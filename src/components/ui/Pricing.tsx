@@ -1,31 +1,29 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, ArrowRight, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 const plans = [
   {
     name: 'MVP Launch',
-    price: '$4,900',
-    description: 'Perfect for startups validating an idea.',
-    features: ['Landing Page + Core Feature', 'Next.js + Tailwind Stack', '2 Weeks Delivery', 'Basic SEO Setup', '1 Month Support'],
-    cta: 'Start MVP',
+    price: '$4,500',
+    description: 'Perfect for early-stage founders validating an idea.',
+    features: ['Custom Next.js Development', 'Mobile-Responsive UI', 'Authentication Setup', 'Database Integration', '1 Month Support'],
     popular: false,
   },
   {
-    name: 'Scale-Up Product',
-    price: '$12,500',
-    description: 'Full-featured application for growth.',
-    features: ['Complex User Flows', 'Authentication & Database', 'Payment Integration (Stripe)', 'Admin Dashboard', '4 Weeks Delivery', 'Priority Support'],
-    cta: 'Scale Now',
+    name: 'Growth Scale',
+    price: '$8,900',
+    description: 'For businesses ready to dominate their market.',
+    features: ['Everything in MVP', 'Advanced Admin Dashboard', 'Stripe Payments Integration', 'SEO & Performance Optimization', 'Content Management System (CMS)', '3 Months Priority Support'],
     popular: true,
   },
   {
-    name: 'Enterprise Custom',
+    name: 'Enterprise',
     price: 'Custom',
-    description: 'Dedicated team for large-scale systems.',
-    features: ['Microservices Architecture', 'AI/ML Integration', 'Custom SLAs', '24/7 Incident Response', 'Audited Security', 'Dedicated Project Manager'],
-    cta: 'Contact Sales',
+    description: 'Full-scale digital transformation and dedicated teams.',
+    features: ['Dedicated Squad (Dev + PM + Design)', 'Microservices Architecture', 'AI/ML Integration', '24/7 SLA Support', 'Audit & Penetration Testing', 'Cloud Infrastructure Setup'],
     popular: false,
   },
 ];
@@ -33,45 +31,61 @@ const plans = [
 export const Pricing = () => {
   return (
     <section className='py-32 bg-zinc-950 relative overflow-hidden' id='pricing'>
+      {/* Ambient Glow */}
+      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none' />
+
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-20'>
-          <h2 className='text-3xl md:text-5xl font-bold text-white mb-6'>Transparent Investment</h2>
-          <p className='text-zinc-400 max-w-2xl mx-auto'>No hidden fees. No hourly billing surprises. Flat-rate pricing for world-class engineering.</p>
+          <h2 className='text-3xl md:text-5xl font-bold text-white mb-6'>Simple, Transparent Pricing</h2>
+          <p className='text-zinc-400 max-w-xl mx-auto'>No hidden fees. No hourly billing surprises. Just clear milestones and exceptional delivery.</p>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto'>
           {plans.map((plan, index) => (
             <motion.div
-              key={index}
+              key={plan.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`relative p-8 rounded-3xl border flex flex-col ${plan.popular ? 'bg-zinc-900/80 border-indigo-500/50 shadow-2xl shadow-indigo-900/20' : 'bg-zinc-900/30 border-zinc-800'}`}
+              className={`relative p-8 rounded-3xl border flex flex-col ${plan.popular ? 'bg-zinc-900/80 border-indigo-500 shadow-2xl shadow-indigo-500/10 scale-105 z-10' : 'bg-zinc-950/50 border-zinc-800 hover:bg-zinc-900/50 transition-colors'}`}
             >
               {plan.popular && (
-                <span className='absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-500 text-white text-xs font-bold rounded-full uppercase tracking-wider'>
-                  Most Popular
-                </span>
+                <div className='absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg'>
+                  <Sparkles className='w-3 h-3' />
+                  MOST POPULAR
+                </div>
               )}
-              
+
               <div className='mb-8'>
                 <h3 className='text-xl font-bold text-white mb-2'>{plan.name}</h3>
-                <div className='text-4xl font-bold text-white mb-2'>{plan.price}</div>
-                <p className='text-zinc-400 text-sm'>{plan.description}</p>
+                <p className='text-zinc-400 text-sm h-10'>{plan.description}</p>
               </div>
 
-              <ul className='space-y-4 mb-8 flex-1'>
-                {plan.features.map((feature, i) => (
-                  <li key={i} className='flex items-start gap-3 text-zinc-300 text-sm'>
-                    <Check className='w-5 h-5 text-indigo-400 shrink-0' />
+              <div className='mb-8'>
+                <span className='text-4xl font-bold text-white'>{plan.price}</span>
+                {plan.price !== 'Custom' && <span className='text-zinc-500'>/project</span>}
+              </div>
+
+              <ul className='space-y-4 mb-8 flex-grow'>
+                {plan.features.map((feature) => (
+                  <li key={feature} className='flex items-start gap-3 text-sm text-zinc-300'>
+                    <Check className={`w-5 h-5 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-600'}`} />
                     {feature}
                   </li>
                 ))}
               </ul>
 
-              <button className={`w-full py-4 rounded-xl font-bold transition-all ${plan.popular ? 'bg-white text-black hover:bg-indigo-50' : 'bg-zinc-800 text-white hover:bg-zinc-700'}`}>
-                {plan.cta}
-              </button>
+              <Link 
+                href='/contact' 
+                className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+                  plan.popular 
+                    ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20' 
+                    : 'bg-zinc-800 text-white hover:bg-zinc-700'
+                }`}
+              >
+                Choose {plan.name}
+                <ArrowRight className='w-4 h-4' />
+              </Link>
             </motion.div>
           ))}
         </div>
