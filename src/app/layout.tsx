@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Flagship | Elite Development Agency",
+  title: "Purrpurr | Elite Development Agency",
   description: "We build Digital Empires, not just code.",
 };
 
