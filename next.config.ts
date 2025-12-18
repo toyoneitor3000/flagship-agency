@@ -6,9 +6,19 @@ const nextConfig: NextConfig = {
     // Necesario para arreglar el loop de 'Cannot find module page.js'
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'image.thum.io',
+      },
+    ],
   },
+
 };
 
 export default nextConfig;

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -24,32 +25,42 @@ export const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
       className={cn(
-        'fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent',
-        isScrolled ? 'bg-zinc-950/80 backdrop-blur-md border-zinc-800 py-3' : 'bg-transparent py-5'
+        'fixed top-0 w-full z-50 transition-all duration-300 border-b border-white/0',
+        isScrolled ? 'bg-zinc-950/70 backdrop-blur-xl border-white/5 py-3 shadow-lg shadow-black/20' : 'bg-transparent py-5'
       )}
     >
       <div className='container mx-auto px-4 md:px-6 flex items-center justify-between'>
-        <Link href='/' className='text-2xl font-bold tracking-tighter text-white'>
-          PURRPURR<span className='text-indigo-500'>.</span>
+        <Link href='/' className='flex items-center gap-2'>
+          <Image
+            src="/brand_logo.png"
+            alt="Purrpurr Logo"
+            width={160}
+            height={40}
+            className="h-10 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <nav className='hidden md:flex items-center gap-8'>
-          {['Features', 'Pricing', 'About', 'Contact'].map((item) => (
-            <Link
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className='text-sm font-medium text-zinc-400 hover:text-indigo-400 transition-colors'
-            >
-              {item}
-            </Link>
-          ))}
-          <button className='px-5 py-2 rounded-full bg-white text-zinc-950 font-semibold hover:bg-indigo-500 hover:text-white transition-all duration-300 text-sm'>
-            Get Started
+          <Link href='#features' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+            Servicios
+          </Link>
+          <Link href='#pricing' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+            Precios
+          </Link>
+          <Link href='#about' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+            Nosotros
+          </Link>
+          <Link href='#contact' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+            Contacto
+          </Link>
+          <button className='px-5 py-2 rounded-full bg-white text-zinc-950 font-semibold hover:bg-green-500 hover:text-zinc-950 transition-all duration-300 text-sm'>
+            Cotizar Proyecto
           </button>
         </nav>
 
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className='md:hidden text-white'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
@@ -59,23 +70,25 @@ export const Navbar = () => {
 
       {/* Mobile Nav */}
       {isMobileMenuOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           className='md:hidden bg-zinc-950 border-b border-zinc-800'
         >
-           <div className='flex flex-col gap-4 p-6'>
-              {['Features', 'Pricing', 'About', 'Contact'].map((item) => (
-                <Link
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className='text-lg font-medium text-zinc-300 hover:text-indigo-400'
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item}
-                </Link>
-              ))}
-           </div>
+          <div className='flex flex-col gap-4 p-6'>
+            <Link href='#features' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+              Servicios
+            </Link>
+            <Link href='#pricing' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+              Precios
+            </Link>
+            <Link href='#about' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+              Nosotros
+            </Link>
+            <Link href='#contact' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+              Contacto
+            </Link>
+          </div>
         </motion.div>
       )}
     </motion.header>

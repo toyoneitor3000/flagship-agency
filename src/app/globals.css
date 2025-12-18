@@ -1,14 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --color-zinc-950: #09090b;
-  --color-zinc-900: #18181b;
-  --color-zinc-800: #27272a;
-  --color-zinc-100: #f4f4f5;
-  --color-indigo-500: #6366f1;
-  --color-purple-500: #a855f7;
-  --color-pink-500: #ec4899;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* New Palette from Illustrator & Derived Shades */
+  --color-zinc-950: #0f0033;
+  --color-zinc-900: #1a0b40;
+  --color-zinc-800: #251650;
+  --color-zinc-500: #6250a5;
+  --color-zinc-400: #a7a2d4;
+  --color-zinc-100: #f0ffcc;
+
+  /* Indigo/Purple - #8f69ff */
+  --color-indigo-400: #b196ff;
+  --color-indigo-500: #8f69ff;
+  --color-indigo-600: #6d42e5;
+
+  --color-purple-400: #b196ff;
+  --color-purple-500: #8f69ff;
+  --color-purple-600: #6d42e5;
+
+  /* Green - #709600 */
+  --color-green-400: #8ebd00;
+  --color-green-500: #709600;
+  --color-green-600: #557200;
+
+  --color-lime-300: #f0ffcc;
+
+  --animate-shine: shine 1.5s infinite;
+  --animate-blink: blink 1s step-end infinite;
+
+  @keyframes shine {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes blink {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+    }
+  }
 }
 
 /* Force styling strategy */

@@ -1,94 +1,203 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Check, ArrowRight, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Check, ArrowRight, Sparkles, Clock, Code2, Rocket, Building2 } from 'lucide-react';
 import Link from 'next/link';
 
-const plans = [
+const agilePlans = [
   {
-    name: 'MVP Launch',
-    price: '$4,500',
-    description: 'Perfect for early-stage founders validating an idea.',
-    features: ['Custom Next.js Development', 'Mobile-Responsive UI', 'Authentication Setup', 'Database Integration', '1 Month Support'],
+    name: 'Landing Page Pro',
+    price: '$550.000',
+    currency: 'COP',
+    time: '24 - 48 Horas',
+    description: 'La forma más rápida de tener tu negocio en internet y generar confianza.',
+    features: ['Diseño Profesional y Limpio', 'Carga Instantánea (menos de 1s)', 'Textos que Venden (Copywriting)', 'Optimizado para Celulares', 'Botón de WhatsApp directo'],
+    tech: 'Tu carta de presentación digital perfecta.',
     popular: false,
   },
   {
-    name: 'Growth Scale',
-    price: '$8,900',
-    description: 'For businesses ready to dominate their market.',
-    features: ['Everything in MVP', 'Advanced Admin Dashboard', 'Stripe Payments Integration', 'SEO & Performance Optimization', 'Content Management System (CMS)', '3 Months Priority Support'],
+    name: 'Página Web Pro',
+    price: '$950.000',
+    currency: 'COP',
+    time: '3 - 5 Días',
+    description: 'Para marcas que necesitan mostrar sus servicios, portafolio y generar autoridad.',
+    features: ['Múltiples páginas (Inicio, Servicios, Nosotros)', 'Galería de Proyectos/Casos de Éxito', 'Panel para editar textos fácilmente', 'Blog para posicionamiento en Google', 'Formularios Avanzados'],
+    tech: 'Autogestionable: Tú tienes el control total.',
     popular: true,
   },
   {
-    name: 'Enterprise',
-    price: 'Custom',
-    description: 'Full-scale digital transformation and dedicated teams.',
-    features: ['Dedicated Squad (Dev + PM + Design)', 'Microservices Architecture', 'AI/ML Integration', '24/7 SLA Support', 'Audit & Penetration Testing', 'Cloud Infrastructure Setup'],
+    name: 'E-commerce Start',
+    price: '$2.500.000+',
+    currency: 'COP',
+    time: '7 - 10 Días',
+    description: 'Tu tienda abierta 24/7. Automatiza ventas, inventario y pagos.',
+    features: ['Catálogo ilimitado de productos', 'Recibe pagos (Tarjetas, PSE, Nequi)', 'Carrito de compras inteligente', 'Panel de Pedidos y Clientes', 'Cálculo de envíos automático'],
+    tech: 'Vende mientras duermes con un sistema robusto.',
+    popular: false,
+  },
+];
+
+const customPlans = [
+  {
+    name: 'MVP Founder',
+    price: '$4,500',
+    currency: 'USD',
+    time: '2 - 3 Semanas',
+    description: 'Lanza tu Startup al mercado. Desde la idea hasta el primer usuario real.',
+    features: ['Cuentas de Usuario y Perfiles', 'Panel de Control para tus Clientes', 'Cobros Recurrentes (Suscripciones)', 'Base de Datos Segura', 'Integración con IA (Opcional)'],
+    tech: 'Tecnología escalable lista para crecer.',
+    popular: true,
+  },
+  {
+    name: 'Growth Platform',
+    price: '$9,000+',
+    currency: 'USD',
+    time: '4 - 6 Semanas',
+    description: 'Software a la medida para optimizar procesos internos de tu empresa.',
+    features: ['Automatización de Tareas Repetitivas', 'Reportes y Analíticas en Tiempo Real', 'Roles de Empleados y Permisos', 'Conexión con tu CRM/ERP actual', 'Soporte Técnico Prioritario'],
+    tech: 'Eficiencia operativa llevada al siguiente nivel.',
+    popular: false,
+  },
+  {
+    name: 'Enterprise Empire',
+    price: '$16,000+',
+    currency: 'USD',
+    time: '2 - 3 Meses',
+    description: 'Transformación Digital Completa. Tu socio tecnológico estratégico a largo plazo.',
+    features: ['Equipo de Ingeniería Dedicado', 'Infraestructura de Alta Disponibilidad', 'Auditoría de Seguridad y Datos', 'Consultoría de Producto Mensual', 'Soporte 24/7 Garantizado'],
+    tech: 'Tu propio departamento de tecnología externo.',
     popular: false,
   },
 ];
 
 export const Pricing = () => {
+  const [activeTab, setActiveTab] = useState<'agile' | 'custom'>('agile');
+
+  const plans = activeTab === 'agile' ? agilePlans : customPlans;
+
   return (
     <section className='py-32 bg-zinc-950 relative overflow-hidden' id='pricing'>
       {/* Ambient Glow */}
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none' />
 
       <div className='container mx-auto px-4 relative z-10'>
-        <div className='text-center mb-20'>
-          <h2 className='text-3xl md:text-5xl font-bold text-white mb-6'>Simple, Transparent Pricing</h2>
-          <p className='text-zinc-400 max-w-xl mx-auto'>No hidden fees. No hourly billing surprises. Just clear milestones and exceptional delivery.</p>
+        <div className='text-center mb-12'>
+          <h2 className='text-3xl md:text-5xl font-bold text-white mb-6'>Elige tu Nivel de Impacto</h2>
+          <p className='text-zinc-400 max-w-2xl mx-auto text-lg'>
+            Entendemos que no todos los proyectos son iguales. <br className="hidden md:block" />
+            Diseñamos una estrategia dual para <strong>validar rápido</strong> o <strong>escalar masivamente</strong>.
+          </p>
         </div>
 
-        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto'>
-          {plans.map((plan, index) => (
+        {/* Strategy Toggle */}
+        <div className='flex justify-center mb-16'>
+          <div className='bg-zinc-900 p-1.5 rounded-2xl border border-zinc-800 flex items-center relative'>
+            {/* Slider Background */}
             <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className={`relative p-8 rounded-3xl border flex flex-col ${plan.popular ? 'bg-zinc-900/80 border-indigo-500 shadow-2xl shadow-indigo-500/10 scale-105 z-10' : 'bg-zinc-950/50 border-zinc-800 hover:bg-zinc-900/50 transition-colors'}`}
+              className='absolute top-1.5 bottom-1.5 bg-indigo-600 rounded-xl z-0'
+              initial={false}
+              animate={{
+                x: activeTab === 'agile' ? 0 : '100%',
+                width: '50%'
+              }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            />
+
+            <button
+              onClick={() => setActiveTab('agile')}
+              className={`relative z-10 px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors w-48 justify-center ${activeTab === 'agile' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
             >
-              {plan.popular && (
-                <div className='absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-bold rounded-full flex items-center gap-1 shadow-lg'>
-                  <Sparkles className='w-3 h-3' />
-                  MOST POPULAR
-                </div>
-              )}
-
-              <div className='mb-8'>
-                <h3 className='text-xl font-bold text-white mb-2'>{plan.name}</h3>
-                <p className='text-zinc-400 text-sm h-10'>{plan.description}</p>
-              </div>
-
-              <div className='mb-8'>
-                <span className='text-4xl font-bold text-white'>{plan.price}</span>
-                {plan.price !== 'Custom' && <span className='text-zinc-500'>/project</span>}
-              </div>
-
-              <ul className='space-y-4 mb-8 flex-grow'>
-                {plan.features.map((feature) => (
-                  <li key={feature} className='flex items-start gap-3 text-sm text-zinc-300'>
-                    <Check className={`w-5 h-5 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-600'}`} />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <Link 
-                href='/contact' 
-                className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
-                  plan.popular 
-                    ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20' 
-                    : 'bg-zinc-800 text-white hover:bg-zinc-700'
-                }`}
-              >
-                Choose {plan.name}
-                <ArrowRight className='w-4 h-4' />
-              </Link>
-            </motion.div>
-          ))}
+              <Rocket className='w-4 h-4' />
+              Paquetes Ágiles
+            </button>
+            <button
+              onClick={() => setActiveTab('custom')}
+              className={`relative z-10 px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors w-48 justify-center ${activeTab === 'custom' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+            >
+              <Building2 className='w-4 h-4' />
+              Ingeniería a Medida
+            </button>
+          </div>
         </div>
+
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto'>
+          <AnimatePresence mode='wait'>
+            {plans.map((plan, index) => (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className={`relative p-8 rounded-3xl border flex flex-col group ${plan.popular ? 'bg-zinc-900/80 border-indigo-500 shadow-2xl shadow-indigo-500/10 z-10 ring-1 ring-indigo-500/50' : 'bg-zinc-950/50 border-zinc-800 hover:bg-zinc-900/50 transition-colors'}`}
+              >
+                {plan.popular && (
+                  <div className='absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-lg uppercase tracking-wide'>
+                    <Sparkles className='w-3 h-3' />
+                    Recomendado
+                  </div>
+                )}
+
+                <div className='mb-6'>
+                  <div className='flex justify-between items-start mb-2'>
+                    <h3 className='text-xl font-bold text-white'>{plan.name}</h3>
+                    {activeTab === 'custom' && (
+                      <span className='px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-[10px] uppercase font-bold tracking-wider'>High-Ticket</span>
+                    )}
+                  </div>
+                  <div className='flex items-center gap-2 text-indigo-400 text-xs font-medium mb-3 bg-indigo-500/10 w-fit px-3 py-1.5 rounded-lg'>
+                    <Clock className='w-3 h-3' />
+                    {plan.time}
+                  </div>
+                  <p className='text-zinc-400 text-sm leading-relaxed h-12'>{plan.description}</p>
+                </div>
+
+                <div className='mb-8 pb-8 border-b border-zinc-900'>
+                  <div className='flex items-baseline gap-1'>
+                    <span className='text-4xl font-bold text-white tracking-tight'>{plan.price}</span>
+                    <span className='text-zinc-500 text-sm font-semibold'>{plan.currency}</span>
+                  </div>
+                  {!plan.price.includes('+') && activeTab === 'agile' && <span className='text-zinc-600 text-xs'>Pago único</span>}
+                  {activeTab === 'custom' && <span className='text-zinc-600 text-xs'>Inversión estimada</span>}
+                </div>
+
+                <div className='space-y-6 flex-grow'>
+                  <div className='bg-zinc-900/50 p-4 rounded-xl border border-zinc-800/50'>
+                    <div className='flex items-center gap-2 mb-2'>
+                      <Code2 className='w-4 h-4 text-indigo-400' />
+                      <span className='text-xs text-zinc-300 font-bold uppercase tracking-wide'>Nivel Técnico</span>
+                    </div>
+                    <p className='text-xs text-zinc-400 leading-relaxed'>{plan.tech}</p>
+                  </div>
+
+                  <ul className='space-y-4'>
+                    {plan.features.map((feature) => (
+                      <li key={feature} className='flex items-start gap-3 text-sm text-zinc-300 group-hover:text-zinc-200 transition-colors'>
+                        <Check className={`w-5 h-5 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-600 group-hover:text-indigo-500/50 transition-colors'}`} />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Link
+                  href='/contact'
+                  className={`mt-8 w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${plan.popular
+                    ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
+                    : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
+                    }`}
+                >
+                  {activeTab === 'agile' ? 'Iniciar Proyecto' : 'Agendar Consultoría'}
+                  <ArrowRight className='w-4 h-4' />
+                </Link>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+
+
       </div>
     </section>
   );

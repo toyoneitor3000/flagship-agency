@@ -1,17 +1,25 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from '@/components/ui/Navbar';
 import { Footer } from '@/components/ui/Footer';
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-sans",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
   title: "Purrpurr | Elite Development Agency",
   description: "We build Digital Empires, not just code.",
+  icons: {
+    icon: '/brand_logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -20,11 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased bg-zinc-950 text-zinc-100 flex flex-col min-h-screen`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-zinc-950 text-zinc-100 flex flex-col min-h-screen`}>
         <Navbar />
         <main className="flex-grow">
-            {children}
+          {children}
         </main>
         <Footer />
       </body>
