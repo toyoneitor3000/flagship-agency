@@ -25,8 +25,8 @@ export const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
       className={cn(
-        'fixed top-0 w-full z-50 transition-all duration-300 border-b border-white/0',
-        isScrolled ? 'bg-zinc-950/70 backdrop-blur-xl border-white/5 py-3 shadow-lg shadow-black/20' : 'bg-transparent py-5'
+        'fixed top-0 w-full z-50 transition-all duration-300 border-b border-black/0',
+        isScrolled ? 'bg-zinc-100/20 backdrop-blur-2xl border-black/5 py-3 shadow-sm' : 'bg-transparent py-5'
       )}
     >
       <div className='container mx-auto px-4 md:px-6 flex items-center justify-between'>
@@ -42,26 +42,26 @@ export const Navbar = () => {
         </Link>
 
         <nav className='hidden md:flex items-center gap-8'>
-          <Link href='#features' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+          <Link href='#features' className='text-sm font-medium text-zinc-600 hover:text-indigo-600 transition-colors'>
             Servicios
           </Link>
-          <Link href='#pricing' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+          <Link href='#pricing' className='text-sm font-medium text-zinc-600 hover:text-indigo-600 transition-colors'>
             Precios
           </Link>
-          <Link href='#about' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+          <Link href='#about' className='text-sm font-medium text-zinc-600 hover:text-indigo-600 transition-colors'>
             Nosotros
           </Link>
-          <Link href='#contact' className='text-sm font-medium text-zinc-400 hover:text-green-500 transition-colors'>
+          <Link href='#contact' className='text-sm font-medium text-zinc-600 hover:text-indigo-600 transition-colors'>
             Contacto
           </Link>
-          <button className='px-5 py-2 rounded-full bg-white text-zinc-950 font-semibold hover:bg-green-500 hover:text-zinc-950 transition-all duration-300 text-sm'>
+          <button className='px-5 py-2 rounded-full bg-zinc-950 text-white font-semibold hover:bg-indigo-600 hover:text-white transition-all duration-300 text-sm shadow-md'>
             Cotizar Proyecto
           </button>
         </nav>
 
         {/* Mobile Menu Toggle */}
         <button
-          className='md:hidden text-white'
+          className='md:hidden text-zinc-950'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X /> : <Menu />}
@@ -73,19 +73,19 @@ export const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className='md:hidden bg-zinc-950 border-b border-zinc-800'
+          className='md:hidden bg-zinc-100 border-b border-zinc-200'
         >
           <div className='flex flex-col gap-4 p-6'>
-            <Link href='#features' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href='#features' className='text-lg font-medium text-zinc-600 hover:text-indigo-600' onClick={() => setIsMobileMenuOpen(false)}>
               Servicios
             </Link>
-            <Link href='#pricing' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href='#pricing' className='text-lg font-medium text-zinc-600 hover:text-indigo-600' onClick={() => setIsMobileMenuOpen(false)}>
               Precios
             </Link>
-            <Link href='#about' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href='#about' className='text-lg font-medium text-zinc-600 hover:text-indigo-600' onClick={() => setIsMobileMenuOpen(false)}>
               Nosotros
             </Link>
-            <Link href='#contact' className='text-lg font-medium text-zinc-300 hover:text-green-500' onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href='#contact' className='text-lg font-medium text-zinc-600 hover:text-indigo-600' onClick={() => setIsMobileMenuOpen(false)}>
               Contacto
             </Link>
           </div>

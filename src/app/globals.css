@@ -51,8 +51,9 @@
 }
 
 /* Force styling strategy */
+/* Force styling strategy */
 body {
-  background-color: var(--color-zinc-950);
-  color: var(--color-zinc-100);
+  background-color: var(--color-zinc-100);
+  color: var(--color-zinc-950);
   font-family: var(--font-sans);
 }

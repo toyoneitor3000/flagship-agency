@@ -38,22 +38,22 @@ const features = [
 
 export const Features = () => {
   return (
-    <section className='py-32 bg-zinc-950 relative overflow-hidden' id='features'>
+    <section className='py-32 bg-zinc-100 relative overflow-hidden' id='features'>
       {/* Background Decor */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:48px_48px] opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f00330a_1px,transparent_1px),linear-gradient(to_bottom,#0f00330a_1px,transparent_1px)] bg-[size:48px_48px] opacity-20 pointer-events-none" />
 
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-20'>
-          <span className="font-mono text-purple-500 text-sm mb-2 block">&lt;capabilities&gt;</span>
-          <h2 className='text-3xl md:text-5xl font-bold text-white mb-6 font-mono'>
-            System.<span className="text-green-500">Upgrade()</span>
+          <span className="font-mono text-purple-600 text-sm mb-2 block">&lt;capabilities&gt;</span>
+          <h2 className='text-3xl md:text-5xl font-bold text-zinc-950 mb-6 font-mono'>
+            System.<span className="text-green-600">Upgrade()</span>
           </h2>
-          <p className='text-zinc-400 max-w-2xl mx-auto font-mono text-sm'>
-            <span className="text-zinc-600">/* </span>
+          <p className='text-zinc-600 max-w-2xl mx-auto font-mono text-sm'>
+            <span className="text-zinc-400">/* </span>
             No solo escribimos código. Construimos herramientas digitales diseñadas para vender más y escalar sin límites.
-            <span className="text-zinc-600"> */</span>
+            <span className="text-zinc-400"> */</span>
           </p>
-          <span className="font-mono text-purple-500 text-sm mt-2 block">&lt;/capabilities&gt;</span>
+          <span className="font-mono text-purple-600 text-sm mt-2 block">&lt;/capabilities&gt;</span>
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
@@ -63,25 +63,25 @@ export const Features = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className='group p-6 bg-zinc-900/40 border border-zinc-800 hover:border-green-500 hover:bg-zinc-900/80 transition-all duration-300 font-mono relative overflow-hidden'
+              className='group p-6 bg-white/50 border border-zinc-200 hover:border-green-500 hover:bg-white transition-all duration-300 font-mono relative overflow-hidden shadow-sm hover:shadow-lg hover:shadow-green-500/10'
             >
-              <div className="absolute top-0 right-0 p-2 opacity-50 text-[10px] text-zinc-600">
+              <div className="absolute top-0 right-0 p-2 opacity-50 text-[10px] text-zinc-400">
                 0{index + 1}
               </div>
 
-              <div className='w-10 h-10 bg-zinc-950 border border-zinc-800 flex items-center justify-center mb-4 group-hover:border-green-500 transition-colors'>
-                <feature.icon className='w-5 h-5 text-zinc-400 group-hover:text-green-500 transition-colors' />
+              <div className='w-10 h-10 bg-zinc-50 border border-zinc-200 flex items-center justify-center mb-4 group-hover:border-green-500 transition-colors rounded-sm'>
+                <feature.icon className='w-5 h-5 text-zinc-500 group-hover:text-green-600 transition-colors' />
               </div>
 
-              <h3 className='text-lg font-bold text-white mb-2'>
+              <h3 className='text-lg font-bold text-zinc-950 mb-2'>
                 {feature.title}
               </h3>
 
-              <p className='text-zinc-400 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 group-hover:border-green-500/50 transition-colors'>
+              <p className='text-zinc-600 text-sm leading-relaxed border-l-2 border-zinc-200 pl-4 group-hover:border-green-500/50 transition-colors'>
                 {feature.description}
               </p>
 
-              <div className="mt-4 text-xs text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="mt-4 text-xs text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity">
                 return true;
               </div>
             </motion.div>
