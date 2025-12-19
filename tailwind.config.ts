@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'brand-cream': '#f0ffcc', // Light cream green
+        'brand-green': '#709600', // Dark moss green
       },
     },
   },
