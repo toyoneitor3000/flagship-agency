@@ -6,72 +6,79 @@ import Link from 'next/link';
 
 export const Hero = () => {
   return (
-    <section className='relative min-h-screen flex items-center justify-center bg-zinc-100 overflow-hidden pt-20 selection:bg-indigo-500/30 selection:text-indigo-900'>
+    <section className='relative min-h-screen flex items-center justify-center bg-[#F8FAF8] overflow-hidden pt-20 selection:bg-[#6D28D9]/20 selection:text-[#6D28D9]'>
 
-      {/* --- DIGITAL EMPIRE BACKGROUND --- */}
-      {/* Darker grid for light background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f00330a_1px,transparent_1px),linear-gradient(to_bottom,#0f00330a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+      {/* --- LAYER 0: FRONTEND SURFACE --- */}
+      {/* Concept: Technical Paper / Clean / Premium */}
 
-      {/* Dynamic Glows - Darker to stand out on light */}
-      <div className='absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none'>
-        <div className='absolute top-[-10%] left-[50%] -translate-x-1/2 w-[800px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px]' />
-        <div className='absolute bottom-[0%] left-[20%] w-[600px] h-[400px] bg-green-500/10 rounded-full blur-[100px] animate-pulse' />
-      </div>
+      {/* Subtle Grid - Minimal Visibility (Reduced Opacity to 2-3%) */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-[0.03]" />
+
+      {/* Ambient Light - Very Subtle Top Shine */}
+      <div className='absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-white/80 rounded-full blur-[100px] pointer-events-none' />
 
       <div className='container mx-auto px-4 text-center z-10 relative'>
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          {/* Terminal Badge */}
+          {/* Badge - Brand Purple Anchor */}
           <div className="flex justify-center mb-8">
-            <div className='flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 border border-zinc-200 backdrop-blur-md shadow-lg shadow-indigo-500/5 group cursor-default hover:border-indigo-500/50 transition-colors'>
-              <Terminal className='w-4 h-4 text-indigo-600 animate-pulse' />
-              <span className='font-mono text-xs md:text-sm text-zinc-600'>
-                <span className="text-purple-600 font-bold">root@purrpurr</span>:<span className="text-zinc-500">~</span>$ ./deploy_empire.sh
+            <div className='flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6D28D9]/5 border border-[#6D28D9]/20 backdrop-blur-sm'>
+              <div className="relative flex items-center justify-center w-2 h-2">
+                <div className="absolute w-full h-full bg-[#6D28D9] rounded-full animate-ping opacity-75"></div>
+                <div className="relative w-1.5 h-1.5 rounded-full bg-[#6D28D9]"></div>
+              </div>
+              <span className='font-mono text-[10px] font-medium tracking-[0.2em] text-[#6D28D9] uppercase'>
+                SYSTEM_STATUS: ONLINE
               </span>
             </div>
           </div>
 
-          <h1 className='font-mono text-5xl md:text-8xl font-bold text-zinc-950 tracking-tighter mb-8 leading-none'>
-            CODE <span className='text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 animate-shine bg-[length:200%_auto]'>EMPIRE</span><br />
-            <span className="text-4xl md:text-7xl opacity-80 decoration-green-500/30 underline decoration-2 underline-offset-8 text-zinc-800">BUILDERS</span><span className="animate-blink text-green-600">_</span>
+          {/* H1 - Display Font - Heavy & Character */}
+          <h1 className='font-display text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[1] max-w-5xl mx-auto text-[#022C22] drop-shadow-sm uppercase'>
+            ARQUITECTURA DIGITAL<br />
+            <span className="text-[#6D28D9]">DE ALTO RENDIMIENTO</span>
+            <span className="inline-block align-baseline ml-2 w-2 h-2 rounded-full bg-[#15803D]"></span>
           </h1>
 
-          <p className='font-mono text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto mb-12 leading-relaxed'>
-            // Sistema de desarrollo de alta ingeniería. <br className="hidden md:block" />
-            <span className="text-indigo-600 font-medium">Transformamos código complejo en dominancia de mercado.</span>
+          {/* P - High Contrast & Clean */}
+          <p className='font-mono text-sm md:text-base text-[#1A1523] max-w-2xl mx-auto mb-20 leading-relaxed tracking-wide font-medium'>
+            <span className="text-[#6D28D9] font-bold">&gt; </span> No vendemos código. Diseñamos <span className="font-bold text-[#6D28D9]">sistemas de experiencia</span>.<br className="hidden md:block" />
+            <span className="text-[#6D28D9] font-bold">&gt; </span> Ingeniería de precisión para marcas que no pueden permitirse fallar.
           </p>
 
-          <div className='flex flex-col sm:flex-row items-center justify-center gap-6 font-mono text-sm'>
-            {/* Cyber Button 1 (Primary) */}
-            <Link href='/contact' className='group relative px-8 py-4 bg-zinc-950 text-white font-bold uppercase tracking-widest overflow-hidden border border-zinc-950 hover:border-indigo-500 transition-colors shadow-[0_5px_15px_rgba(15,0,51,0.2)]'>
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shine" />
-              <span className="relative z-10 flex items-center gap-3">
-                <Code2 className="w-5 h-5 text-indigo-400 group-hover:text-green-400 transition-colors" />
-                [ INICIAR_PROTOCOLO ]
+          {/* Buttons Container - Balanced */}
+          <div className='flex flex-col sm:flex-row items-center justify-center gap-6 mb-32 relative z-20 pb-12 w-full max-w-lg mx-auto'>
+
+            {/* CTA 1: Power Color Button */}
+            <Link href='/contact' className='flex-1 w-full sm:w-auto group relative px-8 py-4 bg-[#6D28D9] text-white font-bold text-xs tracking-[0.15em] uppercase overflow-hidden rounded-sm shadow-none hover:shadow-[0_0_30px_rgba(109,40,217,0.4)] transition-all duration-300 text-center'>
+              <span className="relative z-10 flex items-center justify-center gap-3">
+                INICIAR MOTOR
+                <span className="text-[#00FF9C] font-bold">&gt;</span>
               </span>
-              {/* Corner Accents */}
-              <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-indigo-500 group-hover:border-green-500 transition-colors" />
-              <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-indigo-500 group-hover:border-green-500 transition-colors" />
             </Link>
 
-            {/* Cyber Button 2 (Secondary) */}
-            <Link href='#work' className='group relative px-8 py-4 bg-transparent text-zinc-600 font-bold uppercase tracking-widest hover:text-zinc-950 transition-colors'>
-              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-zinc-300 group-hover:bg-purple-600 transition-colors" />
-              <span className="relative flex items-center gap-2">
-                &lt; EXPLORAR_DATA /&gt;
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
+            {/* CTA 2: Secondary Legible */}
+            <Link href='#work' className='flex-1 w-full sm:w-auto px-6 py-4 rounded-sm border-2 border-[#6D28D9]/10 bg-transparent text-[#6D28D9] font-bold text-xs tracking-[0.15em] uppercase hover:bg-[#6D28D9]/5 hover:border-[#6D28D9] transition-all duration-300 flex items-center justify-center gap-2 text-center'>
+              VER_PORTAFOLIO
             </Link>
+          </div>
+
+          {/* Scroll Guide - Replaced */}
+          <div className="absolute top-1/2 -translate-y-1/2 right-4 md:right-8 hidden xl:flex flex-col items-center gap-4 opacity-60">
+            <div className="h-24 w-[1px] bg-[#6D28D9]/30"></div>
+            <span className="text-[10px] font-mono text-[#6D28D9] uppercase [writing-mode:vertical-rl] tracking-widest">
+              System_Architecture_Below
+            </span>
+            <div className="h-24 w-[1px] bg-[#6D28D9]/30"></div>
           </div>
 
         </motion.div>
       </div>
 
-      {/* Decorative Grid Floor (Optional for depth) */}
-      <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-white/0 to-transparent pointer-events-none z-10" />
+      {/* Decorative Grid Floor */}
     </section>
   );
 };

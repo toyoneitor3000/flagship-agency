@@ -7,33 +7,33 @@ import Link from 'next/link';
 
 const agilePlans = [
   {
-    name: 'Landing Page Pro',
+    name: 'Performance Start',
     price: '$550.000',
     currency: 'COP',
     time: '24 - 48 Horas',
-    description: 'La forma más rápida de tener tu negocio en internet y generar confianza.',
-    features: ['Diseño Profesional y Limpio', 'Carga Instantánea (menos de 1s)', 'Textos que Venden (Copywriting)', 'Optimizado para Celulares', 'Botón de WhatsApp directo'],
-    tech: 'Tu carta de presentación digital perfecta.',
+    description: 'Diseño de alta gama para marcas que no aceptan lo genérico. Ideal para profesionales y startups que necesitan una presencia digital con estándares europeos desde el día uno.',
+    features: ['Landing page de alta conversión', 'Copy enfocado en ventas (no relleno)', 'Performance optimizada (90+)', 'Integración WhatsApp / formulario', 'Entrega rápida'],
+    tech: 'Lanza tu idea al mundo en tiempo récord.',
     popular: false,
   },
   {
-    name: 'Página Web Pro',
+    name: 'Grand Tourer (GT)',
     price: '$950.000',
     currency: 'COP',
     time: '3 - 5 Días',
-    description: 'Para marcas que necesitan mostrar sus servicios, portafolio y generar autoridad.',
-    features: ['Múltiples páginas (Inicio, Servicios, Nosotros)', 'Galería de Proyectos/Casos de Éxito', 'Panel para editar textos fácilmente', 'Blog para posicionamiento en Google', 'Formularios Avanzados'],
-    tech: 'Autogestionable: Tú tienes el control total.',
+    description: 'Escalabilidad y robustez. Para negocios en expansión que requieren sistemas de gestión, pasarelas de pago y una interfaz optimizada para convertir usuarios en clientes recurrentes.',
+    features: ['Sitio web profesional a medida', 'Arquitectura clara para conversión', 'Diseño premium (estética Purrpurr)', 'SEO técnico base', 'Velocidad y estabilidad'],
+    tech: 'No solo es una web, es tu mejor vendedor.',
     popular: true,
   },
   {
-    name: 'E-commerce Start',
+    name: 'Ventas Automáticas',
     price: '$2.500.000+',
     currency: 'COP',
     time: '7 - 10 Días',
-    description: 'Tu tienda abierta 24/7. Automatiza ventas, inventario y pagos.',
-    features: ['Catálogo ilimitado de productos', 'Recibe pagos (Tarjetas, PSE, Nequi)', 'Carrito de compras inteligente', 'Panel de Pedidos y Clientes', 'Cálculo de envíos automático'],
-    tech: 'Vende mientras duermes con un sistema robusto.',
+    description: 'Tu negocio vendiendo incluso cuando no respondes mensajes.',
+    features: ['E-commerce / Sistema de ventas', 'Flujo optimizado de compra', 'Performance + UX para conversión', 'Integraciones de pago', 'Escalable'],
+    tech: 'Independiza tus ventas de tu tiempo.',
     popular: false,
   },
 ];
@@ -116,7 +116,7 @@ export const Pricing = () => {
               className={`relative z-10 px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors w-48 justify-center ${activeTab === 'custom' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
             >
               <Building2 className='w-4 h-4' />
-              Ingeniería a Medida
+              Track-Ready Systems
             </button>
           </div>
         </div>
@@ -194,6 +194,12 @@ export const Pricing = () => {
               </motion.div>
             ))}
           </AnimatePresence>
+        </div>
+
+        <div className="mt-16 text-center">
+          <p className="text-zinc-500 text-sm font-mono max-w-2xl mx-auto border-t border-zinc-900 pt-8">
+            <span className="text-indigo-500 font-bold">&gt; NOTE:</span> No vendo &quot;páginas web&quot;. Construyo sistemas digitales que <strong className="text-zinc-300">independizan tus ventas de tu tiempo</strong>.
+          </p>
         </div>
 
 

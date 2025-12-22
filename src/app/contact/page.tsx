@@ -103,7 +103,7 @@ export default function ContactPage() {
                   // Buscamos proyectos ambiciosos que necesiten ingeniería real.
                 </p>
                 <p>
-                  <span className="text-[#709600]">✔</span> Agenda Q1 2024: <span className="text-white font-bold">DISPONIBLE</span>
+                  <span className="text-[#709600]">✔</span> Agenda Q1 2026: <span className="text-white font-bold">DISPONIBLE</span>
                 </p>
                 <p>
                   <span className="text-[#8f69ff]">➜</span> <span className="text-[#f0ffcc]">~</span> esperando tu idea...

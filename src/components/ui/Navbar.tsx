@@ -57,20 +57,20 @@ export const Navbar = () => {
         </Link>
 
         <nav className='hidden md:flex items-center gap-8'>
-          <Link href='#features' className='text-sm font-medium text-zinc-800 hover:text-indigo-600 transition-colors font-mono'>
+          <Link href='#features' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
             [ Servicios ]
           </Link>
-          <Link href='#pricing' className='text-sm font-medium text-zinc-800 hover:text-indigo-600 transition-colors font-mono'>
+          <Link href='#pricing' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
             [ Precios ]
           </Link>
-          <Link href='#about' className='text-sm font-medium text-zinc-800 hover:text-indigo-600 transition-colors font-mono'>
+          <Link href='#about' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
             [ Nosotros ]
           </Link>
-          <Link href='#contact' className='text-sm font-medium text-zinc-800 hover:text-indigo-600 transition-colors font-mono'>
+          <Link href='#contact' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
             [ Contacto ]
           </Link>
-          <button className='px-5 py-2 rounded-sm bg-zinc-950 text-green-400 font-mono text-sm font-bold border border-green-500/50 hover:bg-green-500 hover:text-zinc-950 hover:border-green-500 transition-all shadow-[0_0_10px_rgba(74,222,128,0.1)]'>
-            &lt; Cotizar /&gt;
+          <button className='px-5 py-2 rounded-sm bg-transparent text-[#6D28D9] font-mono text-[12px] font-bold border border-[#6D28D9] hover:border-[#00FF9C] hover:text-[#00FF9C] hover:bg-zinc-950 transition-all shadow-sm tracking-wider'>
+            &lt; COTIZAR /&gt;
           </button>
         </nav>
 
