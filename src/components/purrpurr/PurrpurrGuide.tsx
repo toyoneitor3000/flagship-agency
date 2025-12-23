@@ -63,9 +63,9 @@ export const PurrpurrGuide = ({ tip, mode = 'contextual', isVisible = true, onNe
     };
 
     const getButtonClasses = () => {
-        const base = "relative flex items-center justify-center backdrop-blur-sm transition-all shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:shadow-[0_0_35px_rgba(168,85,247,0.8)] z-50";
-        if (mode === 'error') return cn(base, "w-16 h-16 rounded-full bg-red-950/90 border-2 border-red-500 hover:border-red-400 shadow-[0_0_25px_rgba(239,68,68,0.6)]");
-        return cn(base, "w-20 h-20 bg-zinc-950 rounded-full border-2 border-purple-500 hover:border-purple-400");
+        const base = "relative flex items-center justify-center transition-transform z-50";
+        if (mode === 'error') return cn(base, "w-16 h-16 rounded-full bg-red-950/90 border-2 border-red-500 hover:border-red-400 shadow-[0_0_25px_rgba(239,68,68,0.6)] backdrop-blur-sm");
+        return cn(base, "w-auto h-auto");
     };
 
     return (
@@ -79,23 +79,26 @@ export const PurrpurrGuide = ({ tip, mode = 'contextual', isVisible = true, onNe
                 onClick={() => setIsOpen(!isOpen)}
                 className={getButtonClasses()}
             >
-                <div className="relative w-16 h-16">
+                <motion.div
+                    className="relative w-20 h-24"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                >
                     <Image
-                        src="/assets/purrpurr/guide.gif"
+                        src="/assets/purrpurr/guide.png"
                         alt="Purrpurr Guide"
                         fill
                         unoptimized
                         className={cn(
-                            "object-contain scale-125 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]",
-                            mode === 'error' && "grayscale sepia hue-rotate-[320deg] saturate-200" // Red tint for error
+                            "object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]",
+                            mode === 'error' && "grayscale sepia hue-rotate-[320deg] saturate-200"
                         )}
                     />
-                </div>
-                {/* Ping effect */}
-                <div className={cn(
-                    "absolute inset-0 rounded-full border opacity-0 animate-ping",
-                    mode === 'error' ? "border-red-400" : "border-purple-400"
-                )}></div>
+                </motion.div>
             </motion.button>
 
             <AnimatePresence>

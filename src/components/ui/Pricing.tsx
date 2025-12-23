@@ -121,78 +121,83 @@ export const Pricing = () => {
           </div>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto'>
+        <div className='max-w-7xl mx-auto'>
           <AnimatePresence mode='wait'>
-            {plans.map((plan, index) => (
-              <motion.div
-                key={plan.name}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className={`relative p-8 rounded-3xl border flex flex-col group ${plan.popular ? 'bg-zinc-900/80 border-indigo-500 shadow-2xl shadow-indigo-500/10 z-10 ring-1 ring-indigo-500/50' : 'bg-zinc-950/50 border-zinc-800 hover:bg-zinc-900/50 transition-colors'}`}
-              >
-                {plan.popular && (
-                  <div className='absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-lg uppercase tracking-wide'>
-                    <Sparkles className='w-3 h-3' />
-                    Recomendado
-                  </div>
-                )}
-
-                <div className='mb-6'>
-                  <div className='flex justify-between items-start mb-2'>
-                    <h3 className='text-xl font-bold text-white'>{plan.name}</h3>
-                    {activeTab === 'custom' && (
-                      <span className='px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-[10px] uppercase font-bold tracking-wider'>High-Ticket</span>
-                    )}
-                  </div>
-                  <div className='flex items-center gap-2 text-indigo-400 text-xs font-medium mb-3 bg-indigo-500/10 w-fit px-3 py-1.5 rounded-lg'>
-                    <Clock className='w-3 h-3' />
-                    {plan.time}
-                  </div>
-                  <p className='text-zinc-400 text-sm leading-relaxed h-12'>{plan.description}</p>
-                </div>
-
-                <div className='mb-8 pb-8 border-b border-zinc-900'>
-                  <div className='flex items-baseline gap-1'>
-                    <span className='text-4xl font-bold text-white tracking-tight'>{plan.price}</span>
-                    <span className='text-zinc-500 text-sm font-semibold'>{plan.currency}</span>
-                  </div>
-                  {!plan.price.includes('+') && activeTab === 'agile' && <span className='text-zinc-600 text-xs'>Pago único</span>}
-                  {activeTab === 'custom' && <span className='text-zinc-600 text-xs'>Inversión estimada</span>}
-                </div>
-
-                <div className='space-y-6 flex-grow'>
-                  <div className='bg-zinc-900/50 p-4 rounded-xl border border-zinc-800/50'>
-                    <div className='flex items-center gap-2 mb-2'>
-                      <Code2 className='w-4 h-4 text-indigo-400' />
-                      <span className='text-xs text-zinc-300 font-bold uppercase tracking-wide'>Nivel Técnico</span>
-                    </div>
-                    <p className='text-xs text-zinc-400 leading-relaxed'>{plan.tech}</p>
-                  </div>
-
-                  <ul className='space-y-4'>
-                    {plan.features.map((feature) => (
-                      <li key={feature} className='flex items-start gap-3 text-sm text-zinc-300 group-hover:text-zinc-200 transition-colors'>
-                        <Check className={`w-5 h-5 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-600 group-hover:text-indigo-500/50 transition-colors'}`} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Link
-                  href='/contact'
-                  className={`mt-8 w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${plan.popular
-                    ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
-                    : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
-                    }`}
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className='grid grid-cols-1 md:grid-cols-3 gap-8'
+            >
+              {plans.map((plan, index) => (
+                <motion.div
+                  key={plan.name}
+                  className={`relative p-8 rounded-3xl border flex flex-col group ${plan.popular ? 'bg-zinc-900/80 border-indigo-500 shadow-2xl shadow-indigo-500/10 z-10 ring-1 ring-indigo-500/50' : 'bg-zinc-950/50 border-zinc-800 hover:bg-zinc-900/50 transition-colors'}`}
                 >
-                  {activeTab === 'agile' ? 'Iniciar Proyecto' : 'Agendar Consultoría'}
-                  <ArrowRight className='w-4 h-4' />
-                </Link>
-              </motion.div>
-            ))}
+                  {plan.popular && (
+                    <div className='absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-lg uppercase tracking-wide'>
+                      <Sparkles className='w-3 h-3' />
+                      Recomendado
+                    </div>
+                  )}
+
+                  <div className='mb-6'>
+                    <div className='flex justify-between items-start mb-2'>
+                      <h3 className='text-xl font-bold text-white'>{plan.name}</h3>
+                      {activeTab === 'custom' && (
+                        <span className='px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-[10px] uppercase font-bold tracking-wider'>High-Ticket</span>
+                      )}
+                    </div>
+                    <div className='flex items-center gap-2 text-indigo-400 text-xs font-medium mb-3 bg-indigo-500/10 w-fit px-3 py-1.5 rounded-lg'>
+                      <Clock className='w-3 h-3' />
+                      {plan.time}
+                    </div>
+                    <p className='text-zinc-400 text-sm leading-relaxed h-12'>{plan.description}</p>
+                  </div>
+
+                  <div className='mb-8 pb-8 border-b border-zinc-900'>
+                    <div className='flex items-baseline gap-1'>
+                      <span className='text-4xl font-bold text-white tracking-tight'>{plan.price}</span>
+                      <span className='text-zinc-500 text-sm font-semibold'>{plan.currency}</span>
+                    </div>
+                    {!plan.price.includes('+') && activeTab === 'agile' && <span className='text-zinc-600 text-xs'>Pago único</span>}
+                    {activeTab === 'custom' && <span className='text-zinc-600 text-xs'>Inversión estimada</span>}
+                  </div>
+
+                  <div className='space-y-6 flex-grow'>
+                    <div className='bg-zinc-900/50 p-4 rounded-xl border border-zinc-800/50'>
+                      <div className='flex items-center gap-2 mb-2'>
+                        <Code2 className='w-4 h-4 text-indigo-400' />
+                        <span className='text-xs text-zinc-300 font-bold uppercase tracking-wide'>Nivel Técnico</span>
+                      </div>
+                      <p className='text-xs text-zinc-400 leading-relaxed'>{plan.tech}</p>
+                    </div>
+
+                    <ul className='space-y-4'>
+                      {plan.features.map((feature) => (
+                        <li key={feature} className='flex items-start gap-3 text-sm text-zinc-300 group-hover:text-zinc-200 transition-colors'>
+                          <Check className={`w-5 h-5 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-600 group-hover:text-indigo-500/50 transition-colors'}`} />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <Link
+                    href='/contact'
+                    className={`mt-8 w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${plan.popular
+                      ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
+                      : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
+                      }`}
+                  >
+                    {activeTab === 'agile' ? 'Iniciar Proyecto' : 'Agendar Consultoría'}
+                    <ArrowRight className='w-4 h-4' />
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
           </AnimatePresence>
         </div>
 
