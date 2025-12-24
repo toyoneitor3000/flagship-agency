@@ -8,7 +8,7 @@ import { FLUID_PRESET_PURRPURR } from '@/config/creative';
 
 export const Hero = () => {
   return (
-    <section className='relative min-h-screen flex items-center justify-center bg-[#0f0033] overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033]' data-section-theme='light'>
+    <section className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033]' data-section-theme='light'>
 
       {/* --- FLUID BACKGROUND --- */}
       <FluidBackground
@@ -18,7 +18,7 @@ export const Hero = () => {
         force={FLUID_PRESET_PURRPURR.force}
         blurStrength={FLUID_PRESET_PURRPURR.blurStrength}
         grainOpacity={FLUID_PRESET_PURRPURR.grainOpacity}
-        className="absolute"
+        className="absolute z-0"
       />
 
 
