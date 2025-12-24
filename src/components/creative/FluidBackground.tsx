@@ -179,8 +179,9 @@ export default function FluidBackground({
     force = 0.8,
     grainOpacity = 0.14,
     blurStrength = 120,
-    debug = false
-}: FluidBackgroundProps & { speed?: number; force?: number }) {
+    debug = false,
+    className
+}: FluidBackgroundProps & { speed?: number; force?: number; className?: string }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<any>(null);
     const programRef = useRef<any>(null);
@@ -272,7 +273,7 @@ export default function FluidBackground({
                 container.removeChild(gl.canvas);
             }
         };
-    }, [config]); // Re-init if config physics changes significantly effectively
+    }, [config]);
 
     // Dynamic Updates for uniforms
     useEffect(() => {
@@ -286,6 +287,6 @@ export default function FluidBackground({
     }, [colors, speed, force]);
 
     return (
-        <div ref={containerRef} className="fixed inset-0 w-full h-full -z-10" />
+        <div ref={containerRef} className={`inset-0 w-full h-full -z-10 ${className || 'fixed'}`} />
     );
 }

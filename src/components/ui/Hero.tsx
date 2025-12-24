@@ -3,19 +3,24 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Code2, Rocket, Terminal } from 'lucide-react';
 import Link from 'next/link';
+import FluidBackground from '@/components/creative/FluidBackground';
+import { FLUID_PRESET_PURRPURR } from '@/config/creative';
 
 export const Hero = () => {
   return (
-    <section className='relative min-h-screen flex items-center justify-center bg-[#f0ffcc] overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033]' data-section-theme='light'>
+    <section className='relative min-h-screen flex items-center justify-center bg-[#0f0033] overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033]' data-section-theme='light'>
 
-      {/* --- LAYER 0: FRONTEND SURFACE --- */}
-      {/* Concept: Technical Paper / Clean / Premium */}
+      {/* --- FLUID BACKGROUND --- */}
+      <FluidBackground
+        config={FLUID_PRESET_PURRPURR.config}
+        colors={FLUID_PRESET_PURRPURR.colors}
+        speed={FLUID_PRESET_PURRPURR.speed}
+        force={FLUID_PRESET_PURRPURR.force}
+        blurStrength={FLUID_PRESET_PURRPURR.blurStrength}
+        grainOpacity={FLUID_PRESET_PURRPURR.grainOpacity}
+        className="absolute"
+      />
 
-      {/* Subtle Grid - Minimal Visibility (Reduced Opacity to 2-3%) */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#7096000a_1px,transparent_1px),linear-gradient(to_bottom,#7096000a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-
-      {/* Ambient Light - Very Subtle Top Shine */}
-      <div className='absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-white/80 rounded-full blur-[100px] pointer-events-none' />
 
       <div className='container mx-auto px-4 text-center z-10 relative'>
         <motion.div
@@ -25,28 +30,28 @@ export const Hero = () => {
         >
           {/* Badge - Brand Purple Anchor */}
           <div className="flex justify-center mb-8">
-            <div className='flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6D28D9]/5 border border-[#6D28D9]/20 backdrop-blur-sm'>
+            <div className='flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6D28D9]/20 border border-[#6D28D9]/30 backdrop-blur-sm'>
               <div className="relative flex items-center justify-center w-2 h-2">
-                <div className="absolute w-full h-full bg-[#6D28D9] rounded-full animate-ping opacity-75"></div>
-                <div className="relative w-1.5 h-1.5 rounded-full bg-[#6D28D9]"></div>
+                <div className="absolute w-full h-full bg-[#a78bfa] rounded-full animate-ping opacity-75"></div>
+                <div className="relative w-1.5 h-1.5 rounded-full bg-[#a78bfa]"></div>
               </div>
-              <span className='font-mono text-[10px] font-medium tracking-[0.2em] text-[#6D28D9] uppercase'>
+              <span className='font-mono text-[10px] font-medium tracking-[0.2em] text-[#a78bfa] uppercase'>
                 SYSTEM_STATUS: ONLINE
               </span>
             </div>
           </div>
 
           {/* H1 - Display Font - Heavy & Character */}
-          <h1 className='font-display text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[1] max-w-5xl mx-auto text-[#022C22] drop-shadow-sm uppercase'>
+          <h1 className='font-display text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[1] max-w-5xl mx-auto text-white drop-shadow-sm uppercase'>
             ARQUITECTURA DIGITAL<br />
-            <span className="text-[#6D28D9]">DE ALTO RENDIMIENTO</span>
-            <span className="inline-block align-baseline ml-2 w-2 h-2 rounded-full bg-[#15803D]"></span>
+            <span className="text-[#a78bfa]">DE ALTO RENDIMIENTO</span>
+            <span className="inline-block align-baseline ml-2 w-2 h-2 rounded-full bg-[#00FF9C]"></span>
           </h1>
 
           {/* P - High Contrast & Clean */}
-          <p className='font-mono text-sm md:text-base text-[#1A1523] max-w-2xl mx-auto mb-20 leading-relaxed tracking-wide font-medium'>
-            <span className="text-[#6D28D9] font-bold">&gt; </span> No vendemos código. Diseñamos <span className="font-bold text-[#6D28D9]">sistemas de experiencia</span>.<br className="hidden md:block" />
-            <span className="text-[#6D28D9] font-bold">&gt; </span> Ingeniería de precisión para marcas que no pueden permitirse fallar.
+          <p className='font-mono text-sm md:text-base text-zinc-300 max-w-2xl mx-auto mb-20 leading-relaxed tracking-wide font-medium'>
+            <span className="text-[#a78bfa] font-bold">&gt; </span> No vendemos código. Diseñamos <span className="font-bold text-[#a78bfa]">sistemas de experiencia</span>.<br className="hidden md:block" />
+            <span className="text-[#a78bfa] font-bold">&gt; </span> Ingeniería de precisión para marcas que no pueden permitirse fallar.
           </p>
 
           {/* Buttons Container - Balanced */}
@@ -61,18 +66,18 @@ export const Hero = () => {
             </Link>
 
             {/* CTA 2: Secondary Legible */}
-            <Link href='#work' className='flex-1 w-full sm:w-auto px-6 py-4 rounded-sm border-2 border-[#6D28D9]/10 bg-transparent text-[#6D28D9] font-bold text-xs tracking-[0.15em] uppercase hover:bg-[#6D28D9]/5 hover:border-[#6D28D9] transition-all duration-300 flex items-center justify-center gap-2 text-center'>
+            <Link href='#work' className='flex-1 w-full sm:w-auto px-6 py-4 rounded-sm border-2 border-[#a78bfa]/30 bg-transparent text-[#a78bfa] font-bold text-xs tracking-[0.15em] uppercase hover:bg-[#a78bfa]/10 hover:border-[#a78bfa] transition-all duration-300 flex items-center justify-center gap-2 text-center'>
               VER_PORTAFOLIO
             </Link>
           </div>
 
           {/* Scroll Guide - Replaced */}
           <div className="absolute top-1/2 -translate-y-1/2 right-4 md:right-8 hidden xl:flex flex-col items-center gap-4 opacity-60">
-            <div className="h-24 w-[1px] bg-[#6D28D9]/30"></div>
-            <span className="text-[10px] font-mono text-[#6D28D9] uppercase [writing-mode:vertical-rl] tracking-widest">
+            <div className="h-24 w-[1px] bg-[#a78bfa]/30"></div>
+            <span className="text-[10px] font-mono text-[#a78bfa] uppercase [writing-mode:vertical-rl] tracking-widest">
               System_Architecture_Below
             </span>
-            <div className="h-24 w-[1px] bg-[#6D28D9]/30"></div>
+            <div className="h-24 w-[1px] bg-[#a78bfa]/30"></div>
           </div>
 
         </motion.div>

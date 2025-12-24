@@ -8,14 +8,15 @@ import Magnetic from '@/components/creative/Magnetic';
 import FluidBackground from '@/components/creative/FluidBackground';
 import { ArrowDown, Sliders, Activity, Palette, Droplets } from 'lucide-react';
 import { Navbar } from '@/components/ui/Navbar';
+import { FLUID_PRESET_PURRPURR } from '@/config/creative';
 
 export default function CreativeLabPage() {
-    const [config, setConfig] = useState({ stiffness: 50, damping: 20, mass: 1 });
-    const [colors, setColors] = useState({ color1: '#6D28D9', color2: '#00FF9C', color3: '#3B82F6' });
-    const [blur, setBlur] = useState(120);
-    const [grain, setGrain] = useState(0.14);
-    const [speed, setSpeed] = useState(0.005);
-    const [force, setForce] = useState(2.0);
+    const [config, setConfig] = useState(FLUID_PRESET_PURRPURR.config);
+    const [colors, setColors] = useState(FLUID_PRESET_PURRPURR.colors);
+    const [blur, setBlur] = useState(FLUID_PRESET_PURRPURR.blurStrength);
+    const [grain, setGrain] = useState(FLUID_PRESET_PURRPURR.grainOpacity);
+    const [speed, setSpeed] = useState(FLUID_PRESET_PURRPURR.speed);
+    const [force, setForce] = useState(FLUID_PRESET_PURRPURR.force);
     const [showControls, setShowControls] = useState(true);
     const [debug, setDebug] = useState(false);
 
@@ -63,12 +64,12 @@ export default function CreativeLabPage() {
                                 </button>
                                 <button
                                     onClick={() => {
-                                        setColors({ color1: '#6D28D9', color2: '#00FF9C', color3: '#3B82F6' });
-                                        setConfig({ stiffness: 50, damping: 20, mass: 1 });
-                                        setSpeed(0.005);
-                                        setForce(2.0);
-                                        setGrain(0.14);
-                                        setBlur(120);
+                                        setColors(FLUID_PRESET_PURRPURR.colors);
+                                        setConfig(FLUID_PRESET_PURRPURR.config);
+                                        setSpeed(FLUID_PRESET_PURRPURR.speed);
+                                        setForce(FLUID_PRESET_PURRPURR.force);
+                                        setGrain(FLUID_PRESET_PURRPURR.grainOpacity);
+                                        setBlur(FLUID_PRESET_PURRPURR.blurStrength);
                                     }}
                                     className="px-3 py-2 bg-zinc-900 border border-zinc-700 rounded hover:border-[#6D28D9] text-[10px] uppercase font-mono transition-colors text-left"
                                 >

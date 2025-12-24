@@ -1,5 +1,17 @@
 import type { NextConfig } from "next";
 
+const withPWA = require("@ducanh2912/next-pwa").default({
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  swMinify: true,
+  disable: false, // Enable in dev for testing purposes
+  workboxOptions: {
+    disableDevLogs: true,
+  },
+});
+
 const nextConfig: NextConfig = {
   typescript: {
     // ⚠️ ATENCION: Esto permite el deploy aunque haya errores de caché de TS
@@ -18,7 +30,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);

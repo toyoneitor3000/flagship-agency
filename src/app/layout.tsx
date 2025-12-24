@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from '@/components/ui/Navbar';
@@ -20,12 +20,17 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0f0033",
+};
+
 export const metadata: Metadata = {
   title: "Purrpurr | Elite Development Agency",
   description: "We build Digital Empires, not just code.",
   icons: {
-    icon: '/brand_logo.png',
+    icon: '/purrpurr-icon.png',
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
