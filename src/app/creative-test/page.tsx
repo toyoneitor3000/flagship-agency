@@ -6,9 +6,10 @@ import SmoothScroll from '@/components/creative/SmoothScroll';
 import CreativeCursor from '@/components/creative/CreativeCursor';
 import Magnetic from '@/components/creative/Magnetic';
 import FluidBackground from '@/components/creative/FluidBackground';
-import { ArrowDown, Sliders, Activity, Palette, Droplets } from 'lucide-react';
+import { ArrowDown, Sliders, Activity, Palette, Droplets, Save } from 'lucide-react';
 import { Navbar } from '@/components/ui/Navbar';
 import { FLUID_PRESET_PURRPURR } from '@/config/creative';
+import { saveFluidConfig } from './actions';
 
 export default function CreativeLabPage() {
     const [config, setConfig] = useState(FLUID_PRESET_PURRPURR.config);
@@ -19,6 +20,27 @@ export default function CreativeLabPage() {
     const [force, setForce] = useState(FLUID_PRESET_PURRPURR.force);
     const [showControls, setShowControls] = useState(true);
     const [debug, setDebug] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+
+    const handleSave = async () => {
+        setSaveStatus('saving');
+        try {
+            await saveFluidConfig({
+                config,
+                colors,
+                blurStrength: blur,
+                grainOpacity: grain,
+                speed,
+                force
+            });
+            setSaveStatus('success');
+            setTimeout(() => setSaveStatus('idle'), 2000);
+        } catch (error) {
+            console.error(error);
+            setSaveStatus('error');
+            setTimeout(() => setSaveStatus('idle'), 2000);
+        }
+    };
 
     return (
         <SmoothScroll>
@@ -49,6 +71,20 @@ export default function CreativeLabPage() {
 
                             {/* PRESETS */}
                             <div className="grid grid-cols-2 gap-2">
+                                <button
+                                    onClick={handleSave}
+                                    disabled={saveStatus !== 'idle'}
+                                    className={`col-span-2 px-3 py-3 rounded border font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed
+                                        ${saveStatus === 'success' ? 'bg-green-500 border-green-500 text-black font-bold' : ''}
+                                        ${saveStatus === 'error' ? 'bg-red-500 border-red-500 text-white' : ''}
+                                        ${saveStatus === 'idle' || saveStatus === 'saving' ? 'bg-[#6D28D9] text-white border-[#6D28D9] hover:bg-[#5b21b6]' : ''}
+                                    `}
+                                >
+                                    {saveStatus === 'idle' && <><Save className="w-4 h-4" /> AGREGAR A LANDING</>}
+                                    {saveStatus === 'saving' && <><Activity className="w-4 h-4 animate-spin" /> GUARDANDO...</>}
+                                    {saveStatus === 'success' && <div className="flex items-center gap-2">✨ ACTUALIZADO CON ÉXITO</div>}
+                                    {saveStatus === 'error' && 'ERROR AL GUARDAR'}
+                                </button>
                                 <button
                                     onClick={() => {
                                         setColors({ color1: '#FF3D00', color2: '#001AFF', color3: '#00FFFF' });

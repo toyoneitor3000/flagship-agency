@@ -18,13 +18,13 @@ export interface FluidConfig {
 
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
     config: { stiffness: 50, damping: 20, mass: 1 },
-    colors: {
-        color1: '#6D28D9', // Brand Purple
-        color2: '#00FF9C', // Neon Green
-        color3: '#3B82F6'  // Blue Accent
+    colors: { 
+        color1: '#6D28D9',
+        color2: '#00FF9C',
+        color3: '#3B82F6'
     },
     speed: 0.005,
-    force: 2.0,
+    force: 2,
     blurStrength: 120,
     grainOpacity: 0.14
 };
