@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 
 export const Footer = () => (
-  <footer className='bg-zinc-950 border-t border-zinc-900 py-12 font-mono'>
+  <footer className='bg-zinc-950 border-t border-zinc-900 py-12 font-mono' data-section-theme='dark'>
     <div className='container mx-auto px-4'>
       <div className='flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-zinc-500'>
 

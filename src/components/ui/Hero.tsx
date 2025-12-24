@@ -6,13 +6,13 @@ import Link from 'next/link';
 
 export const Hero = () => {
   return (
-    <section className='relative min-h-screen flex items-center justify-center bg-[#F8FAF8] overflow-hidden pt-20 selection:bg-[#6D28D9]/20 selection:text-[#6D28D9]'>
+    <section className='relative min-h-screen flex items-center justify-center bg-[#f0ffcc] overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033]' data-section-theme='light'>
 
       {/* --- LAYER 0: FRONTEND SURFACE --- */}
       {/* Concept: Technical Paper / Clean / Premium */}
 
       {/* Subtle Grid - Minimal Visibility (Reduced Opacity to 2-3%) */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000_1px,transparent_1px),linear-gradient(to_bottom,#000000_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-[0.03]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#7096000a_1px,transparent_1px),linear-gradient(to_bottom,#7096000a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
       {/* Ambient Light - Very Subtle Top Shine */}
       <div className='absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-white/80 rounded-full blur-[100px] pointer-events-none' />

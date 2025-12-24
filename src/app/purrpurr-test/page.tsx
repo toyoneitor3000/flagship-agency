@@ -13,7 +13,7 @@ export default function PurrpurrTestPage() {
     const [errorTrigger, setErrorTrigger] = useState(false);
 
     return (
-        <div className="min-h-screen bg-zinc-950 text-white p-8 font-sans pb-32">
+        <div className="min-h-screen bg-zinc-950 text-white p-8 font-sans pb-32" data-section-theme='dark'>
             {/* 3. INTRO MODE DEMO */}
             <PurrpurrGuide mode="intro" tip="Welcome! I am Purrpurr, your holographic guide. I will disappear in a few seconds." />
 

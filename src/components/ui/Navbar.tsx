@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -10,6 +11,8 @@ import { cn } from '@/lib/utils';
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [navTheme, setNavTheme] = useState<'light' | 'dark'>('light'); // 'light' = Light Background (needs dark text)
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +22,52 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Theme Detection Logic
+  useEffect(() => {
+    const handleScrollTheme = () => {
+      // Check what's under the navbar (approx 40px from top of viewport)
+      const scanLine = 40;
+
+      const sections = document.querySelectorAll('[data-section-theme]');
+      let foundTheme: 'light' | 'dark' | null = null;
+
+      for (const section of sections) {
+        const rect = section.getBoundingClientRect();
+        // Check if the scanline falls within this section's vertical bounds
+        if (rect.top <= scanLine && rect.bottom >= scanLine) {
+          const theme = section.getAttribute('data-section-theme');
+          if (theme === 'light' || theme === 'dark') {
+            foundTheme = theme;
+          }
+          break; // Found the active section
+        }
+      }
+
+      if (foundTheme) {
+        setNavTheme(foundTheme);
+      }
+    };
+
+    // Run on scroll
+    window.addEventListener('scroll', handleScrollTheme);
+    window.addEventListener('resize', handleScrollTheme);
+
+    // Run immediately to set initial state
+    handleScrollTheme();
+
+    // Polling fallback: Check frequently for the first second after route change
+    // This fixes issues where the DOM isn't fully ready immediately after navigation
+    const intervalId = setInterval(handleScrollTheme, 50);
+    const timeoutId = setTimeout(() => clearInterval(intervalId), 1000);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollTheme);
+      window.removeEventListener('resize', handleScrollTheme);
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+    };
+  }, [pathname]); // Re-bind and re-check on route change
+
   // Lock body scroll when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -26,11 +75,22 @@ export const Navbar = () => {
     } else {
       document.body.style.overflow = 'unset';
     }
-    // Cleanup function to ensure scroll is re-enabled if component unmounts while menu is open
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isMobileMenuOpen]);
+
+  // Derived styles based on theme
+  const textColorClass = navTheme === 'light' ? 'text-[#022C22]' : 'text-zinc-100'; // Dark text on light bg, Light text on dark bg
+  const hoverColorClass = navTheme === 'light' ? 'hover:text-[#6D28D9]' : 'hover:text-[#00FF9C]';
+  const buttonBorderClass = navTheme === 'light' ? 'border-[#6D28D9] text-[#6D28D9] hover:bg-[#6D28D9] hover:text-white' : 'border-zinc-100 text-zinc-100 hover:border-[#00FF9C] hover:text-[#00FF9C] hover:bg-zinc-950';
+
+  // Navbar Background logic
+  const navbarBgClass = isScrolled
+    ? navTheme === 'light'
+      ? 'bg-white/70 backdrop-blur-xl border-zinc-200/50 shadow-sm'
+      : 'bg-zinc-950/70 backdrop-blur-xl border-zinc-800/50 shadow-sm'
+    : 'bg-transparent border-transparent py-5';
 
   return (
     <motion.header
@@ -39,9 +99,7 @@ export const Navbar = () => {
       transition={{ duration: 0.6 }}
       className={cn(
         'fixed top-0 w-full z-50 transition-all duration-300 border-b',
-        isScrolled
-          ? 'bg-zinc-100/10 backdrop-blur-xl border-zinc-950/5 py-3 shadow-sm'
-          : 'bg-transparent border-transparent py-5'
+        navbarBgClass
       )}
     >
       <div className='container mx-auto px-4 md:px-6 flex items-center justify-between'>
@@ -51,40 +109,51 @@ export const Navbar = () => {
             alt="Purrpurr Logo"
             width={160}
             height={40}
-            className="h-10 w-auto object-contain"
+            className={cn(
+              "h-10 w-auto object-contain transition-all duration-300",
+              // Optional: Invert logo brightness if needed for dark mode, 
+              // but assuming brand logo works on both or we might need a white version.
+              // If navTheme is dark (dark bg), we might want to ensure logo is visible.
+              // For now keeping it standard.
+            )}
             priority
           />
         </Link>
 
         <nav className='hidden md:flex items-center gap-8'>
-          <Link href='#features' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
+          <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
             [ Servicios ]
           </Link>
-          <Link href='#pricing' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
-            [ Precios ]
+          <Link href='/typography-test' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+            [ Purrpurr Labs ]
           </Link>
-          <Link href='#about' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
+          <Link href='#about' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
             [ Nosotros ]
           </Link>
-          <Link href='#contact' className='text-sm font-semibold text-[#6D28D9] hover:text-[#5B21B6] transition-colors font-mono'>
+          <Link href='#contact' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
             [ Contacto ]
           </Link>
-          <button className='px-5 py-2 rounded-sm bg-transparent text-[#6D28D9] font-mono text-[12px] font-bold border border-[#6D28D9] hover:border-[#00FF9C] hover:text-[#00FF9C] hover:bg-zinc-950 transition-all shadow-sm tracking-wider'>
+          <button className={cn(
+            'px-5 py-2 rounded-sm bg-transparent font-mono text-[12px] font-bold border transition-all shadow-sm tracking-wider',
+            buttonBorderClass
+          )}>
             &lt; COTIZAR /&gt;
           </button>
         </nav>
 
         {/* Mobile Menu Toggle */}
         <button
-          className='md:hidden text-indigo-600 p-2 hover:bg-indigo-50 rounded-md transition-colors'
+          className={cn(
+            'md:hidden p-2 rounded-md transition-colors',
+            navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
+          )}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6 text-indigo-600" /> : <Menu className="w-6 h-6" />}
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
       {/* Mobile Nav - Terminal Style */}
-      {/* Mobile Nav - Terminal Style Floating Window */}
       {isMobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: '100%' }}

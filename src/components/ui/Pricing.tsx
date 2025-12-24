@@ -77,7 +77,7 @@ export const Pricing = () => {
   const plans = activeTab === 'agile' ? agilePlans : customPlans;
 
   return (
-    <section className='py-32 bg-zinc-950 relative overflow-hidden' id='pricing'>
+    <section className='py-32 bg-zinc-950 relative overflow-hidden' id='pricing' data-section-theme='dark'>
       {/* Ambient Glow */}
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none' />
 

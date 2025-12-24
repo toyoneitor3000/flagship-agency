@@ -57,7 +57,7 @@ const projects = [
 
 export const Portfolio = () => {
     return (
-        <section className='py-32 bg-zinc-950' id='work'>
+        <section className='py-32 bg-zinc-950' id='work' data-section-theme='dark'>
             <div className='container mx-auto px-4'>
                 <div className='flex flex-col md:flex-row justify-between items-end mb-16 gap-6'>
                     <div className='w-full md:w-auto text-center md:text-left'>

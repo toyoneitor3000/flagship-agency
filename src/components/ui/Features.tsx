@@ -38,7 +38,7 @@ const features = [
 
 export const Features = () => {
   return (
-    <section className='py-32 bg-[#0D0216] relative overflow-hidden' id='features'>
+    <section className='py-32 bg-[#0D0216] relative overflow-hidden' id='features' data-section-theme='dark'>
 
       {/* --- LAYER 1: BACKEND DEEP DIVE --- */}
 

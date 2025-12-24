@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export const DesignPhilosophy = () => {
     return (
-        <section className='py-20 bg-zinc-950 border-t border-zinc-900'>
+        <section className='py-20 bg-zinc-950 border-t border-zinc-900' data-section-theme='dark'>
             <div className='container mx-auto px-4 text-center'>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
