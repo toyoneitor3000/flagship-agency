@@ -237,11 +237,24 @@ export default function FluidBackground({
         const mesh = new Mesh(gl, { geometry, program });
 
         // 5. Interaction Listeners
-        function updateMouse(e: MouseEvent) {
-            targetMouseRef.current.x = e.clientX / window.innerWidth;
-            targetMouseRef.current.y = 1.0 - (e.clientY / window.innerHeight);
+        function updateMouse(e: MouseEvent | TouchEvent) {
+            let clientX, clientY;
+
+            if (e instanceof MouseEvent) {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else if (e instanceof TouchEvent && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                return;
+            }
+
+            targetMouseRef.current.x = clientX / window.innerWidth;
+            targetMouseRef.current.y = 1.0 - (clientY / window.innerHeight);
         }
         window.addEventListener('mousemove', updateMouse);
+        window.addEventListener('touchmove', updateMouse, { passive: false });
 
         // 6. Animation Loop
         let animationId: number;
@@ -267,6 +280,7 @@ export default function FluidBackground({
         return () => {
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', updateMouse);
+            window.removeEventListener('touchmove', updateMouse);
             cancelAnimationFrame(animationId);
             rendererRef.current = null;
             if (container && gl.canvas.parentNode === container) {

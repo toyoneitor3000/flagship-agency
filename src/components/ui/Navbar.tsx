@@ -98,7 +98,7 @@ export const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
       className={cn(
-        'fixed top-0 w-full z-50 transition-all duration-300 border-b',
+        'fixed top-0 w-full z-[100] transition-all duration-300 border-b',
         navbarBgClass
       )}
     >
@@ -182,18 +182,23 @@ export const Navbar = () => {
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Servicios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>
-                <Link href='#pricing' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href='/typography-test' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
                   <span className='text-purple-500/50 text-xs'>[02]</span>
-                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Precios</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Purrpurr Labs</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-purple-500 animate-pulse">_</span>
                 </Link>
+                <Link href='#pricing' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
+                  <span className='text-yellow-500/50 text-xs'>[03]</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Precios</span>
+                  <span className="ml-auto opacity-0 group-hover:opacity-100 text-yellow-500 animate-pulse">_</span>
+                </Link>
                 <Link href='#about' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-indigo-500/50 text-xs'>[03]</span>
+                  <span className='text-indigo-500/50 text-xs'>[04]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Nosotros</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-indigo-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#contact' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-green-500/50 text-xs'>[04]</span>
+                  <span className='text-green-500/50 text-xs'>[05]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Contacto</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>
