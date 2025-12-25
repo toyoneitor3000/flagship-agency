@@ -18,6 +18,9 @@ export default function CreativeLabPage() {
     const [grain, setGrain] = useState(FLUID_PRESET_PURRPURR.grainOpacity);
     const [speed, setSpeed] = useState(FLUID_PRESET_PURRPURR.speed);
     const [force, setForce] = useState(FLUID_PRESET_PURRPURR.force);
+    const [radius, setRadius] = useState(FLUID_PRESET_PURRPURR.interactionRadius);
+    const [zoom, setZoom] = useState(FLUID_PRESET_PURRPURR.fluidZoom);
+    const [blendThresholds, setBlendThresholds] = useState((FLUID_PRESET_PURRPURR as any).blendThresholds || { blend1: 0.1, blend2: 0.4, blend3: 0.7 });
     const [showControls, setShowControls] = useState(true);
     const [debug, setDebug] = useState(false);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
@@ -31,7 +34,10 @@ export default function CreativeLabPage() {
                 blurStrength: blur,
                 grainOpacity: grain,
                 speed,
-                force
+                force,
+                interactionRadius: radius,
+                fluidZoom: zoom,
+                blendThresholds
             });
             setSaveStatus('success');
             setTimeout(() => setSaveStatus('idle'), 2000);
@@ -47,7 +53,19 @@ export default function CreativeLabPage() {
             <div className="min-h-[300vh] text-zinc-100 cursor-auto selection:bg-purple-500/30 relative">
 
                 <CreativeCursor />
-                <FluidBackground config={config} colors={colors} speed={speed} force={force} blurStrength={blur} grainOpacity={grain} debug={debug} />
+                <FluidBackground
+                    config={config}
+                    colors={colors}
+                    speed={speed}
+                    force={force}
+                    blurStrength={blur}
+                    grainOpacity={grain}
+
+                    interactionRadius={radius}
+                    fluidZoom={zoom}
+                    blendThresholds={blendThresholds}
+                    debug={debug}
+                />
 
                 {/* PHYSICS CONTROL PANEL */}
                 <div className="fixed bottom-8 right-8 z-[9990] flex flex-col items-end pointer-events-auto">
@@ -87,25 +105,31 @@ export default function CreativeLabPage() {
                                 </button>
                                 <button
                                     onClick={() => {
-                                        setColors({ color1: '#FF3D00', color2: '#001AFF', color3: '#00FFFF' });
-                                        setConfig({ stiffness: 50, damping: 25, mass: 1 });
-                                        setSpeed(0.2);
-                                        setForce(2.0);
-                                        setGrain(0.18);
-                                        setBlur(140);
+                                        setColors({ color1: '#FF3D00', color2: '#001AFF', color3: '#00FFFF', color4: '#000000' });
+                                        setConfig({ stiffness: 120, damping: 10, mass: 0.8 }); // Snappy & Bouncy
+                                        setSpeed(0.5);
+                                        setForce(2.5);
+                                        setGrain(0.40);
+                                        setBlur(100);
+                                        setRadius(0.8);
+                                        setZoom(1.0);
+                                        setBlendThresholds({ blend1: 0.3, blend2: 0.5, blend3: 0.8 });
                                     }}
                                     className="px-3 py-2 bg-zinc-900 border border-zinc-700 rounded hover:border-[#FF3D00] text-[10px] uppercase font-mono transition-colors text-left"
                                 >
-                                    Running on <span className="text-[#FF3D00] font-bold">Monopo</span>
+                                    Preset: <span className="text-[#FF3D00] font-bold">Monopo (High Energy)</span>
                                 </button>
                                 <button
                                     onClick={() => {
                                         setColors(FLUID_PRESET_PURRPURR.colors);
                                         setConfig(FLUID_PRESET_PURRPURR.config);
-                                        setSpeed(FLUID_PRESET_PURRPURR.speed);
-                                        setForce(FLUID_PRESET_PURRPURR.force);
+                                        setSpeed(0.2); // Explicit valid Speed
+                                        setForce(4.0); // Explicit valid Force
                                         setGrain(FLUID_PRESET_PURRPURR.grainOpacity);
                                         setBlur(FLUID_PRESET_PURRPURR.blurStrength);
+                                        setRadius(FLUID_PRESET_PURRPURR.interactionRadius);
+                                        setZoom(FLUID_PRESET_PURRPURR.fluidZoom);
+                                        setBlendThresholds((FLUID_PRESET_PURRPURR as any).blendThresholds || { blend1: 0.1, blend2: 0.4, blend3: 0.7 });
                                     }}
                                     className="px-3 py-2 bg-zinc-900 border border-zinc-700 rounded hover:border-[#6D28D9] text-[10px] uppercase font-mono transition-colors text-left"
                                 >
@@ -117,15 +141,51 @@ export default function CreativeLabPage() {
                             <div className="space-y-3">
                                 <label className="text-xs font-mono text-zinc-600 flex items-center gap-2"><Palette className="w-3 h-3" /> Fluid Colors</label>
                                 <div className="flex gap-2">
-                                    {['color1', 'color2', 'color3'].map((c, i) => (
+                                    {['color1', 'color2', 'color3', 'color4'].map((c, i) => (
                                         <input
                                             key={c}
                                             type="color"
-                                            value={colors[c as keyof typeof colors]}
+                                            value={colors[c as keyof typeof colors] || '#000000'}
                                             onChange={(e) => setColors(prev => ({ ...prev, [c]: e.target.value }))}
                                             className="h-8 w-full bg-transparent rounded cursor-pointer"
                                         />
                                     ))}
+                                </div>
+                            </div>
+
+                            {/* Color Mixing */}
+                            <div className="space-y-3 pt-2 border-t border-zinc-800">
+                                <label className="text-xs font-mono text-zinc-600 flex items-center gap-2"><Palette className="w-3 h-3" /> Color Mixing Proportions</label>
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+                                        <span>C1-C2 Mix ({blendThresholds.blend1.toFixed(2)})</span>
+                                    </div>
+                                    <input
+                                        type="range" min="0" max="1" step="0.05"
+                                        value={blendThresholds.blend1}
+                                        onChange={(e) => setBlendThresholds(prev => ({ ...prev, blend1: Number(e.target.value) }))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
+                                    />
+
+                                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+                                        <span>C2-C3 Mix ({blendThresholds.blend2.toFixed(2)})</span>
+                                    </div>
+                                    <input
+                                        type="range" min="0" max="1" step="0.05"
+                                        value={blendThresholds.blend2}
+                                        onChange={(e) => setBlendThresholds(prev => ({ ...prev, blend2: Number(e.target.value) }))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
+                                    />
+
+                                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+                                        <span>C3-C4 Mix ({blendThresholds.blend3.toFixed(2)})</span>
+                                    </div>
+                                    <input
+                                        type="range" min="0" max="1" step="0.05"
+                                        value={blendThresholds.blend3}
+                                        onChange={(e) => setBlendThresholds(prev => ({ ...prev, blend3: Number(e.target.value) }))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
+                                    />
                                 </div>
                             </div>
 
@@ -137,7 +197,7 @@ export default function CreativeLabPage() {
                                         <span>{speed.toFixed(2)}</span>
                                     </div>
                                     <input
-                                        type="range" min="0" max="1" step="0.01" value={speed}
+                                        type="range" min="0" max="2" step="0.01" value={speed}
                                         onChange={(e) => setSpeed(Number(e.target.value))}
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
@@ -148,7 +208,7 @@ export default function CreativeLabPage() {
                                         <span>{force.toFixed(2)}</span>
                                     </div>
                                     <input
-                                        type="range" min="0" max="2" step="0.05" value={force}
+                                        type="range" min="0" max="10" step="0.1" value={force}
                                         onChange={(e) => setForce(Number(e.target.value))}
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
@@ -156,26 +216,50 @@ export default function CreativeLabPage() {
 
                                 <div className="h-px bg-zinc-800 my-2" />
 
+                                <div className="h-px bg-zinc-800 my-2" />
+
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2">Mouse Lag (Damping)</span>
-                                        <span>{config.damping}</span>
+                                        <span className="flex items-center gap-2 text-white">Elasticity (Stiffness)</span>
+                                        <span>{config.stiffness}</span>
                                     </div>
                                     <input
-                                        type="range" min="5" max="100" value={config.damping}
-                                        onChange={(e) => setConfig(prev => ({ ...prev, damping: Number(e.target.value) }))}
-                                        className="w-full accent-zinc-500 h-1 bg-zinc-800 rounded appearance-none"
+                                        type="range" min="10" max="300" value={config.stiffness}
+                                        onChange={(e) => setConfig(prev => ({ ...prev, stiffness: Number(e.target.value) }))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span>Mouse Responsiveness</span>
-                                        <span>{config.stiffness}</span>
+                                        <span className="flex items-center gap-2 text-white">Friction (Damping)</span>
+                                        <span>{config.damping}</span>
                                     </div>
                                     <input
-                                        type="range" min="10" max="200" value={config.stiffness}
-                                        onChange={(e) => setConfig(prev => ({ ...prev, stiffness: Number(e.target.value) }))}
-                                        className="w-full accent-zinc-500 h-1 bg-zinc-800 rounded appearance-none"
+                                        type="range" min="1" max="50" value={config.damping}
+                                        onChange={(e) => setConfig(prev => ({ ...prev, damping: Number(e.target.value) }))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
+                                        <span className="flex items-center gap-2 text-white">Viscosity (Mass)</span>
+                                        <span>{config.mass}</span>
+                                    </div>
+                                    <input
+                                        type="range" min="0.1" max="5.0" step="0.1" value={config.mass}
+                                        onChange={(e) => setConfig(prev => ({ ...prev, mass: Number(e.target.value) }))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
+                                        <span className="flex items-center gap-2 text-white">Interaction Radius</span>
+                                        <span>{radius.toFixed(2)}</span>
+                                    </div>
+                                    <input
+                                        type="range" min="0.1" max="2.0" step="0.05" value={radius}
+                                        onChange={(e) => setRadius(Number(e.target.value))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
                             </div>
@@ -184,24 +268,35 @@ export default function CreativeLabPage() {
                             <div className="space-y-4">
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2"><Droplets className="w-3 h-3" /> Blur Strength</span>
+                                        <span className="flex items-center gap-2 text-white"><Droplets className="w-3 h-3" /> Fluid Zoom</span>
+                                        <span>{zoom.toFixed(1)}x</span>
+                                    </div>
+                                    <input
+                                        type="range" min="0.5" max="10.0" step="0.1" value={zoom}
+                                        onChange={(e) => setZoom(Number(e.target.value))}
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
+                                        <span className="flex items-center gap-2 text-white"><Droplets className="w-3 h-3" /> Blur Strength</span>
                                         <span>{blur}px</span>
                                     </div>
                                     <input
                                         type="range" min="0" max="200" value={blur}
                                         onChange={(e) => setBlur(Number(e.target.value))}
-                                        className="w-full accent-blue-500 h-1 bg-zinc-800 rounded appearance-none"
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span>Film Grain</span>
+                                        <span className=" text-white">Film Grain</span>
                                         <span>{(grain * 100).toFixed(0)}%</span>
                                     </div>
                                     <input
                                         type="range" min="0" max="0.5" step="0.01" value={grain}
                                         onChange={(e) => setGrain(Number(e.target.value))}
-                                        className="w-full accent-zinc-500 h-1 bg-zinc-800 rounded appearance-none"
+                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
                                 <div className="pt-4 border-t border-zinc-900">
@@ -221,8 +316,6 @@ export default function CreativeLabPage() {
                 </div>
 
                 {/* PROTOTYPE WARNING */}
-                {/* NAVBAR */}
-                <Navbar />
 
                 {/* HERO SECTION */}
                 <section className="h-screen flex items-center justify-center relative flex-col">
@@ -247,7 +340,7 @@ export default function CreativeLabPage() {
                 <section className="min-h-screen py-32 px-4 md:px-20">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
 
-                        <div className="space-y-8">
+                        <div className="space-y-8 p-8 bg-zinc-950/40 backdrop-blur-xl border border-zinc-800/50 rounded-3xl shadow-2xl">
                             <h2 className="text-4xl font-bold font-mono">// MAGNETIC_OBJECTS</h2>
                             <p className="text-zinc-500 max-w-md text-lg leading-relaxed">
                                 The cursor isn't just a pointer; it's a physical object in the DOM.

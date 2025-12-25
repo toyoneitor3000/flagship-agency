@@ -13,9 +13,17 @@ interface FluidBackgroundProps {
         color1: string;
         color2: string;
         color3: string;
+        color4: string;
     };
     grainOpacity?: number;
     blurStrength?: number;
+    interactionRadius?: number;
+    fluidZoom?: number;
+    blendThresholds?: {
+        blend1: number;
+        blend2: number;
+        blend3: number;
+    };
     debug?: boolean;
 }
 
@@ -35,10 +43,16 @@ const fragment = /* glsl */ `
     uniform vec3 uColor1;
     uniform vec3 uColor2;
     uniform vec3 uColor3;
+    uniform vec3 uColor4;
     uniform vec2 uMouse;
     uniform vec2 uResolution;
     uniform float uFlowSpeed;
     uniform float uInteractionStrength;
+    uniform float uInteractionRadius;
+    uniform float uFluidZoom;
+    uniform float uBlend1;
+    uniform float uBlend2;
+    uniform float uBlend3;
     
     varying vec2 vUv;
 
@@ -126,7 +140,7 @@ const fragment = /* glsl */ `
         float v = 0.0;
         float a = 0.5;
         vec3 shift = vec3(100.0);
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 2; ++i) {
             v += a * snoise(x);
             x = x * 2.0 + shift;
             a *= 0.5;
@@ -148,24 +162,27 @@ const fragment = /* glsl */ `
         
         // Interaction Shape
         // Create a larger, softer influence field
-        float mouseForce = smoothstep(0.5, 0.0, dist) * uInteractionStrength;
+        float mouseForce = smoothstep(uInteractionRadius, 0.0, dist) * uInteractionStrength;
         
         // Base Flow
-        vec3 p = vec3(gridSt * 3.0, uTime * uFlowSpeed);
+        vec3 p = vec3(gridSt * uFluidZoom, uTime * uFlowSpeed);
         
         // Distort noise domain with mouse
-        // We push the 'z' coordinate to animate, and 'xy' to warp
-        float noiseVal = fbm(p + vec3(mouseForce * 0.5, mouseForce * 0.5, 0.0));
+        // Distort noise domain with mouse - Increased strength for better visibility without spotlight
+        float noiseVal = fbm(p + vec3(mouseForce * 1.5, mouseForce * 1.5, 0.0));
         
         // Secondary noise layer
         float q = fbm(p + vec3(noiseVal + uTime * 0.1));
         
-        // Color Mixing
-        vec3 finalColor = mix(uColor1, uColor2, smoothstep(0.0, 0.8, q + mouseForce * 0.2));
-        finalColor = mix(finalColor, uColor3, smoothstep(0.2, 1.0, noiseVal - mouseForce * 0.1));
+        // Color Mixing - Use blend thresholds as center points
+        // Use a fixed transition width to prevent edge0 >= edge1 errors and allow full range control
+        float transition = 0.2;
+        vec3 finalColor = mix(uColor1, uColor2, smoothstep(uBlend1 - transition, uBlend1 + transition, q + mouseForce * 0.5));
+        finalColor = mix(finalColor, uColor3, smoothstep(uBlend2 - transition, uBlend2 + transition, noiseVal - mouseForce * 0.2));
+        finalColor = mix(finalColor, uColor4, smoothstep(uBlend3 - transition, uBlend3 + transition, q - noiseVal * 0.2));
         
-        // Highlight mouse interaction area slightly
-        finalColor += vec3(0.1) * mouseForce;
+        // Removed spotlight effect per user request
+        // finalColor += vec3(0.1) * mouseForce;
 
         float grain = fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453) * 0.05;
         gl_FragColor = vec4(finalColor + grain, 1.0);
@@ -174,11 +191,14 @@ const fragment = /* glsl */ `
 
 export default function FluidBackground({
     config = { stiffness: 50, damping: 20, mass: 1 },
-    colors = { color1: '#6D28D9', color2: '#00FF9C', color3: '#2563EB' },
+    colors = { color1: '#6D28D9', color2: '#00FF9C', color3: '#2563EB', color4: '#000000' },
     speed = 0.1,
     force = 0.8,
     grainOpacity = 0.14,
     blurStrength = 120,
+    interactionRadius = 0.5,
+    fluidZoom = 3.0,
+    blendThresholds = { blend1: 0.1, blend2: 0.4, blend3: 0.7 },
     debug = false,
     className
 }: FluidBackgroundProps & { speed?: number; force?: number; className?: string }) {
@@ -187,13 +207,24 @@ export default function FluidBackground({
     const programRef = useRef<any>(null);
     const mouseRef = useRef(new Vec2(0.5, 0.5));
     const targetMouseRef = useRef(new Vec2(0.5, 0.5));
+    const velocityRef = useRef(new Vec2(0, 0));
+    const prevTimeRef = useRef(0);
+    const simulatedTimeRef = useRef(0);
+    const currentFlowSpeedRef = useRef(0);
+    const speedRef = useRef(speed);
+    const configRef = useRef(config);
+
+    useEffect(() => {
+        configRef.current = config;
+        speedRef.current = speed;
+    }, [config, speed]);
 
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
         // 1. Setup OGL
-        const renderer = new Renderer({ alpha: false, dpr: Math.min(window.devicePixelRatio, 2) });
+        const renderer = new Renderer({ alpha: false, dpr: Math.min(window.devicePixelRatio, 1) });
         const gl = renderer.gl;
         gl.clearColor(0, 0, 0, 1);
         container.appendChild(gl.canvas);
@@ -226,10 +257,16 @@ export default function FluidBackground({
                 uColor1: { value: new Color(colors.color1) },
                 uColor2: { value: new Color(colors.color2) },
                 uColor3: { value: new Color(colors.color3) },
+                uColor4: { value: new Color(colors.color4 || '#000000') },
                 uMouse: { value: new Vec2(0.5, 0.5) },
                 uResolution: { value: new Vec2(renderer.width, renderer.height) },
-                uFlowSpeed: { value: speed },
-                uInteractionStrength: { value: force }
+                uFlowSpeed: { value: 1.0 }, // Multiplier handled in JS time integration
+                uInteractionStrength: { value: force },
+                uInteractionRadius: { value: interactionRadius },
+                uFluidZoom: { value: fluidZoom },
+                uBlend1: { value: blendThresholds.blend1 },
+                uBlend2: { value: blendThresholds.blend2 },
+                uBlend3: { value: blendThresholds.blend3 }
             },
         });
         programRef.current = program;
@@ -264,14 +301,66 @@ export default function FluidBackground({
             // Safety check
             if (!rendererRef.current || !containerRef.current) return;
 
-            const time = t * 0.001;
+            const timeNow = t * 0.001;
+            // Calculate delta time in seconds, capped at 0.05s to prevent huge jumps and instability
+            const dt = Math.min(0.05, timeNow - prevTimeRef.current);
+            prevTimeRef.current = timeNow;
 
-            // Physics LERP - derived from config for responsiveness
-            // stiffness 10-200 -> lerp 0.01 - 0.2
-            const lerpFactor = Math.max(0.01, Math.min(0.5, config.stiffness * 0.002));
-            mouseRef.current.lerp(targetMouseRef.current, lerpFactor);
+            // Physics Update: Spring-Mass-Damper
+            const { stiffness, damping, mass } = configRef.current;
 
-            program.uniforms.uTime.value = time;
+            // F_spring = k * (target - position)
+            const forceX = stiffness * (targetMouseRef.current.x - mouseRef.current.x);
+            const forceY = stiffness * (targetMouseRef.current.y - mouseRef.current.y);
+
+            // F_damping = -c * velocity
+            const dampX = -damping * velocityRef.current.x;
+            const dampY = -damping * velocityRef.current.y;
+
+            // a = F / m
+            const accelX = (forceX + dampX) / mass;
+            const accelY = (forceY + dampY) / mass;
+
+            // Integrate
+            velocityRef.current.x += accelX * dt;
+            velocityRef.current.y += accelY * dt;
+
+            // Safety check for NaN (Physics explosion)
+            if (Number.isNaN(velocityRef.current.x) || Number.isNaN(velocityRef.current.y)) {
+                velocityRef.current.set(0, 0);
+            }
+
+            mouseRef.current.x += velocityRef.current.x * dt;
+            mouseRef.current.y += velocityRef.current.y * dt;
+
+            if (Number.isNaN(mouseRef.current.x) || Number.isNaN(mouseRef.current.y)) {
+                mouseRef.current.copy(targetMouseRef.current);
+            }
+
+            // Clamp velocity to prevent explosion (instability)
+            const MAX_VELOCITY = 50.0;
+            if (velocityRef.current.len() > MAX_VELOCITY) {
+                velocityRef.current.normalize().scale(MAX_VELOCITY);
+            }
+
+            // Dynamic Speed Calculation
+            const velocityMag = velocityRef.current.len();
+            // Target speed: tiny idle movement + scaling based on mouse energy
+            // We use speedRef.current as the "Sensitivity" multiplier
+            const targetSpeed = speedRef.current * (0.05 + velocityMag * 3.0);
+
+            // Lerp current speed towards target for smooth acceleration/deceleration
+            currentFlowSpeedRef.current += (targetSpeed - currentFlowSpeedRef.current) * 0.1;
+
+            // Manually integrate time
+            simulatedTimeRef.current += dt * currentFlowSpeedRef.current;
+
+            // Prevent float precision loss for uTime over very long runs
+            if (simulatedTimeRef.current > 10000) {
+                simulatedTimeRef.current -= 10000;
+            }
+
+            program.uniforms.uTime.value = simulatedTimeRef.current;
             program.uniforms.uMouse.value.copy(mouseRef.current);
             renderer.render({ scene: mesh, camera });
         }
@@ -287,7 +376,7 @@ export default function FluidBackground({
                 container.removeChild(gl.canvas);
             }
         };
-    }, [config]);
+    }, []); // Empty dependency array - only run once on mount
 
     // Dynamic Updates for uniforms
     useEffect(() => {
@@ -295,10 +384,16 @@ export default function FluidBackground({
             programRef.current.uniforms.uColor1.value.set(colors.color1);
             programRef.current.uniforms.uColor2.value.set(colors.color2);
             programRef.current.uniforms.uColor3.value.set(colors.color3);
-            programRef.current.uniforms.uFlowSpeed.value = speed;
+            programRef.current.uniforms.uColor4.value.set(colors.color4 || '#000000');
+            // uFlowSpeed is handled dynamically in the loop now, so we don't set it directly here
             programRef.current.uniforms.uInteractionStrength.value = force;
+            programRef.current.uniforms.uInteractionRadius.value = interactionRadius;
+            programRef.current.uniforms.uFluidZoom.value = fluidZoom;
+            programRef.current.uniforms.uBlend1.value = blendThresholds.blend1;
+            programRef.current.uniforms.uBlend2.value = blendThresholds.blend2;
+            programRef.current.uniforms.uBlend3.value = blendThresholds.blend3;
         }
-    }, [colors, speed, force]);
+    }, [colors, speed, force, interactionRadius, fluidZoom, blendThresholds]);
 
     return (
         <div ref={containerRef} className={`inset-0 w-full h-full -z-10 ${className || 'fixed'}`} />

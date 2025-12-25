@@ -13,11 +13,19 @@ interface FluidState {
         color1: string;
         color2: string;
         color3: string;
+        color4: string;
     };
     speed: number;
     force: number;
     blurStrength: number;
     grainOpacity: number;
+    interactionRadius: number;
+    fluidZoom: number;
+    blendThresholds: {
+        blend1: number;
+        blend2: number;
+        blend3: number;
+    };
 }
 
 export async function saveFluidConfig(data: FluidState) {
@@ -34,11 +42,19 @@ export interface FluidConfig {
         color1: string;
         color2: string;
         color3: string;
+        color4: string;
     };
     speed: number;
     force: number;
     blurStrength: number;
     grainOpacity: number;
+    interactionRadius: number;
+    fluidZoom: number;
+    blendThresholds: {
+        blend1: number;
+        blend2: number;
+        blend3: number;
+    };
 }
 
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
@@ -46,12 +62,16 @@ export const FLUID_PRESET_PURRPURR: FluidConfig = {
     colors: { 
         color1: '${data.colors.color1}',
         color2: '${data.colors.color2}',
-        color3: '${data.colors.color3}'
+        color3: '${data.colors.color3}',
+        color4: '${data.colors.color4}'
     },
     speed: ${data.speed},
     force: ${data.force},
     blurStrength: ${data.blurStrength},
-    grainOpacity: ${data.grainOpacity}
+    grainOpacity: ${data.grainOpacity},
+    interactionRadius: ${data.interactionRadius},
+    fluidZoom: ${data.fluidZoom},
+    blendThresholds: { blend1: ${data.blendThresholds.blend1}, blend2: ${data.blendThresholds.blend2}, blend3: ${data.blendThresholds.blend3} }
 };
 
 // Add more presets here if needed

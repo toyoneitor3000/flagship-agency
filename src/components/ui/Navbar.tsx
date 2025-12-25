@@ -124,8 +124,11 @@ export const Navbar = () => {
           <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
             [ Servicios ]
           </Link>
-          <Link href='/typography-test' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+          <Link href='/purrpurr-test' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
             [ Purrpurr Labs ]
+          </Link>
+          <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+            [ Academy ]
           </Link>
           <Link href='#about' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
             [ Nosotros ]
@@ -182,23 +185,28 @@ export const Navbar = () => {
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Servicios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>
-                <Link href='/typography-test' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href='/purrpurr-test' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
                   <span className='text-purple-500/50 text-xs'>[02]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Purrpurr Labs</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-purple-500 animate-pulse">_</span>
                 </Link>
+                <Link href='/academy' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
+                  <span className='text-pink-500/50 text-xs'>[03]</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Academy</span>
+                  <span className="ml-auto opacity-0 group-hover:opacity-100 text-pink-500 animate-pulse">_</span>
+                </Link>
                 <Link href='#pricing' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-yellow-500/50 text-xs'>[03]</span>
+                  <span className='text-yellow-500/50 text-xs'>[04]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Precios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-yellow-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#about' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-indigo-500/50 text-xs'>[04]</span>
+                  <span className='text-indigo-500/50 text-xs'>[05]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Nosotros</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-indigo-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#contact' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-green-500/50 text-xs'>[05]</span>
+                  <span className='text-green-500/50 text-xs'>[06]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Contacto</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>
