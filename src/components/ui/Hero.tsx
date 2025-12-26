@@ -15,7 +15,7 @@ const FluidBackground = dynamic(() => import('@/components/creative/FluidBackgro
 
 export const Hero = () => {
   return (
-    <section className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033]' data-section-theme='light'>
+    <section className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033] touch-none' data-section-theme='light'>
 
       {/* --- FLUID BACKGROUND --- */}
       <FluidBackground
@@ -71,7 +71,7 @@ export const Hero = () => {
 
           {/* H1 - Wide Impact (Cols 1-12 or 2-11) */}
           <h1
-            className='col-span-4 md:col-span-12 relative font-display font-bold text-center transition-all duration-300 w-full z-20 mb-4 pointer-events-auto'
+            className='col-span-4 md:col-span-12 relative font-display font-bold text-center transition-all duration-300 w-full z-20 mb-4 pointer-events-none'
             style={{
               fontSize: 'clamp(3rem, 7vw, 9rem)',
               letterSpacing: '-0.04em',
@@ -91,7 +91,7 @@ export const Hero = () => {
           </h1>
 
           {/* Description - Clean Text, No Box (Cols 3-10) */}
-          <div className="col-span-4 md:col-start-3 md:col-span-8 flex justify-center z-10 pointer-events-auto">
+          <div className="col-span-4 md:col-start-3 md:col-span-8 flex justify-center z-10 pointer-events-none">
             <div className="max-w-3xl mx-auto text-center px-4">
               <p className='font-mono text-white leading-relaxed tracking-wide font-medium drop-shadow-md'
                 style={{ fontSize: 'clamp(1rem, 1.25vw, 1.5rem)' }}>

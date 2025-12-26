@@ -282,25 +282,30 @@ export default function FluidBackground({
         const mesh = new Mesh(gl, { geometry, program });
 
         // 5. Interaction Listeners
-        function updateMouse(e: MouseEvent | TouchEvent) {
-            let clientX = 0;
-            let clientY = 0;
+        // Attach listeners to the CONTAINER, not window, to localize interaction
+        // This combined with touch-action: none allows us to trap gestures here without scrolling
+        function updatePointer(e: PointerEvent) {
+            if (e.isPrimary === false) return;
 
-            if (e instanceof MouseEvent) {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            } else if (e instanceof TouchEvent && e.touches.length > 0) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else {
-                return;
-            }
+            // Get coordinates relative to the container
+            const rect = container!.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-            targetMouseRef.current.x = clientX / window.innerWidth;
-            targetMouseRef.current.y = 1.0 - (clientY / window.innerHeight);
+            // Normalize to 0..1 based on container size
+            targetMouseRef.current.x = x / rect.width;
+
+            // WebGL Y is inverted (0 at bottom), clientY is 0 at top
+            targetMouseRef.current.y = 1.0 - (y / rect.height);
         }
-        window.addEventListener('mousemove', updateMouse);
-        window.addEventListener('touchmove', updateMouse, { passive: true });
+
+        // Attach to container, not window
+        container.addEventListener('pointermove', updatePointer);
+        container.addEventListener('pointerdown', updatePointer);
+        container.addEventListener('pointerenter', updatePointer);
+        // We might want to know when we leave to stop dragging? 
+        // For fluid, leaving just means the last position sticks or decays. 
+        // Current logic decays velocity via damping, so it's fine.
 
         // 6. Animation Loop
         let animationId: number;
@@ -331,22 +336,32 @@ export default function FluidBackground({
             const accelY = (forceY + dampY) / mass;
 
             // SCROLL INERTIA INJECTION
-            // Calculate scroll delta to add momentum to the fluid
             const currentScrollY = window.scrollY;
             const scrollDelta = currentScrollY - lastScrollYRef.current;
             lastScrollYRef.current = currentScrollY;
 
             if (Math.abs(scrollDelta) > 0) {
-                // Normalize scroll based on screen height
-                // Scrolling DOWN (positive delta) -> Finger moves UP -> Fluid should push UP (positive Y)
-                // We multiply by a sensitivity factor
-                const scrollForce = (scrollDelta / window.innerHeight) * scrollInfluenceRef.current;
+                // Boost sensitivity: Scrolling 10px should feel like a push
+                const scrollSensitivity = scrollInfluenceRef.current * 0.5;
+                // Normalized force
+                const scrollForce = (scrollDelta / window.innerHeight) * scrollSensitivity;
 
-                // Add to velocity
-                velocityRef.current.y += scrollForce;
+                // 1. Add impulse to Velocity (The "Kick")
+                velocityRef.current.y += scrollForce * 50.0;
 
-                // Also slightly disturb X for organic feel
-                velocityRef.current.x += scrollForce * 0.2 * (Math.random() - 0.5);
+                // 2. Move the Target Mouse (The "Drag")
+                // This prevents the spring force from immediately fighting the velocity
+                // If we scroll down (delta > 0), page moves up, we want virtual mouse to move up relative to window (visual consistency)
+                // Actually, if we scroll down, new content appears from bottom.
+                // Let's just create general turbulence.
+                targetMouseRef.current.y += scrollForce * 2.0;
+
+                // Wrap around X/Y to keep interaction alive on screen
+                targetMouseRef.current.x = (targetMouseRef.current.x + 1.0) % 1.0;
+                targetMouseRef.current.y = (targetMouseRef.current.y + 1.0) % 1.0;
+
+                // Also update immediate mouse ref partially to reduce lag
+                mouseRef.current.y += scrollForce * 0.5;
             }
 
             // Integrate
@@ -396,8 +411,12 @@ export default function FluidBackground({
 
         return () => {
             window.removeEventListener('resize', resize);
-            window.removeEventListener('mousemove', updateMouse);
-            window.removeEventListener('touchmove', updateMouse);
+            // Clean up container listeners
+            if (container) {
+                container.removeEventListener('pointermove', updatePointer);
+                container.removeEventListener('pointerdown', updatePointer);
+                container.removeEventListener('pointerenter', updatePointer);
+            }
             cancelAnimationFrame(animationId);
             rendererRef.current = null;
             if (container && gl.canvas.parentNode === container) {
@@ -424,6 +443,10 @@ export default function FluidBackground({
     }, [colors, speed, force, interactionRadius, fluidZoom, blendThresholds]);
 
     return (
-        <div ref={containerRef} className={`inset-0 w-full h-full -z-10 ${className || 'fixed'}`} />
+        <div
+            ref={containerRef}
+            className={`inset-0 w-full h-full z-0 ${className || 'fixed'}`}
+            style={{ touchAction: 'none' }} // CRITICAL: Blocks scroll on this element to allow fluid interaction
+        />
     );
 }
