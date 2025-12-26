@@ -17,18 +17,27 @@ export const ThemeColorManager = () => {
 
         // Determine target color
         // Check for exact match or potentially startsWith if we have sub-sections
-        const targetColor = themeColors[pathname] || themeColors.default;
+        // Determine target color
+        const targetColor = themeColors[pathname];
 
         // Update the meta tag
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', targetColor);
+
+        if (targetColor) {
+            // If we have a specific color for this route, set it
+            if (metaThemeColor) {
+                metaThemeColor.setAttribute('content', targetColor);
+            } else {
+                const meta = document.createElement('meta');
+                meta.name = 'theme-color';
+                meta.content = targetColor;
+                document.head.appendChild(meta);
+            }
         } else {
-            // Create if it doesn't exist (though layout usually has it)
-            const meta = document.createElement('meta');
-            meta.name = 'theme-color';
-            meta.content = targetColor;
-            document.head.appendChild(meta);
+            // If no color is defined (default/home), REMOVE the tag to allow transparency
+            if (metaThemeColor) {
+                metaThemeColor.remove();
+            }
         }
 
     }, [pathname]);

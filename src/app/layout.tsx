@@ -5,7 +5,7 @@ import { Footer } from '@/components/ui/Footer';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 
 export const viewport: Viewport = {
-  themeColor: "#0f0033", // Match our new dark bg
+  // themeColor removed to allow iOS transparent status bar
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
