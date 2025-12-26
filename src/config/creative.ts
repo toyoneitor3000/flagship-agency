@@ -26,7 +26,7 @@ export interface FluidConfig {
 
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
     config: { stiffness: 223, damping: 50, mass: 5 },
-    colors: { 
+    colors: {
         color1: '#dff0a3',
         color2: '#cde6b7',
         color3: '#8c00ff',

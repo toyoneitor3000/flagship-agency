@@ -5,7 +5,7 @@ import { Footer } from '@/components/ui/Footer';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 
 export const viewport: Viewport = {
-  themeColor: "#0f0033",
+  themeColor: "#250047",
 };
 
 export const metadata: Metadata = {

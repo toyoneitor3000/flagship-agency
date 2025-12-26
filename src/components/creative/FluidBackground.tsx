@@ -229,7 +229,7 @@ export default function FluidBackground({
         if (!container) return;
 
         // 1. Setup OGL
-        const renderer = new Renderer({ alpha: false, dpr: Math.min(window.devicePixelRatio, 1) });
+        const renderer = new Renderer({ alpha: false, dpr: Math.min(window.devicePixelRatio, 2) });
         const gl = renderer.gl;
         gl.clearColor(0, 0, 0, 1);
         container.appendChild(gl.canvas);

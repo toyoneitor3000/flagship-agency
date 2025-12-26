@@ -19,6 +19,7 @@ export const Hero = () => {
 
       {/* --- FLUID BACKGROUND --- */}
       <FluidBackground
+        key="fluid-hero-main"
         config={FLUID_PRESET_PURRPURR.config}
         colors={FLUID_PRESET_PURRPURR.colors}
         speed={FLUID_PRESET_PURRPURR.speed}
