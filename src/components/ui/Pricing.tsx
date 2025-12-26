@@ -83,7 +83,7 @@ export const Pricing = () => {
 
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-12'>
-          <h2 className='text-3xl md:text-5xl font-bold text-white mb-6'>Elige tu Nivel de Impacto</h2>
+          <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Elige tu Nivel de Impacto</h2>
           <p className='text-zinc-400 max-w-2xl mx-auto text-lg'>
             Entendemos que no todos los proyectos son iguales. <br className="hidden md:block" />
             Diseñamos una estrategia dual para <strong>validar rápido</strong> o <strong>escalar masivamente</strong>.
@@ -145,7 +145,7 @@ export const Pricing = () => {
 
                   <div className='mb-6'>
                     <div className='flex justify-between items-start mb-2'>
-                      <h3 className='text-xl font-bold text-white'>{plan.name}</h3>
+                      <h3 className='font-display text-xl font-bold text-white'>{plan.name}</h3>
                       {activeTab === 'custom' && (
                         <span className='px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-[10px] uppercase font-bold tracking-wider'>High-Ticket</span>
                       )}

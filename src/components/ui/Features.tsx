@@ -58,7 +58,7 @@ export const Features = () => {
               <span className="font-mono text-[#00FF9C] text-sm tracking-widest uppercase">System Core Online</span>
             </div>
 
-            <h2 className='text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight'>
+            <h2 className='font-display text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight'>
               La Ingeniería Invisible<br />
               <span className="text-[#A855F7]">Que Genera Ventas.</span>
             </h2>

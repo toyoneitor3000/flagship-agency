@@ -25,6 +25,7 @@ interface FluidBackgroundProps {
         blend3: number;
     };
     debug?: boolean;
+    scrollInfluence?: number; // New prop for scroll sensitivity
 }
 
 const vertex = /* glsl */ `
@@ -200,6 +201,7 @@ export default function FluidBackground({
     fluidZoom = 3.0,
     blendThresholds = { blend1: 0.1, blend2: 0.4, blend3: 0.7 },
     debug = false,
+    scrollInfluence = 5.0, // Default scroll influence
     className
 }: FluidBackgroundProps & { speed?: number; force?: number; className?: string }) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -213,11 +215,14 @@ export default function FluidBackground({
     const currentFlowSpeedRef = useRef(0);
     const speedRef = useRef(speed);
     const configRef = useRef(config);
+    const lastScrollYRef = useRef(0);
+    const scrollInfluenceRef = useRef(scrollInfluence);
 
     useEffect(() => {
         configRef.current = config;
         speedRef.current = speed;
-    }, [config, speed]);
+        scrollInfluenceRef.current = scrollInfluence;
+    }, [config, speed, scrollInfluence]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -232,6 +237,9 @@ export default function FluidBackground({
 
         const camera = new Camera(gl);
         camera.position.z = 1;
+
+        // Initialize scroll position
+        lastScrollYRef.current = window.scrollY;
 
         // 2. Setup Resize
         function resize() {
@@ -275,7 +283,8 @@ export default function FluidBackground({
 
         // 5. Interaction Listeners
         function updateMouse(e: MouseEvent | TouchEvent) {
-            let clientX, clientY;
+            let clientX = 0;
+            let clientY = 0;
 
             if (e instanceof MouseEvent) {
                 clientX = e.clientX;
@@ -291,7 +300,7 @@ export default function FluidBackground({
             targetMouseRef.current.y = 1.0 - (clientY / window.innerHeight);
         }
         window.addEventListener('mousemove', updateMouse);
-        window.addEventListener('touchmove', updateMouse, { passive: false });
+        window.addEventListener('touchmove', updateMouse, { passive: true });
 
         // 6. Animation Loop
         let animationId: number;
@@ -320,6 +329,25 @@ export default function FluidBackground({
             // a = F / m
             const accelX = (forceX + dampX) / mass;
             const accelY = (forceY + dampY) / mass;
+
+            // SCROLL INERTIA INJECTION
+            // Calculate scroll delta to add momentum to the fluid
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollYRef.current;
+            lastScrollYRef.current = currentScrollY;
+
+            if (Math.abs(scrollDelta) > 0) {
+                // Normalize scroll based on screen height
+                // Scrolling DOWN (positive delta) -> Finger moves UP -> Fluid should push UP (positive Y)
+                // We multiply by a sensitivity factor
+                const scrollForce = (scrollDelta / window.innerHeight) * scrollInfluenceRef.current;
+
+                // Add to velocity
+                velocityRef.current.y += scrollForce;
+
+                // Also slightly disturb X for organic feel
+                velocityRef.current.x += scrollForce * 0.2 * (Math.random() - 0.5);
+            }
 
             // Integrate
             velocityRef.current.x += accelX * dt;

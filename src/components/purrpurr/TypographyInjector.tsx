@@ -1,57 +1,87 @@
 'use client';
 
 import { useEffect } from 'react';
-import { fontMap, fontVariableNames } from '@/lib/fonts';
+import { usePathname } from 'next/navigation';
+import { fontVariableNames } from '@/lib/fonts';
 
 export const TypographyInjector = () => {
-    useEffect(() => {
-        const applySystemFonts = () => {
-            // Read from LocalStorage
-            const displayFont = localStorage.getItem('purrpurr_sys_display');
-            const h1Font = localStorage.getItem('purrpurr_sys_h1'); // Not fully mapped yet, could map to generic Header variable
-            const pFont = localStorage.getItem('purrpurr_sys_p');
+    const pathname = usePathname();
 
-            // Read Custom Metrics from LocalStorage
-            const displayTracking = localStorage.getItem('purrpurr_sys_display_tracking');
-            const displayLeading = localStorage.getItem('purrpurr_sys_display_leading');
+    const applySystemFonts = () => {
+        // Read Configuration
+        const displayFont = localStorage.getItem('purrpurr_sys_display') || 'Righteous';
+        const pFont = localStorage.getItem('purrpurr_sys_p') || 'Inter';
+        const displayTracking = localStorage.getItem('purrpurr_sys_display_tracking');
+        const displayLeading = localStorage.getItem('purrpurr_sys_display_leading');
 
-            const target = document.body;
+        // Resolve CSS Variables
+        const displayVarName = fontVariableNames[displayFont] || '--font-righteous';
+        const pVarName = fontVariableNames[pFont] || '--font-inter';
 
-            // ... Font Family Logic ...
+        const displayVar = `var(${displayVarName})`;
+        const pVar = `var(${pVarName})`;
 
-            // Apply Display Metrics
-            if (displayTracking) {
-                target.style.setProperty('--display-tracking', `${displayTracking}em`);
-            }
-            if (displayLeading) {
-                target.style.setProperty('--display-leading', displayLeading);
-            }
+        // Target Elements
+        const root = document.documentElement;
+        const body = document.body;
 
-            // Apply Font Families (Existing Logic)
-            const selectedDisplay = displayFont || 'Space Grotesk';
-            const selectedP = pFont || 'Inter';
-
-            if (fontVariableNames[selectedDisplay]) {
-                target.style.setProperty('--font-space', `var(${fontVariableNames[selectedDisplay]})`);
-            }
-            if (fontVariableNames[selectedP]) {
-                target.style.setProperty('--font-sans', `var(${fontVariableNames[selectedP]})`);
-            }
+        // Helper to set important styles
+        const setStyle = (property: string, value: string) => {
+            root.style.setProperty(property, value, 'important');
+            body.style.setProperty(property, value, 'important');
         };
 
-        // Apply on mount
+        // 1. Override Global Typography Variables
+        setStyle('--font-space', displayVar);
+        setStyle('--font-sans', pVar);
+        setStyle('--purrpurr-display', displayVar);
+        setStyle('--purrpurr-sans', pVar);
+
+        // 2. Metrics (Tracking / Leading)
+        if (displayTracking) {
+            setStyle('--display-tracking', `${displayTracking}em`);
+        }
+        if (displayLeading) {
+            setStyle('--display-leading', displayLeading);
+        }
+
+        // 3. Force Class Overrides (Manually injecting style for classes that keys off variables)
+        // Since we can't easily override .className styles via inline styles on the ELEMENT (unless we put it on every element),
+        // we keep ONE style tag for the class-based overrides, but we make it very specific.
+        let styleEl = document.getElementById('purrpurr-class-overrides');
+        if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = 'purrpurr-class-overrides';
+            document.head.appendChild(styleEl);
+        }
+
+        styleEl.textContent = `
+            .font-display {
+                font-family: var(--purrpurr-display) !important;
+                letter-spacing: var(--display-tracking) !important;
+                line-height: var(--display-leading) !important;
+            }
+            .font-sans, body {
+                font-family: var(--purrpurr-sans) !important;
+            }
+        `;
+
+        console.log('Purrpurr Injector: Applied', { displayFont, pFont });
+    };
+
+    useEffect(() => {
+        // Apply immediately
         applySystemFonts();
 
-        // Listen for storage events
+        // Listeners
         window.addEventListener('storage', applySystemFonts);
-        // Listen for custom event
         window.addEventListener('purrpurr-sys-update', applySystemFonts);
 
         return () => {
             window.removeEventListener('storage', applySystemFonts);
             window.removeEventListener('purrpurr-sys-update', applySystemFonts);
         };
-    }, []);
+    }, [pathname]);
 
     return null;
 };

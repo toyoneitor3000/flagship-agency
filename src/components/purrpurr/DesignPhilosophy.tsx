@@ -13,7 +13,7 @@ export const DesignPhilosophy = () => {
                     <span className='font-mono text-indigo-500 text-xs tracking-[0.2em] uppercase mb-4 block'>
                         Engineering DNA
                     </span>
-                    <h2 className='text-3xl md:text-4xl font-bold text-white mb-8'>
+                    <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-8'>
                         Más que Código: <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">Mecánica Digital</span>
                     </h2>
                     <p className='text-zinc-400 max-w-3xl mx-auto text-sm md:text-base leading-relaxed mb-8'>

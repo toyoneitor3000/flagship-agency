@@ -102,58 +102,62 @@ export const Navbar = () => {
         navbarBgClass
       )}
     >
-      <div className='container mx-auto px-4 md:px-6 flex items-center justify-between'>
-        <Link href='/' className='flex items-center gap-2'>
-          <Image
-            src="/brand_logo.png"
-            alt="Purrpurr Logo"
-            width={160}
-            height={40}
+      <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-12 gap-4 items-center'>
+        <div className="col-span-1 md:col-span-3 flex justify-start">
+          <Link href='/' className='flex items-center gap-2'>
+            <Image
+              src="/brand_logo.png"
+              alt="Purrpurr Logo"
+              width={160}
+              height={40}
+              className={cn(
+                "h-10 w-auto object-contain transition-all duration-300",
+                // Optional: Invert logo brightness if needed for dark mode, 
+                // but assuming brand logo works on both or we might need a white version.
+                // If navTheme is dark (dark bg), we might want to ensure logo is visible.
+                // For now keeping it standard.
+              )}
+              priority
+            />
+          </Link>
+        </div>
+
+        <div className="col-span-1 md:col-span-9 flex justify-end items-center gap-4">
+          <nav className='hidden md:flex items-center gap-8'>
+            <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+              [ Servicios ]
+            </Link>
+            <Link href='/purrpurr-test' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+              [ Purrpurr Labs ]
+            </Link>
+            <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+              [ Academy ]
+            </Link>
+            <Link href='#about' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+              [ Nosotros ]
+            </Link>
+            <Link href='#contact' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
+              [ Contacto ]
+            </Link>
+            <button className={cn(
+              'px-5 py-2 rounded-sm bg-transparent font-mono text-[12px] font-bold border transition-all shadow-sm tracking-wider',
+              buttonBorderClass
+            )}>
+              &lt; COTIZAR /&gt;
+            </button>
+          </nav>
+
+          {/* Mobile Menu Toggle */}
+          <button
             className={cn(
-              "h-10 w-auto object-contain transition-all duration-300",
-              // Optional: Invert logo brightness if needed for dark mode, 
-              // but assuming brand logo works on both or we might need a white version.
-              // If navTheme is dark (dark bg), we might want to ensure logo is visible.
-              // For now keeping it standard.
+              'md:hidden p-2 rounded-md transition-colors',
+              navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
             )}
-            priority
-          />
-        </Link>
-
-        <nav className='hidden md:flex items-center gap-8'>
-          <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
-            [ Servicios ]
-          </Link>
-          <Link href='/purrpurr-test' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
-            [ Purrpurr Labs ]
-          </Link>
-          <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
-            [ Academy ]
-          </Link>
-          <Link href='#about' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
-            [ Nosotros ]
-          </Link>
-          <Link href='#contact' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
-            [ Contacto ]
-          </Link>
-          <button className={cn(
-            'px-5 py-2 rounded-sm bg-transparent font-mono text-[12px] font-bold border transition-all shadow-sm tracking-wider',
-            buttonBorderClass
-          )}>
-            &lt; COTIZAR /&gt;
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-        </nav>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className={cn(
-            'md:hidden p-2 rounded-md transition-colors',
-            navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
-          )}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        </div>
       </div>
 
       {/* Mobile Nav - Terminal Style */}

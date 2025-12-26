@@ -62,7 +62,7 @@ export const Portfolio = () => {
                 <div className='flex flex-col md:flex-row justify-between items-end mb-16 gap-6'>
                     <div className='w-full md:w-auto text-center md:text-left'>
                         <span className='text-indigo-400 font-bold tracking-wider uppercase text-xs mb-2 block'>Proof of Concept</span>
-                        <h2 className='text-3xl md:text-5xl font-bold text-white'>Brands_By_<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Purrpurr</span></h2>
+                        <h2 className='font-display text-3xl md:text-5xl font-bold text-white'>Brands_By_<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Purrpurr</span></h2>
                     </div>
                     <p className='text-zinc-400 max-w-sm text-sm text-center md:text-right w-full md:w-auto'>
                         Estas no son solo "webs de clientes". Son empresas exitosas creadas, diseñadas y programadas por nosotros.

@@ -163,7 +163,7 @@ export default function CreativeLabPage() {
                                     <input
                                         type="range" min="0" max="1" step="0.05"
                                         value={blendThresholds.blend1}
-                                        onChange={(e) => setBlendThresholds(prev => ({ ...prev, blend1: Number(e.target.value) }))}
+                                        onChange={(e) => setBlendThresholds((prev: any) => ({ ...prev, blend1: Number(e.target.value) }))}
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
 
@@ -173,7 +173,7 @@ export default function CreativeLabPage() {
                                     <input
                                         type="range" min="0" max="1" step="0.05"
                                         value={blendThresholds.blend2}
-                                        onChange={(e) => setBlendThresholds(prev => ({ ...prev, blend2: Number(e.target.value) }))}
+                                        onChange={(e) => setBlendThresholds((prev: any) => ({ ...prev, blend2: Number(e.target.value) }))}
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
 
@@ -183,7 +183,7 @@ export default function CreativeLabPage() {
                                     <input
                                         type="range" min="0" max="1" step="0.05"
                                         value={blendThresholds.blend3}
-                                        onChange={(e) => setBlendThresholds(prev => ({ ...prev, blend3: Number(e.target.value) }))}
+                                        onChange={(e) => setBlendThresholds((prev: any) => ({ ...prev, blend3: Number(e.target.value) }))}
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>

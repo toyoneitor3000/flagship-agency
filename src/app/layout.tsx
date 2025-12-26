@@ -18,27 +18,35 @@ export const metadata: Metadata = {
 };
 
 import { PurrpurrProvider } from '@/components/purrpurr/PurrpurrContext';
+import { MagicProvider } from '@/components/magic/MagicContext';
+import { getMagicContent } from '@/lib/magic-server';
+const MagicTrigger = () => null; // Placeholder or just remove import if not used
+
 
 import { allFontVariables } from "@/lib/fonts";
 import { TypographyInjector } from "@/components/purrpurr/TypographyInjector";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const magicContent = await getMagicContent();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${allFontVariables} antialiased bg-zinc-950 text-zinc-100 flex flex-col min-h-screen`}>
-        <PurrpurrProvider>
-          <TypographyInjector />
-          <LoadingScreen />
-          <Navbar />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-        </PurrpurrProvider>
+        <MagicProvider initialContent={magicContent}>
+          <PurrpurrProvider>
+            <TypographyInjector />
+            <LoadingScreen />
+            <Navbar />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </PurrpurrProvider>
+        </MagicProvider>
       </body>
     </html>
   );
