@@ -106,7 +106,7 @@ export const Hero = () => {
           <div className='col-span-4 md:col-start-4 md:col-span-6 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
 
             {/* CTA 1: Primary - Button shape, not Bar */}
-            <Link href='/contact' className='group relative min-w-[200px] w-auto px-8 py-4 rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)]'>
+            <Link href='/contact' className='group relative min-w-[200px] w-full sm:w-auto px-8 py-4 rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
               <div className="absolute inset-0 bg-[#6D28D9]" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-sm tracking-[0.15em] text-white uppercase">
@@ -116,7 +116,7 @@ export const Hero = () => {
             </Link>
 
             {/* CTA 2: Secondary - Minimalist Ghost */}
-            <Link href='#work' className='group relative min-w-[180px] w-auto px-6 py-4 rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto'>
+            <Link href='#work' className='group relative min-w-[180px] w-full sm:w-auto px-6 py-4 rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto flex items-center justify-center'>
               {/* Subtle border instead of block */}
               <div className="absolute inset-0 border border-white/20 group-hover:bg-white/10 rounded-full transition-all" />
               <span className="relative z-10 flex items-center justify-center gap-2 font-medium text-sm tracking-[0.15em] text-zinc-100 uppercase transition-colors">

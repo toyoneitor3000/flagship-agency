@@ -5,7 +5,12 @@ import { Footer } from '@/components/ui/Footer';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 
 export const viewport: Viewport = {
-  themeColor: "#250047",
+  themeColor: "#0f0033", // Match our new dark bg
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -15,6 +20,11 @@ export const metadata: Metadata = {
     icon: '/purrpurr-icon.png',
   },
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Purrpurr",
+  },
 };
 
 import { PurrpurrProvider } from '@/components/purrpurr/PurrpurrContext';

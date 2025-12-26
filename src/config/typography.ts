@@ -1,6 +1,6 @@
 export const DEFAULT_TYPOGRAPHY_SETTINGS = {
-    displayFont: 'Space Grotesk',
+    displayFont: 'Righteous',
     pFont: 'Inter',
-    displayTracking: '-0.04', // Tight tracking for headers
-    displayLeading: '0.95',   // Tight leading for headers
+    displayTracking: '0',    // Righteous usually doesn't need negative tracking
+    displayLeading: '1.0',    // Righteous needs slightly more breathing room
 };
