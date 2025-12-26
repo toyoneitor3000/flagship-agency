@@ -3,19 +3,20 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { fontVariableNames } from '@/lib/fonts';
+import { DEFAULT_TYPOGRAPHY_SETTINGS } from '@/config/typography';
 
 export const TypographyInjector = () => {
     const pathname = usePathname();
 
     const applySystemFonts = () => {
         // Read Configuration
-        const displayFont = localStorage.getItem('purrpurr_sys_display') || 'Righteous';
-        const pFont = localStorage.getItem('purrpurr_sys_p') || 'Inter';
-        const displayTracking = localStorage.getItem('purrpurr_sys_display_tracking');
-        const displayLeading = localStorage.getItem('purrpurr_sys_display_leading');
+        const displayFont = localStorage.getItem('purrpurr_sys_display') || DEFAULT_TYPOGRAPHY_SETTINGS.displayFont;
+        const pFont = localStorage.getItem('purrpurr_sys_p') || DEFAULT_TYPOGRAPHY_SETTINGS.pFont;
+        const displayTracking = localStorage.getItem('purrpurr_sys_display_tracking') || DEFAULT_TYPOGRAPHY_SETTINGS.displayTracking;
+        const displayLeading = localStorage.getItem('purrpurr_sys_display_leading') || DEFAULT_TYPOGRAPHY_SETTINGS.displayLeading;
 
         // Resolve CSS Variables
-        const displayVarName = fontVariableNames[displayFont] || '--font-righteous';
+        const displayVarName = fontVariableNames[displayFont] || '--font-space-grotesk';
         const pVarName = fontVariableNames[pFont] || '--font-inter';
 
         const displayVar = `var(${displayVarName})`;
