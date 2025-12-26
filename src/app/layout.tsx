@@ -35,6 +35,7 @@ const MagicTrigger = () => null; // Placeholder or just remove import if not use
 
 import { allFontVariables } from "@/lib/fonts";
 import { TypographyInjector } from "@/components/purrpurr/TypographyInjector";
+import { ThemeColorManager } from "@/components/ui/ThemeColorManager";
 
 export default async function RootLayout({
   children,
@@ -48,6 +49,7 @@ export default async function RootLayout({
       <body className={`${allFontVariables} antialiased bg-zinc-950 text-zinc-100 flex flex-col min-h-screen`}>
         <MagicProvider initialContent={magicContent}>
           <PurrpurrProvider>
+            <ThemeColorManager />
             <TypographyInjector />
             <LoadingScreen />
             <Navbar />

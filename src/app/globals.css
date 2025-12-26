@@ -57,6 +57,7 @@
   /* Default Typography Mapping - Ensures fonts work before JS loads */
   --font-space: var(--font-righteous);
   --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
 }
 
 body {
