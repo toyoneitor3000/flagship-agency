@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import React from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Cpu, Globe, ShieldCheck, Zap, Smartphone, Layers } from 'lucide-react';
 
 const features = [
@@ -36,9 +37,157 @@ const features = [
   },
 ];
 
+// --- TERMINAL COMPONENT ---
+
+const Terminal = () => {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 }); // Start when 30% visible
+
+  const [step, setStep] = React.useState(0);
+  const [text1, setText1] = React.useState('');
+  const [text2, setText2] = React.useState('');
+  const [showOutput1, setShowOutput1] = React.useState(false);
+  const [showOutput2, setShowOutput2] = React.useState(false);
+  const [showFinalPrompt, setShowFinalPrompt] = React.useState(false);
+
+  // Animation sequence
+  React.useEffect(() => {
+    if (!isInView) return; // Wait for visibility
+
+    const cmd1 = "./analyze_market.sh --target=growth";
+    const cmd2 = "deploy_infrastructure --mode=aggressive";
+
+    let isActive = true;
+
+    const runSequence = async () => {
+      // Initial delay before starting
+      await new Promise(r => setTimeout(r, 500));
+      if (!isActive) return;
+
+      // Type Command 1
+      for (let i = 0; i <= cmd1.length; i++) {
+        if (!isActive) return;
+        setText1(cmd1.slice(0, i));
+        await new Promise(r => setTimeout(r, 50)); // Typing speed
+      }
+
+      // Process Command 1
+      await new Promise(r => setTimeout(r, 400));
+      if (!isActive) return;
+      setShowOutput1(true);
+
+      // Delay before Command 2
+      await new Promise(r => setTimeout(r, 1500));
+      if (!isActive) return;
+      setStep(1); // Ready for cmd 2
+
+      // Type Command 2
+      for (let i = 0; i <= cmd2.length; i++) {
+        if (!isActive) return;
+        setText2(cmd2.slice(0, i));
+        await new Promise(r => setTimeout(r, 50));
+      }
+
+      // Process Command 2
+      await new Promise(r => setTimeout(r, 400));
+      if (!isActive) return;
+      setShowOutput2(true);
+
+      // Final Prompt
+      await new Promise(r => setTimeout(r, 1000));
+      if (!isActive) return;
+      setShowFinalPrompt(true);
+    };
+
+    runSequence();
+    return () => { isActive = false; };
+  }, [isInView]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="rounded-xl bg-[#0f0b1e] border border-[#A855F7]/30 shadow-2xl p-6 font-mono text-sm relative overflow-hidden group min-h-[340px]"
+    >
+      {/* Terminal Header */}
+      <div className="flex items-center justify-between mb-4 border-b border-[#A855F7]/20 pb-4">
+        <div className="flex gap-2">
+          <div className="w-3 h-3 rounded-full bg-red-500/50" />
+          <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
+          <div className="w-3 h-3 rounded-full bg-green-500/50" />
+        </div>
+        <div className="text-[#A855F7]/50 text-xs">root@purrpurr-server: ~</div>
+      </div>
+
+      {/* Code Content */}
+      <div className="space-y-2 text-[#E9D5FF]">
+
+        {/* Command 1 Line */}
+        <div className="flex gap-2 min-h-[20px]">
+          <span className="text-[#00FF9C] shrink-0">$</span>
+          <span>
+            {text1}
+            {step === 0 && !showOutput1 && (
+              <span className="animate-pulse bg-[#00FF9C] w-2 h-4 inline-block ml-1 align-middle" />
+            )}
+          </span>
+        </div>
+
+        {/* Output 1 */}
+        {showOutput1 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="opacity-50 text-xs py-2 space-y-1"
+          >
+            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>[INFO] Connecting to neural network...</motion.div>
+            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>[INFO] Analyzing competitor data...</motion.div>
+            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }}>[SUCCESS] Optimization vectors found.</motion.div>
+          </motion.div>
+        )}
+
+        {/* Command 2 Line */}
+        {(step >= 1) && (
+          <div className="flex gap-2 min-h-[20px]">
+            <span className="text-[#00FF9C] shrink-0">$</span>
+            <span>
+              {text2}
+              {step === 1 && !showOutput2 && (
+                <span className="animate-pulse bg-[#00FF9C] w-2 h-4 inline-block ml-1 align-middle" />
+              )}
+            </span>
+          </div>
+        )}
+
+        {/* Output 2 */}
+        {showOutput2 && (
+          <div className="text-[#00FF9C] py-2 space-y-1">
+            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>✓ CDN Nodes Active</motion.div>
+            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>✓ Database Sharding Enabled</motion.div>
+            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>✓ Payment Gateway Secured</motion.div>
+          </div>
+        )}
+
+        {/* Final Prompt */}
+        {showFinalPrompt && (
+          <div className="flex gap-2">
+            <span className="text-[#00FF9C]">$</span>
+            <span className="w-3 h-5 bg-[#00FF9C] animate-pulse"></span>
+          </div>
+        )}
+      </div>
+
+      {/* Glow Effect */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-[#A855F7]/0 via-[#A855F7]/10 to-[#A855F7]/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+    </motion.div>
+  );
+};
+
 export const Features = () => {
   return (
-    <section className='py-32 bg-[#0D0216] relative overflow-hidden' id='features' data-section-theme='dark'>
+    <section className='pt-24 pb-32 bg-[#0D0216] relative overflow-hidden' id='features' data-section-theme='dark'>
 
       {/* --- LAYER 1: BACKEND DEEP DIVE --- */}
 
@@ -67,7 +216,7 @@ export const Features = () => {
               Lo que no se ve es lo que sostiene el negocio. Mientras otros usan plantillas, nosotros construimos <span className="text-white">sistemas robustos</span> diseñados para escalar.
             </p>
 
-            <ul className="space-y-4 font-mono text-sm text-zinc-300">
+            <ul className="space-y-4 font-mono text-sm text-zinc-300 mb-8">
               <li className="flex items-center gap-3">
                 <span className="text-[#00FF9C]">&gt;</span> Infraestructura serverless escala automática
               </li>
@@ -78,52 +227,23 @@ export const Features = () => {
                 <span className="text-[#00FF9C]">&gt;</span> Seguridad bancaria integrada
               </li>
             </ul>
+
+            <a
+              href="#philosophy"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-900/50 border border-zinc-800 text-zinc-300 hover:text-white hover:border-[#00FF9C]/50 hover:bg-[#00FF9C]/10 transition-all duration-300 font-mono text-sm uppercase tracking-wider"
+            >
+              Explorar Mecánica Digital
+              <span className="text-[#00FF9C] group-hover:translate-x-1 transition-transform">&gt;</span>
+            </a>
           </div>
 
           {/* LIVING TERMINAL - VISUAL PROOF */}
           <div className="order-1 lg:order-2">
-            <div className="rounded-xl bg-[#0f0b1e] border border-[#A855F7]/30 shadow-2xl p-6 font-mono text-sm relative overflow-hidden group">
-              {/* Terminal Header */}
-              <div className="flex items-center justify-between mb-4 border-b border-[#A855F7]/20 pb-4">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/50" />
-                </div>
-                <div className="text-[#A855F7]/50 text-xs">root@purrpurr-server: ~</div>
-              </div>
-
-              {/* Code Content */}
-              <div className="space-y-2 text-[#E9D5FF]">
-                <div className="flex gap-2">
-                  <span className="text-[#00FF9C]">$</span>
-                  <span className="typing-effect">./analyze_market.sh --target=growth</span>
-                </div>
-                <div className="opacity-50 text-xs py-2">
-                  [INFO] Connecting to neural network...<br />
-                  [INFO] Analyzing competitor data...<br />
-                  [SUCCESS] Optimization vectors found.
-                </div>
-                <div className="flex gap-2">
-                  <span className="text-[#00FF9C]">$</span>
-                  <span>deploy_infrastructure --mode=aggressive</span>
-                </div>
-                <div className="text-[#00FF9C] py-2">
-                  ✓ CDN Nodes Active<br />
-                  ✓ Database Sharding Enabled<br />
-                  ✓ Payment Gateway Secured<br />
-                </div>
-                <div className="flex gap-2 animate-pulse">
-                  <span className="text-[#00FF9C]">$</span>
-                  <span className="w-3 h-5 bg-[#00FF9C]"></span>
-                </div>
-              </div>
-
-              {/* Glow Effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#A855F7]/0 via-[#A855F7]/10 to-[#A855F7]/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-            </div>
+            <Terminal />
           </div>
         </div>
+
+
 
         {/* FEATURE CARDS - MODULES */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
@@ -157,3 +277,4 @@ export const Features = () => {
     </section>
   );
 };
+

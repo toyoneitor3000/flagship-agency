@@ -102,8 +102,8 @@ export const Navbar = () => {
         navbarBgClass
       )}
     >
-      <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-12 gap-4 items-center'>
-        <div className="col-span-1 md:col-span-3 flex justify-start">
+      <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-12 gap-4 items-center'>
+        <div className="col-span-1 lg:col-span-3 flex justify-start">
           <Link href='/' className='flex items-center gap-2'>
             <Image
               src="/brand_logo.png"
@@ -122,8 +122,8 @@ export const Navbar = () => {
           </Link>
         </div>
 
-        <div className="col-span-1 md:col-span-9 flex justify-end items-center gap-4">
-          <nav className='hidden md:flex items-center gap-8'>
+        <div className="col-span-1 lg:col-span-9 flex justify-end items-center gap-4">
+          <nav className='hidden lg:flex items-center gap-8'>
             <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono', textColorClass, hoverColorClass)}>
               [ Servicios ]
             </Link>
@@ -150,7 +150,7 @@ export const Navbar = () => {
           {/* Mobile Menu Toggle */}
           <button
             className={cn(
-              'md:hidden p-2 rounded-md transition-colors',
+              'lg:hidden p-2 rounded-md transition-colors',
               navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
             )}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -166,7 +166,7 @@ export const Navbar = () => {
           initial={{ opacity: 0, scale: 0.95, y: '100%' }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: '100%' }}
-          className='md:hidden fixed inset-x-4 top-[80px] bottom-8 z-40 flex flex-col'
+          className='lg:hidden fixed inset-x-4 top-[80px] bottom-8 z-40 flex flex-col'
         >
           <div className='flex-1 bg-zinc-950/98 backdrop-blur-2xl border border-zinc-800/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col relative'>
             {/* Scanline Effect */}

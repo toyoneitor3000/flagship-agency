@@ -1,8 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, Code2, Rocket, Terminal } from 'lucide-react';
+import { ArrowRight, Code2, Rocket, Terminal, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 // import FluidBackground from '@/components/creative/FluidBackground'; // Static import removed
 import dynamic from 'next/dynamic';
 import { FLUID_PRESET_PURRPURR } from '@/config/creative';
@@ -14,6 +15,52 @@ const FluidBackground = dynamic(() => import('@/components/creative/FluidBackgro
 });
 
 export const Hero = () => {
+  const scrollToFeatures = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    // Desktop Scroll Trigger
+    const handleScroll = (e: WheelEvent) => {
+      // Only trigger if we are at the top and scrolling down
+      if (window.scrollY < 100 && e.deltaY > 20) {
+        // Prevent default only if we really want to hijack, 
+        // but often better to just let it happen naturally if native scroll is enabled.
+        // For "locking" feel, we might want: e.preventDefault(); scrollToFeatures();
+        // But user said "no podemos hacer scroll" implying maybe overflow hidden?
+        // Let's assume we just want to help the user down.
+        scrollToFeatures();
+      }
+    };
+
+    // Mobile Swipe Trigger
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      if (window.scrollY < 50 && touchStartY - touchEndY > 50) { // Swipe Up (scrolling down)
+        scrollToFeatures();
+      }
+    };
+
+    window.addEventListener('wheel', handleScroll);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
   return (
     <section className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033] touch-none' data-section-theme='light'>
 
@@ -81,35 +128,33 @@ export const Hero = () => {
             }}
           >
             <span className="relative z-20 text-white mix-blend-exclusion" style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3)) drop-shadow(0 10px 15px rgba(0,0,0,0.2))' }}>
-              <MagicText id="hero.title_1_v2" defaultText="HACEMOS WEBS" /><br />
+              <MagicText id="hero.title_1_v11" defaultText="ESTRATEGIA" /><br />
               {/* Prevent weird wrap of the dot */}
-              <span className="inline-flex items-center whitespace-nowrap align-middle">
-                <MagicText id="hero.title_2_v2" defaultText="QUE VENDEN." />
-                {/* Typing Cursor / Caret - Flex aligned */}
-                <span className="text-[#00FF9C] drop-shadow-[0_0_10px_rgba(0,255,156,0.8)] animate-[pulse_1s_steps(2)_infinite] ml-1">_</span>
+              <span className="whitespace-nowrap">
+                <MagicText id="hero.title_2_v11" defaultText="HECHA CÓDIGO." />
               </span>
             </span>
           </h1>
 
-          {/* Description - Clean Text, No Box (Cols 3-10) */}
-          <div className="col-span-4 md:col-start-3 md:col-span-8 flex justify-center z-10 pointer-events-none">
+          {/* Description - Clean Text, No Box (Cols 3-10) -> now (Cols 2-11) */}
+          <div className="col-span-4 md:col-start-2 md:col-span-10 flex justify-center z-10 pointer-events-none">
             <div className="max-w-3xl mx-auto text-center px-4">
               <p className='font-mono text-white leading-relaxed tracking-wide font-medium drop-shadow-md'
                 style={{ fontSize: 'clamp(1rem, 1.25vw, 1.5rem)' }}>
                 <span className="text-[#a78bfa] font-bold">&gt; </span>
-                <MagicText id="hero.description_v2" defaultText="Y las hacemos jodidamente bien. Sin trucos, solo diseño estratégico y código sólido que convierte visitas en dinero." />
+                <MagicText id="hero.description_v11" defaultText="No solo escribimos software, entendemos tu negocio. Creamos la infraestructura digital que ordena tu operación y te devuelve el control." />
               </p>
             </div>
           </div>
 
-          {/* Buttons - Central Action Block (Cols 4-9) - Compact Hierarchy */}
-          <div className='col-span-4 md:col-start-4 md:col-span-6 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
+          {/* Buttons - Central Action Block (Cols 4-9) -> now (Cols 3-10) */}
+          <div className='col-span-4 md:col-start-3 md:col-span-8 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
 
             {/* CTA 1: Primary - Button shape, not Bar */}
             <Link href='/contact' className='group relative min-w-[200px] w-full sm:w-auto px-8 py-4 rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
               <div className="absolute inset-0 bg-[#6D28D9]" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-sm tracking-[0.15em] text-white uppercase">
+              <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-sm tracking-[0.15em] text-white uppercase whitespace-nowrap">
                 INICIAR MOTOR
                 <span className="text-[#00FF9C] transition-transform group-hover:translate-x-1">&gt;</span>
               </span>
@@ -119,11 +164,14 @@ export const Hero = () => {
             <Link href='#work' className='group relative min-w-[180px] w-full sm:w-auto px-6 py-4 rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto flex items-center justify-center'>
               {/* Subtle border instead of block */}
               <div className="absolute inset-0 border border-white/20 group-hover:bg-white/10 rounded-full transition-all" />
-              <span className="relative z-10 flex items-center justify-center gap-2 font-medium text-sm tracking-[0.15em] text-zinc-100 uppercase transition-colors">
+              <span className="relative z-10 flex items-center justify-center gap-2 font-medium text-sm tracking-[0.15em] text-zinc-100 uppercase transition-colors whitespace-nowrap">
                 VER_PORTAFOLIO
               </span>
             </Link>
           </div>
+
+
+
 
           {/* Side Indicators - Decorative (Absolute, not grid) mostly visuals */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-60 pointer-events-none">
@@ -135,6 +183,33 @@ export const Hero = () => {
           </div>
 
         </motion.div>
+      </div>
+
+      {/* Navigation Trigger - Integrated Terminal Style (Moved to Root for correct Viewport Positioning) */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto w-full">
+        <button
+          onClick={scrollToFeatures}
+          className="group flex flex-col items-center gap-2 py-2 w-full transition-all duration-500 focus:outline-none"
+          aria-label="Scroll to Infrastructure"
+        >
+          {/* Terminal Line */}
+          <div className="flex items-center gap-3 font-mono text-[10px] md:text-xs tracking-[0.2em] text-zinc-400 group-hover:text-zinc-100 transition-colors uppercase bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/5 group-hover:border-[#00FF9C]/30 group-hover:shadow-[0_0_20px_rgba(0,255,156,0.1)]">
+            <span className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00FF9C] animate-pulse" />
+              <span className="text-zinc-300">SYSTEM_READY</span>
+            </span>
+            <span className="text-zinc-600">//</span>
+            <span className="text-[#00FF9C] font-semibold transition-all duration-500">
+              ACCESS_INFRASTRUCTURE
+            </span>
+          </div>
+
+          {/* Minimal Chevron - Animated */}
+          <div className="flex flex-col items-center -space-y-1.5 opacity-50 group-hover:opacity-100 transition-opacity duration-500">
+            <ChevronDown className="w-4 h-4 text-zinc-500 group-hover:text-[#00FF9C] group-hover:translate-y-1 transition-all duration-500 delay-75" />
+            <ChevronDown className="w-4 h-4 text-zinc-600 group-hover:text-[#00FF9C]/50 group-hover:translate-y-2 transition-all duration-500" />
+          </div>
+        </button>
       </div>
 
       {/* Decorative Grid Floor */}
