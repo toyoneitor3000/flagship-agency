@@ -10,6 +10,7 @@ const projects = [
         title: 'Speedlight Culture',
         category: 'Lifestyle',
         description: 'Plataforma para entusiastas del motor.',
+        role: 'Creamos un ecosistema digital para la cultura automotriz, integrando flujos de noticias, eventos y una experiencia de usuario inmersiva que conecta a miles de entusiastas.',
         image: '/portfolio/slcultureicon.png',
         link: 'https://speedlightculture.com',
         color: 'from-orange-500 to-red-600'
@@ -18,6 +19,7 @@ const projects = [
         title: 'Pigmentos TKRS',
         category: 'E-commerce',
         description: 'Tienda de stickers y arte urbano.',
+        role: 'Desarrollamos una plataforma de e-commerce centrada en el diseño visual, optimizando el túnel de venta para productos de arte urbano con una interfaz rápida y minimalista.',
         image: '/portfolio/pigmentoicon.png',
         link: 'https://pigmentostkrs.com',
         color: 'from-pink-500 to-rose-500'
@@ -26,6 +28,7 @@ const projects = [
         title: 'Victory Cars',
         category: 'Detailing',
         description: 'Detailing y estética automotriz.',
+        role: 'Construimos la presencia digital de alto nivel para servicios de estética automotriz, enfocándonos en la conversión de leads mediante una presentación visual impecable.',
         image: '/portfolio/victoryicon.png',
         link: 'https://victorycarsdetailing.com',
         color: 'from-blue-600 to-cyan-500'
@@ -34,6 +37,7 @@ const projects = [
         title: 'Speedlight Academy',
         category: 'Education',
         description: 'Academia digital especializada.',
+        role: 'Implementamos una infraestructura educativa robusta para la formación técnica, con sistemas de gestión de contenido especializados para el aprendizaje moderno.',
         image: '/portfolio/slacademyicon.png',
         link: 'https://speedlightacademy.com',
         color: 'from-violet-600 to-indigo-600'
@@ -42,6 +46,7 @@ const projects = [
         title: 'Financars',
         category: 'Fintech',
         description: 'Soluciones de financiación.',
+        role: 'Diseñamos una interfaz clara y confiable para procesos financieros complejos, permitiendo a los usuarios calcular y solicitar créditos de manera intuitiva.',
         image: '/portfolio/financarsicon.png',
         link: 'https://financars.vercel.app/',
         color: 'from-emerald-500 to-green-600'
@@ -50,6 +55,7 @@ const projects = [
         title: 'Wrap Designer',
         category: 'Design',
         description: 'Portafolio de diseño de alta gama.',
+        role: 'Elevamos el estándar visual de la marca mediante un portafolio digital que actúa como una vitrina de lujo, proyectando la calidad del trabajo físico al mundo digital.',
         image: '/portfolio/wdesignericon.png',
         link: 'https://wrapdesigner.xyz',
         color: 'from-amber-500 to-orange-500'
@@ -72,9 +78,14 @@ export const Portfolio = () => {
                         <span className='font-mono text-indigo-500 text-[10px] tracking-[0.2em] uppercase mb-3 block'>
                             Engineering DNA
                         </span>
-                        <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-4'>
+                        <h2 className='font-display text-3xl md:text-4xl font-bold text-white mb-6'>
                             Más que Código: <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">Mecánica Digital</span>
                         </h2>
+                        <p className='text-zinc-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed mb-8'>
+                            Nuestro portafolio no es una colección de "sitios", es una trayectoria de ingeniería aplicada.
+                            Cada proyecto es un <strong>mundo propio</strong> donde hemos diseñado infraestructuras robustas,
+                            interfaces de alto impacto y sistemas que escalan. Construimos la mecánica digital que permite a los negocios operar con libertad total.
+                        </p>
                     </motion.div>
                 </div>
 
@@ -124,8 +135,25 @@ export const Portfolio = () => {
                             })}
                         </div>
 
+                        {/* Project Details (Dynamic) */}
+                        <motion.div
+                            key={activeProject.title}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="mt-12 w-full bg-zinc-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-sm"
+                        >
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${activeProject.color} animate-pulse`} />
+                                <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-[0.2em]">{activeProject.category}</span>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">{activeProject.title}</h3>
+                            <p className="text-zinc-400 text-sm leading-relaxed">
+                                {activeProject.role}
+                            </p>
+                        </motion.div>
+
                         {/* Helper Text */}
-                        <p className="hidden lg:block mt-8 text-[10px] text-zinc-600 font-mono text-center lg:text-right max-w-[250px]">
+                        <p className="hidden lg:block mt-6 text-[10px] text-zinc-600 font-mono text-center lg:text-right max-w-[250px]">
                             Selecciona una aplicación para interactuar con la versión en vivo.
                         </p>
                     </div>

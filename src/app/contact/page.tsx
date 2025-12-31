@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Mail, MessageSquare, Send, ArrowRight, Sparkles, Code2 } from 'lucide-react';
 import { submitContactForm } from '../actions';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({ name: '', email: '', budget: '', message: '' });
@@ -47,6 +48,10 @@ export default function ContactPage() {
 
         {/* Header Section */}
         <div className='mb-12 text-center'>
+          <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#8f69ff] transition-colors mb-6 text-xs font-mono group">
+            <ArrowRight className="w-3 h-3 rotate-180 group-hover:-translate-x-1 transition-transform" />
+                // VOLVER_AL_INICIO
+          </Link>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8f69ff]/10 border border-[#8f69ff]/20 text-[#8f69ff] text-xs mb-4 font-bold tracking-widest uppercase">
             <span className="w-2 h-2 rounded-full bg-[#8f69ff] animate-pulse"></span>
             src/app/contact/page.tsx
@@ -250,7 +255,7 @@ export default function ContactPage() {
                         ) : (
                           <>
                             <Code2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                            EJECUTAR PROYECTO
+                            ENVIAR SOLICITUD
                           </>
                         )}
                       </button>

@@ -2,6 +2,7 @@ import { Hero } from '@/components/ui/Hero';
 import { Features } from '@/components/ui/Features';
 import { DesignPhilosophy } from '@/components/purrpurr/DesignPhilosophy';
 import { Portfolio } from '@/components/ui/Portfolio';
+import { Invitation } from '@/components/ui/Invitation';
 import { Pricing } from '@/components/ui/Pricing';
 import { CallToAction } from '@/components/ui/CallToAction';
 import { PurrpurrLeadMagnet } from '@/components/purrpurr/PurrpurrLeadMagnet';
@@ -13,6 +14,7 @@ export default function Home() {
       <Features />
       <Portfolio />
       <Pricing />
+      <Invitation />
       <CallToAction />
       <PurrpurrLeadMagnet />
     </div>

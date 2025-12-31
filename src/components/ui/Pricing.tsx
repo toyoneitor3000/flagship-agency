@@ -84,6 +84,12 @@ export const Pricing = () => {
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-12'>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Elige tu Nivel de Impacto</h2>
+          <div className="inline-block px-4 py-2 bg-[#00FF9C]/10 border border-[#00FF9C]/20 rounded-lg mb-6">
+            <p className="text-[#00FF9C] text-sm font-bold tracking-wide uppercase flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              No inviertas a ciegas. Solicita una Demostración de Ingeniería.
+            </p>
+          </div>
           <p className='text-zinc-400 max-w-2xl mx-auto text-lg'>
             Entendemos que no todos los proyectos son iguales. <br className="hidden md:block" />
             Diseñamos una estrategia dual para <strong>validar rápido</strong> o <strong>escalar masivamente</strong>.
@@ -245,7 +251,7 @@ export const Pricing = () => {
                         </div>
 
                         <Link
-                          href='/contact'
+                          href='#invitation'
                           className={`mt-8 w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${plan.popular
                             ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
                             : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
@@ -268,9 +274,6 @@ export const Pricing = () => {
                   <ArrowRight className="w-4 h-4 rotate-180" />
                   Volver a seleccionar categoría
                 </button>
-                <p className="text-zinc-500 text-sm font-mono max-w-2xl mx-auto border-t border-zinc-900 pt-8 mt-4">
-                  <span className="text-indigo-500 font-bold">&gt; NOTE:</span> No vendo &quot;páginas web&quot;. Construyo sistemas digitales que <strong className="text-zinc-300">independizan tus ventas de tu tiempo</strong>.
-                </p>
               </div>
 
             </motion.div>
@@ -280,7 +283,7 @@ export const Pricing = () => {
         {/* Scroll Down Button */}
         <div className="flex justify-center mt-12 pb-8">
           <a
-            href="#cta"
+            href="#invitation"
             className="group flex flex-col items-center gap-2 text-zinc-500 hover:text-indigo-400 transition-colors duration-300"
           >
             <span className="text-[10px] font-mono tracking-[0.2em] uppercase">Iniciar Despegue</span>

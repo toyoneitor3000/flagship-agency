@@ -41,12 +41,13 @@ export const PurrpurrProvider = ({ children }: { children: React.ReactNode }) =>
         if (role !== 'concierge') return;
 
         const statuses = [
-            'System operational. Waiting for input.',
-            'Network stability: 100%.',
-            'Did you check the new Inertia Engine?',
-            'Monitoring user interaction events...',
-            'All safety protocols active.',
-            'Awaiting command sequence...'
+            'System operational. Explorando el Portafolio.',
+            'Analizando Mecánica Digital: Red de alto rendimiento.',
+            '¿Sabías que cada proyecto es un mundo optimizado?',
+            'Transformando legado en infraestructura moderna.',
+            'Monitoreando conversiones y flujos de usuario...',
+            'Ingeniería DNA: Precisión en cada línea de código.',
+            'Preparando previsualización gratuita de 24 horas.'
         ];
 
         let index = 0;

@@ -93,7 +93,7 @@ export const Hero = () => {
           }}
         />
         {/* Floor Shadow Gradient (Smooth Transition) */}
-        <div className="absolute bottom-0 left-0 right-0 h-[60vh] bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent pointer-events-none" />
       </div>
 
 
@@ -151,20 +151,25 @@ export const Hero = () => {
           <div className='col-span-4 md:col-start-3 md:col-span-8 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
 
             {/* CTA 1: Primary - Button shape, not Bar */}
-            <Link href='/contact' className='group relative min-w-[200px] w-full sm:w-auto px-8 py-4 rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
+            <Link href='#features' className='group relative w-[250px] h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
               <div className="absolute inset-0 bg-[#6D28D9]" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10 flex items-center justify-center gap-3 font-bold text-sm tracking-[0.15em] text-white uppercase whitespace-nowrap">
-                INICIAR MOTOR
-                <span className="text-[#00FF9C] transition-transform group-hover:translate-x-1">&gt;</span>
-              </span>
+              <div className="relative z-10 flex flex-col items-center justify-center">
+                <span className="flex items-center gap-3 font-mono font-bold text-sm tracking-wider text-white uppercase whitespace-nowrap">
+                  INICIAR PROTOTIPO
+                  <span className="text-[#00FF9C] transition-transform group-hover:translate-x-1">&gt;</span>
+                </span>
+                <span className="text-[8px] text-zinc-300 tracking-wider font-mono mt-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                  DEMOSTRACIÓN TÉCNICA • 24H
+                </span>
+              </div>
             </Link>
 
             {/* CTA 2: Secondary - Minimalist Ghost */}
-            <Link href='#work' className='group relative min-w-[180px] w-full sm:w-auto px-6 py-4 rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto flex items-center justify-center'>
+            <Link href='#philosophy' className='group relative w-[250px] h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto flex items-center justify-center'>
               {/* Subtle border instead of block */}
               <div className="absolute inset-0 border border-white/20 group-hover:bg-white/10 rounded-full transition-all" />
-              <span className="relative z-10 flex items-center justify-center gap-2 font-medium text-sm tracking-[0.15em] text-zinc-100 uppercase transition-colors whitespace-nowrap">
+              <span className="relative z-10 flex items-center justify-center gap-2 font-mono font-medium text-sm tracking-wider text-zinc-100 uppercase transition-colors whitespace-nowrap">
                 VER_PORTAFOLIO
               </span>
             </Link>

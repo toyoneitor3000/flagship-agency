@@ -37,7 +37,7 @@ export const CallToAction = () => {
 
                     <div className='flex flex-col sm:flex-row items-center justify-center gap-6'>
                         <Link
-                            href='/contact'
+                            href='#invitation'
                             className='group relative px-8 py-4 bg-[#00FF9C] text-zinc-950 font-bold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(0,255,156,0.3)]'
                         >
                             <span className="relative z-10 flex items-center gap-3 uppercase tracking-wider text-sm">
@@ -47,10 +47,10 @@ export const CallToAction = () => {
                         </Link>
 
                         <Link
-                            href='#pricing'
+                            href='#philosophy'
                             className='group px-8 py-4 rounded-full border border-zinc-800 text-zinc-300 font-bold text-sm uppercase tracking-wider hover:bg-zinc-900 hover:text-white transition-all'
                         >
-                            Ver Planes
+                            Nuestra Filosofía
                         </Link>
                     </div>
                 </motion.div>
