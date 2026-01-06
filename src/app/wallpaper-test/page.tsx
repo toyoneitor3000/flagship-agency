@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Copy, Monitor, Smartphone, Maximize2, Layers, Sun, Palette } from 'lucide-react';
+import { Check, Copy, Monitor, Smartphone, Maximize2, Layers, Sun, Palette, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usePurrpurrLab } from '@/hooks/usePurrpurrLab';
 
 // --- WALLPAPER PRESETS (Legacy) ---
 const wallpapers = [
@@ -124,6 +125,9 @@ const hsvToHex = (h: number, s: number, v: number) => {
 
 export default function WallpaperTestPage() {
     const [activeWallpaper, setActiveWallpaper] = useState<{ id: string, name: string, className: string, code: string, children?: React.ReactNode } | null>(wallpapers[0]);
+
+    // --- PURRPURR LAB: Live data from database ---
+    const { palettes, effects: dbEffects, patterns, loading: labLoading } = usePurrpurrLab();
 
     // PRIMARY COLOR STATE
     const [customColor, setCustomColor] = useState('#6D28D9');
@@ -544,15 +548,41 @@ export default function WallpaperTestPage() {
                                         <button onClick={() => copyToClipboard(activeColorLayer === 'primary' ? customColor : secondaryColor)} className="text-zinc-400 hover:text-white transition-colors"><Copy className="w-4 h-4" /></button>
                                     </div>
 
-                                    <div className="grid grid-cols-8 gap-2">
-                                        {mainPalette.map((color) => (
-                                            <button
-                                                key={color.name}
-                                                onClick={() => handlePaletteClick(color.hex)}
-                                                className={cn("aspect-square rounded-full border border-white/10 hover:scale-110 transition-transform", color.class)}
-                                                title={color.name}
-                                            />
-                                        ))}
+                                    {/* Color Palette - FROM DATABASE */}
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {labLoading ? (
+                                            <div className="col-span-4 flex justify-center py-4">
+                                                <Loader2 className="w-4 h-4 animate-spin text-purple-500" />
+                                            </div>
+                                        ) : palettes.length > 0 ? (
+                                            // Use palettes from Purrpurr Lab DB
+                                            palettes.map((palette) => (
+                                                <button
+                                                    key={palette.id}
+                                                    onClick={() => handlePaletteClick(palette.primary)}
+                                                    className="group p-2 rounded-lg border border-white/10 hover:border-purple-500/50 transition-all bg-white/5"
+                                                    title={palette.name}
+                                                >
+                                                    <div className="flex gap-0.5 mb-1 justify-center">
+                                                        <div className="w-3 h-3 rounded-full" style={{ background: palette.primary }} />
+                                                        <div className="w-3 h-3 rounded-full" style={{ background: palette.accent }} />
+                                                    </div>
+                                                    <span className="text-[8px] font-mono text-zinc-500 group-hover:text-white block text-center truncate">
+                                                        {palette.name}
+                                                    </span>
+                                                </button>
+                                            ))
+                                        ) : (
+                                            // Fallback to local palette
+                                            mainPalette.slice(0, 8).map((color) => (
+                                                <button
+                                                    key={color.name}
+                                                    onClick={() => handlePaletteClick(color.hex)}
+                                                    className={cn("aspect-square rounded-full border border-white/10 hover:scale-110 transition-transform", color.class)}
+                                                    title={color.name}
+                                                />
+                                            ))
+                                        )}
                                     </div>
                                 </div>
 
@@ -574,28 +604,28 @@ export default function WallpaperTestPage() {
                                     </div>
                                 </div>
 
-                                {/* EFFECTS CONTROL */}
+                                {/* EFFECTS CONTROL - FROM DATABASE */}
                                 <div>
                                     <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2"><Layers className="w-3 h-3" /> FX Layers</h3>
                                     <div className="grid grid-cols-2 gap-2">
-                                        {[
-                                            { id: 'grid', label: 'Grid' }, { id: 'dots', label: 'Dots' },
-                                            { id: 'scanlines', label: 'Scanline' }, { id: 'mesh', label: 'Mesh' },
-                                            { id: 'ambient', label: 'Ambient' }, { id: 'scanner', label: 'Scanner' },
-                                            { id: 'pulse', label: 'Pulse' }, { id: 'noise', label: 'Noise' },
-                                            { id: 'vignette', label: 'Vignette' }, { id: 'blur', label: 'Blur' }
-                                        ].map((effect) => (
+                                        {(dbEffects.length > 0 ? dbEffects : [
+                                            { id: 'grid', slug: 'grid', name: 'Grid' }, { id: 'dots', slug: 'dots', name: 'Dots' },
+                                            { id: 'scanlines', slug: 'scanlines', name: 'Scanline' }, { id: 'mesh', slug: 'mesh', name: 'Mesh' },
+                                            { id: 'ambient', slug: 'ambient', name: 'Ambient' }, { id: 'scanner', slug: 'scanner', name: 'Scanner' },
+                                            { id: 'pulse', slug: 'pulse', name: 'Pulse' }, { id: 'noise', slug: 'noise', name: 'Noise' },
+                                            { id: 'vignette', slug: 'vignette', name: 'Vignette' }, { id: 'blur', slug: 'blur', name: 'Blur' }
+                                        ]).map((effect) => (
                                             <button
                                                 key={effect.id}
-                                                onClick={() => toggleEffect(effect.id as any)}
+                                                onClick={() => toggleEffect(effect.slug as any)}
                                                 className={cn(
                                                     "px-2 py-1.5 rounded-md text-[10px] font-bold uppercase border transition-all",
-                                                    effects[effect.id as keyof typeof effects]
+                                                    effects[effect.slug as keyof typeof effects]
                                                         ? "bg-purple-500 text-white border-purple-500"
                                                         : "bg-transparent text-zinc-500 border-zinc-700 hover:border-zinc-500"
                                                 )}
                                             >
-                                                {effect.label}
+                                                {effect.name}
                                             </button>
                                         ))}
                                     </div>

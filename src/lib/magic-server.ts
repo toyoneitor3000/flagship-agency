@@ -1,23 +1,44 @@
+// --- MAGIC SERVER STORAGE v2.0 ---
+// Handles persistence across Local Dev (Filesystem) and Production (Vercel KV / Memory Fallback)
+
 import fs from 'fs/promises';
 import path from 'path';
 
 const CONTENT_PATH = path.join(process.cwd(), 'src/data/content.json');
 
+// Memory Cache for Production Fallback (volatile, but prevents crashes)
+let MEMORY_CACHE: any = null;
+
+// Helper to determine mode
+const IS_DEV = process.env.NODE_ENV === 'development';
+
 export async function getMagicContent() {
     try {
+        // 1. Try Memory first (fastest)
+        if (MEMORY_CACHE) return MEMORY_CACHE;
+
+        // 2. Try Filesystem (Dev only or if file exists)
+        // In Vercel, this file exists at build time but is read-only. 
+        // We read it to seed the memory cache.
         const data = await fs.readFile(CONTENT_PATH, 'utf-8');
-        return JSON.parse(data);
+        const parsed = JSON.parse(data);
+
+        // Seed memory cache
+        MEMORY_CACHE = parsed;
+
+        return parsed;
     } catch (error) {
         console.error('Failed to read magic content:', error);
-        return {};
+        return MEMORY_CACHE || {};
     }
 }
 
 export async function updateMagicContent(pathKey: string, value: string) {
     try {
+        // 1. Get current content
         const content = await getMagicContent();
 
-        // Simple deep merge/update logic setup
+        // 2. Update Object in Memory
         const keys = pathKey.split('.');
         let current = content;
 
@@ -29,7 +50,21 @@ export async function updateMagicContent(pathKey: string, value: string) {
 
         current[keys[keys.length - 1]] = value;
 
-        await fs.writeFile(CONTENT_PATH, JSON.stringify(content, null, 2));
+        // Update global cache immediately
+        MEMORY_CACHE = content;
+
+        // 3. Persist based on Environment
+        if (IS_DEV) {
+            // Local formatting for dev experience
+            await fs.writeFile(CONTENT_PATH, JSON.stringify(content, null, 2));
+        } else {
+            // PRODUCTION STRATEGY
+            // TODO: Connect to Vercel KV here for true persistence.
+            // For now, we rely on MEMORY_CACHE which persists only while the Lambda is warm.
+            // This allows the "Live View" to work for the current demo session without crashing.
+            console.log(`[MagicStore] In-Memory Update: ${pathKey} = ${value}`);
+        }
+
         return { success: true };
     } catch (error) {
         console.error('Failed to write magic content:', error);

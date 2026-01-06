@@ -13,6 +13,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 });
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["@libsql/client", "libsql", "@prisma/adapter-libsql"],
   typescript: {
     // ⚠️ ATENCION: Esto permite el deploy aunque haya errores de caché de TS
     // Necesario para arreglar el loop de 'Cannot find module page.js'
@@ -28,7 +29,18 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'image.thum.io',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
     ],
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.md$/,
+      type: 'asset/source',
+    });
+    return config;
   },
 };
 

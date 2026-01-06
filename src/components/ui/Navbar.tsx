@@ -5,14 +5,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { UserMenu } from '@/components/auth/UserMenu';
 
 export const Navbar = () => {
   // Scroll detection removed as requested for consistent sizing
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [navTheme, setNavTheme] = useState<'light' | 'dark'>('light'); // 'light' = Light Background (needs dark text)
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Hide navbar on deployed site pages (/sites/[slug])
+  // Check if we're on /sites/something (but not just /sites)
+  const isSiteViewPage = pathname.startsWith('/sites/') && pathname !== '/sites/';
+
+  if (isSiteViewPage) {
+    return null;
+  }
 
 
   // Theme Detection Logic
@@ -84,80 +95,100 @@ export const Navbar = () => {
     : 'bg-zinc-950/50 backdrop-blur-[100px] border-white/10';
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
-      className={cn(
-        'fixed top-0 w-full z-[100] transition-all duration-300 border-b',
-        navbarBgClass
-      )}
-    >
-      <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-12 gap-4 items-center'>
-        <div className="col-span-1 lg:col-span-3 flex justify-start">
-          <Link href='/' className='flex items-center gap-2'>
-            <Image
-              src="/brand_logo.png"
-              alt="Purrpurr Logo"
-              width={160}
-              height={40}
-              className={cn(
-                "h-10 w-auto object-contain transition-all duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]",
-                // Optional: Invert logo brightness if needed for dark mode, 
-                // but assuming brand logo works on both or we might need a white version.
-                // If navTheme is dark (dark bg), we might want to ensure logo is visible.
-                // For now keeping it standard.
-              )}
-              priority
-            />
-          </Link>
-        </div>
-
-        <div className="col-span-1 lg:col-span-9 flex justify-end items-center gap-4">
-          <nav className='hidden lg:flex items-center gap-8'>
-            <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-              [ Servicios ]
-            </Link>
-            <Link href='/purrpurr-test' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-              [ Purrpurr Labs ]
-            </Link>
-            <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-              [ Academy ]
-            </Link>
-            <Link href='#philosophy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-              [ Nosotros ]
-            </Link>
-            <Link href='#invitation' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-              [ Contacto ]
-            </Link>
-            <button className={cn(
-              'px-5 py-2 rounded-sm bg-transparent font-mono text-[12px] font-bold border transition-all shadow-sm tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]',
-              buttonBorderClass
-            )}>
-              &lt; COTIZAR /&gt;
-            </button>
-          </nav>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className={cn(
-              'lg:hidden p-2 rounded-md transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]',
-              navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
+    <>
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
+        className={cn(
+          'fixed top-0 w-full z-[100] transition-all duration-300 border-b h-20 flex items-center',
+          navbarBgClass
+        )}
+      >
+        <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-12 gap-4 items-center'>
+          <div className="col-span-1 lg:col-span-3 flex justify-start items-center gap-2">
+            {/* Mobile Back Button - Only visible on mobile/tablet AND when not on home */}
+            {pathname !== '/' && (
+              <button
+                onClick={() => router.back()}
+                className={cn(
+                  "lg:hidden p-2 -ml-2 rounded-full transition-colors flex items-center justify-center",
+                  navTheme === 'light' ? 'text-[#022C22] hover:bg-zinc-100' : 'text-zinc-100 hover:bg-zinc-800'
+                )}
+                aria-label="Go back"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
             )}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
 
-      {/* Mobile Nav - Terminal Style */}
+            <Link href='/' className='flex items-center gap-2'>
+              <Image
+                src="/brand_logo.png"
+                alt="Purrpurr Logo"
+                width={160}
+                height={40}
+                className={cn(
+                  "h-10 w-auto object-contain transition-all duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]",
+                  // Optional: Invert logo brightness if needed for dark mode, 
+                  // but assuming brand logo works on both or we might need a white version.
+                  // If navTheme is dark (dark bg), we might want to ensure logo is visible.
+                  // For now keeping it standard.
+                )}
+                priority
+              />
+            </Link>
+          </div>
+
+          <div className="col-span-1 lg:col-span-9 flex justify-end items-center gap-4">
+            <nav className='hidden lg:flex items-center gap-8'>
+              <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Servicios ]
+              </Link>
+              <Link href='/purrpurr-test' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Purrpurr Labs ]
+              </Link>
+              <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Academy ]
+              </Link>
+              <Link href='#philosophy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Nosotros ]
+              </Link>
+              <Link href='#invitation' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Contacto ]
+              </Link>
+              <button className={cn(
+                'px-5 py-2 rounded-sm bg-transparent font-mono text-[12px] font-bold border transition-all shadow-sm tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]',
+                buttonBorderClass
+              )}>
+                &lt; COTIZAR /&gt;
+              </button>
+              <UserMenu />
+            </nav>
+
+            <div className="lg:hidden flex items-center gap-2">
+              <UserMenu iconOnly={true} />
+              <button
+                className={cn(
+                  'p-2 rounded-md transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]',
+                  navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
+                )}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </motion.header>
+
+      {/* Mobile Nav - Terminal Style - Moved outside header to avoid transform stacking context issues */}
       {isMobileMenuOpen && (
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: '100%' }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: '100%' }}
-          className='lg:hidden fixed inset-x-4 top-[80px] bottom-8 z-40 flex flex-col'
+          className='lg:hidden fixed inset-x-4 top-[90px] bottom-8 z-[110] flex flex-col'
         >
           <div className='flex-1 bg-zinc-950/98 backdrop-blur-2xl border border-zinc-800/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col relative'>
             {/* Scanline Effect */}
@@ -220,6 +251,6 @@ export const Navbar = () => {
           </div>
         </motion.div>
       )}
-    </motion.header>
+    </>
   );
 };

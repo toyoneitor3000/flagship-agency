@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://tu-dominio.com/sitemap.xml',
+    sitemap: 'https://purrpurr.dev/sitemap.xml',
   };
 }

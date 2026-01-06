@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateMagicContent } from '@/lib/magic-server';
+import { revalidatePath } from 'next/cache';
 
 const MAGIC_WORD = process.env.MAGIC_WORD || 'purrpurr-magic';
 
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
         const result = await updateMagicContent(key, value);
 
         if (result.success) {
+            revalidatePath('/', 'layout'); // Revalidate all paths as MagicContent is in RootLayout
             return NextResponse.json({ success: true });
         } else {
             return NextResponse.json({ success: false, error: 'Write failed' }, { status: 500 });

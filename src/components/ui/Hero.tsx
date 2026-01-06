@@ -150,17 +150,21 @@ export const Hero = () => {
           {/* Buttons - Central Action Block (Cols 4-9) -> now (Cols 3-10) */}
           <div className='col-span-4 md:col-start-3 md:col-span-8 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
 
-            {/* CTA 1: Primary - Button shape, not Bar */}
-            <Link href='#features' className='group relative w-[250px] h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
+            {/* CTA 1: Primary - MVP Builder Entry */}
+            <Link href='/purrpurr-test' className='group relative w-[280px] h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
               <div className="absolute inset-0 bg-[#6D28D9]" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+              {/* Animated Glow Effect */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[30px] bg-white/30 skew-x-12 opacity-0 group-hover:animate-shine" />
+
               <div className="relative z-10 flex flex-col items-center justify-center">
-                <span className="flex items-center gap-3 font-mono font-bold text-sm tracking-wider text-white uppercase whitespace-nowrap">
-                  INICIAR PROTOTIPO
-                  <span className="text-[#00FF9C] transition-transform group-hover:translate-x-1">&gt;</span>
+                <span className="flex items-center gap-3 font-mono font-bold text-sm tracking-widest text-white uppercase whitespace-nowrap">
+                  <Rocket className="w-4 h-4" />
+                  CREATE YOUR MVP
                 </span>
-                <span className="text-[8px] text-zinc-300 tracking-wider font-mono mt-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                  DEMOSTRACIÓN TÉCNICA • 24H
+                <span className="text-[9px] text-zinc-300 tracking-wider font-mono mt-1 opacity-80 group-hover:text-emerald-300 transition-colors">
+                  AI ARCHITECT • INSTANT HOST
                 </span>
               </div>
             </Link>

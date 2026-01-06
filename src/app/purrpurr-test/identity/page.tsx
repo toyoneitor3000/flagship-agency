@@ -26,14 +26,14 @@ export default function IdentityAgentsPage() {
             {/* ATMOSPHERE */}
             <FluidBackground
                 config={{ ...FLUID_PRESET_PURRPURR.config, stiffness: 20 }}
-                colors={{ color1: '#1e1b4b', color2: '#09090b', color3: '#4c1d95' }}
+                colors={{ color1: '#1e1b4b', color2: '#09090b', color3: '#4c1d95', color4: '#312e81' }}
                 speed={0.001}
                 force={1}
                 className="absolute z-0 opacity-50"
             />
 
             {/* STATUS BAR */}
-            <div className='fixed top-[70px] left-0 w-full z-40 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-100/5'>
+            <div className='fixed top-[80px] left-0 w-full z-40 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-100/5'>
                 <div className='max-w-7xl mx-auto px-4 h-10 flex items-center justify-between text-[10px] md:text-xs font-mono tracking-widest uppercase text-zinc-500'>
                     <div className='flex items-center gap-4'>
                         <span className='text-purple-500'>// PURRPURR_LABS</span>
