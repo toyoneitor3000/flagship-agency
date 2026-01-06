@@ -7,7 +7,9 @@
     "build": "next build --webpack",
     "start": "next start -p 3002",
     "lint": "eslint",
-    "deploy": "vercel build --prod && vercel deploy --prebuilt --prod"
+    "deploy": "vercel build --prod && vercel deploy --prebuilt --prod",
+    "deployment": "vercel build --prod && vercel deploy --prebuilt --prod",
+    "ship": "./ship.sh"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
