@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://flagship-agency.vercel.app'),
+  metadataBase: new URL('https://www.purrpurr.dev'),
   title: "Purrpurr | Elite Development Agency",
   description: "Ingeniería de precisión para marcas que no pueden permitirse fallar. Arquitectura Digital de Alto Rendimiento.",
   icons: {
