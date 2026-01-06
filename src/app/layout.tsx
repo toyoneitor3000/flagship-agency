@@ -64,7 +64,7 @@ import { TypographyInjector } from "@/components/purrpurr/TypographyInjector";
 import { ThemeColorManager } from "@/components/ui/ThemeColorManager";
 import { MainWrapper } from "@/components/ui/MainWrapper";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
-import { WhatsAppFloat } from '@/components/ui/WhatsAppFloat';
+
 
 export default async function RootLayout({
   children,
@@ -87,7 +87,7 @@ export default async function RootLayout({
               <MainWrapper>
                 {children}
               </MainWrapper>
-              <WhatsAppFloat />
+
               <Footer />
             </PurrpurrProvider>
           </MagicProvider>
