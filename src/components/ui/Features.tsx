@@ -40,7 +40,7 @@ const frontendFeatures = [
   },
   {
     title: 'Preparado para el Futuro',
-    description: 'Integramos Inteligencia Artificial y tecnologías modernas que mantienen tu negocio a la vanguardia.',
+    description: 'Integramos ingeniería robusta y tecnologías modernas que mantienen tu negocio a la vanguardia.',
     icon: Cpu,
   },
 ];

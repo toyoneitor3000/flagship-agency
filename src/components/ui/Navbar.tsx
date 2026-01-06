@@ -89,10 +89,7 @@ export const Navbar = () => {
   const hoverColorClass = navTheme === 'light' ? 'hover:text-[#6D28D9]' : 'hover:text-[#00FF9C]';
   const buttonBorderClass = navTheme === 'light' ? 'border-[#6D28D9] text-[#6D28D9] hover:bg-[#6D28D9] hover:text-white' : 'border-zinc-100 text-zinc-100 hover:border-[#00FF9C] hover:text-[#00FF9C] hover:bg-zinc-950';
 
-  // Navbar Background logic - Liquid Glass Effect
-  const navbarBgClass = navTheme === 'light'
-    ? 'bg-zinc-950/20 backdrop-blur-xl border-white/20'
-    : 'bg-zinc-950/20 backdrop-blur-xl border-white/10';
+
 
   return (
     <>
@@ -101,10 +98,14 @@ export const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
         className={cn(
-          'fixed top-0 w-full z-[100] transition-all duration-300 border-b h-14 flex items-center',
-          navbarBgClass
-        )}
-      >
+          'fixed top-0 w-full z-[100] transition-all duration-300 border-b flex items-center',
+          'h-12', // Reduced height
+          // Liquid Glass properties
+          'bg-white/5 dark:bg-zinc-950/10', // Extremely transparent
+          'backdrop-blur-xl backdrop-saturate-150', // Heavy blur + saturation
+          'border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]' // Subtle border and shadow
+        )
+        }>
         <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-12 gap-4 items-center'>
           <div className="col-span-1 lg:col-span-3 flex justify-start items-center gap-2">
             {/* Mobile Back Button - Only visible on mobile/tablet AND when not on home */}

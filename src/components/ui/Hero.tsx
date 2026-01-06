@@ -164,7 +164,7 @@ export const Hero = () => {
                   CREATE YOUR MVP
                 </span>
                 <span className="text-[9px] text-zinc-300 tracking-wider font-mono mt-1 opacity-80 group-hover:text-emerald-300 transition-colors">
-                  AI ARCHITECT • INSTANT HOST
+                  SYSTEM ARCHITECT • INSTANT HOST
                 </span>
               </div>
             </Link>
