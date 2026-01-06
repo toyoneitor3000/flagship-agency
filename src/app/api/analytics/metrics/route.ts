@@ -9,6 +9,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { getClusterMetrics, formatBytes } from '@/lib/analytics';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
     try {
         const session = await auth();
