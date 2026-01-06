@@ -121,7 +121,7 @@ export const Hero = () => {
           <h1
             className='col-span-4 md:col-span-12 relative font-display font-bold text-center transition-all duration-300 w-full z-20 mb-4 pointer-events-none'
             style={{
-              fontSize: 'clamp(3rem, 7vw, 9rem)',
+              fontSize: 'clamp(2rem, 6vw, 8rem)',
               letterSpacing: '-0.04em',
               lineHeight: '0.95',
               textShadow: '0 10px 30px rgba(0,0,0,0.5)'
@@ -140,7 +140,7 @@ export const Hero = () => {
           <div className="col-span-4 md:col-start-2 md:col-span-10 flex justify-center z-10 pointer-events-none">
             <div className="max-w-3xl mx-auto text-center px-4">
               <p className='font-mono text-white leading-relaxed tracking-wide font-medium drop-shadow-md'
-                style={{ fontSize: 'clamp(1rem, 1.25vw, 1.5rem)' }}>
+                style={{ fontSize: 'clamp(0.875rem, 1.25vw, 1.5rem)' }}>
                 <span className="text-[#a78bfa] font-bold">&gt; </span>
                 <MagicText id="hero.description_v11" defaultText="No solo escribimos software, entendemos tu negocio. Creamos la infraestructura digital que ordena tu operación y te devuelve el control." />
               </p>
@@ -151,7 +151,7 @@ export const Hero = () => {
           <div className='col-span-4 md:col-start-3 md:col-span-8 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
 
             {/* CTA 1: Primary - MVP Builder Entry */}
-            <Link href='/purrpurr-test' className='group relative w-[280px] h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
+            <Link href='/purrpurr-test' className='group relative w-[240px] sm:w-[280px] h-[56px] sm:h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
               <div className="absolute inset-0 bg-[#6D28D9]" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -170,7 +170,7 @@ export const Hero = () => {
             </Link>
 
             {/* CTA 2: Secondary - Minimalist Ghost */}
-            <Link href='#philosophy' className='group relative w-[250px] h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto flex items-center justify-center'>
+            <Link href='#philosophy' className='group relative w-[220px] sm:w-[250px] h-[56px] sm:h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:text-white pointer-events-auto flex items-center justify-center'>
               {/* Subtle border instead of block */}
               <div className="absolute inset-0 border border-white/20 group-hover:bg-white/10 rounded-full transition-all" />
               <span className="relative z-10 flex items-center justify-center gap-2 font-mono font-medium text-sm tracking-wider text-zinc-100 uppercase transition-colors whitespace-nowrap">
