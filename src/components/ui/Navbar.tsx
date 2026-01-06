@@ -91,8 +91,8 @@ export const Navbar = () => {
 
   // Navbar Background logic - Liquid Glass Effect
   const navbarBgClass = navTheme === 'light'
-    ? 'bg-zinc-950/50 backdrop-blur-[100px] border-white/20'
-    : 'bg-zinc-950/50 backdrop-blur-[100px] border-white/10';
+    ? 'bg-zinc-950/20 backdrop-blur-xl border-white/20'
+    : 'bg-zinc-950/20 backdrop-blur-xl border-white/10';
 
   return (
     <>
@@ -101,7 +101,7 @@ export const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
         className={cn(
-          'fixed top-0 w-full z-[100] transition-all duration-300 border-b h-20 flex items-center',
+          'fixed top-0 w-full z-[100] transition-all duration-300 border-b h-14 flex items-center',
           navbarBgClass
         )}
       >

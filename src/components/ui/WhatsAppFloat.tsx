@@ -19,14 +19,14 @@ export const WhatsAppFloat = () => {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50">
+        <div className="fixed bottom-6 left-6 z-50">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.8, y: 20 }}
-                        className="absolute bottom-20 right-0 w-80 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden"
+                        className="absolute bottom-20 left-0 w-80 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden"
                     >
                         {/* Header */}
                         <div className="bg-[#25D366] p-4 flex items-center gap-3">
@@ -106,7 +106,7 @@ export const WhatsAppFloat = () => {
 
             {/* Pulse Animation (only when closed) */}
             {!isOpen && (
-                <span className="absolute top-0 right-0 w-3 h-3">
+                <span className="absolute top-0 left-0 w-3 h-3">
                     <span className="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75 animate-ping" />
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-[#25D366]" />
                 </span>
