@@ -36,39 +36,40 @@ type ProjectDNA = {
 // --- COMPONENT FACTORY (THE "BLOCKS") ---
 
 const HeroSection = ({ content, identity }: { content: any; identity: any }) => (
-    <section className="min-h-screen flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
-        <div
-            className="absolute inset-0 opacity-10"
-            style={{
-                background: `radial-gradient(circle at center, ${identity.brand.colors.primary}, transparent 70%)`
-            }}
-        />
-        <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className={`text-6xl md:text-9xl font-bold tracking-tighter mb-6 relative z-10 ${identity.brand.typography === 'SERIF' ? 'font-serif' : 'font-sans'}`}
-        >
-            {content.title}
-        </motion.h1>
-        <motion.p
+    <section className="min-h-screen flex flex-col items-center justify-center p-8 text-center relative overflow-hidden bg-black">
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-xl md:text-2xl opacity-70 max-w-2xl mx-auto relative z-10 leading-relaxed"
+            className="relative z-10"
         >
-            {content.subtitle}
-        </motion.p>
+            <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className={`text-6xl md:text-9xl font-light tracking-widest mb-8 relative z-10 text-white uppercase`}
+            >
+                {content.title}
+            </motion.h1>
+            <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="text-sm md:text-lg text-zinc-400 tracking-[0.3em] font-light max-w-2xl mx-auto relative z-10 uppercase"
+            >
+                {content.subtitle}
+            </motion.p>
+        </motion.div>
     </section>
 );
 
 const AuthoritySection = ({ content }: { content: any }) => (
-    <section className="py-20 border-t border-purple-500/10 bg-[#1a0b40]/50">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-            <p className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-12">{content.headline}</p>
-            <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+    <section className="py-20 border-y border-white/5 bg-zinc-950/20">
+        <div className="max-w-6xl mx-auto px-6">
+            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60">
                 {content.logos.map((logo: string, i: number) => (
-                    <div key={i} className="text-xl font-bold font-serif italic text-zinc-300">{logo}</div>
+                    <div key={i} className="flex flex-col items-center">
+                        <div className="text-sm font-light text-white tracking-[0.2em] uppercase">{logo}</div>
+                    </div>
                 ))}
             </div>
         </div>
@@ -78,13 +79,15 @@ const AuthoritySection = ({ content }: { content: any }) => (
 const ValuePropSection = ({ content }: { content: any }) => (
     <section className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-light mb-24 max-w-2xl">{content.headline}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-x-24">
+            <h2 className="text-2xl md:text-3xl font-light text-white mb-24 max-w-2xl border-l border-white/20 pl-8 uppercase tracking-widest">
+                {content.headline}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                 {content.cards.map((card: any, i: number) => (
                     <div key={i} className="group">
-                        <div className="w-12 h-[1px] bg-white/20 mb-8 group-hover:w-full transition-all duration-500" />
-                        <h3 className="text-2xl font-bold mb-4">{card.title}</h3>
-                        <p className="text-zinc-400 leading-relaxed">{card.desc}</p>
+                        <div className="text-[10px] font-light text-zinc-600 mb-6 tracking-widest uppercase">0{i + 1} —</div>
+                        <h3 className="text-lg font-normal mb-4 text-white uppercase tracking-widest">{card.title}</h3>
+                        <p className="text-zinc-500 leading-relaxed text-sm font-light tracking-wide">{card.desc}</p>
                     </div>
                 ))}
             </div>
@@ -93,19 +96,34 @@ const ValuePropSection = ({ content }: { content: any }) => (
 );
 
 const DemoSection = ({ content }: { content: any }) => (
-    <section className="py-24 px-4 overflow-hidden">
-        <div className="max-w-[1400px] mx-auto text-center mb-16">
-            <h2 className="text-sm font-mono uppercase tracking-widest text-zinc-500">{content.headline}</h2>
+    <section className="py-24 px-4 bg-black border-y border-white/5 font-sans">
+        <div className="max-w-6xl mx-auto mb-20 flex flex-col md:flex-row justify-between items-end gap-6">
+            <div>
+                <h2 className="text-zinc-500 text-[10px] mb-2 tracking-[0.5em] uppercase">Selección de Obra</h2>
+                <p className="text-4xl font-light text-white tracking-tighter uppercase leading-none">Catálogo del Evento</p>
+            </div>
+            <div className="text-right border-b border-white/10 pb-2">
+                <span className="text-[10px] text-zinc-500 block mb-1 uppercase tracking-widest">Resumen de Galería</span>
+                <div className="text-lg font-light text-white uppercase tracking-widest">Carrito Vacío</div>
+            </div>
         </div>
 
-        {/* Mock Gallery Grid */}
-        <div className="flex gap-4 overflow-x-auto pb-8 snap-x">
-            {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="shrink-0 w-[80vw] md:w-[600px] h-[400px] bg-[#1a0b40] rounded-lg border border-purple-500/10 flex items-center justify-center relative group snap-center">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-8 flex items-end">
-                        <span className="font-mono text-xs">PROJECT_0{i}.JPG</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto">
+            {content.images?.map((img: string, i: number) => (
+                <div key={i} className="relative group aspect-[4/3] bg-zinc-950 overflow-hidden">
+                    <img src={img} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-1000" alt="Car" />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+
+                    {/* Minimal Selection UI */}
+                    <div className="absolute top-6 right-6">
+                        <button className="w-10 h-10 border border-white/10 bg-black/40 backdrop-blur-sm flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                            <span className="text-xs font-light">Elegir</span>
+                        </button>
                     </div>
-                    <span className="text-zinc-700 font-mono">PLACEHOLDER_IMG_{i}</span>
+
+                    <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[10px] text-zinc-400 tracking-[0.4em] uppercase">Obra Ref. {i + 1}</span>
+                    </div>
                 </div>
             ))}
         </div>
@@ -113,24 +131,23 @@ const DemoSection = ({ content }: { content: any }) => (
 );
 
 const PricingSection = ({ content }: { content: any }) => (
-    <section className="py-32 px-6 bg-[#1a0b40]/30 border-y border-purple-500/10">
+    <section className="py-32 px-6 bg-zinc-950/20">
         <div className="max-w-5xl mx-auto">
-            <h2 className="text-center text-3xl md:text-5xl font-bold mb-20">{content.headline}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <h2 className="text-center text-[10px] text-zinc-600 mb-16 uppercase tracking-[0.6em]">{content.headline}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {content.plans.map((plan: any, i: number) => (
-                    <div key={i} className={`p-8 rounded-2xl border ${i === 1 ? 'border-white bg-white/5' : 'border-white/10 hover:border-white/30'} transition-all flex flex-col`}>
-                        <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                        <div className="text-4xl font-light mb-8">{plan.price}</div>
+                    <div key={i} className={`p-10 bg-black border ${i === 2 ? 'border-white/20' : 'border-white/5'} hover:border-white/30 transition-all flex flex-col items-center text-center`}>
+                        <h3 className="text-xs font-light text-zinc-400 mb-2 uppercase tracking-[0.3em]">{plan.name}</h3>
+                        <div className="text-3xl font-light text-white mb-10 tracking-widest">{plan.price}</div>
                         <ul className="space-y-4 mb-12 flex-1">
                             {plan.features.map((feat: string, j: number) => (
-                                <li key={j} className="flex items-center gap-3 text-sm text-zinc-300">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                <li key={j} className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">
                                     {feat}
                                 </li>
                             ))}
                         </ul>
-                        <button className={`w-full py-4 rounded-xl font-bold text-sm tracking-wide ${i === 1 ? 'bg-white text-black' : 'bg-white/10 hover:bg-white text-white hover:text-black'} transition-colors`}>
-                            SELECCIONAR
+                        <button className={`w-full py-4 text-[10px] font-medium uppercase tracking-[0.4em] transition-all border ${i === 2 ? 'bg-white text-black' : 'border-white/10 text-white hover:bg-white hover:text-black'}`}>
+                            Seleccionar
                         </button>
                     </div>
                 ))}
@@ -139,35 +156,18 @@ const PricingSection = ({ content }: { content: any }) => (
     </section>
 );
 
-const FAQSection = ({ content }: { content: any }) => (
-    <section className="py-24 px-6 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold mb-12">{content.headline}</h2>
-        <div className="space-y-8">
-            {content.items.map((item: any, i: number) => (
-                <div key={i} className="border-b border-white/10 pb-8">
-                    <h3 className="text-lg font-medium mb-3">{item.q}</h3>
-                    <p className="text-zinc-400 leading-relaxed text-sm">{item.a}</p>
-                </div>
-            ))}
-        </div>
-    </section>
-);
-
 const ContactSection = ({ content }: { content: any }) => (
-    <section className="py-32 px-8 bg-[#0f0033] border-t border-purple-500/20">
-        <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">¿Listo para empezar?</h2>
-            <p className="text-xl text-zinc-400 mb-12 max-w-lg mx-auto">
-                Tu proyecto {content.location && `en ${content.location}`} merece destacar. Escríbenos hoy.
-            </p>
+    <section className="py-40 px-8 bg-black relative flex items-center justify-center">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+            <h2 className="text-4xl md:text-6xl font-light mb-12 tracking-[0.2em] text-white uppercase leading-none">Hablemos</h2>
             {content.whatsapp && (
                 <a
                     href={`https://wa.me/${content.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-3 bg-[#25D366] text-black px-10 py-5 rounded-full font-bold text-xl hover:scale-105 transition-transform shadow-[0_0_50px_rgba(37,211,102,0.3)]"
+                    className="inline-block border border-white/20 px-12 py-6 text-xs font-light tracking-[0.5em] text-white hover:bg-white hover:text-black transition-all uppercase"
                 >
-                    Chat en WhatsApp
+                    Contacto Directo
                 </a>
             )}
         </div>
@@ -176,95 +176,58 @@ const ContactSection = ({ content }: { content: any }) => (
 
 // --- ARCHETYPES COLOR MAPPING (Fallback for existing projects) ---
 const ARCHETYPE_COLORS: Record<string, { color1: string; color2: string; color3: string; color4: string }> = {
-    'CREATOR': { color1: '#000000', color2: '#18181b', color3: '#ef4444', color4: '#000000' },
-    'BOUTIQUE': { color1: '#000000', color2: '#18181b', color3: '#d4af37', color4: '#000000' },
-    'PROFESSIONAL': { color1: '#000000', color2: '#18181b', color3: '#3b82f6', color4: '#000000' },
-    'STARTUP': { color1: '#000000', color2: '#18181b', color3: '#8b5cf6', color4: '#000000' },
-    'GASTRO': { color1: '#000000', color2: '#18181b', color3: '#f97316', color4: '#000000' },
-    'REAL_ESTATE': { color1: '#000000', color2: '#18181b', color3: '#10b981', color4: '#000000' },
-    'HEALTH': { color1: '#000000', color2: '#18181b', color3: '#06b6d4', color4: '#000000' },
-    'AUTO': { color1: '#000000', color2: '#18181b', color3: '#eab308', color4: '#000000' },
+    'CREATOR': { color1: '#000000', color2: '#080808', color3: '#111111', color4: '#000000' },
 };
 
-const DEFAULT_THEME = { color1: '#000000', color2: '#18181b', color3: '#6D28D9', color4: '#000000' };
+const DEFAULT_THEME = { color1: '#000000', color2: '#080808', color3: '#111111', color4: '#000000' };
 
 // --- THE ENGINE CORE ---
 
 export function RenderEngine({ buildId, slug, architecture }: { buildId: string; slug: string; architecture: ProjectDNA }) {
 
     // 1. Theme Configuration
-    // Get theme colors from architecture, or fallback to category-based colors, or default
     const themeColors = architecture.identity.brand.themeColors
         || ARCHETYPE_COLORS[architecture.identity.category]
         || DEFAULT_THEME;
 
     return (
-        <main className="bg-black text-white min-h-screen selection:bg-purple-500/30 font-sans relative overflow-x-hidden">
+        <main className="bg-black text-white min-h-screen selection:bg-white/10 font-sans relative overflow-x-hidden">
             {/* SEO Metadata Override */}
             <title>{architecture.identity.seo.title}</title>
             <meta name="description" content={architecture.identity.seo.description} />
 
-            {/* FluidBackground - Same as Studio */}
+            {/* Clean Static Background */}
             <div className="fixed inset-0 z-0">
-                <FluidBackground
-                    config={{ ...FLUID_PRESET_PURRPURR.config, stiffness: 60 }}
-                    colors={themeColors}
-                    speed={0.005}
-                    force={1.0}
-                    className="w-full h-full"
+                <img
+                    src="/pipelow_clean_bg.png"
+                    className="w-full h-full object-cover opacity-30"
+                    alt="Background"
                 />
-                {/* Overlay for legibility */}
                 <div className="absolute inset-0 bg-black/40 pointer-events-none" />
             </div>
 
-            {/* Global Navbar - Synced with Studio */}
-            <nav className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center border-b border-white/10">
-                <span className="font-bold text-xl tracking-tighter">{architecture.identity.name}</span>
-                <div className="hidden md:flex gap-6 text-sm font-medium opacity-70">
-                    <span className="cursor-pointer hover:opacity-100 transition-opacity">Inicio</span>
-                    <span className="cursor-pointer hover:opacity-100 transition-opacity">Nosotros</span>
-                    <span className="cursor-pointer hover:opacity-100 transition-opacity">Proyectos</span>
-                    <span className="cursor-pointer hover:opacity-100 transition-opacity">Contacto</span>
+            {/* Global Navbar */}
+            <nav className="fixed top-0 left-0 right-0 z-50 p-8 flex justify-between items-center bg-black/20 backdrop-blur-md ">
+                <span className="font-light text-xl tracking-[0.4em] text-white uppercase">{architecture.identity.name}</span>
+                <div className="hidden md:flex gap-12 text-[9px] font-medium tracking-[0.5em] text-zinc-500 uppercase">
+                    <span className="cursor-pointer hover:text-white transition-colors">Galería</span>
+                    <span className="cursor-pointer hover:text-white transition-colors">Servicios</span>
+                    <span className="cursor-pointer hover:text-white transition-colors">Contacto</span>
                 </div>
             </nav>
 
-            <div className="flex flex-col relative z-10">
-                {architecture.sections.map((section, index) => {
+            <div className="flex flex-col relative z-10 pt-20">
+                {architecture.sections.map((section) => {
                     switch (section.type) {
                         case 'HERO': return <HeroSection key={section.id} content={section.content} identity={architecture.identity} />;
                         case 'AUTHORITY': return <AuthoritySection key={section.id} content={section.content} />;
                         case 'VALUE_PROP': return <ValuePropSection key={section.id} content={section.content} />;
                         case 'DEMO': return <DemoSection key={section.id} content={section.content} />;
                         case 'PRICING': return <PricingSection key={section.id} content={section.content} />;
-                        case 'FAQ': return <FAQSection key={section.id} content={section.content} />;
                         case 'CONTACT': return <ContactSection key={section.id} content={section.content} />;
-                        default:
-                            return (
-                                <div key={section.id} className="p-12 border border-dashed border-zinc-800 text-zinc-600 font-mono text-center">
-                                    [MODULE '{section.type}' NOT COMPILED]
-                                </div>
-                            );
+                        default: return null;
                     }
                 })}
-            </div>
-
-            {/* Subscription Banner (The "Checkout" logic is now embedded here) */}
-            <div className="fixed bottom-0 w-full bg-purple-900/90 backdrop-blur-md text-white px-6 py-4 z-50 flex items-center justify-between border-t border-purple-500/30">
-                <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <span className="text-xs font-mono bg-black/50 px-2 py-1 rounded text-purple-200">PREVIEW MODE</span>
-                    <span className="text-sm font-medium">Esta web aún no es pública. Suscríbete para publicarla en tu dominio.</span>
-                </div>
-                <div className="flex gap-2">
-                    <a
-                        href={`/studio?slug=${slug}`}
-                        className="bg-purple-800 text-white px-5 py-2 rounded-lg font-bold text-sm hover:bg-purple-700 transition-colors border border-purple-600"
-                    >
-                        ❖️ Editar
-                    </a>
-                    <button className="bg-white text-purple-950 px-6 py-2 rounded-lg font-bold text-sm hover:bg-purple-100 transition-colors">
-                        Activar Sitio
-                    </button>
-                </div>
             </div>
         </main>
     );
