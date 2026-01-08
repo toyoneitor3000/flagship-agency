@@ -398,6 +398,7 @@ export default function StudioPage() {
                                         config={designConfig}
                                         onConfigChange={handleDesignConfigChange}
                                         onLog={addLog}
+                                        hasPower={false} // BLOQUEADO por defecto para forzar la venta del "Poder"
                                     />
                                 </div>
                             </motion.div>

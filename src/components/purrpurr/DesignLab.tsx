@@ -117,9 +117,10 @@ interface DesignLabProps {
     config: DesignConfig;
     onConfigChange: (config: DesignConfig) => void;
     onLog?: (message: string, type?: 'info' | 'success' | 'warn' | 'error') => void;
+    hasPower?: boolean;
 }
 
-export const DesignLab = ({ config, onConfigChange, onLog }: DesignLabProps) => {
+export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: DesignLabProps) => {
     // --- STATE ---
     const [tools, setTools] = useState<DesignLabTools | null>(null);
     const [loading, setLoading] = useState(true);
@@ -589,6 +590,26 @@ export const DesignLab = ({ config, onConfigChange, onLog }: DesignLabProps) => 
                         </div>
                     </div>
                 </Tab>
+
+                {/* --- POWER OVERLAY (LOCKED STATE) --- */}
+                {!hasPower && (
+                    <div className="absolute inset-0 z-[100] bg-black/60 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center">
+                        <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-6 border border-white/20">
+                            <Zap className="w-8 h-8 text-white animate-pulse" />
+                        </div>
+                        <h3 className="text-xl font-light text-white uppercase tracking-[0.3em] mb-2">Poder Bloqueado</h3>
+                        <p className="text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed mb-8">
+                            Estás en el plan estático. <br />
+                            Adquiere acceso al Laboratorio para modificar la química de tu diseño.
+                        </p>
+                        <a
+                            href="/checkout?plan=diy"
+                            className="bg-white text-black px-6 py-3 text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-zinc-200 transition-all font-sans"
+                        >
+                            Obtener el Poder
+                        </a>
+                    </div>
+                )}
             </div>
         </div>
     );

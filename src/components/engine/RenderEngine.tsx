@@ -132,25 +132,54 @@ const DemoSection = ({ content }: { content: any }) => (
 
 const PricingSection = ({ content }: { content: any }) => (
     <section className="py-32 px-6 bg-zinc-950/20">
-        <div className="max-w-5xl mx-auto">
-            <h2 className="text-center text-[10px] text-zinc-600 mb-16 uppercase tracking-[0.6em]">{content.headline}</h2>
+        <div className="max-w-6xl mx-auto">
+            <h2 className="text-center text-[10px] text-zinc-600 mb-16 uppercase tracking-[0.6em] font-light">Estrategia de Activación</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {content.plans.map((plan: any, i: number) => (
-                    <div key={i} className={`p-10 bg-black border ${i === 2 ? 'border-white/20' : 'border-white/5'} hover:border-white/30 transition-all flex flex-col items-center text-center`}>
-                        <h3 className="text-xs font-light text-zinc-400 mb-2 uppercase tracking-[0.3em]">{plan.name}</h3>
-                        <div className="text-3xl font-light text-white mb-10 tracking-widest">{plan.price}</div>
-                        <ul className="space-y-4 mb-12 flex-1">
-                            {plan.features.map((feat: string, j: number) => (
-                                <li key={j} className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">
-                                    {feat}
-                                </li>
-                            ))}
-                        </ul>
-                        <button className={`w-full py-4 text-[10px] font-medium uppercase tracking-[0.4em] transition-all border ${i === 2 ? 'bg-white text-black' : 'border-white/10 text-white hover:bg-white hover:text-black'}`}>
-                            Seleccionar
-                        </button>
-                    </div>
-                ))}
+                {/* PLAN CORTO PLAZO: DIY - EL ANSÍOSO */}
+                <div className="p-10 bg-black border border-white/5 hover:border-white/30 transition-all flex flex-col items-center text-center">
+                    <h3 className="text-xs font-light text-zinc-400 mb-2 uppercase tracking-[0.3em]">Acceso Laboratorio</h3>
+                    <div className="text-3xl font-light text-white mb-2 tracking-widest">$45 USD<span className="text-[10px] text-zinc-500 font-mono">/mes</span></div>
+                    <p className="text-[9px] text-zinc-600 mb-8 uppercase tracking-widest font-mono">Control total inmediato</p>
+                    <ul className="space-y-4 mb-12 flex-1">
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Uso del Lab Purrpurr 24/7</li>
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Cambios en tiempo real</li>
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Soporte por Ticket</li>
+                    </ul>
+                    <a href="/checkout?plan=diy" className="w-full py-4 text-[10px] font-medium uppercase tracking-[0.4em] transition-all border border-white/10 text-white hover:bg-white hover:text-black">
+                        Suscribirme
+                    </a>
+                </div>
+
+                {/* PLAN MEDIANO PLAZO: ESTÁTICO - EL PRÁCTICO */}
+                <div className="p-10 bg-black border border-white/5 hover:border-white/30 transition-all flex flex-col items-center text-center">
+                    <h3 className="text-xs font-light text-zinc-400 mb-2 uppercase tracking-[0.3em]">Anual Estándar</h3>
+                    <div className="text-3xl font-light text-white mb-2 tracking-widest">$350 USD<span className="text-[10px] text-zinc-500 font-mono">/año</span></div>
+                    <p className="text-[9px] text-zinc-600 mb-8 uppercase tracking-widest font-mono">Un solo pago, sin enredos</p>
+                    <ul className="space-y-4 mb-12 flex-1">
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Desarrollo por nosotros</li>
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Sitio Estático Profesional</li>
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Renovación anual simple</li>
+                    </ul>
+                    <a href="/checkout?plan=static" className="w-full py-4 text-[10px] font-medium uppercase tracking-[0.4em] transition-all border border-white/10 text-white hover:bg-white hover:text-black">
+                        Pago Único
+                    </a>
+                </div>
+
+                {/* PLAN LARGO PLAZO: PARTNER - EL IMPERIO */}
+                <div className="p-10 bg-black border border-white/20 hover:border-white/50 transition-all flex flex-col items-center text-center relative overflow-hidden">
+                    <div className="absolute top-4 right-[-35px] bg-white text-black text-[8px] font-bold py-1 px-10 rotate-45 uppercase tracking-widest">Enterprise</div>
+                    <h3 className="text-xs font-light text-zinc-400 mb-2 uppercase tracking-[0.3em]">Socio Estratégico</h3>
+                    <div className="text-3xl font-light text-white mb-2 tracking-widest">$16k<span className="text-[10px] text-zinc-500 font-mono">/año</span></div>
+                    <p className="text-[9px] text-zinc-600 mb-8 uppercase tracking-widest font-mono">Crecimiento y Escala</p>
+                    <ul className="space-y-4 mb-12 flex-1">
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Ingeniería Dedicada</li>
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Sistemas a Medida</li>
+                        <li className="text-[10px] text-zinc-500 uppercase tracking-widest leading-relaxed">Partnership 24/7</li>
+                    </ul>
+                    <a href="/checkout?plan=enterprise" className="w-full py-4 text-[10px] font-medium uppercase tracking-[0.4em] transition-all bg-white text-black hover:bg-zinc-200">
+                        Contactar Socio
+                    </a>
+                </div>
             </div>
         </div>
     </section>

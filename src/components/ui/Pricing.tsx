@@ -7,68 +7,38 @@ import Link from 'next/link';
 
 const agilePlans = [
   {
-    name: 'Performance Start',
-    price: '$550.000',
-    currency: 'COP',
-    time: '24 - 48 Horas',
-    description: 'Diseño de alta gama para marcas que no aceptan lo genérico. Ideal para profesionales y startups que necesitan una presencia digital con estándares europeos desde el día uno.',
-    features: ['Landing page de alta conversión', 'Copy enfocado en ventas (no relleno)', 'Performance optimizada (90+)', 'Integración WhatsApp / formulario', 'Entrega rápida'],
-    tech: 'Lanza tu idea al mundo en tiempo récord.',
+    name: 'Acceso Laboratorio (DIY)',
+    price: '$45',
+    currency: 'USD',
+    time: 'Acceso Instantáneo',
+    description: 'Para el emprendedor "ansioso". Toma el control total de tu estética y contenido con nuestro Studio Purrpurr 24/7.',
+    features: ['Uso ilimitado del Design Lab', 'Cambios en tiempo real', 'Soporte técnico por ticket', 'Hospedaje premium incluido', 'Sin contratos largos'],
+    tech: 'Ideal para flujo de caja mensual y control total.',
     popular: false,
   },
   {
-    name: 'Grand Tourer (GT)',
-    price: '$950.000',
-    currency: 'COP',
-    time: '3 - 5 Días',
-    description: 'Escalabilidad y robustez. Para negocios en expansión que requieren sistemas de gestión, pasarelas de pago y una interfaz optimizada para convertir usuarios en clientes recurrentes.',
-    features: ['Sitio web profesional a medida', 'Arquitectura clara para conversión', 'Diseño premium (estética Purrpurr)', 'SEO técnico base', 'Velocidad y estabilidad'],
-    tech: 'No solo es una web, es tu mejor vendedor.',
+    name: 'Anual Estándar (Static)',
+    price: '$350',
+    currency: 'USD',
+    time: 'Entrega en 48h',
+    description: 'La solución profesional "llave en mano". Nosotros construimos, tú te relajas. Un solo pago al año y te olvidas.',
+    features: ['Diseño y montaje por expertos', 'Mantenimiento anual incluido', 'Rendimiento optimizado (90+)', 'Soporte prioritario', 'Renovación anual simple'],
+    tech: 'Estabilidad y calidad premium sin mover un dedo.',
     popular: true,
-  },
-  {
-    name: 'Ventas Automáticas',
-    price: '$2.500.000+',
-    currency: 'COP',
-    time: '7 - 10 Días',
-    description: 'Tu negocio vendiendo incluso cuando no respondes mensajes.',
-    features: ['E-commerce / Sistema de ventas', 'Flujo optimizado de compra', 'Performance + UX para conversión', 'Integraciones de pago', 'Escalable'],
-    tech: 'Independiza tus ventas de tu tiempo.',
-    popular: false,
   },
 ];
 
 const customPlans = [
   {
-    name: 'MVP Founder',
-    price: '$4,500',
+    name: 'Growth & Partnership',
+    price: '$16,000',
     currency: 'USD',
-    time: '2 - 3 Semanas',
-    description: 'Lanza tu Startup al mercado. Desde la idea hasta el primer usuario real.',
-    features: ['Cuentas de Usuario y Perfiles', 'Panel de Control para tus Clientes', 'Cobros Recurrentes (Suscripciones)', 'Base de Datos Segura', 'Integración con IA (Opcional)'],
-    tech: 'Tecnología escalable lista para crecer.',
-    popular: true,
-  },
-  {
-    name: 'Growth Platform',
-    price: '$9,000+',
-    currency: 'USD',
-    time: '4 - 6 Semanas',
-    description: 'Software a la medida para optimizar procesos internos de tu empresa.',
-    features: ['Automatización de Tareas Repetitivas', 'Reportes y Analíticas en Tiempo Real', 'Roles de Empleados y Permisos', 'Conexión con tu CRM/ERP actual', 'Soporte Técnico Prioritario'],
-    tech: 'Eficiencia operativa llevada al siguiente nivel.',
-    popular: false,
-  },
-  {
-    name: 'Enterprise Empire',
-    price: '$16,000+',
-    currency: 'USD',
-    time: '2 - 3 Meses',
-    description: 'Transformación Digital Completa. Tu socio tecnológico estratégico a largo plazo.',
-    features: ['Equipo de Ingeniería Dedicado', 'Infraestructura de Alta Disponibilidad', 'Auditoría de Seguridad y Datos', 'Consultoría de Producto Mensual', 'Soporte 24/7 Garantizado'],
+    time: 'Contrato Anual',
+    description: 'Tu socio estratégico de ingeniería. Desarrollo a medida, automatizaciones y escalabilidad masiva.',
+    features: ['Ingeniería dedicada (SaaS/Apps)', 'Sistemas de pagos complejos', 'Automatización de procesos', 'Consultoría de producto mensual', 'Soporte 24/7 garantizado'],
     tech: 'Tu propio departamento de tecnología externo.',
-    popular: false,
-  },
+    popular: true,
+  }
 ];
 
 export const Pricing = () => {
@@ -251,13 +221,13 @@ export const Pricing = () => {
                         </div>
 
                         <Link
-                          href='#invitation'
+                          href={`/checkout?plan=${plan.name.includes('DIY') ? 'diy' : plan.name.includes('Static') ? 'static' : 'enterprise'}`}
                           className={`mt-8 w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${plan.popular
                             ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
                             : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
                             }`}
                         >
-                          {activeTab === 'agile' ? 'Iniciar Proyecto' : 'Agendar Consultoría'}
+                          {activeTab === 'agile' ? 'Iniciar Suscripción' : 'Activar Partnership'}
                           <ArrowRight className='w-4 h-4' />
                         </Link>
                       </motion.div>
