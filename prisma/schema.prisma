@@ -18,6 +18,25 @@ model Contact {
   createdAt DateTime @default(now())
 }
 
+// --- DEMO REQUESTS (Sales Funnel) ---
+model DemoRequest {
+  id          String   @id @default(uuid())
+  name        String
+  whatsapp    String
+  instagram   String?
+  industry    String
+  message     String?  // What the client wants - their prompt/vision
+  status      String   @default("pending") // pending, contacted, demo_sent, converted, rejected
+  notes       String?  // Internal notes for follow-up
+  source      String   @default("landing") // landing, instagram, referral
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([status])
+  @@index([createdAt])
+}
+
 // --- PURRPURR ARCHITECTURE ---
 
 model Project {

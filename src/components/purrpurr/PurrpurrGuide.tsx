@@ -21,9 +21,15 @@ interface PurrpurrGuideProps {
     cta?: {
         label: string;
         onClick: () => void;
-    };
+        variant?: 'primary' | 'whatsapp';
+    } | {
+        label: string;
+        onClick: () => void;
+        variant?: 'primary' | 'whatsapp';
+    }[];
     className?: string; // Allow custom positioning overrides
 }
+
 
 import { usePurrpurr } from './PurrpurrContext';
 
@@ -152,19 +158,29 @@ export const PurrpurrGuide = ({ tip, mode = 'contextual', isVisible = true, onNe
 
                         <p className="text-sm text-zinc-100 leading-relaxed mb-3 font-medium">{displayTip}</p>
 
-                        {/* CTA Button */}
+                        {/* CTA Buttons */}
                         {cta && (
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsOpen(false);
-                                    cta.onClick();
-                                }}
-                                className="w-full mb-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold py-2 px-3 rounded shadow-lg shadow-purple-900/20 transition-all active:scale-95 flex items-center justify-center gap-2 group/btn"
-                            >
-                                <span>{cta.label}</span>
-                                <span className="group-hover/btn:translate-x-0.5 transition-transform">→</span>
-                            </button>
+                            <div className="space-y-2">
+                                {(Array.isArray(cta) ? cta : [cta]).map((btn, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsOpen(false);
+                                            btn.onClick();
+                                        }}
+                                        className={cn(
+                                            "w-full text-white text-xs font-bold py-2 px-3 rounded shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 group/btn",
+                                            btn.variant === 'whatsapp'
+                                                ? "bg-[#25D366] hover:bg-[#20BD5A] shadow-[#25D366]/20"
+                                                : "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-purple-900/20"
+                                        )}
+                                    >
+                                        <span>{btn.label}</span>
+                                        <span className="group-hover/btn:translate-x-0.5 transition-transform">→</span>
+                                    </button>
+                                ))}
+                            </div>
                         )}
 
                         {mode === 'tour' && onNext && (

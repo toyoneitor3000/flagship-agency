@@ -150,8 +150,8 @@ export const Hero = () => {
           {/* Buttons - Central Action Block (Cols 4-9) -> now (Cols 3-10) */}
           <div className='col-span-4 md:col-start-3 md:col-span-8 flex flex-col sm:flex-row items-center justify-center gap-6 mt-8 w-full'>
 
-            {/* CTA 1: Primary - MVP Builder Entry */}
-            <Link href='/purrpurr-test' className='group relative w-[240px] sm:w-[280px] h-[56px] sm:h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
+            {/* CTA 1: Primary - Demo Request */}
+            <Link href='/demo' className='group relative w-[240px] sm:w-[280px] h-[56px] sm:h-[70px] rounded-full overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:-translate-y-1 pointer-events-auto shadow-[0_0_30px_rgba(109,40,217,0.3)] hover:shadow-[0_0_50px_rgba(109,40,217,0.5)] flex items-center justify-center'>
               <div className="absolute inset-0 bg-[#6D28D9]" />
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -161,10 +161,10 @@ export const Hero = () => {
               <div className="relative z-10 flex flex-col items-center justify-center">
                 <span className="flex items-center gap-3 font-mono font-bold text-sm tracking-widest text-white uppercase whitespace-nowrap">
                   <Rocket className="w-4 h-4" />
-                  CREATE YOUR MVP
+                  OBTENER DEMO
                 </span>
                 <span className="text-[9px] text-zinc-300 tracking-wider font-mono mt-1 opacity-80 group-hover:text-emerald-300 transition-colors">
-                  SYSTEM ARCHITECT • INSTANT HOST
+                  GRATIS • 48 HORAS • SIN COMPROMISO
                 </span>
               </div>
             </Link>

@@ -6,11 +6,14 @@ import {
     CreditCard,
     Globe,
     Settings,
-    Terminal
+    Terminal,
+    Users,
+    ArrowRight
 } from "lucide-react";
 import { ClusterStatus } from "@/components/dashboard/ClusterStatus";
 import { ProjectManager } from "@/components/dashboard/ProjectManager";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
+import { LeadsNotificationBadge } from "@/components/dashboard/LeadsNotificationBadge";
 
 
 export default async function DashboardPage() {
@@ -48,6 +51,7 @@ export default async function DashboardPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
+                        <LeadsNotificationBadge />
                         <span className="text-sm text-zinc-400 hidden sm:block">{user.email}</span>
                         <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 overflow-hidden">
                             {user.image && <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />}
@@ -148,7 +152,14 @@ export default async function DashboardPage() {
                         </section>
 
                         {/* CONFIG */}
-                        <section className="p-2">
+                        <section className="p-2 space-y-1">
+                            <Link href="/dashboard/leads" className="flex items-center justify-between gap-3 text-purple-400 hover:text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 transition-colors p-3 rounded-lg border border-purple-500/20">
+                                <div className="flex items-center gap-3">
+                                    <Users className="w-5 h-5" />
+                                    <span className="font-medium">Gestión de Leads</span>
+                                </div>
+                                <ArrowRight className="w-4 h-4" />
+                            </Link>
                             <Link href="/settings" className="flex items-center gap-3 text-zinc-500 hover:text-white transition-colors p-2">
                                 <Settings className="w-5 h-5" />
                                 <span>Configuraciones de Cuenta</span>

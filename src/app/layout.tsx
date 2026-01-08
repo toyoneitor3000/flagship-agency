@@ -64,6 +64,7 @@ import { TypographyInjector } from "@/components/purrpurr/TypographyInjector";
 import { ThemeColorManager } from "@/components/ui/ThemeColorManager";
 import { MainWrapper } from "@/components/ui/MainWrapper";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
+import { AdminNotifications } from "@/components/notifications/AdminNotifications";
 
 
 export default async function RootLayout({
@@ -79,16 +80,18 @@ export default async function RootLayout({
         <AuthProvider>
           <MagicProvider initialContent={magicContent}>
             <PurrpurrProvider>
-              <ThemeColorManager />
-              <TypographyInjector />
-              <LoadingScreen />
-              <AnalyticsTracker />
-              <Navbar />
-              <MainWrapper>
-                {children}
-              </MainWrapper>
+              <AdminNotifications>
+                <ThemeColorManager />
+                <TypographyInjector />
+                <LoadingScreen />
+                <AnalyticsTracker />
+                <Navbar />
+                <MainWrapper>
+                  {children}
+                </MainWrapper>
 
-              <Footer />
+                <Footer />
+              </AdminNotifications>
             </PurrpurrProvider>
           </MagicProvider>
         </AuthProvider>

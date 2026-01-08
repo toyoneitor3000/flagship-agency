@@ -9,6 +9,7 @@ import { Menu, X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { UserMenu } from '@/components/auth/UserMenu';
+import { LeadsNotificationBadge } from '@/components/dashboard/LeadsNotificationBadge';
 
 export const Navbar = () => {
   // Scroll detection removed as requested for consistent sizing
@@ -145,8 +146,8 @@ export const Navbar = () => {
               <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
                 [ Servicios ]
               </Link>
-              <Link href='/purrpurr-test' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Purrpurr Labs ]
+              <Link href='/demo' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Demo Gratis ]
               </Link>
               <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
                 [ Academy ]
@@ -163,10 +164,12 @@ export const Navbar = () => {
               )}>
                 &lt; COTIZAR /&gt;
               </button>
+              <LeadsNotificationBadge />
               <UserMenu />
             </nav>
 
             <div className="lg:hidden flex items-center gap-2">
+              <LeadsNotificationBadge />
               <UserMenu iconOnly={true} />
               <button
                 className={cn(
@@ -212,9 +215,9 @@ export const Navbar = () => {
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Servicios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>
-                <Link href='/purrpurr-test' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href='/demo' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
                   <span className='text-purple-500/50 text-xs'>[02]</span>
-                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Purrpurr Labs</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Demo Gratis</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-purple-500 animate-pulse">_</span>
                 </Link>
                 <Link href='/academy' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
@@ -245,9 +248,9 @@ export const Navbar = () => {
                 <span>Status: Ready</span>
                 <span>Latency: 12ms</span>
               </div>
-              <button className='w-full py-4 bg-green-500 text-zinc-950 font-bold font-mono text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[0_0_20px_rgba(74,222,128,0.2)]'>
-                &gt; INICIAR_PROYECTO
-              </button>
+              <Link href='/demo' onClick={() => setIsMobileMenuOpen(false)} className='w-full py-4 bg-green-500 text-zinc-950 font-bold font-mono text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[0_0_20px_rgba(74,222,128,0.2)] text-center block'>
+                &gt; OBTENER_DEMO
+              </Link>
             </div>
           </div>
         </motion.div>
