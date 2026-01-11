@@ -29,8 +29,14 @@ export const Breadcrumbs = ({ className }: { className?: string }) => {
                 const href = `/${paths.slice(0, index + 1).join('/')}`;
                 const isLast = index === paths.length - 1;
 
+                // Custom Mappings
+                const labelMap: Record<string, string> = {
+                    'labs': 'Purrpurr Labs',
+                    'social-labs': 'Social Labs'
+                };
+
                 // Capitalize first letter and replace hyphens with spaces
-                const label = path
+                const label = labelMap[path] || path
                     .replace(/-/g, ' ')
                     .replace(/^\w/, (c) => c.toUpperCase());
 

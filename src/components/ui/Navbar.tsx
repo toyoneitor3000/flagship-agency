@@ -152,6 +152,9 @@ export const Navbar = () => {
               <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
                 [ Academy ]
               </Link>
+              <Link href='/labs' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Labs ]
+              </Link>
               <Link href='#philosophy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
                 [ Nosotros ]
               </Link>
@@ -225,18 +228,23 @@ export const Navbar = () => {
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Academy</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-pink-500 animate-pulse">_</span>
                 </Link>
+                <Link href='/labs' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
+                  <span className='text-blue-500/50 text-xs'>[04]</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Labs</span>
+                  <span className="ml-auto opacity-0 group-hover:opacity-100 text-blue-500 animate-pulse">_</span>
+                </Link>
                 <Link href='#pricing' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-yellow-500/50 text-xs'>[04]</span>
+                  <span className='text-yellow-500/50 text-xs'>[05]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Precios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-yellow-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#philosophy' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-indigo-500/50 text-xs'>[05]</span>
+                  <span className='text-indigo-500/50 text-xs'>[06]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Nosotros</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-indigo-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#invitation' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-green-500/50 text-xs'>[06]</span>
+                  <span className='text-green-500/50 text-xs'>[07]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Contacto</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>

@@ -28,7 +28,7 @@ export const MainWrapper = ({ children }: MainWrapperProps) => {
 
     // Standard layout for purrpurr.dev pages
     return (
-        <main className="flex-grow">
+        <main className="flex-grow pt-12">
             <div className="container mx-auto px-4 py-4 md:px-6">
                 <Breadcrumbs />
             </div>
