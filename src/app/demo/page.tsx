@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Rocket, Clock, CheckCircle2, ArrowRight, Sparkles, Star, Zap } from 'lucide-react';
+import { Rocket, Clock, CheckCircle2, ArrowRight, Sparkles, Zap, Shield, ChevronRight, Lock } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { PurrpurrGuide } from '@/components/purrpurr/PurrpurrGuide';
@@ -17,12 +17,6 @@ const industries = [
     { value: 'ecommerce', label: '🛒 E-commerce / Tienda' },
     { value: 'servicios', label: '💼 Servicios Profesionales' },
     { value: 'otro', label: '✨ Otro' },
-];
-
-const benefits = [
-    { icon: Clock, text: 'Entrega en 48 horas', subtext: 'Lo que otros tardan semanas' },
-    { icon: Zap, text: 'Arquitectura real', subtext: 'No plantillas genéricas' },
-    { icon: Star, text: '100% gratis', subtext: 'Sin compromiso alguno' },
 ];
 
 export default function DemoPage() {
@@ -70,108 +64,93 @@ export default function DemoPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f0033] relative overflow-hidden">
-            {/* Animated Background */}
+        <div className="min-h-screen bg-[#0a011f] relative overflow-hidden selection:bg-[#8f69ff]/30">
+            {/* Premium Animated Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#8f69ff]/10 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#709600]/10 rounded-full blur-3xl animate-pulse delay-1000" />
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#8f69ff05_1px,transparent_1px),linear-gradient(to_bottom,#8f69ff05_1px,transparent_1px)] bg-[size:48px_48px]" />
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#8f69ff]/10 rounded-full blur-[120px] -translate-y-1/4 translate-x-1/4 animate-pulse opacity-50" />
+                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#709600]/5 rounded-full blur-[100px] translate-y-1/4 -translate-x-1/4" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]" />
             </div>
 
-            {/* Purrpurr Guide - Gatito flotante */}
+            {/* Purrpurr Guide */}
             <PurrpurrGuide
                 mode="floating"
-                tip="¿Tienes dudas? Escríbenos por WhatsApp y te ayudamos a elegir el plan perfecto para tu negocio."
+                tip="¿No sabes qué necesitas? Escríbeme y te asesoro gratis."
                 cta={{
-                    label: 'Hablar por WhatsApp',
-                    onClick: () => window.open('https://wa.me/573209544587?text=Hola%2C%20tengo%20dudas%20sobre%20las%20demos', '_blank'),
+                    label: 'Asesoría por WhatsApp',
+                    onClick: () => window.open('https://wa.me/573209544587?text=Hola%2C%20quiero%20asesoria%20sobre%20mi%20web', '_blank'),
                     variant: 'whatsapp'
                 }}
             />
 
-            <div className="relative z-10 container mx-auto px-4 py-12 md:py-20">
-                {/* Back Link */}
-                <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#8f69ff] transition-colors mb-8 text-sm font-mono group"
-                >
-                    <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
-                    Volver al inicio
-                </Link>
+            <div className="relative z-10 container mx-auto px-4 pt-4 pb-20 md:pb-32">
 
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center max-w-6xl mx-auto">
+                <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-7xl mx-auto pt-8">
                     {/* Left Column - Copy */}
                     <div className="text-center lg:text-left">
-                        {/* Badge */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#709600]/20 border border-[#709600]/30 text-[#709600] text-sm font-bold mb-6"
-                        >
-                            <Sparkles className="w-4 h-4" />
-                            Demo gratis y sin compromiso
-                        </motion.div>
+                        {/* No Badge */}
 
                         {/* Headline */}
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#f0ffcc] mb-6 leading-tight"
+                            className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-[1.1] tracking-tight"
                         >
-                            Ve cómo se vería{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8f69ff] to-[#b196ff]">
-                                tu web
-                            </span>{' '}
-                            en 48 horas
+                            De la idea a la <br className="hidden md:block" />
+                            <span className="relative whitespace-nowrap">
+                                <span className="absolute -inset-1 bg-gradient-to-r from-[#8f69ff] to-[#6d42e5] blur-2xl opacity-30" />
+                                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-[#b196ff] via-[#8f69ff] to-[#6d42e5]">
+                                    realidad
+                                </span>
+                            </span>
                         </motion.h1>
 
                         {/* Subheadline */}
-                        <motion.p
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-lg md:text-xl text-[#f0ffcc]/70 mb-4 max-w-xl mx-auto lg:mx-0"
+                            className="mb-12 space-y-6"
                         >
-                            Desarrollamos desde landing pages hasta ecosistemas digitales completos.
-                        </motion.p>
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.25 }}
-                            className="text-sm text-[#f0ffcc]/50 mb-8 max-w-xl mx-auto lg:mx-0 font-mono"
-                        >
-                            Proyectos desde $500K COP hasta $16,000 USD
-                        </motion.p>
+                            <p className="text-lg text-zinc-300 leading-relaxed font-light">
+                                <strong className="text-white font-medium">Arquitectura Digital de Alto Nivel.</strong> Construimos un prototipo funcional de tu visión para que valides la calidad de nuestra ingeniería antes de invertir.
+                            </p>
 
-                        {/* Benefits */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="grid grid-cols-3 gap-4 mb-8"
-                        >
-                            {benefits.map((benefit, index) => (
-                                <div key={index} className="text-center lg:text-left">
-                                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#8f69ff]/10 border border-[#8f69ff]/20 mb-2">
-                                        <benefit.icon className="w-5 h-5 text-[#8f69ff]" />
+                            {/* Process Steps - Professional Tone */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                                    <div className="w-10 h-10 rounded-full bg-[#8f69ff]/10 flex items-center justify-center flex-shrink-0 border border-[#8f69ff]/20">
+                                        <Sparkles className="w-5 h-5 text-[#8f69ff]" />
                                     </div>
-                                    <p className="text-sm font-bold text-[#f0ffcc]">{benefit.text}</p>
-                                    <p className="text-xs text-[#f0ffcc]/50">{benefit.subtext}</p>
+                                    <div className="text-left">
+                                        <h3 className="text-sm font-bold text-white">1. Solicitud de Acceso</h3>
+                                        <p className="text-xs text-zinc-400">Cuéntanos tu visión. Analizamos la viabilidad técnica.</p>
+                                    </div>
                                 </div>
-                            ))}
+
+                                <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                                    <div className="w-10 h-10 rounded-full bg-[#8f69ff]/10 flex items-center justify-center flex-shrink-0 border border-[#8f69ff]/20">
+                                        <Rocket className="w-5 h-5 text-[#8f69ff]" />
+                                    </div>
+                                    <div className="text-left">
+                                        <h3 className="text-sm font-bold text-white">2. Ingeniería & Prototipado</h3>
+                                        <p className="text-xs text-zinc-400">Desarrollamos una versión funcional en 48 horas.</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+                                    <div className="w-10 h-10 rounded-full bg-[#8f69ff]/10 flex items-center justify-center flex-shrink-0 border border-[#8f69ff]/20">
+                                        <CheckCircle2 className="w-5 h-5 text-[#8f69ff]" />
+                                    </div>
+                                    <div className="text-left">
+                                        <h3 className="text-sm font-bold text-white">3. Decisión de Lanzamiento</h3>
+                                        <p className="text-xs text-zinc-400">Recibes el prototipo + propuesta comercial. Tú decides el siguiente paso.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </motion.div>
 
-                        {/* Value prop */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.4 }}
-                            className="flex items-center justify-center lg:justify-start gap-2 text-sm text-[#f0ffcc]/60"
-                        >
-                            <Zap className="w-4 h-4 text-[#709600]" />
-                            <span>Velocidad de startup, complejidad de agencia</span>
-                        </motion.div>
                     </div>
 
                     {/* Right Column - Form */}
@@ -181,114 +160,96 @@ export default function DemoPage() {
                         transition={{ delay: 0.2 }}
                         className="relative"
                     >
-                        {/* Glow Effect */}
-                        <div className="absolute -inset-1 bg-gradient-to-r from-[#8f69ff] to-[#709600] rounded-2xl blur-lg opacity-20" />
+                        {/* Glow Behind Form */}
+                        <div className="absolute -inset-0.5 bg-gradient-to-b from-[#8f69ff] to-[#709600] rounded-[24px] blur-2xl opacity-20" />
 
                         {/* Form Card */}
-                        <div className="relative bg-[#1a0b40]/80 backdrop-blur-xl border border-[#8f69ff]/20 rounded-2xl p-6 md:p-8 shadow-2xl">
+                        <div className="relative bg-[#0f0033]/90 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 md:p-8 shadow-2xl overflow-hidden ring-1 ring-white/5">
+
+                            {/* Decorative grid inside card */}
+                            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
+
                             {isSuccess ? (
-                                /* Success State - Invite to Register */
+                                /* Success State */
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="text-center py-6"
+                                    className="text-center py-8 relative z-10"
                                 >
-                                    <div className="w-20 h-20 bg-[#709600]/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#709600]/30">
-                                        <CheckCircle2 className="w-10 h-10 text-[#709600]" />
+                                    <div className="w-24 h-24 bg-gradient-to-tr from-[#709600]/20 to-[#ccff00]/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#709600]/30 shadow-[0_0_30px_-5px_rgba(112,150,0,0.3)]">
+                                        <CheckCircle2 className="w-12 h-12 text-[#ccff00]" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-[#f0ffcc] mb-3">¡Solicitud Recibida!</h2>
-                                    <p className="text-[#f0ffcc]/70 mb-6">
-                                        Ya estamos trabajando en tu demo personalizada. Te contactaremos por WhatsApp en las próximas 48 horas.
+                                    <h2 className="text-3xl font-display font-bold text-white mb-4">Solicitud Recibida</h2>
+                                    <p className="text-zinc-300 mb-8 max-w-sm mx-auto">
+                                        Tu proyecto ha entrado en nuestra cola de análisis. Uno de nuestros arquitectos digitales te contactará brevemente.
                                     </p>
 
-                                    {/* Divider */}
-                                    <div className="flex items-center gap-4 my-6">
-                                        <div className="flex-1 h-px bg-[#8f69ff]/20" />
-                                        <span className="text-xs text-[#f0ffcc]/40 font-mono">SIGUIENTE PASO</span>
-                                        <div className="flex-1 h-px bg-[#8f69ff]/20" />
-                                    </div>
-
-                                    {/* Account Benefits */}
-                                    <div className="bg-[#0f0033]/50 border border-[#8f69ff]/10 rounded-xl p-5 mb-6 text-left">
-                                        <h3 className="text-sm font-bold text-[#f0ffcc] mb-3 flex items-center gap-2">
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-8 text-left">
+                                        <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2 uppercase tracking-wider">
                                             <Sparkles className="w-4 h-4 text-[#8f69ff]" />
-                                            Crea tu cuenta para:
+                                            Siguientes pasos
                                         </h3>
-                                        <ul className="space-y-2 text-sm text-[#f0ffcc]/70">
-                                            <li className="flex items-start gap-2">
-                                                <CheckCircle2 className="w-4 h-4 text-[#709600] mt-0.5 flex-shrink-0" />
-                                                <span>Ver el estado de tu proyecto en tiempo real</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <CheckCircle2 className="w-4 h-4 text-[#709600] mt-0.5 flex-shrink-0" />
-                                                <span>Personalizar colores, textos y secciones</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <CheckCircle2 className="w-4 h-4 text-[#709600] mt-0.5 flex-shrink-0" />
-                                                <span>Conectar tu dominio cuando estés listo</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <CheckCircle2 className="w-4 h-4 text-[#709600] mt-0.5 flex-shrink-0" />
-                                                <span>Publicar tu sitio con un clic</span>
-                                            </li>
+                                        <ul className="space-y-3">
+                                            {[
+                                                'Análisis de viabilidad (1-2 horas)',
+                                                'Contacto inicial vía WhatsApp',
+                                                'Definición de alcance del prototipo',
+                                                'Inicio de construcción'
+                                            ].map((item, i) => (
+                                                <li key={i} className="flex items-start gap-3 text-sm text-zinc-300">
+                                                    <div className="w-5 h-5 rounded-full bg-[#8f69ff]/20 flex items-center justify-center flex-shrink-0 text-[#8f69ff] text-xs font-bold">
+                                                        {i + 1}
+                                                    </div>
+                                                    {item}
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
 
-                                    {/* CTA Buttons */}
-                                    <div className="space-y-3">
-                                        <Link
-                                            href="/api/auth/signin"
-                                            className="w-full bg-gradient-to-r from-[#8f69ff] to-[#6d42e5] hover:from-[#9d7aff] hover:to-[#7d52f5] text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#8f69ff]/25"
-                                        >
-                                            <Rocket className="w-5 h-5" />
-                                            Crear mi Cuenta Gratis
-                                        </Link>
-                                        <p className="text-xs text-[#f0ffcc]/40">
-                                            ¿Ya tienes cuenta? <Link href="/api/auth/signin" className="text-[#8f69ff] hover:underline">Inicia sesión</Link>
-                                        </p>
-                                    </div>
-
-                                    {/* Skip Option */}
-                                    <p className="mt-6 text-xs text-[#f0ffcc]/30">
-                                        También te enviaremos el link por WhatsApp cuando tu demo esté lista
-                                    </p>
+                                    <Link
+                                        href="/api/auth/signin"
+                                        className="w-full bg-white text-black hover:bg-zinc-200 font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                        <Rocket className="w-5 h-5" />
+                                        Crear cuenta de seguimiento
+                                    </Link>
                                 </motion.div>
                             ) : (
-                                /* Form */
-                                <>
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="p-2 rounded-lg bg-[#8f69ff]/20">
-                                            <Rocket className="w-5 h-5 text-[#8f69ff]" />
-                                        </div>
+                                /* Form Content */
+                                <div className="relative z-10">
+                                    <div className="flex items-start justify-between mb-8">
                                         <div>
-                                            <h2 className="text-xl font-bold text-[#f0ffcc]">Solicita tu Demo</h2>
-                                            <p className="text-sm text-[#f0ffcc]/60">Campos obligatorios marcados con *</p>
+                                            <h2 className="text-2xl font-display font-bold text-white mb-1">Solicitar Prototipo</h2>
+                                            <p className="text-sm text-zinc-400">Arquitectura preliminar sin costo.</p>
+                                        </div>
+                                        <div className="p-3 rounded-xl bg-[#8f69ff]/10 border border-[#8f69ff]/20">
+                                            <Sparkles className="w-6 h-6 text-[#8f69ff]" />
                                         </div>
                                     </div>
 
                                     <form onSubmit={handleSubmit} className="space-y-5">
                                         {/* Name */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-[#f0ffcc]/80 mb-2">
-                                                Tu nombre o empresa *
+                                        <div className="space-y-1.5">
+                                            <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                                                Nombre / Empresa
                                             </label>
                                             <input
                                                 type="text"
                                                 required
-                                                placeholder="Ej: Tu Negocio S.A.S"
+                                                placeholder="Ej: Startup Increíble"
                                                 value={formState.name}
                                                 onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                                                className="w-full bg-[#0f0033]/50 border border-[#8f69ff]/20 rounded-lg px-4 py-3 text-[#f0ffcc] placeholder:text-[#f0ffcc]/30 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff]/50 transition-all"
+                                                className="w-full bg-[#1a0b40]/50 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff] transition-all"
                                             />
                                         </div>
 
                                         {/* WhatsApp */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-[#f0ffcc]/80 mb-2">
-                                                Tu WhatsApp *
+                                        <div className="space-y-1.5">
+                                            <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                                                WhatsApp de Contacto
                                             </label>
-                                            <div className="relative">
-                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#f0ffcc]/50">+57</span>
+                                            <div className="relative group">
+                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-mono group-focus-within:text-[#8f69ff] transition-colors">+57</div>
                                                 <input
                                                     type="tel"
                                                     required
@@ -297,78 +258,70 @@ export default function DemoPage() {
                                                     onChange={(e) =>
                                                         setFormState({ ...formState, whatsapp: formatWhatsApp(e.target.value) })
                                                     }
-                                                    className="w-full bg-[#0f0033]/50 border border-[#8f69ff]/20 rounded-lg pl-14 pr-4 py-3 text-[#f0ffcc] placeholder:text-[#f0ffcc]/30 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff]/50 transition-all"
+                                                    className="w-full bg-[#1a0b40]/50 border border-white/10 rounded-xl pl-14 pr-4 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff] transition-all font-mono"
                                                 />
                                             </div>
-                                            <p className="text-xs text-[#f0ffcc]/40 mt-1">Te enviaremos el demo por aquí</p>
                                         </div>
 
-                                        {/* Instagram (optional) */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-[#f0ffcc]/80 mb-2">
-                                                Instagram del negocio <span className="text-[#f0ffcc]/40">(opcional)</span>
-                                            </label>
-                                            <div className="relative">
-                                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#f0ffcc]/50">@</span>
-                                                <input
-                                                    type="text"
-                                                    placeholder="tunegocio"
-                                                    value={formState.instagram}
-                                                    onChange={(e) =>
-                                                        setFormState({ ...formState, instagram: e.target.value.replace('@', '') })
-                                                    }
-                                                    className="w-full bg-[#0f0033]/50 border border-[#8f69ff]/20 rounded-lg pl-10 pr-4 py-3 text-[#f0ffcc] placeholder:text-[#f0ffcc]/30 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff]/50 transition-all"
-                                                />
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {/* Industry */}
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                                                    Industria
+                                                </label>
+                                                <select
+                                                    required
+                                                    value={formState.industry}
+                                                    onChange={(e) => setFormState({ ...formState, industry: e.target.value })}
+                                                    className="w-full bg-[#1a0b40]/50 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff] transition-all appearance-none cursor-pointer"
+                                                >
+                                                    <option value="" disabled className="text-zinc-500">Seleccionar...</option>
+                                                    {industries.map((ind) => (
+                                                        <option key={ind.value} value={ind.value} className="bg-[#1a0b40]">
+                                                            {ind.label}
+                                                        </option>
+                                                    ))}
+                                                </select>
                                             </div>
-                                            <p className="text-xs text-[#f0ffcc]/40 mt-1">Lo usamos para personalizar tu demo</p>
+
+                                            {/* Instagram */}
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                                                    Instagram
+                                                </label>
+                                                <div className="relative">
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">@</span>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="usuario"
+                                                        value={formState.instagram}
+                                                        onChange={(e) =>
+                                                            setFormState({ ...formState, instagram: e.target.value.replace('@', '') })
+                                                        }
+                                                        className="w-full bg-[#1a0b40]/50 border border-white/10 rounded-xl pl-8 pr-4 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff] transition-all"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        {/* Industry */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-[#f0ffcc]/80 mb-2">
-                                                Industria *
-                                            </label>
-                                            <select
-                                                required
-                                                value={formState.industry}
-                                                onChange={(e) => setFormState({ ...formState, industry: e.target.value })}
-                                                className="w-full bg-[#0f0033]/50 border border-[#8f69ff]/20 rounded-lg px-4 py-3 text-[#f0ffcc] focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff]/50 transition-all cursor-pointer appearance-none"
-                                                style={{
-                                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238f69ff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                                                    backgroundRepeat: 'no-repeat',
-                                                    backgroundPosition: 'right 12px center',
-                                                    backgroundSize: '20px',
-                                                }}
-                                            >
-                                                <option value="" disabled className="text-zinc-500">
-                                                    Selecciona tu industria
-                                                </option>
-                                                {industries.map((ind) => (
-                                                    <option key={ind.value} value={ind.value} className="bg-[#1a0b40]">
-                                                        {ind.label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        {/* Message/Prompt */}
-                                        <div>
-                                            <label className="block text-sm font-medium text-[#f0ffcc]/80 mb-2">
-                                                ¿Qué tienes en mente? <span className="text-[#f0ffcc]/40">(opcional pero ayuda mucho)</span>
+                                        {/* Message */}
+                                        <div className="space-y-1.5">
+                                            <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                                                Tu Visión (Opcional)
                                             </label>
                                             <textarea
-                                                placeholder="Ej: Quiero una web elegante para mostrar mis trabajos y que los clientes puedan agendar citas..."
+                                                placeholder="Descríbenos brevemente tu proyecto soñado..."
                                                 value={formState.message}
                                                 onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                                                 rows={3}
-                                                className="w-full bg-[#0f0033]/50 border border-[#8f69ff]/20 rounded-lg px-4 py-3 text-[#f0ffcc] placeholder:text-[#f0ffcc]/30 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff]/50 transition-all resize-none"
+                                                className="w-full bg-[#1a0b40]/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-[#8f69ff] focus:ring-1 focus:ring-[#8f69ff] transition-all resize-none"
                                             />
-                                            <p className="text-xs text-[#f0ffcc]/40 mt-1">Cuéntanos tu visión para personalizar mejor tu demo</p>
                                         </div>
 
-                                        {/* Error Message */}
+                                        {/* Error */}
                                         {error && (
-                                            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
+                                            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                                                 {error}
                                             </div>
                                         )}
@@ -377,38 +330,41 @@ export default function DemoPage() {
                                         <button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="w-full bg-gradient-to-r from-[#8f69ff] to-[#6d42e5] hover:from-[#9d7aff] hover:to-[#7d52f5] text-white font-bold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#8f69ff]/25 disabled:opacity-70 disabled:cursor-not-allowed group"
+                                            className="w-full bg-gradient-to-r from-[#8f69ff] to-[#6d42e5] hover:from-[#9d7aff] hover:to-[#7d52f5] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(143,105,255,0.5)] hover:shadow-[0_0_30px_-5px_rgba(143,105,255,0.7)] group relative overflow-hidden"
                                         >
-                                            {isSubmitting ? (
-                                                <>
-                                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                                    Enviando...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Rocket className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                                    Quiero mi Demo Gratis
-                                                </>
-                                            )}
+                                            <span className="relative z-10 flex items-center gap-2">
+                                                {isSubmitting ? (
+                                                    <>
+                                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                        Procesando...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        Solicitar Prototipo
+                                                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                                    </>
+                                                )}
+                                            </span>
                                         </button>
 
-                                        {/* Trust Text */}
-                                        <p className="text-center text-xs text-[#f0ffcc]/40">
-                                            🔒 Tus datos están seguros. No spam, solo tu demo.
-                                        </p>
+                                        {/* Transparency Notice */}
+                                        <div className="mt-6 pt-4 border-t border-white/10">
+                                            <div className="flex gap-3">
+                                                <div className="flex-shrink-0 mt-0.5">
+                                                    <Zap className="w-4 h-4 text-[#ccff00]" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-xs text-white font-bold">Claridad ante todo:</p>
+                                                    <p className="text-[11px] text-zinc-400 leading-relaxed">
+                                                        Junto con tu prototipo, recibirás una <span className="text-white">propuesta comercial detallada</span> para su publicación y desarrollo completo. Si prefieres conocer nuestros precios estándar antes, <Link href="/#pricing" target="_blank" className="text-zinc-200 underline hover:text-white transition-colors">puedes verlos aquí</Link>.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </form>
-                                </>
+                                </div>
                             )}
                         </div>
-
-                        {/* Floating Elements */}
-                        <motion.div
-                            animate={{ y: [0, -10, 0] }}
-                            transition={{ repeat: Infinity, duration: 3 }}
-                            className="absolute -top-4 -right-4 w-12 h-12 bg-[#709600]/20 rounded-lg border border-[#709600]/30 flex items-center justify-center"
-                        >
-                            <Star className="w-6 h-6 text-[#709600]" />
-                        </motion.div>
                     </motion.div>
                 </div>
             </div>

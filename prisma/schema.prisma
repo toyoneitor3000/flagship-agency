@@ -20,19 +20,19 @@ model Contact {
 
 // --- DEMO REQUESTS (Sales Funnel) ---
 model DemoRequest {
-  id          String   @id @default(uuid())
-  name        String
-  whatsapp    String
-  instagram   String?
-  industry    String
-  message     String?  // What the client wants - their prompt/vision
-  status      String   @default("pending") // pending, contacted, demo_sent, converted, rejected
-  notes       String?  // Internal notes for follow-up
-  source      String   @default("landing") // landing, instagram, referral
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id        String  @id @default(uuid())
+  name      String
+  whatsapp  String
+  instagram String?
+  industry  String
+  message   String? // What the client wants - their prompt/vision
+  status    String  @default("pending") // pending, contacted, demo_sent, converted, rejected
+  notes     String? // Internal notes for follow-up
+  source    String  @default("landing") // landing, instagram, referral
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([status])
   @@index([createdAt])
 }
@@ -40,50 +40,50 @@ model DemoRequest {
 // --- PURRPURR ARCHITECTURE ---
 
 model Project {
-  id          String   @id @default(uuid())
+  id     String @id @default(uuid())
   // Identification
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   // Core Data
-  name        String
-  slug        String   @unique // Custom URL identifier
-  status      String   @default("DRAFT") // DRAFT, PUBLISHED
-  
+  name   String
+  slug   String @unique // Custom URL identifier
+  status String @default("DRAFT") // DRAFT, PUBLISHED
+
   // THE BRAIN: Contains Identity, Sections, and Content
   // This matches the "Structure Section" from the Blueprint
-  architecture String   // Stored as a JSON string (Prisma SQLite limitation workaround if needed, or just standard JSON text)
-  
+  architecture String // Stored as a JSON string (Prisma SQLite limitation workaround if needed, or just standard JSON text)
+
   // Analytics & Integrations (WhatsApp, Pixels)
-  integrations String?  // API Keys and configurations
-  
+  integrations String? // API Keys and configurations
+
   // Version Control
-  versions     ProjectVersion[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  versions ProjectVersion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Control de versiones para proyectos
 model ProjectVersion {
-  id          String   @id @default(uuid())
-  projectId   String
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  name        String   // v1, v2, etc
-  description String?  // Descripción del cambio
-  architecture String  // Snapshot de la arquitectura en ese momento
-  
-  createdAt   DateTime @default(now())
-  
+  id        String  @id @default(uuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  name         String // v1, v2, etc
+  description  String? // Descripción del cambio
+  architecture String // Snapshot de la arquitectura en ese momento
+
+  createdAt DateTime @default(now())
+
   @@index([projectId])
 }
 
 // --- NEXT AUTH ---
 model User {
-  id            String          @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?         @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -91,7 +91,7 @@ model User {
   projects      Project[]
   domains       Domain[]
   subscription  Subscription?
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -124,7 +124,7 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -160,29 +160,29 @@ model Subscription {
 // --- ANALYTICS & METRICS ---
 
 model Analytics {
-  id          String   @id @default(cuid())
-  
+  id String @id @default(cuid())
+
   // Event Type: PAGE_VIEW, API_CALL, ASSET_LOAD, ERROR
-  eventType   String
-  
+  eventType String
+
   // Target identification
-  projectId   String?  // Which project was accessed (nullable for global events)
-  userId      String?  // Owner of the project (for aggregation)
-  
+  projectId String? // Which project was accessed (nullable for global events)
+  userId    String? // Owner of the project (for aggregation)
+
   // Event Data
-  path        String?  // URL path accessed
-  userAgent   String?  // Browser/device info
-  ipHash      String?  // Hashed IP for unique visitor counting (privacy-friendly)
-  referer     String?  // Where the visitor came from
-  country     String?  // Geo location (optional)
-  
+  path      String? // URL path accessed
+  userAgent String? // Browser/device info
+  ipHash    String? // Hashed IP for unique visitor counting (privacy-friendly)
+  referer   String? // Where the visitor came from
+  country   String? // Geo location (optional)
+
   // Metrics
-  responseTime Int?    // Response time in ms (for CPU load calculation)
-  bytesTransferred Int @default(0) // Bytes sent (for bandwidth calculation)
-  
+  responseTime     Int? // Response time in ms (for CPU load calculation)
+  bytesTransferred Int  @default(0) // Bytes sent (for bandwidth calculation)
+
   // Timestamps
-  createdAt   DateTime @default(now())
-  
+  createdAt DateTime @default(now())
+
   @@index([projectId])
   @@index([userId])
   @@index([createdAt])
@@ -190,23 +190,23 @@ model Analytics {
 }
 
 model UsageStats {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  
+  id     String @id @default(cuid())
+  userId String @unique
+
   // Aggregated Metrics (updated periodically or on-demand)
-  totalPageViews  Int      @default(0)
-  uniqueVisitors  Int      @default(0)
-  totalBandwidth  BigInt   @default(0) // Total bytes transferred
-  totalApiCalls   Int      @default(0)
-  avgResponseTime Int      @default(0) // Average response time in ms
-  
+  totalPageViews  Int    @default(0)
+  uniqueVisitors  Int    @default(0)
+  totalBandwidth  BigInt @default(0) // Total bytes transferred
+  totalApiCalls   Int    @default(0)
+  avgResponseTime Int    @default(0) // Average response time in ms
+
   // Storage (calculated from projects)
-  storageUsed     BigInt   @default(0) // Total bytes used by projects
-  
+  storageUsed BigInt @default(0) // Total bytes used by projects
+
   // Period tracking
-  periodStart     DateTime @default(now())
-  lastUpdated     DateTime @updatedAt
-  
+  periodStart DateTime @default(now())
+  lastUpdated DateTime @updatedAt
+
   @@index([userId])
 }
 
@@ -217,150 +217,149 @@ model UsageStats {
 
 // Paletas de colores disponibles
 model ColorPalette {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
   // Colores del tema
-  primary     String   // Hex color
-  secondary   String   // Hex color
-  accent      String   // Hex color
-  background  String   // Hex color
-  
+  primary    String // Hex color
+  secondary  String // Hex color
+  accent     String // Hex color
+  background String // Hex color
+
   // Metadata
-  category    String?  // DARK, LIGHT, VIBRANT, etc
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  category  String? // DARK, LIGHT, VIBRANT, etc
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Layouts/Estructuras disponibles
 model LayoutOption {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
   description String?
-  icon        String?  // Lucide icon name
-  
+  icon        String? // Lucide icon name
+
   // Configuración del layout (JSON)
-  config      String?  // Grid settings, spacing, etc
-  
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  config String? // Grid settings, spacing, etc
+
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Secciones disponibles para agregar a un sitio
 model SectionTemplate {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
   description String?
-  icon        String?  // Lucide icon name
-  
+  icon        String? // Lucide icon name
+
   // Defnición de la sección (campos, estructura)
-  schema      String?  // JSON schema for content fields
+  schema         String? // JSON schema for content fields
   defaultContent String? // Default content template
-  
+
   // Categorización
-  category    String?  // HERO, CONTENT, SOCIAL, COMMERCE
-  
-  isActive    Boolean  @default(true)
-  isPremium   Boolean  @default(false) // Requiere suscripción?
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  category String? // HERO, CONTENT, SOCIAL, COMMERCE
+
+  isActive  Boolean @default(true)
+  isPremium Boolean @default(false) // Requiere suscripción?
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Efectos visuales disponibles
 model VisualEffect {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
   description String?
-  
+
   // Tipo: BACKGROUND, OVERLAY, ANIMATION
-  type        String   @default("OVERLAY")
-  
+  type String @default("OVERLAY")
+
   // CSS/Config para aplicar el efecto
-  cssClass    String?  // Tailwind classes or CSS
-  config      String?  // JSON config for advanced effects
-  
-  isActive    Boolean  @default(true)
-  isPremium   Boolean  @default(false)
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  cssClass String? // Tailwind classes or CSS
+  config   String? // JSON config for advanced effects
+
+  isActive  Boolean @default(true)
+  isPremium Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Patrones generativos de fondo
 model GenerativePattern {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
   description String?
-  
+
   // Función/algoritmo para generar el patrón
-  generator   String   // JSON con parámetros del gradiente/patrón
-  preview     String?  // URL to preview image
-  
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  generator String // JSON con parámetros del gradiente/patrón
+  preview   String? // URL to preview image
+
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Combinaciones de tipografía recomendadas
 model FontPairing {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  
-  displayFont String   // Font name for headings
-  bodyFont    String   // Font name for body text
-  
+  id   String @id @default(cuid())
+  name String @unique
+
+  displayFont String // Font name for headings
+  bodyFont    String // Font name for body text
+
   // Configuración de métricas
-  tracking    Float    @default(0)
-  leading     Float    @default(1.0)
-  
-  category    String?  // TECH, LUXURY, MODERN, ELEGANT
-  
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  tracking Float @default(0)
+  leading  Float @default(1.0)
+
+  category String? // TECH, LUXURY, MODERN, ELEGANT
+
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Arquetipos de negocio (categorías de sitio)
 model Archetype {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  
-  label       String   // Display name
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  label       String // Display name
   description String?
-  icon        String?  // Lucide icon name
-  color       String   // Primary color for this archetype
-  
+  icon        String? // Lucide icon name
+  color       String // Primary color for this archetype
+
   // Configuración por defecto para este arquetipo
   defaultPaletteId String?
   defaultLayoutId  String?
-  
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
 
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

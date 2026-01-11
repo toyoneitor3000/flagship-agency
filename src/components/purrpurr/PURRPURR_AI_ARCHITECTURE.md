@@ -19,7 +19,7 @@ Para evitar la congestión de funcionalidades, el comportamiento de Purrpurr cam
     *   Reporta el estado general del sistema ("All systems operational").
     *   *Futuro:* Gamificación (Easter eggs, desbloqueo de temas).
 
-### 📍 Laboratorio de Física (`/creative-test`)
+### 📍 Laboratorio de Física (`/inertia-engine`)
 *   **Rol:** `Telemetry Engineer (Ingeniero de Telemetría)`
 *   **Función Principal:** **Monitor de Rendimiento**.
 *   **Comportamiento:**
@@ -63,7 +63,7 @@ Crear el contexto que permitirá a Purrpurr "saber" dónde está y qué cerebro 
 *   **Entregable:** `PurrpurrGuide` cambia su `tip` automáticamente al navegar entre páginas.
 
 ### Fase 2: El Ojo Técnico (Telemetría) 🟡
-Implementar el monitor de FPS en `/creative-test`.
+Implementar el monitor de FPS en `/inertia-engine`.
 *   **Tech:** `requestAnimationFrame` loop.
 *   **Desafío:** Optimizar para que el observador no afecte el rendimiento que observa.
 

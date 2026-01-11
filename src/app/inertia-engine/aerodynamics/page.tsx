@@ -199,7 +199,7 @@ export default function TextileEnginePage() {
                     <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6">TEXTURE FACTORY</h1>
                     <p className="text-zinc-400 text-lg font-mono">&gt; Capas múltiples con parallax. Sin distorsión pixelada.</p>
                 </motion.div>
-                <Link href="/creative-test" className="mt-12 px-6 py-3 border border-zinc-700 rounded-full font-mono text-xs uppercase tracking-wider hover:border-purple-500 hover:text-purple-400 transition-colors">
+                <Link href="/inertia-engine" className="mt-12 px-6 py-3 border border-zinc-700 rounded-full font-mono text-xs uppercase tracking-wider hover:border-purple-500 hover:text-purple-400 transition-colors">
                     ← Volver a Inertia Engine
                 </Link>
             </div>

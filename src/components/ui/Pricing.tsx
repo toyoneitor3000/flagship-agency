@@ -1,50 +1,110 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check, ArrowRight, Sparkles, Clock, Code2, Rocket, Building2, ArrowDown } from 'lucide-react';
 import Link from 'next/link';
+import { WikiLinker } from '@/components/ui/WikiLinker';
 
-const agilePlans = [
+const plansData = [
   {
-    name: 'Acceso Laboratorio (DIY)',
-    price: '$45',
-    currency: 'USD',
-    time: 'Acceso Instantáneo',
-    description: 'Para el emprendedor "ansioso". Toma el control total de tu estética y contenido con nuestro Studio Purrpurr 24/7.',
-    features: ['Uso ilimitado del Design Lab', 'Cambios en tiempo real', 'Soporte técnico por ticket', 'Hospedaje premium incluido', 'Sin contratos largos'],
-    tech: 'Ideal para flujo de caja mensual y control total.',
+    name: 'Plan Semilla (Start)',
+    prices: {
+      monthly: { cop: '$19,900', usd: '$5.50' },
+      annual: { cop: '$180,000', usd: '$50.00' }, // PRECIO TOTAL ANUAL
+      setup: { cop: '$550,000', usd: '$150' }
+    },
+    description: 'El punto de partida ideal. Tu espacio digital profesional, accesible y sin barreras.',
+    features: [
+      'Diseño Web Profesional (Landing Page)',
+      'Dashboard Básico (Textos/Fotos)',
+      '1 Dominio .com Incluido',
+      'Asistente Digital 24/7'
+    ],
+    specs: {
+      storage: '5 GB NVMe SSD',
+      bandwidth: '100 GB Transferencia',
+      compute: 'Serverless (Shared CPU)',
+      changes: 'Solo Contenido (CMS)'
+    },
+    tech: 'Tu primera web profesional.',
+    popular: true,
+    hours: 8
+  },
+  {
+    name: 'Plan Profesional (Services)',
+    prices: {
+      monthly: { cop: '$149,000', usd: '$40' },
+      annual: { cop: '$1,440,000', usd: '$380' },
+      setup: { cop: '$1,200,000', usd: '$320' }
+    },
+    description: 'Para consultores y marcas. Blog, captación de clientes y presencia corporativa seria.',
+    features: [
+      'Sitio Multi-Página + Blog',
+      'CMS Autoadministrable',
+      'Formularios CRM & WhatsApp',
+      'Optimización SEO Técnica'
+    ],
+    specs: {
+      storage: '20 GB NVMe SSD',
+      bandwidth: '500 GB Transferencia',
+      compute: 'Serverless (Fast Edge)',
+      changes: 'Ajustes de Diseño (No Funcional)'
+    },
+    tech: 'Tu oficina digital abierta 24/7.',
     popular: false,
+    hours: 24
   },
   {
-    name: 'Anual Estándar (Static)',
-    price: '$350',
-    currency: 'USD',
-    time: 'Entrega en 48h',
-    description: 'La solución profesional "llave en mano". Nosotros construimos, tú te relajas. Un solo pago al año y te olvidas.',
-    features: ['Diseño y montaje por expertos', 'Mantenimiento anual incluido', 'Rendimiento optimizado (90+)', 'Soporte prioritario', 'Renovación anual simple'],
-    tech: 'Estabilidad y calidad premium sin mover un dedo.',
-    popular: true,
+    name: 'Plan Comercio (Store)',
+    prices: {
+      monthly: { cop: '$280,000', usd: '$75' },
+      annual: { cop: '$2,800,000', usd: '$750' },
+      setup: { cop: '$3,800,000', usd: '$1,000' }
+    },
+    description: 'Tu imperio digital. No solo vendes, gestionas finanzas, inventarios y logística en un solo lugar.',
+    features: [
+      'Catálogo & Productos Ilimitados',
+      'Panel Financiero y Analítica',
+      'Integración Logística (Envíos)',
+      'Checkout Sin Fricción'
+    ],
+    specs: {
+      storage: '100 GB NVMe SSD',
+      bandwidth: '1 TB Transferencia',
+      compute: 'Dedicated DB (Primary)',
+      changes: 'Soporte Técnico & Actualizaciones'
+    },
+    tech: 'Tu negocio facturando en automático.',
+    popular: false,
+    hours: 40
   },
-];
-
-const customPlans = [
   {
-    name: 'Growth & Partnership',
-    price: '$16,000',
-    currency: 'USD',
-    time: 'Contrato Anual',
-    description: 'Tu socio estratégico de ingeniería. Desarrollo a medida, automatizaciones y escalabilidad masiva.',
-    features: ['Ingeniería dedicada (SaaS/Apps)', 'Sistemas de pagos complejos', 'Automatización de procesos', 'Consultoría de producto mensual', 'Soporte 24/7 garantizado'],
-    tech: 'Tu propio departamento de tecnología externo.',
-    popular: true,
+    name: 'Núcleo Corporativo',
+    prices: {
+      monthly: { cop: 'Cotizar', usd: 'Custom' },
+      annual: { cop: 'Cotizar', usd: 'Custom' },
+      setup: { cop: 'Desde $10M', usd: '$3k+' }
+    },
+    description: 'Ingeniería pesada para Ballenas. Reestructuración digital de flotas e integración Legacy.',
+    features: [
+      'Nube Privada Aislada (On-Premise)',
+      'Modelos AI con Data Propia (RAG)',
+      'Integración SAP/Oracle',
+      'Auditoría y Compliance'
+    ],
+    specs: {
+      storage: 'Almacenamiento Ilimitado (S3)',
+      bandwidth: 'Ancho de Banda Dedicado',
+      compute: 'Cluster Kubernetes Privado',
+      changes: 'Equipo de Desarrollo Dedicado'
+    },
+    tech: 'La infraestructura que mueve industrias.',
+    popular: false,
+    hours: 'Indefinido'
   }
 ];
 
 export const Pricing = () => {
-  const [activeTab, setActiveTab] = useState<'agile' | 'custom' | null>(null);
-
-  const plans = activeTab === 'custom' ? customPlans : agilePlans;
 
   return (
     <section className='py-32 bg-zinc-950 relative overflow-hidden' id='pricing' data-section-theme='dark'>
@@ -53,204 +113,204 @@ export const Pricing = () => {
 
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-12'>
-          <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Elige tu Nivel de Impacto</h2>
-          <div className="inline-block px-4 py-2 bg-[#00FF9C]/10 border border-[#00FF9C]/20 rounded-lg mb-6">
-            <p className="text-[#00FF9C] text-sm font-bold tracking-wide uppercase flex items-center gap-2">
+          <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Diseñado para <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">PERSONAS</span></h2>
+          <div className="inline-block px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg mb-6">
+            <p className="text-indigo-400 text-sm font-bold tracking-wide uppercase flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
-              No inviertas a ciegas. Solicita una Demostración de Ingeniería.
+              Tecnología que potencia tu visión, sin barreras.
             </p>
           </div>
           <p className='text-zinc-400 max-w-2xl mx-auto text-lg'>
-            Entendemos que no todos los proyectos son iguales. <br className="hidden md:block" />
-            Diseñamos una estrategia dual para <strong>validar rápido</strong> o <strong>escalar masivamente</strong>.
+            Entendemos que detrás de cada proyecto hay un sueño. <br className="hidden md:block" />
+            Nuestros planes están pensados para acompañar cada etapa de tu crecimiento.
           </p>
         </div>
 
-        <AnimatePresence mode='wait'>
-          {activeTab === null ? (
-            <motion.div
-              key="selection-view"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
-            >
-              <button
-                onClick={() => setActiveTab('agile')}
-                className="group relative p-8 rounded-3xl bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-900/80 hover:border-indigo-500/50 transition-all text-left overflow-hidden"
+        {/* Strategy Toggle */}
+        {/* Strategy Toggle */}
+        {/* Strategy Toggle */}
+        <div className='flex flex-col items-center mb-16 gap-4'>
+          <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-2xl max-w-2xl text-center">
+            <p className="text-zinc-400 text-sm">
+              <span className="text-indigo-400 font-bold">Modelo Transparente:</span> Pagas por el desarrollo de tu proyecto (Pago Único) y una cuota anual operativa para mantenerlo en línea (Hosting + Dominio). Sin mensualidades ocultas.
+            </p>
+          </div>
+        </div>
+
+        <div className='max-w-[95%] mx-auto'>
+          <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6'>
+            {plansData.map((plan, index) => (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className={`relative p-6 rounded-3xl border flex flex-col group ${plan.popular ? 'bg-zinc-900 border-indigo-500 shadow-2xl shadow-indigo-500/20 z-10 ring-1 ring-indigo-500/50' : 'bg-zinc-950/80 border-zinc-800 hover:bg-zinc-900/80 transition-colors'}`}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative z-10 space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform duration-500">
-                    <Rocket className="w-6 h-6" />
+                {plan.popular && (
+                  <div className='absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-lg uppercase tracking-wide z-20'>
+                    <Sparkles className='w-3 h-3' />
+                    Recomendado
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-display font-bold text-white mb-2">Paquetes Ágiles</h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
-                      Lanza tu MVP o Landing Page en tiempo récord. Ideal para pre-ventas, validación de mercado y startups early-stage.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-indigo-400 text-sm font-bold pt-4 group-hover:gap-3 transition-all">
-                    Ver Planes <ArrowRight className="w-4 h-4" />
-                  </div>
+                )}
+
+                <div className='mb-6'>
+                  <h3 className='font-display text-lg font-bold text-white mb-2 min-h-[3.5rem] flex items-center'>{plan.name}</h3>
+                  <p className='text-zinc-400 text-xs leading-relaxed min-h-[2.5rem]'>
+                    <WikiLinker text={plan.description} />
+                  </p>
                 </div>
-              </button>
 
-              <button
-                onClick={() => setActiveTab('custom')}
-                className="group relative p-8 rounded-3xl bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-900/80 hover:border-indigo-500/50 transition-all text-left overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative z-10 space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform duration-500">
-                    <Building2 className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-display font-bold text-white mb-2">Track-Ready Systems</h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
-                      Sistemas robustos de gestión, automatización y escalabilidad. Para empresas que necesitan infraestructura seria.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-purple-400 text-sm font-bold pt-4 group-hover:gap-3 transition-all">
-                    Ver Sistemas <ArrowRight className="w-4 h-4" />
-                  </div>
-                </div>
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="pricing-view"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-            >
-              {/* Strategy Toggle */}
-              <div className='flex justify-center mb-16'>
-                <div className='bg-zinc-900 p-1.5 rounded-2xl border border-zinc-800 flex items-center relative'>
-                  {/* Slider Background */}
-                  <motion.div
-                    className='absolute top-1.5 bottom-1.5 bg-indigo-600 rounded-xl z-0'
-                    initial={false}
-                    animate={{
-                      x: activeTab === 'agile' ? 0 : '100%',
-                      width: '50%'
-                    }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
+                <div className='mb-6 pb-6 border-b border-zinc-900'>
+                  <div className='flex flex-col gap-1 mb-2'>
 
-                  <button
-                    onClick={() => setActiveTab('agile')}
-                    className={`relative z-10 px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors w-48 justify-center ${activeTab === 'agile' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
-                  >
-                    <Rocket className='w-4 h-4' />
-                    Paquetes Ágiles
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('custom')}
-                    className={`relative z-10 px-6 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-colors w-48 justify-center ${activeTab === 'custom' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
-                  >
-                    <Building2 className='w-4 h-4' />
-                    Track-Ready Systems
-                  </button>
-                </div>
-              </div>
+                    {/* PRIMARY COST: DEVELOPMENT */}
+                    {/* PRIMARY COST: DEVELOPMENT */}
+                    <div className="mb-4">
+                      <span className="text-zinc-400 text-[10px] uppercase font-bold tracking-wider block mb-1">Inversión Inicial (Diseño)</span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-bold text-white tracking-tight">{plan.prices.setup.cop}</span>
+                        <span className="text-zinc-500 text-[10px] uppercase">Pago Único</span>
+                      </div>
+                      {/* HOURS BUDGET */}
+                      <div className="mt-1.5 flex items-center gap-1.5 bg-indigo-500/10 w-fit px-2 py-1 rounded border border-indigo-500/20">
+                        <Clock className="w-3 h-3 text-indigo-400" />
+                        <span className="text-[10px] text-zinc-300">Incluye <strong>{plan.hours} {typeof plan.hours === 'number' ? 'Horas' : ''}</strong> <span className="text-zinc-500 ml-1">(Pack Ahorro)</span></span>
+                      </div>
+                    </div>
 
-              <div className='max-w-7xl mx-auto'>
-                <AnimatePresence mode='wait'>
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className='grid grid-cols-1 md:grid-cols-3 gap-8'
-                  >
-                    {plans.map((plan, index) => (
-                      <motion.div
-                        key={plan.name}
-                        className={`relative p-8 rounded-3xl border flex flex-col group ${plan.popular ? 'bg-zinc-900/80 border-indigo-500 shadow-2xl shadow-indigo-500/10 z-10 ring-1 ring-indigo-500/50' : 'bg-zinc-950/50 border-zinc-800 hover:bg-zinc-900/50 transition-colors'}`}
-                      >
-                        {plan.popular && (
-                          <div className='absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded-full flex items-center gap-1 shadow-lg uppercase tracking-wide'>
-                            <Sparkles className='w-3 h-3' />
-                            Recomendado
-                          </div>
-                        )}
-
-                        <div className='mb-6'>
-                          <div className='flex justify-between items-start mb-2'>
-                            <h3 className='font-display text-xl font-bold text-white'>{plan.name}</h3>
-                            {activeTab === 'custom' && (
-                              <span className='px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-[10px] uppercase font-bold tracking-wider'>High-Ticket</span>
-                            )}
-                          </div>
-                          <div className='flex items-center gap-2 text-indigo-400 text-xs font-medium mb-3 bg-indigo-500/10 w-fit px-3 py-1.5 rounded-lg'>
-                            <Clock className='w-3 h-3' />
-                            {plan.time}
-                          </div>
-                          <p className='text-zinc-400 text-sm leading-relaxed min-h-[3rem]'>{plan.description}</p>
-                        </div>
-
-                        <div className='mb-8 pb-8 border-b border-zinc-900'>
-                          <div className='flex items-baseline gap-1'>
-                            <span className='text-4xl font-bold text-white tracking-tight'>{plan.price}</span>
-                            <span className='text-zinc-500 text-sm font-semibold'>{plan.currency}</span>
-                          </div>
-                          {!plan.price.includes('+') && activeTab === 'agile' && <span className='text-zinc-600 text-xs'>Pago único</span>}
-                          {activeTab === 'custom' && <span className='text-zinc-600 text-xs'>Inversión estimada</span>}
-                        </div>
-
-                        <div className='space-y-6 flex-grow'>
-                          <div className='bg-zinc-900/50 p-4 rounded-xl border border-zinc-800/50'>
-                            <div className='flex items-center gap-2 mb-2'>
-                              <Code2 className='w-4 h-4 text-indigo-400' />
-                              <span className='text-xs text-zinc-300 font-bold uppercase tracking-wide'>Nivel Técnico</span>
+                    {/* SECONDARY COST: INFRASTRUCTURE */}
+                    <div className="bg-zinc-950/50 rounded-xl p-3 border border-zinc-800/60">
+                      <div className="flex justify-between items-baseline mb-2">
+                        <span className='text-zinc-300 text-[11px] font-medium'>Infraestructura (Anual)</span>
+                        <div className="group/info relative">
+                          <span className="cursor-help text-[10px] text-zinc-500 border border-zinc-600 px-1.5 rounded hover:text-white hover:border-zinc-400 transition-colors">?</span>
+                          <div className="absolute bottom-full right-0 mb-2 w-52 p-3 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl opacity-0 group-hover/info:opacity-100 transition-opacity pointer-events-none z-50">
+                            <div className="text-[10px] text-zinc-300 leading-normal">
+                              <WikiLinker text="Este valor se paga una vez al año para cubrir el Dominio (.com) y el Hosting." />
+                              <strong className="block mt-2 text-red-300">Cualquier cambio de diseño o funcionalidad adicional se cobra por horas ($120k/h).</strong>
                             </div>
-                            <p className='text-xs text-zinc-400 leading-relaxed'>{plan.tech}</p>
                           </div>
+                        </div>
+                      </div>
 
-                          <ul className='space-y-4'>
-                            {plan.features.map((feature) => (
-                              <li key={feature} className='flex items-start gap-3 text-sm text-zinc-300 group-hover:text-zinc-200 transition-colors'>
-                                <Check className={`w-5 h-5 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-600 group-hover:text-indigo-500/50 transition-colors'}`} />
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className='text-lg font-bold text-[#00FF9C] tracking-tight'>{plan.prices.annual.cop}</span>
+                          <span className='text-zinc-600 text-[9px] font-medium'>Renovación Anual</span>
                         </div>
 
-                        <Link
-                          href={`/checkout?plan=${plan.name.includes('DIY') ? 'diy' : plan.name.includes('Static') ? 'static' : 'enterprise'}`}
-                          className={`mt-8 w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${plan.popular
-                            ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
-                            : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
-                            }`}
-                        >
-                          {activeTab === 'agile' ? 'Iniciar Suscripción' : 'Activar Partnership'}
-                          <ArrowRight className='w-4 h-4' />
-                        </Link>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                        {/* MICRO FEATURES */}
+                        <div className="text-[9px] text-zinc-500 text-right space-y-0.5">
+                          <div>✓ <WikiLinker text="Dominio" /> .com</div>
+                          <div>✓ <WikiLinker text="Hosting" /> SSL</div>
+                        </div>
+                      </div>
 
-              <div className="mt-16 text-center">
-                <button
-                  onClick={() => setActiveTab(null)}
-                  className="text-zinc-500 text-sm font-mono hover:text-indigo-400 transition-colors flex items-center justify-center mx-auto gap-2"
+                      <div className="mt-3 pt-3 border-t border-zinc-800/50 flex items-center justify-between gap-1">
+                        <span className="text-[9px] text-red-400/70 font-medium">Cambios fuera del plan:</span>
+                        <div className="flex items-center gap-1 bg-red-500/10 px-2 py-1 rounded border border-red-500/20">
+                          <Clock className="w-3 h-3 text-red-400" />
+                          <span className="text-[9px] text-red-300 font-bold">$120.000 <span className="text-red-500/60 font-normal">/hora</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* TECH SPECS MINI GRID */}
+                {plan.specs && (
+                  <div className="bg-zinc-900/30 p-2 rounded-lg border border-zinc-800/30 mb-4 grid grid-cols-2 gap-2">
+                    <div>
+                      <span className="text-[9px] text-zinc-500 uppercase block">Espacio</span>
+                      <span className="text-[10px] text-zinc-300 font-mono">{plan.specs.storage}</span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-zinc-500 uppercase block">Banda</span>
+                      <span className="text-[10px] text-zinc-300 font-mono">{plan.specs.bandwidth}</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className='space-y-4 flex-grow'>
+                  <ul className='space-y-3'>
+                    {plan.features.slice(0, 4).map((feature) =>
+                      <li key={feature} className='flex items-start gap-2 text-xs text-zinc-300 group-hover:text-white transition-colors'>
+                        <Check className={`w-4 h-4 shrink-0 ${plan.popular ? 'text-indigo-400' : 'text-zinc-500 group-hover:text-indigo-400 transition-colors'}`} />
+                        <WikiLinker text={feature} />
+                      </li>
+                    )}
+                  </ul>
+                </div>
+
+                <Link
+                  href={`/checkout?plan=${index === 0 ? 'semilla' : index === 1 ? 'pro' : index === 2 ? 'store' : 'enterprise'}`}
+                  className={`mt-6 w-full py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all ${plan.popular
+                    ? 'bg-white text-zinc-950 hover:bg-indigo-50 shadow-lg shadow-indigo-500/20 hover:scale-[1.02]'
+                    : 'bg-zinc-800 text-white hover:bg-zinc-700 hover:text-white'
+                    }`}
                 >
-                  <ArrowRight className="w-4 h-4 rotate-180" />
-                  Volver a seleccionar categoría
-                </button>
-              </div>
+                  {index === 3 ? 'Cotizar Proyecto' : 'Elegir Plan'}
+                  <ArrowRight className='w-3 h-3' />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* MÓDULOS DE ESPECIALIDAD (ADD-ONS) */}
+        <div className="mt-24 max-w-5xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h3 className="font-display text-2xl font-bold text-white mb-4">¿Necesitas Superpoderes?</h3>
+            <p className="text-zinc-400">Agrega módulos específicos a tu Setup inicial.</p>
+          </div>
 
-        {/* Scroll Down Button */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+            {/* Módulo E-commerce */}
+            <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-indigo-500/50 transition-colors group">
+              <div className="text-2xl mb-2">🛍️</div>
+              <h4 className="font-bold text-white text-sm mb-1">E-Commerce Plus</h4>
+              <p className="text-[10px] text-zinc-400 mb-2">Si necesitas más de 100 productos.</p>
+              <p className="text-sm font-bold text-[#00FF9C]">+$850k <span className="text-[10px] text-zinc-500">COP</span></p>
+            </div>
+            {/* Módulo App */}
+            <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-indigo-500/50 transition-colors group">
+              <div className="text-2xl mb-2">🔐</div>
+              <h4 className="font-bold text-white text-sm mb-1">Sistemas & Auth</h4>
+              <p className="text-[10px] text-zinc-400 mb-2">Login, Roles y Base de Datos.</p>
+              <p className="text-sm font-bold text-[#00FF9C]">+$1.5M <span className="text-[10px] text-zinc-500">COP</span></p>
+            </div>
+            {/* Módulo 3D */}
+            <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-purple-500/50 transition-colors group">
+              <div className="text-2xl mb-2">🧊</div>
+              <h4 className="font-bold text-white text-sm mb-1">Cine & 3D</h4>
+              <p className="text-[10px] text-zinc-400 mb-2">Experiencias Inmersivas WebGL.</p>
+              <p className="text-sm font-bold text-[#00FF9C]">+$2.8M <span className="text-[10px] text-zinc-500">COP</span></p>
+            </div>
+            {/* Módulo Data */}
+            <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-[#00FF9C]/50 transition-colors group">
+              <div className="text-2xl mb-2">🧬</div>
+              <h4 className="font-bold text-white text-sm mb-1">Data Engine</h4>
+              <p className="text-[10px] text-zinc-400 mb-2">Dashboards BI y Big Data.</p>
+              <p className="text-sm font-bold text-white text-xs opacity-50">Cotizar</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center mt-16 max-w-2xl mx-auto px-6 py-6 bg-zinc-900/30 rounded-2xl border border-dashed border-zinc-800">
+          <h4 className="text-zinc-300 font-bold mb-2 flex items-center justify-center gap-2">
+            <Code2 className="w-4 h-4 text-indigo-400" />
+            ¿Prefieres alojarlo en tu propio servidor?
+          </h4>
+          <p className="text-sm text-zinc-500 mb-4">
+            Ofrecemos una opción de <strong>"Buyout" (Pago Único Final)</strong> donde te entregamos todo el código fuente y activos para que seas 100% dueño de tu infraestructura. Sin pagos mensuales ni ataduras.
+          </p>
+          <Link href="/contact" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium underline underline-offset-4">
+            Solicitar cotización de entrega de código &rarr;
+          </Link>
+        </div>
+
         <div className="flex justify-center mt-12 pb-8">
           <a
             href="#invitation"

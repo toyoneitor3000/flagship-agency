@@ -27,11 +27,15 @@ export const MainWrapper = ({ children }: MainWrapperProps) => {
     }
 
     // Standard layout for purrpurr.dev pages
+    const isHomePage = pathname === '/';
+
     return (
-        <main className="flex-grow pt-12">
-            <div className="container mx-auto px-4 py-4 md:px-6">
-                <Breadcrumbs />
-            </div>
+        <main className="flex-grow">
+            {!isHomePage && (
+                <div className="container mx-auto px-4 pt-24 pb-4 md:px-6">
+                    <Breadcrumbs />
+                </div>
+            )}
             {children}
         </main>
     );

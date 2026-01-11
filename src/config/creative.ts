@@ -25,19 +25,19 @@ export interface FluidConfig {
 }
 
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
-    config: { stiffness: 223, damping: 50, mass: 5 },
-    colors: {
+    config: { stiffness: 269, damping: 22, mass: 5 },
+    colors: { 
         color1: '#dff0a3',
         color2: '#cde6b7',
-        color3: '#8c00ff',
-        color4: '#250047'
+        color3: '#ff0000',
+        color4: '#050505'
     },
-    speed: 0.22,
-    force: 0.8,
+    speed: 1.77,
+    force: 0.9,
     blurStrength: 200,
     grainOpacity: 0.5,
-    interactionRadius: 0.6,
-    fluidZoom: 1.3,
+    interactionRadius: 1.1,
+    fluidZoom: 0.7,
     blendThresholds: { blend1: 0.4, blend2: 0, blend3: 0 }
 };
 

@@ -7,7 +7,6 @@ import CreativeCursor from '@/components/creative/CreativeCursor';
 import Magnetic from '@/components/creative/Magnetic';
 import FluidBackground from '@/components/creative/FluidBackground';
 import { ArrowDown, Sliders, Activity, Palette, Droplets, Save } from 'lucide-react';
-import { Navbar } from '@/components/ui/Navbar';
 import { FLUID_PRESET_PURRPURR } from '@/config/creative';
 import { saveFluidConfig } from './actions';
 
@@ -80,7 +79,7 @@ export default function CreativeLabPage() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            className="absolute bottom-16 right-0 w-80 bg-zinc-950/80 backdrop-blur-xl border border-zinc-800 p-6 rounded-3xl shadow-2xl space-y-6"
+                            className="absolute bottom-16 right-0 w-80 max-h-[calc(100vh-120px)] overflow-y-auto bg-zinc-950/80 backdrop-blur-xl border border-zinc-800 p-6 rounded-3xl shadow-2xl space-y-6 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent"
                         >
                             <div className="flex justify-between items-center">
                                 <h3 className="text-sm font-mono uppercase font-bold text-zinc-400">Physics Engine</h3>

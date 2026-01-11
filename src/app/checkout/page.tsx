@@ -1,149 +1,182 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CreditCard, CheckCircle2, ShieldCheck, Zap, ArrowLeft } from 'lucide-react';
+import { CreditCard, Lock, ShieldCheck, Zap, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
-const PLANS = {
-    'diy': { name: 'Acceso Laboratorio (DIY)', price: '$45', period: 'mes', total: '$45' },
-    'static': { name: 'Anual Estándar (Static)', price: '$350', period: 'año', total: '$350' },
-    'enterprise': { name: 'Growth & Partnership', price: '$16,000', period: 'año', total: '$16,000' }
+// Datos de los planes (Deberían venir de una config centralizada, pero por ahora replicate)
+const PLANS_DB = {
+    'semilla-monthly': { name: 'Plan Semilla (Mensual)', price: 19900, currency: 'COP' },
+    'semilla-annual': { name: 'Plan Semilla (Anual)', price: 180000, currency: 'COP' }, // 15k * 12
+    'despegue-monthly': { name: 'Plan Despegue (Mensual)', price: 149000, currency: 'COP' },
+    'despegue-annual': { name: 'Plan Despegue (Anual)', price: 1440000, currency: 'COP' }, // 120k * 12
+    'imperio': { name: 'Núcleo Corporativo', price: 0, currency: 'COP', isQuote: true },
 };
 
 function CheckoutContent() {
     const searchParams = useSearchParams();
-    const planId = searchParams.get('plan') as keyof typeof PLANS || 'static';
-    const plan = PLANS[planId] || PLANS.static;
+    const planParam = searchParams.get('plan') || 'semilla-monthly';
+    // Simple logic to map params to keys if needed, for now assumes direct match or exact strings
+    // Let's normalize generic params from pricing page
 
+    const [selectedPlan, setSelectedPlan] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
 
-    const handlePayment = () => {
+    useEffect(() => {
+        // Map generic params like 'diy' to specific default
+        let key = planParam;
+        if (planParam === 'diy') key = 'semilla-monthly';
+        if (planParam === 'static') key = 'despegue-monthly'; // old name mapping
+        if (planParam === 'managed') key = 'despegue-monthly';
+        if (planParam === 'enterprise') key = 'imperio';
+
+        setSelectedPlan(PLANS_DB[key as keyof typeof PLANS_DB] || PLANS_DB['semilla-monthly']);
+    }, [planParam]);
+
+    const handlePayment = (e: React.FormEvent) => {
+        e.preventDefault();
         setLoading(true);
-        // Simulación de procesamiento de pago
+        // Aquí iría la integración real con Wompi
         setTimeout(() => {
+            alert('Modo Simulación: Redirigiendo a Pasarela Wompi...');
             setLoading(false);
-            setSuccess(true);
-        }, 2000);
+        }, 1500);
     };
 
-    if (success) {
-        return (
-            <div className="min-h-screen bg-black flex items-center justify-center p-6">
-                <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="max-w-md w-full bg-zinc-900 border border-white/10 p-12 text-center rounded-3xl"
-                >
-                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8">
-                        <CheckCircle2 className="w-10 h-10 text-black" />
-                    </div>
-                    <h1 className="text-3xl font-light text-white mb-4 uppercase tracking-[0.2em]">Pago Exitoso</h1>
-                    <p className="text-zinc-500 text-sm mb-12 uppercase tracking-widest leading-relaxed">
-                        Tu cuenta ha sido activada. Tu "Llave Maestra" ha sido enviada a tu correo institucional.
-                    </p>
-                    <Link
-                        href="/studio"
-                        className="inline-block w-full py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-zinc-200 transition-all font-sans"
-                    >
-                        Entrar al Laboratorio
-                    </Link>
-                </motion.div>
-            </div>
-        );
-    }
+    if (!selectedPlan) return <div>Cargando...</div>;
 
     return (
-        <div className="min-h-screen bg-black text-white font-sans selection:bg-white/10">
-            <div className="max-w-7xl mx-auto px-6 py-20 lg:py-32 grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div className="min-h-screen bg-zinc-950 text-white flex flex-col md:flex-row">
 
-                {/* Left: Summary */}
-                <div className="flex flex-col justify-center">
-                    <Link href="/" className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-widest mb-12 hover:text-white transition-colors">
-                        <ArrowLeft className="w-3 h-3" /> Volver
-                    </Link>
-                    <span className="text-[10px] text-zinc-600 uppercase tracking-[0.5em] mb-4">Finalizar Compra</span>
-                    <h1 className="text-5xl md:text-7xl font-light mb-8 uppercase tracking-widest leading-tight">Activa tu Poder.</h1>
+            {/* Columna Izquierda: Resumen de Orden (Estilo Recibo) */}
+            <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="w-full md:w-1/2 p-8 md:p-12 lg:p-20 bg-zinc-900 border-r border-zinc-800 flex flex-col justify-center relative overflow-hidden"
+            >
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-[#00FF9C]" />
 
-                    <div className="p-8 bg-zinc-900/50 border border-white/5 rounded-3xl mb-12">
-                        <div className="flex justify-between items-center mb-6 pb-6 border-b border-white/5">
+                <Link href="/#pricing" className="absolute top-8 left-8 text-zinc-500 hover:text-white flex items-center gap-2 transition-colors">
+                    <ArrowLeft className="w-4 h-4" /> Volver
+                </Link>
+
+                <div className="max-w-md mx-auto w-full">
+                    <div className="mb-8">
+                        <span className="text-[#00FF9C] font-mono text-xs tracking-widest uppercase">Resumen de Compra</span>
+                        <h1 className="text-3xl md:text-4xl font-display font-bold mt-2">Tu acceso a la Elite.</h1>
+                    </div>
+
+                    <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 space-y-6">
+                        <div className="flex justify-between items-start pb-6 border-b border-zinc-900">
                             <div>
-                                <h2 className="text-sm font-light text-zinc-400 uppercase tracking-[0.2em] mb-1">{plan.name}</h2>
-                                <p className="text-[10px] text-zinc-600 uppercase tracking-widest">{planId === 'diy' ? 'Suscripción Mensual' : 'Suscripción Anual'}</p>
+                                <h3 className="font-bold text-lg text-white">{selectedPlan.name}</h3>
+                                <p className="text-zinc-400 text-sm">Suscripción recurrente</p>
                             </div>
-                            <div className="text-2xl font-light">{plan.price}</div>
+                            <div className="text-right">
+                                <p className="text-xl font-bold font-mono">
+                                    {selectedPlan.isQuote ? 'COTIZAR' : `$${selectedPlan.price.toLocaleString('es-CO')}`}
+                                </p>
+                                <p className="text-xs text-zinc-500">{selectedPlan.currency}</p>
+                            </div>
                         </div>
-                        <div className="flex justify-between items-center text-xl tracking-widest uppercase font-light">
-                            <span>Total</span>
-                            <span className="text-white">{plan.total} <span className="text-xs text-zinc-500">USD</span></span>
+
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3 text-sm text-zinc-300">
+                                <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+                                <span>Infraestructura Serverless Incluida</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm text-zinc-300">
+                                <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+                                <span>Dashboard de Control Inmediato</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm text-zinc-300">
+                                <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+                                <span>Soporte Wompi (Nequi, PSE, Tarjetas)</span>
+                            </div>
                         </div>
+
+                        {!selectedPlan.isQuote && (
+                            <div className="pt-4 flex justify-between items-center font-bold text-lg">
+                                <span>Total a Pagar hoy:</span>
+                                <span className="text-[#00FF9C]">${selectedPlan.price.toLocaleString('es-CO')}</span>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-4 text-zinc-500">
-                            <ShieldCheck className="w-5 h-5 text-zinc-700" />
-                            <span className="text-[10px] uppercase tracking-widest">Encriptación de Grado Bancario</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-zinc-500">
-                            <Zap className="w-5 h-5 text-zinc-700" />
-                            <span className="text-[10px] uppercase tracking-widest">Activación Instantánea</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right: Payment Method */}
-                <div className="flex flex-col justify-center bg-zinc-900/30 p-12 border border-white/5 rounded-[3rem]">
-                    <div className="mb-12">
-                        <h3 className="text-xs text-zinc-400 uppercase tracking-[0.4em] mb-8">Método de Pago</h3>
-                        <div className="grid grid-cols-1 gap-4">
-                            <button className="flex items-center justify-between p-6 border border-white/20 bg-white/5 rounded-2xl hover:border-white transition-all group">
-                                <div className="flex items-center gap-4">
-                                    <CreditCard className="w-6 h-6 text-zinc-500 group-hover:text-white" />
-                                    <span className="text-[10px] uppercase tracking-widest">Tarjeta de Crédito / Débito</span>
-                                </div>
-                                <div className="flex gap-1">
-                                    <div className="w-6 h-4 bg-zinc-800 rounded-sm" />
-                                    <div className="w-6 h-4 bg-zinc-800 rounded-sm" />
-                                </div>
-                            </button>
-                            <button className="flex items-center justify-between p-6 border border-white/5 bg-zinc-950/50 rounded-2xl opacity-50 cursor-not-allowed">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-6 h-6 flex items-center justify-center text-[8px] font-bold border border-zinc-800 rounded-full">PSE</div>
-                                    <span className="text-[10px] uppercase tracking-widest">PSE / Nequi (Próximamente)</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <button
-                            onClick={handlePayment}
-                            disabled={loading}
-                            className="w-full py-6 bg-white text-black font-bold text-xs uppercase tracking-[0.5em] hover:bg-zinc-200 transition-all flex items-center justify-center gap-4"
-                        >
-                            {loading ? (
-                                <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                            ) : (
-                                'Procesar Pago'
-                            )}
-                        </button>
-                        <p className="text-center text-[9px] text-zinc-600 uppercase tracking-widest leading-relaxed">
-                            Al proceder, aceptas los términos de servicio del Laboratorio Purrpurr. <br />
-                            Tu suscripción se renovará automáticamente al final del periodo.
-                        </p>
+                    <div className="mt-8 flex items-center gap-4 text-xs text-zinc-500">
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>Pagos encriptados de extremo a extremo.</span>
                     </div>
                 </div>
+            </motion.div>
 
-            </div>
+            {/* Columna Derecha: Formulario (Datos del Lead) */}
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="w-full md:w-1/2 p-8 md:p-12 lg:p-20 flex flex-col justify-center"
+            >
+                <div className="max-w-md mx-auto w-full space-y-8">
+                    <div>
+                        <h2 className="text-2xl font-bold mb-2">Datos de Facturación</h2>
+                        <p className="text-zinc-400 text-sm">Crea tu cuenta Purrpurr para gestionar tu suscripción.</p>
+                    </div>
+
+                    <form onSubmit={handlePayment} className="space-y-5">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-zinc-500 uppercase">Nombre</label>
+                                <input required type="text" placeholder="John" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-zinc-500 uppercase">Apellido</label>
+                                <input required type="text" placeholder="Doe" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-zinc-500 uppercase">Email Corporativo</label>
+                            <input required type="email" placeholder="ceo@empresa.com" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-zinc-500 uppercase">WhatsApp (Importante para Soporte)</label>
+                            <input required type="tel" placeholder="+57 300 ..." className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                        </div>
+
+                        <div className="pt-4">
+                            <button
+                                disabled={loading}
+                                type="submit"
+                                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02] shadow-lg shadow-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {loading ? (
+                                    <span className="animate-pulse">Procesando...</span>
+                                ) : (
+                                    <>
+                                        {selectedPlan.isQuote ? 'Solicitar Cotización' : 'Pagar con Wompi / PSE / Nequi'}
+                                        <Zap className="w-4 h-4 fill-white" />
+                                    </>
+                                )}
+                            </button>
+                            <p className="text-center text-[10px] text-zinc-600 mt-4">
+                                Al continuar, aceptas nuestros términos de servicio y política de privacidad.
+                                Tus pagos son procesados seguramente por Wompi Colombia.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </motion.div>
         </div>
     );
 }
 
 export default function CheckoutPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white font-mono uppercase tracking-widest text-xs">Cargando Terminal...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-zinc-950 flex items-center justify-center text-white">Cargando Checkout...</div>}>
             <CheckoutContent />
         </Suspense>
     );

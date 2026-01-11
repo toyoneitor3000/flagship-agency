@@ -42,7 +42,7 @@ export default function InertiaEngineIndexPage() {
                         transition={{ delay: 0.2 }}
                     >
                         <Link
-                            href="/creative-test/fluid"
+                            href="/inertia-engine/fluid"
                             className="group block relative bg-zinc-900/60 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:border-blue-500/50 transition-all duration-500 hover:shadow-[0_0_60px_rgba(59,130,246,0.15)]"
                         >
                             {/* Preview Background */}
@@ -80,7 +80,7 @@ export default function InertiaEngineIndexPage() {
                         transition={{ delay: 0.4 }}
                     >
                         <Link
-                            href="/creative-test/aerodynamics"
+                            href="/inertia-engine/aerodynamics"
                             className="group block relative bg-zinc-900/60 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 hover:shadow-[0_0_60px_rgba(147,51,234,0.15)]"
                         >
                             {/* Preview Background */}

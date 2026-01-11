@@ -444,7 +444,7 @@ export default function WallpaperTestPage() {
                             <a href="/purrpurr-test" className='hover:text-purple-400 transition-colors'>02_COMPONENTS</a>
                             <a href="/purrpurr-test/slow" className='hover:text-purple-400 transition-colors'>03_1_LOADER</a>
                             <span className='text-zinc-100 cursor-default'>04_WALLPAPERS</span>
-                            <a href="/creative-test" className='hover:text-purple-400 transition-colors'>05_CREATIVE</a>
+                            <a href="/inertia-engine" className='hover:text-purple-400 transition-colors'>05_INERTIA</a>
                         </nav>
                     </div>
                 </div>

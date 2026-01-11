@@ -69,7 +69,7 @@ export const PurrpurrProvider = ({ children }: { children: React.ReactNode }) =>
             setMessage('Purrpurr.Labs Nexus. Select a module to begin.');
             setMood('happy');
         }
-        else if (path === '/creative-test') {
+        else if (path === '/inertia-engine') {
             setRole('engineer');
             setMessage('Physics Engine loaded. Monitoring particle density...');
             setMood('thinking');

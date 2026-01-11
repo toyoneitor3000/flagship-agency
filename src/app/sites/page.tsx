@@ -2,6 +2,9 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { Globe, Rocket, ArrowRight, Plus } from 'lucide-react';
 
+// Force dynamic rendering to avoid prerender errors when DB tables don't exist yet
+export const dynamic = 'force-dynamic';
+
 export default async function SitesIndexPage() {
 
     // Fetch some recent public sites (optional, could do this later)
