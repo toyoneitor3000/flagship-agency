@@ -16,8 +16,10 @@ fi
 echo "🚀 2. Pushing code to repository..."
 git push
 
-echo "🏗️  3. Starting Local Build & Vercel Deploy..."
+# echo "🏗️  3. Starting Local Build & Vercel Deploy..."
 # Execute the existing deploy script
-npm run deploy
+# npm run deploy
+
+echo "🚀 Code pushed to GitHub. Vercel should auto-deploy from there."
 
 echo "✅ DONE! Code matches GitHub and is live on Vercel."
