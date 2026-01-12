@@ -65,6 +65,7 @@ import { ThemeColorManager } from "@/components/ui/ThemeColorManager";
 import { MainWrapper } from "@/components/ui/MainWrapper";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
 import { AdminNotifications } from "@/components/notifications/AdminNotifications";
+import { UserFluidBackground } from "@/components/purrpurr/UserFluidBackground";
 
 
 export default async function RootLayout({
@@ -81,16 +82,19 @@ export default async function RootLayout({
           <MagicProvider initialContent={magicContent}>
             <PurrpurrProvider>
               <AdminNotifications>
-                <ThemeColorManager />
-                <TypographyInjector />
-                <LoadingScreen />
-                <AnalyticsTracker />
-                <Navbar />
-                <MainWrapper>
-                  {children}
-                </MainWrapper>
+                <UserFluidBackground />
+                <div className="relative z-10 font-sans">
+                  <ThemeColorManager />
+                  <TypographyInjector />
+                  <LoadingScreen />
+                  <AnalyticsTracker />
+                  <Navbar />
+                  <MainWrapper>
+                    {children}
+                  </MainWrapper>
 
-                <Footer />
+                  <Footer />
+                </div>
               </AdminNotifications>
             </PurrpurrProvider>
           </MagicProvider>

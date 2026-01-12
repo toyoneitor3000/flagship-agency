@@ -16,17 +16,11 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
     const menuRef = useRef<HTMLDivElement>(null);
 
     const handleSwitchAccount = async () => {
-        // 1. Close the menu immediately
         setIsOpen(false);
-
-        // 2. Sign out locally without redirecting yet to keep context
-        await signOut({ redirect: false });
-
-        // 3. Force sign-in with Google, explicitly requesting account selection
-        // Passing prompt: 'login' or 'select_account' in the options 
+        // Trigger sign in with prompt: "select_account" which forces google to show the account picker
         await signIn("google", {
-            callbackUrl: "/dashboard",
-            prompt: "select_account"
+            prompt: "select_account",
+            callbackUrl: "/dashboard"
         });
     };
 
@@ -149,7 +143,7 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
                         {/* Footer / Logout */}
                         <div className="p-2">
                             <button
-                                onClick={() => signOut()}
+                                onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
                                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/20 rounded-lg transition-colors"
                             >
                                 <LogOut className="w-4 h-4" />
@@ -165,7 +159,7 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
     if (iconOnly) {
         return (
             <button
-                onClick={() => signIn("google")}
+                onClick={() => signIn("google", { prompt: "select_account" })}
                 className="p-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-all font-mono text-xs"
                 aria-label="Iniciar Sesión"
             >
@@ -176,7 +170,7 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
 
     return (
         <button
-            onClick={() => signIn("google")}
+            onClick={() => signIn("google", { prompt: "select_account" })}
             className="px-4 py-2 rounded-full border border-zinc-700 bg-zinc-900/50 text-sm font-bold font-mono text-zinc-300 hover:text-white hover:border-zinc-500 hover:bg-zinc-900 transition-all"
         >
             [ INICIAR_SESIÓN ]

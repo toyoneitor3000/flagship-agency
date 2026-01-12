@@ -9,10 +9,8 @@ import dynamic from 'next/dynamic';
 import { FLUID_PRESET_PURRPURR } from '@/config/creative';
 import { MagicText } from '@/components/magic/MagicText';
 
-const FluidBackground = dynamic(() => import('@/components/creative/FluidBackground'), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-zinc-950" />
-});
+// Local FluidBackground import removed to use global UserFluidBackground
+
 
 export const Hero = () => {
   const scrollToFeatures = () => {
@@ -65,19 +63,8 @@ export const Hero = () => {
     <section className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033] touch-none' data-section-theme='light'>
 
       {/* --- FLUID BACKGROUND --- */}
-      <FluidBackground
-        key="fluid-hero-main"
-        config={FLUID_PRESET_PURRPURR.config}
-        colors={FLUID_PRESET_PURRPURR.colors}
-        speed={FLUID_PRESET_PURRPURR.speed}
-        force={FLUID_PRESET_PURRPURR.force}
-        blurStrength={FLUID_PRESET_PURRPURR.blurStrength}
-        grainOpacity={FLUID_PRESET_PURRPURR.grainOpacity}
-        interactionRadius={FLUID_PRESET_PURRPURR.interactionRadius}
-        fluidZoom={FLUID_PRESET_PURRPURR.fluidZoom}
-        blendThresholds={FLUID_PRESET_PURRPURR.blendThresholds}
-        className="absolute top-0 left-0 w-full h-full"
-      />
+      {/* --- FLUID BACKGROUND REMOVED: Using Global UserFluidBackground --- */}
+
 
       {/* 3. Invisible Contrast Box (Reduced Opacity) - KEEPING AS SECONDARY LAYER */}
       <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">

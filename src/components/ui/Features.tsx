@@ -197,7 +197,7 @@ export const Features = () => {
   return (
     <div id='features' className="overflow-hidden">
       {/* --- BACK-END SECTION (Purple) --- */}
-      <section className='pt-24 pb-32 bg-[#0f0033] relative overflow-hidden' data-section-theme='dark'>
+      <section className='pt-24 pb-32 relative overflow-hidden' data-section-theme='dark'>
         {/* Deep Space Grid - The System */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8f69ff08_1px,transparent_1px),linear-gradient(to_bottom,#8f69ff08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 

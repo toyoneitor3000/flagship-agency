@@ -1,7 +1,8 @@
 'use server';
 
-import fs from 'fs/promises';
-import path from 'path';
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 interface FluidState {
     config: {
@@ -26,62 +27,110 @@ interface FluidState {
         blend2: number;
         blend3: number;
     };
+    buttonPalette?: {
+        primary: string;
+        accent: string;
+        text: string;
+    };
+}
+
+export interface FluidPreset {
+    id: string;
+    name: string;
+    data: FluidState;
+    timestamp: number;
 }
 
 export async function saveFluidConfig(data: FluidState) {
-    const configPath = path.join(process.cwd(), 'src/config/creative.ts');
+    const session = await auth();
 
-    const content = `
-export interface FluidConfig {
-    config: {
-        stiffness: number;
-        damping: number;
-        mass: number;
-    };
-    colors: {
-        color1: string;
-        color2: string;
-        color3: string;
-        color4: string;
-    };
-    speed: number;
-    force: number;
-    blurStrength: number;
-    grainOpacity: number;
-    interactionRadius: number;
-    fluidZoom: number;
-    blendThresholds: {
-        blend1: number;
-        blend2: number;
-        blend3: number;
-    };
-}
+    logo("ATTEMPTING SAVE CONFIG", session?.user?.email);
 
-export const FLUID_PRESET_PURRPURR: FluidConfig = {
-    config: { stiffness: ${data.config.stiffness}, damping: ${data.config.damping}, mass: ${data.config.mass} },
-    colors: { 
-        color1: '${data.colors.color1}',
-        color2: '${data.colors.color2}',
-        color3: '${data.colors.color3}',
-        color4: '${data.colors.color4}'
-    },
-    speed: ${data.speed},
-    force: ${data.force},
-    blurStrength: ${data.blurStrength},
-    grainOpacity: ${data.grainOpacity},
-    interactionRadius: ${data.interactionRadius},
-    fluidZoom: ${data.fluidZoom},
-    blendThresholds: { blend1: ${data.blendThresholds.blend1}, blend2: ${data.blendThresholds.blend2}, blend3: ${data.blendThresholds.blend3} }
-};
-
-// Add more presets here if needed
-`;
+    if (!session?.user?.email) {
+        console.error("Save failed: No session email");
+        return { success: false, error: 'Must be logged in to save configuration' };
+    }
 
     try {
-        await fs.writeFile(configPath, content, 'utf-8');
+        console.log("Saving fluid config for:", session.user.email);
+        await prisma.user.update({
+            where: { email: session.user.email },
+            data: {
+                fluidConfig: JSON.stringify(data)
+            }
+        });
+        console.log("Save successful. Revalidating...");
+        revalidatePath('/', 'layout');
+        revalidatePath('/');
         return { success: true };
     } catch (error) {
         console.error('Failed to save config:', error);
-        return { success: false, error: 'Failed to write config file' };
+        return { success: false, error: 'Failed to save configuration to user profile' };
     }
+}
+
+export async function saveFluidPresets(presets: FluidPreset[]) {
+    const session = await auth();
+    logo("SAVING PRESETS", session?.user?.email);
+
+    if (!session?.user?.email) return { success: false, error: 'Auth required' };
+
+    try {
+        await prisma.user.update({
+            where: { email: session.user.email },
+            data: {
+                fluidPresets: JSON.stringify(presets)
+            }
+        });
+        return { success: true };
+    } catch (error) {
+        console.error('Failed to save presets:', error);
+        return { success: false, error: 'Failed to save presets' };
+    }
+}
+
+function logo(msg: string, data: any) {
+    console.log(`[FLUID_ACTION] ${msg}`, data);
+}
+
+export async function getUserFluidConfig() {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+        return null;
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { fluidConfig: true, fluidPresets: true } // Select presets too if we want to optimize partial fetches, but usually we want specific getters.
+        });
+
+        if (user?.fluidConfig) {
+            return JSON.parse(user.fluidConfig);
+        }
+    } catch (error) {
+        console.error('Failed to fetch user config:', error);
+    }
+
+    return null;
+}
+
+export async function getUserFluidPresets(): Promise<FluidPreset[]> {
+    const session = await auth();
+    if (!session?.user?.email) return [];
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { fluidPresets: true }
+        });
+
+        if (user?.fluidPresets) {
+            return JSON.parse(user.fluidPresets);
+        }
+    } catch (error) {
+        console.error('Failed to fetch user presets:', error);
+    }
+    return [];
 }

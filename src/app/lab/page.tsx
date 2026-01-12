@@ -80,7 +80,7 @@ export default function PurrpurrTestPage() {
         <div className="min-h-screen bg-zinc-950 text-white font-sans relative selection:bg-purple-500/30" data-section-theme='dark'>
 
             {/* --- HERO COVER SECTION --- */}
-            <header className="relative w-full h-[85vh] flex items-center justify-center overflow-hidden">
+            <header className="relative w-full h-screen flex items-center justify-center overflow-hidden">
 
                 {/* 1. BACKGROUND LAYER (Luxury Animated Background) */}
                 <div className="absolute inset-0 z-0 bg-zinc-950 overflow-hidden">

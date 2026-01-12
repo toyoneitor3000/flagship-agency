@@ -22,15 +22,25 @@ export interface FluidConfig {
         blend2: number;
         blend3: number;
     };
+    buttonPalette?: {
+        primary: string;
+        accent: string;
+        text: string;
+    };
 }
 
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
     config: { stiffness: 269, damping: 22, mass: 5 },
-    colors: { 
+    colors: {
         color1: '#dff0a3',
         color2: '#cde6b7',
         color3: '#ff0000',
         color4: '#050505'
+    },
+    buttonPalette: {
+        primary: '#8f69ff', // Indigo 500
+        accent: '#00FF9C',  // Spring Green
+        text: '#000000'
     },
     speed: 1.77,
     force: 0.9,

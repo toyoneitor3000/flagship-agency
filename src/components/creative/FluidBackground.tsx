@@ -25,6 +25,11 @@ interface FluidBackgroundProps {
         blend3: number;
     };
     debug?: boolean;
+    buttonPalette?: {
+        primary: string;
+        accent: string;
+        text: string;
+    };
     scrollInfluence?: number; // New prop for scroll sensitivity
 }
 
@@ -190,9 +195,12 @@ const fragment = /* glsl */ `
     }
 `;
 
+import { usePathname } from 'next/navigation';
+
 export default function FluidBackground({
     config = { stiffness: 50, damping: 20, mass: 1 },
     colors = { color1: '#6D28D9', color2: '#00FF9C', color3: '#2563EB', color4: '#000000' },
+    buttonPalette,
     speed = 0.1,
     force = 0.8,
     grainOpacity = 0.14,
@@ -202,8 +210,21 @@ export default function FluidBackground({
     blendThresholds = { blend1: 0.1, blend2: 0.4, blend3: 0.7 },
     debug = false,
     scrollInfluence = 5.0, // Default scroll influence
+    globalInteraction = false,
     className
-}: FluidBackgroundProps & { speed?: number; force?: number; className?: string }) {
+}: FluidBackgroundProps & { speed?: number; force?: number; className?: string; globalInteraction?: boolean }) {
+    const pathname = usePathname();
+
+    // Button Palette Injection
+    useEffect(() => {
+        if (buttonPalette) {
+            const root = document.documentElement;
+            root.style.setProperty('--color-brand-primary', buttonPalette.primary);
+            root.style.setProperty('--color-brand-accent', buttonPalette.accent);
+            // Also map to common utility-like vars if needed, but for now specific custom vars
+        }
+    }, [buttonPalette]);
+
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<any>(null);
     const programRef = useRef<any>(null);
@@ -243,7 +264,9 @@ export default function FluidBackground({
 
         // 2. Setup Resize
         function resize() {
-            renderer.setSize(container!.offsetWidth, container!.offsetHeight);
+            const width = globalInteraction ? window.innerWidth : container!.offsetWidth;
+            const height = globalInteraction ? window.innerHeight : container!.offsetHeight;
+            renderer.setSize(width, height);
             if (programRef.current) {
                 programRef.current.uniforms.uResolution.value.set(renderer.width, renderer.height);
             }
@@ -287,22 +310,30 @@ export default function FluidBackground({
         function updatePointer(e: PointerEvent) {
             if (e.isPrimary === false) return;
 
-            // Get coordinates relative to the container
-            const rect = container!.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            let x, y;
 
-            // Normalize to 0..1 based on container size
-            targetMouseRef.current.x = x / rect.width;
+            if (globalInteraction) {
+                x = e.clientX;
+                y = e.clientY;
+                targetMouseRef.current.x = x / window.innerWidth;
+                targetMouseRef.current.y = 1.0 - (y / window.innerHeight);
+            } else {
+                // Get coordinates relative to the container
+                const rect = container!.getBoundingClientRect();
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
 
-            // WebGL Y is inverted (0 at bottom), clientY is 0 at top
-            targetMouseRef.current.y = 1.0 - (y / rect.height);
+                // Normalize to 0..1 based on container size
+                targetMouseRef.current.x = x / rect.width;
+                targetMouseRef.current.y = 1.0 - (y / rect.height);
+            }
         }
 
         // Attach to container, not window
-        container.addEventListener('pointermove', updatePointer);
-        container.addEventListener('pointerdown', updatePointer);
-        container.addEventListener('pointerenter', updatePointer);
+        const target = globalInteraction ? window : container;
+        target.addEventListener('pointermove', updatePointer as any);
+        target.addEventListener('pointerdown', updatePointer as any);
+        target.addEventListener('pointerenter', updatePointer as any);
         // We might want to know when we leave to stop dragging? 
         // For fluid, leaving just means the last position sticks or decays. 
         // Current logic decays velocity via damping, so it's fine.
@@ -441,6 +472,10 @@ export default function FluidBackground({
             programRef.current.uniforms.uBlend3.value = blendThresholds.blend3;
         }
     }, [colors, speed, force, interactionRadius, fluidZoom, blendThresholds]);
+
+    if (globalInteraction && pathname !== '/') {
+        return null;
+    }
 
     return (
         <div

@@ -28,10 +28,11 @@ export const MainWrapper = ({ children }: MainWrapperProps) => {
 
     // Standard layout for purrpurr.dev pages
     const isHomePage = pathname === '/';
+    const isLabPage = pathname.startsWith('/lab');
 
     return (
         <main className="flex-grow">
-            {!isHomePage && (
+            {!isHomePage && !isLabPage && (
                 <div className="container mx-auto px-4 pt-16 pb-2 md:px-6">
                     <Breadcrumbs />
                 </div>

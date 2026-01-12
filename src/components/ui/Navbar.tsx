@@ -8,11 +8,14 @@ import { motion } from 'framer-motion';
 import { Menu, X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
 import { UserMenu } from '@/components/auth/UserMenu';
-import { LeadsNotificationBadge } from '@/components/dashboard/LeadsNotificationBadge';
+// Removed LeadsNotificationBadge as requested
+import { NotificationList } from '@/components/notifications/NotificationList';
 
 export const Navbar = () => {
   // Scroll detection removed as requested for consistent sizing
+  const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [navTheme, setNavTheme] = useState<'light' | 'dark'>('light'); // 'light' = Light Background (needs dark text)
   const pathname = usePathname();
@@ -100,28 +103,25 @@ export const Navbar = () => {
         transition={{ duration: 0.6 }}
         className={cn(
           'fixed top-0 w-full z-[100] transition-all duration-300 border-b flex items-center',
-          'h-12', // Reduced height
-          // Liquid Glass properties
-          'bg-white/5 dark:bg-zinc-950/10', // Extremely transparent
-          'backdrop-blur-xl backdrop-saturate-150', // Heavy blur + saturation
-          'border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]' // Subtle border and shadow
+          'h-16', // Slightly taller for better breathing room
+          // Premium Glass properties
+          'bg-white/5 dark:bg-[#050505]/60', // More solid dark background
+          'backdrop-blur-md', // Moderate blur
+          'border-white/5 shadow-sm'
         )
         }>
         <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-12 gap-4 items-center'>
           <div className="col-span-1 lg:col-span-3 flex justify-start items-center gap-2">
-            {/* Mobile Back Button - Only visible on mobile/tablet AND when not on home */}
-            {pathname !== '/' && (
-              <button
-                onClick={() => router.back()}
-                className={cn(
-                  "lg:hidden p-2 -ml-2 rounded-full transition-colors flex items-center justify-center",
-                  navTheme === 'light' ? 'text-[#022C22] hover:bg-zinc-100' : 'text-zinc-100 hover:bg-zinc-800'
-                )}
-                aria-label="Go back"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-            )}
+            {/* Mobile Hamburger Menu - Left Side */}
+            <button
+              className={cn(
+                'lg:hidden p-2 -ml-2 rounded-md transition-colors',
+                navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
+              )}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
 
             <Link href='/' className='flex items-center gap-2'>
               <Image
@@ -131,10 +131,6 @@ export const Navbar = () => {
                 height={40}
                 className={cn(
                   "h-10 w-auto object-contain transition-all duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]",
-                  // Optional: Invert logo brightness if needed for dark mode, 
-                  // but assuming brand logo works on both or we might need a white version.
-                  // If navTheme is dark (dark bg), we might want to ensure logo is visible.
-                  // For now keeping it standard.
                 )}
                 priority
               />
@@ -142,53 +138,46 @@ export const Navbar = () => {
           </div>
 
           <div className="col-span-1 lg:col-span-9 flex justify-end items-center gap-4">
-            <nav className='hidden lg:flex items-center gap-8'>
-              <Link href='#features' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Servicios ]
+            <nav className='hidden lg:flex items-center gap-6'>
+              <Link href='#features' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Servicios
               </Link>
-              <Link href='/demo' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Demo Gratis ]
+              <Link href='/demo' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Demo
               </Link>
-              <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Academy ]
+              <Link href='/academy' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Academy
               </Link>
-              <Link href='/lab' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Lab ]
+              <Link href='/lab' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Lab
               </Link>
-              <Link href='/purrpurr' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Purrpurr ]
+              <Link href='/purrpurr' className={cn('text-sm font-medium transition-colors hover:text-purple-400 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400')}>
+                Purrpurr AI
               </Link>
-              <Link href='/wiki' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Wiki ]
+              <Link href='/wiki' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Wiki
               </Link>
-              <Link href='#philosophy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Nosotros ]
+              <Link href='#philosophy' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Nosotros
               </Link>
-              <Link href='#invitation' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Contacto ]
+              <Link href='#invitation' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                Contacto
               </Link>
               <button className={cn(
-                'px-5 py-2 rounded-sm bg-transparent font-mono text-[12px] font-bold border transition-all shadow-sm tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]',
+                'px-4 py-2 rounded-full text-xs font-bold border transition-all shadow-[0_0_15px_rgba(109,40,217,0.3)] hover:shadow-[0_0_25px_rgba(109,40,217,0.5)] active:scale-95',
                 buttonBorderClass
               )}>
-                &lt; COTIZAR /&gt;
+                COTIZAR
               </button>
-              <LeadsNotificationBadge />
+
+              {session && <NotificationList iconColorClass={cn(textColorClass, hoverColorClass)} />}
               <UserMenu />
             </nav>
 
             <div className="lg:hidden flex items-center gap-2">
-              <LeadsNotificationBadge />
+
+              {session && <NotificationList iconColorClass={cn(textColorClass, hoverColorClass)} />}
               <UserMenu iconOnly={true} />
-              <button
-                className={cn(
-                  'p-2 rounded-md transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]',
-                  navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
-                )}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
             </div>
           </div>
         </div>

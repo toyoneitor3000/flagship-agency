@@ -135,13 +135,13 @@ const plansData = [
 export const Pricing = () => {
 
   return (
-    <section className='py-32 bg-zinc-950 relative overflow-hidden' id='pricing' data-section-theme='dark'>
+    <section className='py-32 relative overflow-hidden' id='pricing' data-section-theme='dark'>
       {/* Ambient Glow */}
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none' />
 
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-12'>
-          <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Diseñado para <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-[#00FF9C]">PERSONAS</span></h2>
+          <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Diseñado para <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand-primary)] to-[var(--color-brand-accent)]">PERSONAS</span></h2>
           <div className="inline-block px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg mb-6">
             <p className="text-indigo-400 text-sm font-bold tracking-wide uppercase flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
@@ -228,7 +228,7 @@ export const Pricing = () => {
                 {/* --- FASE 2: OPERACIÓN (INFRAESTRUCTURA) --- */}
                 <div className='mb-6 pt-6 pb-4 px-4 bg-zinc-900/20 rounded-2xl border border-zinc-800/50 border-t-0 rounded-t-none -mt-3'>
                   <span className="text-zinc-500 text-[9px] uppercase font-bold tracking-widest block mb-2 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00FF9C]"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-brand-accent)]"></span>
                     Fase 2: Operación
                   </span>
 
@@ -240,7 +240,7 @@ export const Pricing = () => {
                       </div>
                     ) : (
                       <div className="flex flex-col">
-                        <span className='text-3xl font-black text-[#00FF9C] tracking-tighter drop-shadow-[0_0_10px_rgba(0,255,156,0.2)]'>{plan.prices.annual.cop}</span>
+                        <span className='text-3xl font-black text-[var(--color-brand-accent)] tracking-tighter drop-shadow-[0_0_10px_rgba(0,255,156,0.2)]'>{plan.prices.annual.cop}</span>
                         <span className='text-zinc-500 text-[9px] font-medium'>/ Año (Renovación)</span>
                       </div>
                     )}
@@ -248,8 +248,8 @@ export const Pricing = () => {
                     {/* Micro Features Compactas */}
                     {plan.name !== 'Venture & Corporate' && (
                       <div className="text-[9px] text-zinc-500 text-right">
-                        <div className="flex items-center justify-end gap-1"><Check className="w-3 h-3 text-[#00FF9C]" /> Dominio .com</div>
-                        <div className="flex items-center justify-end gap-1"><Check className="w-3 h-3 text-[#00FF9C]" /> Hosting SSL</div>
+                        <div className="flex items-center justify-end gap-1"><Check className="w-3 h-3 text-[var(--color-brand-accent)]" /> Dominio .com</div>
+                        <div className="flex items-center justify-end gap-1"><Check className="w-3 h-3 text-[var(--color-brand-accent)]" /> Hosting SSL</div>
                       </div>
                     )}
                   </div>
@@ -298,7 +298,7 @@ export const Pricing = () => {
                   className={`mt-6 w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 uppercase tracking-wide ${index === 4
                     ? 'bg-transparent border border-white/20 text-white hover:bg-white/10'
                     : plan.popular
-                      ? 'bg-[#00FF9C] text-zinc-950 hover:bg-[#00dda0] shadow-[0_0_20px_rgba(0,255,156,0.3)] hover:shadow-[0_0_30px_rgba(0,255,156,0.5)]'
+                      ? 'bg-[var(--color-brand-accent)] text-zinc-950 hover:brightness-110 shadow-[0_0_20px_rgba(0,255,156,0.3)] hover:shadow-[0_0_30px_rgba(0,255,156,0.5)]'
                       : 'bg-white text-zinc-950 hover:bg-zinc-200 shadow-lg shadow-white/5'
                     }`}
                 >
@@ -323,14 +323,14 @@ export const Pricing = () => {
               <div className="text-2xl mb-2">🛍️</div>
               <h4 className="font-bold text-white text-sm mb-1">E-Commerce Plus</h4>
               <p className="text-[10px] text-zinc-400 mb-2">Si necesitas más de 100 productos.</p>
-              <p className="text-sm font-bold text-[#00FF9C]">+$350k <span className="text-[10px] text-zinc-500">COP</span></p>
+              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$350k <span className="text-[10px] text-zinc-500">COP</span></p>
             </div>
             {/* Módulo App */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-indigo-500/50 transition-colors group flex flex-col items-center">
               <div className="text-2xl mb-2">�</div>
               <h4 className="font-bold text-white text-sm mb-1">Portal de Usuarios</h4>
               <p className="text-[10px] text-zinc-400 mb-2">Tus clientes se registran (Membresía).</p>
-              <p className="text-sm font-bold text-[#00FF9C]">+$600k <span className="text-[10px] text-zinc-500">COP</span></p>
+              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$600k <span className="text-[10px] text-zinc-500">COP</span></p>
             </div>
             {/* Módulo Apps Nativas */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900 border border-indigo-500/30 p-4 rounded-2xl hover:border-indigo-400 transition-colors group flex flex-col items-center shadow-lg shadow-indigo-900/10">
@@ -344,7 +344,7 @@ export const Pricing = () => {
               <div className="text-2xl mb-2">🧊</div>
               <h4 className="font-bold text-white text-sm mb-1">Cine & 3D</h4>
               <p className="text-[10px] text-zinc-400 mb-2 text-center">Experiencias Inmersivas WebGL.</p>
-              <p className="text-sm font-bold text-[#00FF9C]">+$900k <span className="text-[10px] text-zinc-500">COP</span></p>
+              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$900k <span className="text-[10px] text-zinc-500">COP</span></p>
             </div>
             {/* Módulo Data */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-[#00FF9C]/50 transition-colors group flex flex-col items-center">

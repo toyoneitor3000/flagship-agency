@@ -1,16 +1,22 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SmoothScroll from '@/components/creative/SmoothScroll';
 import CreativeCursor from '@/components/creative/CreativeCursor';
 import Magnetic from '@/components/creative/Magnetic';
 import FluidBackground from '@/components/creative/FluidBackground';
-import { ArrowDown, Sliders, Activity, Palette, Droplets, Save } from 'lucide-react';
+import { ArrowDown, Sliders, Activity, Palette, Droplets, Save, Plus, Trash2, MousePointerClick } from 'lucide-react';
 import { FLUID_PRESET_PURRPURR } from '@/config/creative';
-import { saveFluidConfig } from './actions';
+import { saveFluidConfig, saveFluidPresets, getUserFluidConfig, getUserFluidPresets, type FluidPreset } from './actions';
+
+import { useRouter } from 'next/navigation';
 
 export default function CreativeLabPage() {
+    const router = useRouter();
+
+    // -- STATE --
+    // We use individual states to control the sliders easily, but we could group them.
     const [config, setConfig] = useState(FLUID_PRESET_PURRPURR.config);
     const [colors, setColors] = useState(FLUID_PRESET_PURRPURR.colors);
     const [blur, setBlur] = useState(FLUID_PRESET_PURRPURR.blurStrength);
@@ -20,26 +26,71 @@ export default function CreativeLabPage() {
     const [radius, setRadius] = useState(FLUID_PRESET_PURRPURR.interactionRadius);
     const [zoom, setZoom] = useState(FLUID_PRESET_PURRPURR.fluidZoom);
     const [blendThresholds, setBlendThresholds] = useState((FLUID_PRESET_PURRPURR as any).blendThresholds || { blend1: 0.1, blend2: 0.4, blend3: 0.7 });
+
+    const [buttonPalette, setButtonPalette] = useState(FLUID_PRESET_PURRPURR.buttonPalette || { primary: '#6366f1', accent: '#00FF9C', text: '#000000' });
+
+    const [userPresets, setUserPresets] = useState<FluidPreset[]>([]);
+
     const [showControls, setShowControls] = useState(true);
     const [debug, setDebug] = useState(false);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+    const [presetStatus, setPresetStatus] = useState<'idle' | 'saving'>('idle');
 
-    const handleSave = async () => {
+    // -- LOAD DATA ON MOUNT --
+    useEffect(() => {
+        async function init() {
+            try {
+                // 1. Load Last Active Configuration
+                const savedConfig = await getUserFluidConfig();
+                if (savedConfig) {
+                    applyConfig(savedConfig);
+                }
+
+                // 2. Load User Presets
+                const presets = await getUserFluidPresets();
+                if (presets) {
+                    setUserPresets(presets);
+                }
+            } catch (e) {
+                console.error("Failed to load lab data", e);
+            }
+        }
+        init();
+    }, []);
+
+    const applyConfig = (data: any) => {
+        if (data.config) setConfig(data.config);
+        if (data.colors) setColors(data.colors);
+        if (data.blurStrength !== undefined) setBlur(data.blurStrength);
+        if (data.grainOpacity !== undefined) setGrain(data.grainOpacity);
+        if (data.speed !== undefined) setSpeed(data.speed);
+        if (data.force !== undefined) setForce(data.force);
+        if (data.interactionRadius !== undefined) setRadius(data.interactionRadius);
+        if (data.fluidZoom !== undefined) setZoom(data.fluidZoom);
+        if (data.blendThresholds) setBlendThresholds(data.blendThresholds);
+        if (data.buttonPalette) setButtonPalette(data.buttonPalette);
+    };
+
+    const getCurrentState = () => ({
+        config,
+        colors,
+        blurStrength: blur,
+        grainOpacity: grain,
+        speed,
+        force,
+        interactionRadius: radius,
+        fluidZoom: zoom,
+        blendThresholds,
+        buttonPalette
+    });
+
+    const handleSaveToLanding = async () => {
         setSaveStatus('saving');
         try {
-            await saveFluidConfig({
-                config,
-                colors,
-                blurStrength: blur,
-                grainOpacity: grain,
-                speed,
-                force,
-                interactionRadius: radius,
-                fluidZoom: zoom,
-                blendThresholds
-            });
+            await saveFluidConfig(getCurrentState());
             setSaveStatus('success');
             setTimeout(() => setSaveStatus('idle'), 2000);
+            router.refresh(); // Refresh to update layouts
         } catch (error) {
             console.error(error);
             setSaveStatus('error');
@@ -47,9 +98,41 @@ export default function CreativeLabPage() {
         }
     };
 
+    const saveToPresetSlot = async (index: number) => {
+        setPresetStatus('saving');
+        const newPresets = [...userPresets];
+
+        // Define new preset
+        const preset: FluidPreset = {
+            id: `slot-${index}-${Date.now()}`,
+            name: `Preset ${index + 1}`,
+            data: getCurrentState(),
+            timestamp: Date.now()
+        };
+
+        // Ensure array has size
+        while (newPresets.length <= index) {
+            newPresets.push({} as any); // Fill gaps if any (though we usually map fixed slots)
+        }
+
+        newPresets[index] = preset;
+        setUserPresets(newPresets);
+
+        // Persist
+        await saveFluidPresets(newPresets.filter(p => p && p.id)); // Remove empty gaps if any
+        setPresetStatus('idle');
+    };
+
+    const loadPreset = (preset: FluidPreset) => {
+        if (!preset || !preset.data) return;
+        applyConfig(preset.data);
+    };
+
     return (
         <SmoothScroll>
-            <div className="min-h-[300vh] text-zinc-100 cursor-auto selection:bg-purple-500/30 relative">
+            {/* FORCE MIN-HEIGHT TO ALLOW SCROLLING */}
+            {/* Added pt-24 to prevent content from loading under the navbar */}
+            <div className="min-h-[300vh] pt-24 text-zinc-100 cursor-auto selection:bg-purple-500/30 relative">
 
                 <CreativeCursor />
                 <FluidBackground
@@ -59,10 +142,10 @@ export default function CreativeLabPage() {
                     force={force}
                     blurStrength={blur}
                     grainOpacity={grain}
-
                     interactionRadius={radius}
                     fluidZoom={zoom}
                     blendThresholds={blendThresholds}
+                    buttonPalette={buttonPalette}
                     debug={debug}
                 />
 
@@ -79,120 +162,147 @@ export default function CreativeLabPage() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            className="absolute bottom-16 right-0 w-80 max-h-[calc(100vh-120px)] overflow-y-auto bg-zinc-950/80 backdrop-blur-xl border border-zinc-800 p-6 rounded-3xl shadow-2xl space-y-6 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent"
+                            // Changed bg-zinc-950/80 backdrop-blur-xl to solid bg-zinc-950 to ensure neutral tone
+                            className="absolute bottom-16 right-0 w-80 max-h-[calc(100vh-120px)] overflow-y-auto bg-zinc-950 border border-zinc-800 p-6 rounded-3xl shadow-2xl space-y-6 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent"
                         >
                             <div className="flex justify-between items-center">
                                 <h3 className="text-sm font-mono uppercase font-bold text-zinc-400">Physics Engine</h3>
                                 <div className="h-2 w-2 rounded-full bg-[#00FF9C] animate-pulse" />
                             </div>
 
-                            {/* PRESETS */}
-                            <div className="grid grid-cols-2 gap-2">
-                                <button
-                                    onClick={handleSave}
-                                    disabled={saveStatus !== 'idle'}
-                                    className={`col-span-2 px-3 py-3 rounded border font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed
-                                        ${saveStatus === 'success' ? 'bg-green-500 border-green-500 text-black font-bold' : ''}
-                                        ${saveStatus === 'error' ? 'bg-red-500 border-red-500 text-white' : ''}
-                                        ${saveStatus === 'idle' || saveStatus === 'saving' ? 'bg-[#6D28D9] text-white border-[#6D28D9] hover:bg-[#5b21b6]' : ''}
-                                    `}
-                                >
-                                    {saveStatus === 'idle' && <><Save className="w-4 h-4" /> AGREGAR A LANDING</>}
-                                    {saveStatus === 'saving' && <><Activity className="w-4 h-4 animate-spin" /> GUARDANDO...</>}
-                                    {saveStatus === 'success' && <div className="flex items-center gap-2">✨ ACTUALIZADO CON ÉXITO</div>}
-                                    {saveStatus === 'error' && 'ERROR AL GUARDAR'}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setColors({ color1: '#FF3D00', color2: '#001AFF', color3: '#00FFFF', color4: '#000000' });
-                                        setConfig({ stiffness: 120, damping: 10, mass: 0.8 }); // Snappy & Bouncy
-                                        setSpeed(0.5);
-                                        setForce(2.5);
-                                        setGrain(0.40);
-                                        setBlur(100);
-                                        setRadius(0.8);
-                                        setZoom(1.0);
-                                        setBlendThresholds({ blend1: 0.3, blend2: 0.5, blend3: 0.8 });
-                                    }}
-                                    className="px-3 py-2 bg-zinc-900 border border-zinc-700 rounded hover:border-[#FF3D00] text-[10px] uppercase font-mono transition-colors text-left"
-                                >
-                                    Preset: <span className="text-[#FF3D00] font-bold">Monopo (High Energy)</span>
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setColors(FLUID_PRESET_PURRPURR.colors);
-                                        setConfig(FLUID_PRESET_PURRPURR.config);
-                                        setSpeed(0.2); // Explicit valid Speed
-                                        setForce(4.0); // Explicit valid Force
-                                        setGrain(FLUID_PRESET_PURRPURR.grainOpacity);
-                                        setBlur(FLUID_PRESET_PURRPURR.blurStrength);
-                                        setRadius(FLUID_PRESET_PURRPURR.interactionRadius);
-                                        setZoom(FLUID_PRESET_PURRPURR.fluidZoom);
-                                        setBlendThresholds((FLUID_PRESET_PURRPURR as any).blendThresholds || { blend1: 0.1, blend2: 0.4, blend3: 0.7 });
-                                    }}
-                                    className="px-3 py-2 bg-zinc-900 border border-zinc-700 rounded hover:border-[#6D28D9] text-[10px] uppercase font-mono transition-colors text-left"
-                                >
-                                    Reset <span className="text-[#6D28D9] font-bold">Purrpurr</span>
-                                </button>
+                            {/* GLOBAL SAVE ACTION */}
+                            <button
+                                onClick={handleSaveToLanding}
+                                disabled={saveStatus !== 'idle'}
+                                className={`w-full px-3 py-3 rounded border font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed
+                                    ${saveStatus === 'success' ? 'bg-green-500 border-green-500 text-black font-bold' : ''}
+                                    ${saveStatus === 'error' ? 'bg-red-500 border-red-500 text-white' : ''}
+                                    ${saveStatus === 'idle' || saveStatus === 'saving' ? 'bg-[#6D28D9] text-white border-[#6D28D9] hover:bg-[#5b21b6]' : ''}
+                                `}
+                            >
+                                {saveStatus === 'idle' && <><Save className="w-4 h-4" /> AGREGAR A LANDING</>}
+                                {saveStatus === 'saving' && <><Activity className="w-4 h-4 animate-spin" /> EXPORTANDO...</>}
+                                {saveStatus === 'success' && <div className="flex items-center gap-2">✨ ASIGNADO</div>}
+                                {saveStatus === 'error' && 'ERROR'}
+                            </button>
+
+                            <div className="h-px bg-zinc-800" />
+
+                            {/* PRESETS GRID (CUSTOM) */}
+                            <div className="space-y-3">
+                                <label className="text-xs font-mono text-zinc-600 flex items-center gap-2">
+                                    <Save className="w-3 h-3" /> Custom Presets
+                                </label>
+                                <div className="grid grid-cols-4 gap-2">
+                                    {[0, 1, 2, 3].map((index) => {
+                                        const preset = userPresets[index];
+                                        const hasData = preset && preset.id;
+
+                                        return (
+                                            <div key={index} className="relative group/preset">
+                                                <button
+                                                    onClick={() => hasData ? loadPreset(preset) : saveToPresetSlot(index)}
+                                                    className={`w-full aspect-square rounded-lg border flex flex-col items-center justify-center transition-all overflow-hidden relative
+                                                        ${hasData
+                                                            ? 'bg-zinc-900 border-zinc-700 hover:border-[#00FF9C] hover:cursor-pointer'
+                                                            : 'bg-zinc-950/50 border-dashed border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900'
+                                                        }
+                                                    `}
+                                                    title={hasData ? preset.name : "Save current state"}
+                                                >
+                                                    {hasData ? (
+                                                        <div className="w-full h-full p-2 flex flex-col items-center justify-center">
+                                                            {/* Mini Preview using colors */}
+                                                            <div className="flex gap-0.5 mb-1">
+                                                                <div className="w-2 h-2 rounded-full" style={{ background: preset.data?.colors?.color1 }} />
+                                                                <div className="w-2 h-2 rounded-full" style={{ background: preset.data?.colors?.color2 }} />
+                                                            </div>
+                                                            <span className="text-[8px] font-mono text-zinc-500 uppercase">{index + 1}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <Plus className="w-4 h-4 text-zinc-600 group-hover/preset:text-zinc-400" />
+                                                    )}
+                                                </button>
+
+                                                {/* Overwrite / Save Context Menu on Hover (Simplified) */}
+                                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover/preset:opacity-100 transition-opacity pointer-events-none group-hover/preset:pointer-events-auto">
+                                                    {hasData && (
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); saveToPresetSlot(index); }}
+                                                            className="bg-black/90 text-[8px] text-white px-2 py-1 rounded whitespace-nowrap hover:bg-red-500"
+                                                        >
+                                                            Overwrite
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <p className="text-[9px] text-zinc-600 font-mono text-center">Click empty slot to save. Hover to overwrite.</p>
                             </div>
 
-                            {/* Colors */}
-                            <div className="space-y-3">
+                            <div className="h-px bg-zinc-800" />
+
+                            {/* COLORS & PALETTE */}
+                            <div className="space-y-4">
                                 <label className="text-xs font-mono text-zinc-600 flex items-center gap-2"><Palette className="w-3 h-3" /> Fluid Colors</label>
                                 <div className="flex gap-2">
-                                    {['color1', 'color2', 'color3', 'color4'].map((c, i) => (
-                                        <input
-                                            key={c}
-                                            type="color"
-                                            value={colors[c as keyof typeof colors] || '#000000'}
-                                            onChange={(e) => setColors(prev => ({ ...prev, [c]: e.target.value }))}
-                                            className="h-8 w-full bg-transparent rounded cursor-pointer"
-                                        />
+                                    {['color1', 'color2', 'color3', 'color4'].map((c) => (
+                                        <div key={c} className="group relative">
+                                            <input
+                                                type="color"
+                                                value={colors[c as keyof typeof colors] || '#000000'}
+                                                onChange={(e) => setColors(prev => ({ ...prev, [c]: e.target.value }))}
+                                                className="w-8 h-8 rounded-full cursor-pointer bg-transparent overflow-hidden"
+                                                style={{ padding: 0, border: 'none' }} // Hack for color input
+                                            />
+                                            {/* Custom wrapper view could be added here for nicer look */}
+                                        </div>
                                     ))}
                                 </div>
-                            </div>
 
-                            {/* Color Mixing */}
-                            <div className="space-y-3 pt-2 border-t border-zinc-800">
-                                <label className="text-xs font-mono text-zinc-600 flex items-center gap-2"><Palette className="w-3 h-3" /> Color Mixing Proportions</label>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
-                                        <span>C1-C2 Mix ({blendThresholds.blend1.toFixed(2)})</span>
+                                {/* BUTTON PALETTE */}
+                                <div className="pt-2 border-t border-zinc-900">
+                                    <label className="text-xs font-mono text-zinc-600 flex items-center gap-2 mb-2">
+                                        <MousePointerClick className="w-3 h-3" /> UI Button Palette
+                                    </label>
+                                    <div className="grid grid-cols-2 gap-4 bg-zinc-900/40 p-3 rounded-lg border border-zinc-800">
+                                        <div>
+                                            <label className="text-[9px] uppercase text-zinc-500 block mb-1">Primary (Links)</label>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    type="color"
+                                                    value={buttonPalette.primary}
+                                                    onChange={(e) => setButtonPalette(prev => ({ ...prev, primary: e.target.value }))}
+                                                    className="w-6 h-6 rounded bg-transparent cursor-pointer"
+                                                />
+                                                <span className="text-[10px] font-mono text-zinc-400">{buttonPalette.primary}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-[9px] uppercase text-zinc-500 block mb-1">Accent (Action)</label>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    type="color"
+                                                    value={buttonPalette.accent}
+                                                    onChange={(e) => setButtonPalette(prev => ({ ...prev, accent: e.target.value }))}
+                                                    className="w-6 h-6 rounded bg-transparent cursor-pointer"
+                                                />
+                                                <span className="text-[10px] font-mono text-zinc-400">{buttonPalette.accent}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <input
-                                        type="range" min="0" max="1" step="0.05"
-                                        value={blendThresholds.blend1}
-                                        onChange={(e) => setBlendThresholds((prev: any) => ({ ...prev, blend1: Number(e.target.value) }))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
-
-                                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
-                                        <span>C2-C3 Mix ({blendThresholds.blend2.toFixed(2)})</span>
-                                    </div>
-                                    <input
-                                        type="range" min="0" max="1" step="0.05"
-                                        value={blendThresholds.blend2}
-                                        onChange={(e) => setBlendThresholds((prev: any) => ({ ...prev, blend2: Number(e.target.value) }))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
-
-                                    <div className="flex justify-between text-[10px] font-mono text-zinc-500">
-                                        <span>C3-C4 Mix ({blendThresholds.blend3.toFixed(2)})</span>
-                                    </div>
-                                    <input
-                                        type="range" min="0" max="1" step="0.05"
-                                        value={blendThresholds.blend3}
-                                        onChange={(e) => setBlendThresholds((prev: any) => ({ ...prev, blend3: Number(e.target.value) }))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
                                 </div>
                             </div>
 
-                            {/* Physics */}
-                            <div className="space-y-4">
+                            {/* PHYSICS */}
+                            <div className="space-y-4 pt-4 border-t border-zinc-800">
+                                <h4 className="text-xs font-mono text-zinc-600 uppercase font-bold">Dynamics</h4>
+
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white"><Activity className="w-3 h-3" /> Fluid Speed (Time)</span>
+                                        <span className="text-white">Flow Speed</span>
                                         <span>{speed.toFixed(2)}</span>
                                     </div>
                                     <input
@@ -203,7 +313,7 @@ export default function CreativeLabPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white"><Activity className="w-3 h-3" /> Interaction Force</span>
+                                        <span className="text-white">Force</span>
                                         <span>{force.toFixed(2)}</span>
                                     </div>
                                     <input
@@ -212,62 +322,10 @@ export default function CreativeLabPage() {
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
-
-                                <div className="h-px bg-zinc-800 my-2" />
-
-                                <div className="h-px bg-zinc-800 my-2" />
-
+                                {/* Advanced Toggles removed for cleaner UI as per default, but code is below */}
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white">Elasticity (Stiffness)</span>
-                                        <span>{config.stiffness}</span>
-                                    </div>
-                                    <input
-                                        type="range" min="10" max="300" value={config.stiffness}
-                                        onChange={(e) => setConfig(prev => ({ ...prev, stiffness: Number(e.target.value) }))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white">Friction (Damping)</span>
-                                        <span>{config.damping}</span>
-                                    </div>
-                                    <input
-                                        type="range" min="1" max="50" value={config.damping}
-                                        onChange={(e) => setConfig(prev => ({ ...prev, damping: Number(e.target.value) }))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white">Viscosity (Mass)</span>
-                                        <span>{config.mass}</span>
-                                    </div>
-                                    <input
-                                        type="range" min="0.1" max="5.0" step="0.1" value={config.mass}
-                                        onChange={(e) => setConfig(prev => ({ ...prev, mass: Number(e.target.value) }))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white">Interaction Radius</span>
-                                        <span>{radius.toFixed(2)}</span>
-                                    </div>
-                                    <input
-                                        type="range" min="0.1" max="2.0" step="0.05" value={radius}
-                                        onChange={(e) => setRadius(Number(e.target.value))}
-                                        className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Visuals */}
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-xs font-mono text-zinc-500">
-                                        <span className="flex items-center gap-2 text-white"><Droplets className="w-3 h-3" /> Fluid Zoom</span>
+                                        <span className="text-white">Fluid Zoom</span>
                                         <span>{zoom.toFixed(1)}x</span>
                                     </div>
                                     <input
@@ -276,6 +334,11 @@ export default function CreativeLabPage() {
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
+                            </div>
+
+                            {/* VISUALS */}
+                            <div className="space-y-4 pt-4 border-t border-zinc-800">
+                                <h4 className="text-xs font-mono text-zinc-600 uppercase font-bold">Visuals</h4>
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-xs font-mono text-zinc-500">
                                         <span className="flex items-center gap-2 text-white"><Droplets className="w-3 h-3" /> Blur Strength</span>
@@ -298,7 +361,7 @@ export default function CreativeLabPage() {
                                         className="w-full accent-[#00FF9C] h-1 bg-zinc-800 rounded appearance-none"
                                     />
                                 </div>
-                                <div className="pt-4 border-t border-zinc-900">
+                                <div className="pt-2">
                                     <label className="flex items-center justify-between text-xs font-mono text-zinc-400 cursor-pointer group">
                                         <span className="group-hover:text-white transition-colors uppercase">Debug Wireframe</span>
                                         <input
@@ -310,11 +373,10 @@ export default function CreativeLabPage() {
                                     </label>
                                 </div>
                             </div>
+
                         </motion.div>
                     )}
                 </div>
-
-                {/* PROTOTYPE WARNING */}
 
                 {/* HERO SECTION */}
                 <section className="h-screen flex items-center justify-center relative flex-col">
@@ -370,27 +432,6 @@ export default function CreativeLabPage() {
                             </Magnetic>
                         </div>
 
-                    </div>
-                </section>
-
-                {/* BIG TYPOGRAPHY SCROLL */}
-                <section className="py-32 overflow-hidden">
-                    {['INERTIA', 'VELOCITY', 'FRICTION', 'GRAVITY'].map((text, i) => (
-                        <div key={i} className="border-t border-zinc-900 py-12 px-4 md:px-20 hover:bg-zinc-900/30 transition-colors hover-trigger" data-hover>
-                            <h2 className="text-[8vw] leading-none font-bold text-zinc-800 hover:text-[#00FF9C] transition-colors hover:translate-x-10 duration-500 ease-out">
-                                {text}
-                            </h2>
-                        </div>
-                    ))}
-                </section>
-
-                {/* FOOTER */}
-                <section className="h-[50vh] flex items-center justify-center bg-zinc-950 border-t border-zinc-900">
-                    <div className="text-center">
-                        <h3 className="text-2xl font-mono mb-4 text-[#6D28D9]">Ready for WebGL?</h3>
-                        <button className="px-12 py-6 bg-white text-black font-bold rounded-full hover:scale-110 transition-transform hover-trigger" data-hover>
-                            INITIATE_PHASE_2
-                        </button>
                     </div>
                 </section>
 

@@ -1,25 +1,34 @@
 #!/bin/bash
 set -e # Stop on error
 
-echo "📦 1. Synchronizing with GitHub..."
+echo "📦 1. Preparando cambios para GitHub..."
 git add .
 
 # Check if there are changes to commit
 if ! git diff --cached --quiet; then
-  TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-  git commit -m "Deployment update: $TIMESTAMP"
-  echo "✅ Changes committed."
+  # Use provided message if available, otherwise use a generic but natural one
+  if [ -n "$1" ]; then
+    COMMIT_MSG="$1"
+  else
+    # Lista de mensajes naturales para variabilidad
+    MESSAGES=(
+      "Actualización de funciones y refinamiento de la interfaz"
+      "Mejoras de rendimiento y ajustes en la experiencia de usuario"
+      "Sincronización de cambios y optimización del sistema"
+      "Nuevos ajustes implementados en el puente de mando"
+    )
+    # Selecciona uno al azar si no hay mensaje
+    COMMIT_MSG="${MESSAGES[$RANDOM % ${#MESSAGES[@]}]}"
+  fi
+  git commit -m "$COMMIT_MSG"
+  echo "✅ Cambios confirmados: $COMMIT_MSG"
 else
-  echo "✨ No new local changes to commit."
+  echo "✨ Todo está al día. No hay cambios pendientes."
 fi
 
-echo "🚀 2. Pushing code to repository..."
+echo "🚀 2. Sincronizando con el repositorio remoto..."
 git push
 
-# echo "🏗️  3. Starting Local Build & Vercel Deploy..."
-# Execute the existing deploy script
-# npm run deploy
+echo "🚀 El código está en GitHub. Vercel iniciará el despliegue automático."
 
-echo "🚀 Code pushed to GitHub. Vercel should auto-deploy from there."
-
-echo "✅ DONE! Code matches GitHub and is live on Vercel."
+echo "✅ ¡LISTO! El código está sincronizado y en camino a producción."
