@@ -40,22 +40,19 @@ export default function ContactPage() {
   };
 
   return (
-    <div className='min-h-screen pt-28 pb-20 bg-[#f0ffcc] font-mono relative overflow-hidden selection:bg-[#8f69ff]/30 selection:text-[#0f0033]'>
+    <div className='min-h-screen pt-8 pb-20 bg-[#f0ffcc] font-mono relative overflow-hidden selection:bg-[#8f69ff]/30 selection:text-[#0f0033]'>
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#7096000a_1px,transparent_1px),linear-gradient(to_bottom,#7096000a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
       <div className='container mx-auto px-4 max-w-6xl relative z-10'>
 
         {/* Header Section */}
-        <div className='mb-12 text-center'>
-          <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#8f69ff] transition-colors mb-6 text-xs font-mono group">
-            <ArrowRight className="w-3 h-3 rotate-180 group-hover:-translate-x-1 transition-transform" />
-                // VOLVER_AL_INICIO
-          </Link>
+        <div className='mb-4 text-center'>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8f69ff]/10 border border-[#8f69ff]/20 text-[#8f69ff] text-xs mb-4 font-bold tracking-widest uppercase">
             <span className="w-2 h-2 rounded-full bg-[#8f69ff] animate-pulse"></span>
             src/app/contact/page.tsx
           </div>
+
           <h1 className='text-4xl md:text-5xl font-bold text-[#1a2e05] mb-4 tracking-tight'>
             Iniciar_<span className="text-[#8f69ff]">Proyecto()</span>
           </h1>

@@ -31,7 +31,7 @@ export const Breadcrumbs = ({ className }: { className?: string }) => {
 
                 // Custom Mappings
                 const labelMap: Record<string, string> = {
-                    'labs': 'Purrpurr Labs',
+                    'labs': 'Purrpurr Lab',
                     'social-labs': 'Social Labs'
                 };
 

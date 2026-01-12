@@ -17,9 +17,10 @@ export const Footer = () => {
         <div className='flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-zinc-500'>
 
           {/* Brand & Rights */}
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="font-bold text-zinc-300">PURRPURR_LABS</p>
-            <p>&copy; {new Date().getFullYear()} All Systems Operational.</p>
+          <div className="flex flex-col items-center md:items-start gap-1">
+            <p className="font-bold text-zinc-300">PURRPURR DEVELOPMENT</p>
+            <p className="text-xs text-zinc-500 mb-2">Una creación de <Link href="/lab" className="text-zinc-400 hover:text-emerald-500 transition-colors">Purrpurr Lab</Link></p>
+            <p className="text-zinc-700 text-[10px]">&copy; {new Date().getFullYear()} Todos los derechos reservados.</p>
           </div>
 
           {/* System Status */}
@@ -28,7 +29,7 @@ export const Footer = () => {
               <div className="absolute w-full h-full bg-emerald-500 rounded-full animate-ping opacity-75"></div>
               <div className="relative w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
             </div>
-            <span className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">Grid_Online</span>
+            <span className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">Disponibilidad: Alta</span>
           </div>
 
           {/* Links */}
@@ -39,8 +40,8 @@ export const Footer = () => {
               <Link href='https://twitter.com' target="_blank" className='hover:text-zinc-300 transition-colors'><Twitter className="w-4 h-4" /></Link>
             </div>
             <div className="flex gap-6 text-[10px] uppercase tracking-wider">
-              <Link href='/privacy' className='hover:text-zinc-300 transition-colors'>Privacy_Protocol</Link>
-              <Link href='/terms' className='hover:text-zinc-300 transition-colors'>Terms_of_Use</Link>
+              <Link href='/privacy' className='hover:text-zinc-300 transition-colors'>Política de Privacidad</Link>
+              <Link href='/terms' className='hover:text-zinc-300 transition-colors'>Términos de Uso</Link>
             </div>
           </div>
         </div>

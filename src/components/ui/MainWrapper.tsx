@@ -32,7 +32,7 @@ export const MainWrapper = ({ children }: MainWrapperProps) => {
     return (
         <main className="flex-grow">
             {!isHomePage && (
-                <div className="container mx-auto px-4 pt-24 pb-4 md:px-6">
+                <div className="container mx-auto px-4 pt-16 pb-2 md:px-6">
                     <Breadcrumbs />
                 </div>
             )}

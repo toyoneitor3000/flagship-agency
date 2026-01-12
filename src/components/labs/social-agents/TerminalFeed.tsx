@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Terminal } from 'lucide-react';
 
 const INITIAL_LOGS = [
-    { time: '18:52:01', type: 'system', message: 'Purrpurr Labs Social Media Orchestrator initialized.' },
+    { time: '18:52:01', type: 'system', message: 'Purrpurr Lab Social Media Orchestrator initialized.' },
     { time: '18:52:05', type: 'brain', message: 'Analyzing current tech trends on X and LinkedIn...' },
     { time: '18:52:12', type: 'brain', message: 'Trend identified: "Strategy as Infrastructure".' },
     { time: '18:52:15', type: 'visual', message: 'Generating visual concept for "The Code Behind the Business".' },
@@ -63,8 +63,8 @@ export const TerminalFeed = () => {
                     <div key={i} className="flex gap-3 animate-in fade-in slide-in-from-left-2 duration-300">
                         <span className="text-zinc-600 shrink-0">[{log.time}]</span>
                         <span className={`uppercase font-bold shrink-0 ${log.type === 'system' ? 'text-zinc-400' :
-                                log.type === 'brain' ? 'text-[#8f69ff]' :
-                                    log.type === 'visual' ? 'text-[#00FF9C]' : 'text-[#a78bfa]'
+                            log.type === 'brain' ? 'text-[#8f69ff]' :
+                                log.type === 'visual' ? 'text-[#00FF9C]' : 'text-[#a78bfa]'
                             }`}>
                             {log.type}:
                         </span>

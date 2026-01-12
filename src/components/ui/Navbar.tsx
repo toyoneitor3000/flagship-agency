@@ -152,8 +152,11 @@ export const Navbar = () => {
               <Link href='/academy' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
                 [ Academy ]
               </Link>
-              <Link href='/labs' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
-                [ Labs ]
+              <Link href='/lab' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Lab ]
+              </Link>
+              <Link href='/purrpurr' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
+                [ Purrpurr ]
               </Link>
               <Link href='/wiki' className={cn('text-sm font-semibold transition-colors font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]', textColorClass, hoverColorClass)}>
                 [ Wiki ]
@@ -231,10 +234,15 @@ export const Navbar = () => {
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Academy</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-pink-500 animate-pulse">_</span>
                 </Link>
-                <Link href='/labs' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href='/lab' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
                   <span className='text-blue-500/50 text-xs'>[04]</span>
-                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Labs</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Lab</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-blue-500 animate-pulse">_</span>
+                </Link>
+                <Link href='/purrpurr' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
+                  <span className='text-purple-500/50 text-xs'>[AI]</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Purrpurr</span>
+                  <span className="ml-auto opacity-0 group-hover:opacity-100 text-purple-500 animate-pulse">_</span>
                 </Link>
                 <Link href='/wiki' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
                   <span className='text-cyan-500/50 text-xs'>[05]</span>

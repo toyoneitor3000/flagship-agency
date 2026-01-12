@@ -31,8 +31,14 @@ export default function PurrpurrTestPage() {
         }
         try {
             const res = await fetch('/api/magic/content');
-            const data = await res.json();
-            setContent(data);
+            const contentType = res.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await res.json();
+                setContent(data);
+            } else {
+                const text = await res.text();
+                console.error("Failed to sync matrix: Received non-JSON response:", text.substring(0, 100)); // Log first 100 chars
+            }
         } catch (e) {
             console.error("Failed to sync matrix", e);
         }
@@ -118,7 +124,7 @@ export default function PurrpurrTestPage() {
                                 PURRPURR
                             </h1>
                             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-emerald-400 uppercase leading-[0.9]">
-                                LABS
+                                LAB
                             </h2>
                         </div>
 
@@ -224,7 +230,7 @@ export default function PurrpurrTestPage() {
                                 </div>
                             </Link>
 
-                            <Link href="/labs/identity" className="md:col-span-6 lg:col-span-4 group relative bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:border-pink-500/50 transition-all duration-500 hover:bg-zinc-900/60 hover:shadow-[0_0_50px_rgba(236,72,153,0.1)]">
+                            <Link href="/lab/identity" className="md:col-span-6 lg:col-span-4 group relative bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:border-pink-500/50 transition-all duration-500 hover:bg-zinc-900/60 hover:shadow-[0_0_50px_rgba(236,72,153,0.1)]">
                                 <div className="absolute top-0 right-0 p-6 opacity-30 group-hover:opacity-100 transition-opacity"><User className="w-6 h-6 text-pink-400" /></div>
                                 <div className="p-8 h-full flex flex-col justify-between min-h-[280px]">
                                     <div>
@@ -243,7 +249,7 @@ export default function PurrpurrTestPage() {
                                 </div>
                             </Link>
 
-                            <Link href="/labs/social-labs" className="md:col-span-6 lg:col-span-4 group relative bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:border-indigo-500/50 transition-all duration-500 hover:bg-zinc-900/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.1)]">
+                            <Link href="/lab/social-labs" className="md:col-span-6 lg:col-span-4 group relative bg-zinc-900/40 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:border-indigo-500/50 transition-all duration-500 hover:bg-zinc-900/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.1)]">
                                 <div className="absolute top-0 right-0 p-6 opacity-30 group-hover:opacity-100 transition-opacity"><Share2 className="w-6 h-6 text-indigo-400" /></div>
                                 <div className="p-8 h-full flex flex-col justify-between min-h-[280px]">
                                     <div>
