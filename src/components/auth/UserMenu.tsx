@@ -4,14 +4,31 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from 'next/link';
-import { LogOut, User, Settings, LayoutDashboard, Briefcase, ChevronDown } from "lucide-react";
+import { LogOut, User, Settings, LayoutDashboard, Briefcase, ChevronDown, ArrowRightLeft } from "lucide-react";
 import { useState, useRef, useEffect } from 'react';
 import { cn } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
 
 export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
     const { data: session, status } = useSession();
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const handleSwitchAccount = async () => {
+        // 1. Close the menu immediately
+        setIsOpen(false);
+
+        // 2. Sign out locally without redirecting yet to keep context
+        await signOut({ redirect: false });
+
+        // 3. Force sign-in with Google, explicitly requesting account selection
+        // Passing prompt: 'login' or 'select_account' in the options 
+        await signIn("google", {
+            callbackUrl: "/dashboard",
+            prompt: "select_account"
+        });
+    };
 
     // Close on click outside
     useEffect(() => {
@@ -117,6 +134,17 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
 
                         {/* Divider */}
                         <div className="h-px bg-zinc-900 mx-2" />
+
+                        <div className="p-2">
+                            <button
+                                onClick={handleSwitchAccount}
+                                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
+                            >
+                                <ArrowRightLeft className="w-4 h-4 text-yellow-400" />
+                                <span>Cambiar Cuenta</span>
+                            </button>
+                        </div>
+
 
                         {/* Footer / Logout */}
                         <div className="p-2">

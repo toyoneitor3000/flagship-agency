@@ -13,11 +13,18 @@ import {
 import { ClusterStatus } from "@/components/dashboard/ClusterStatus";
 import { ProjectManager } from "@/components/dashboard/ProjectManager";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
-import { LeadsNotificationBadge } from "@/components/dashboard/LeadsNotificationBadge";
 
+
+
+
+export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
     const session = await auth();
+    console.log("___ DASHBOARD DEBUG ___");
+    console.log("Session Email:", session?.user?.email);
+    console.log("Session User ID:", session?.user?.id);
+    console.log("_______________________");
 
     if (!session?.user?.email) {
         redirect("/api/auth/signin");
@@ -50,13 +57,7 @@ export default async function DashboardPage() {
                         <span className="font-bold tracking-tight text-lg">Purrpurr Console</span>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <LeadsNotificationBadge />
-                        <span className="text-sm text-zinc-400 hidden sm:block">{user.email}</span>
-                        <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 overflow-hidden">
-                            {user.image && <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />}
-                        </div>
-                    </div>
+
                 </div>
             </nav>
 
