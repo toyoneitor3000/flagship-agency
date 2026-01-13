@@ -9,13 +9,17 @@ const authToken = process.env.TURSO_AUTH_TOKEN
 
 const prismaClientSingleton = () => {
     try {
+        if (!process.env.DATABASE_URL) {
+            console.warn('⚠️ DATABASE_URL not set, falling back to local SQLite (file:./dev.db). This may fail in production.');
+        }
+
         const adapter = new PrismaLibSql({
             url: connectionString,
             authToken: authToken,
         })
         return new PrismaClient({ adapter })
     } catch (e) {
-        console.error('Failed to initialize Prisma adapter/client:', e)
+        console.error('CRITICAL: Failed to initialize Prisma adapter/client:', e)
         // Fallback to default client
         return new PrismaClient()
     }
@@ -24,7 +28,8 @@ const prismaClientSingleton = () => {
 
 export const prisma = globalForPrisma.prisma || prismaClientSingleton()
 
-console.log('PRISMA CLIENT INITIALIZED WITH MODELS:', Object.keys(prisma).filter(k => !k.startsWith('$')));
+// Silenced logger for production stability
+// console.log('PRISMA CLIENT INITIALIZED WITH MODELS:', Object.keys(prisma).filter(k => !k.startsWith('$')));
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
