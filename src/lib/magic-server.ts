@@ -3,6 +3,7 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import contentData from '../data/content.json';
 
 const CONTENT_PATH = path.join(process.cwd(), 'src/data/content.json');
 
@@ -17,19 +18,13 @@ export async function getMagicContent() {
         // 1. Try Memory first (fastest)
         if (MEMORY_CACHE) return MEMORY_CACHE;
 
-        // 2. Try Filesystem (Dev only or if file exists)
-        // In Vercel, this file exists at build time but is read-only. 
-        // We read it to seed the memory cache.
-        const data = await fs.readFile(CONTENT_PATH, 'utf-8');
-        const parsed = JSON.parse(data);
+        // 2. Use imported data as seed (ensures it works in Vercel without FS)
+        MEMORY_CACHE = JSON.parse(JSON.stringify(contentData));
 
-        // Seed memory cache
-        MEMORY_CACHE = parsed;
-
-        return parsed;
+        return MEMORY_CACHE;
     } catch (error) {
         console.error('Failed to read magic content:', error);
-        return MEMORY_CACHE || {};
+        return MEMORY_CACHE || contentData || {};
     }
 }
 
