@@ -74,3 +74,23 @@ export async function PATCH(req: Request) {
         return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
     }
 }
+
+export async function DELETE() {
+    try {
+        const session = await auth();
+        if (!session?.user?.id) {
+            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+        }
+
+        await prisma.notification.deleteMany({
+            where: {
+                userId: session.user.id,
+            },
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error("Error deleting notifications:", error);
+        return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 });
+    }
+}

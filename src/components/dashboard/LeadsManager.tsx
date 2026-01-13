@@ -47,11 +47,11 @@ interface Metrics {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
-    pending: { label: 'Pendiente', color: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30', icon: Clock },
-    contacted: { label: 'Contactado', color: 'text-blue-400 bg-blue-400/10 border-blue-400/30', icon: MessageSquare },
-    demo_sent: { label: 'Demo Enviada', color: 'text-purple-400 bg-purple-400/10 border-purple-400/30', icon: Send },
-    converted: { label: 'Cerrado', color: 'text-green-400 bg-green-400/10 border-green-400/30', icon: CheckCircle2 },
-    rejected: { label: 'Descartado', color: 'text-red-400 bg-red-400/10 border-red-400/30', icon: XCircle },
+    pending: { label: 'Pendiente', color: 'text-yellow-300 bg-yellow-500/10 border-yellow-500/20 shadow-[0_0_10px_-2px_rgba(234,179,8,0.2)]', icon: Clock },
+    contacted: { label: 'Contactado', color: 'text-blue-300 bg-blue-500/10 border-blue-500/20 shadow-[0_0_10px_-2px_rgba(59,130,246,0.2)]', icon: MessageSquare },
+    demo_sent: { label: 'Demo Enviada', color: 'text-purple-300 bg-purple-500/10 border-purple-500/20 shadow-[0_0_10px_-2px_rgba(168,85,247,0.2)]', icon: Send },
+    converted: { label: 'Cerrado', color: 'text-green-300 bg-green-500/10 border-green-500/20 shadow-[0_0_10px_-2px_rgba(34,197,94,0.2)]', icon: CheckCircle2 },
+    rejected: { label: 'Descartado', color: 'text-red-300 bg-red-500/10 border-red-500/20 shadow-[0_0_10px_-2px_rgba(239,68,68,0.2)]', icon: XCircle },
 };
 
 const INDUSTRY_LABELS: Record<string, string> = {
@@ -227,13 +227,13 @@ export function LeadsManager() {
             )}
 
             {/* Filter Bar */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                     <Filter className="w-4 h-4 text-zinc-500" />
                     <select
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
-                        className="bg-zinc-900/40 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-purple-500"
+                        className="flex-1 sm:flex-none bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-purple-500 focus:bg-white/10 transition-colors"
                     >
                         <option value="all">Todos</option>
                         <option value="pending">🟡 Pendientes</option>
@@ -247,7 +247,7 @@ export function LeadsManager() {
                 <button
                     onClick={fetchLeads}
                     disabled={loading}
-                    className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+                    className="flex items-center justify-center sm:justify-start gap-2 text-sm text-zinc-400 hover:text-white transition-colors w-full sm:w-auto py-2 sm:py-0 border border-white/5 sm:border-none rounded-xl sm:rounded-none bg-white/5 sm:bg-transparent"
                 >
                     <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                     Actualizar
@@ -255,7 +255,7 @@ export function LeadsManager() {
             </div>
 
             {/* Leads List */}
-            <div className="bg-zinc-900/40 border border-white/10 rounded-2xl overflow-hidden">
+            <div className="bg-white/5 border border-white/5 rounded-3xl overflow-hidden backdrop-blur-sm">
                 <div className="p-4 border-b border-white/10 flex items-center justify-between">
                     <h2 className="text-lg font-semibold flex items-center gap-2">
                         <Users className="w-5 h-5 text-purple-400" />
@@ -290,18 +290,18 @@ export function LeadsManager() {
                                 <li
                                     key={demo.id}
                                     onClick={() => openDetailModal(demo)}
-                                    className="p-4 hover:bg-white/5 cursor-pointer transition-colors"
+                                    className="p-4 hover:bg-white/5 cursor-pointer transition-all duration-200 border-l-2 border-transparent hover:border-purple-500"
                                 >
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-3">
-                                                <h3 className="font-semibold text-white truncate">{demo.name}</h3>
-                                                <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${statusConfig.color}`}>
-                                                    <StatusIcon className="w-3 h-3" />
+                                                <h3 className="font-bold text-white text-lg tracking-tight truncate">{demo.name}</h3>
+                                                <span className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border backdrop-blur-md ${statusConfig.color}`}>
+                                                    <StatusIcon className="w-3.5 h-3.5" />
                                                     {statusConfig.label}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center gap-4 mt-1 text-sm text-zinc-500">
+                                            <div className="flex items-center gap-4 mt-1.5 text-sm text-white/50">
                                                 <span>{INDUSTRY_LABELS[demo.industry] || demo.industry}</span>
                                                 <span className="text-zinc-600">•</span>
                                                 <span>{getRelativeTime(demo.createdAt)}</span>
@@ -314,7 +314,7 @@ export function LeadsManager() {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 onClick={(e) => e.stopPropagation()}
-                                                className="p-2 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded-lg transition-colors"
+                                                className="p-2.5 bg-green-500/10 hover:bg-green-500/20 hover:scale-105 active:scale-95 text-green-400 rounded-xl transition-all border border-transparent hover:border-green-500/30"
                                                 title="Abrir WhatsApp"
                                             >
                                                 <Phone className="w-4 h-4" />
@@ -325,7 +325,7 @@ export function LeadsManager() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     onClick={(e) => e.stopPropagation()}
-                                                    className="p-2 bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 rounded-lg transition-colors"
+                                                    className="p-2.5 bg-pink-500/10 hover:bg-pink-500/20 hover:scale-105 active:scale-95 text-pink-400 rounded-xl transition-all border border-transparent hover:border-pink-500/30"
                                                     title="Ver Instagram"
                                                 >
                                                     <Instagram className="w-4 h-4" />
@@ -382,8 +382,8 @@ export function LeadsManager() {
                                                 onClick={() => updateStatus(selectedDemo.id, key)}
                                                 disabled={saving}
                                                 className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-all ${isActive
-                                                        ? config.color + ' font-medium'
-                                                        : 'border-white/10 text-zinc-500 hover:border-white/20 hover:text-zinc-300'
+                                                    ? config.color + ' font-medium'
+                                                    : 'border-white/10 text-zinc-500 hover:border-white/20 hover:text-zinc-300'
                                                     }`}
                                             >
                                                 <Icon className="w-4 h-4" />

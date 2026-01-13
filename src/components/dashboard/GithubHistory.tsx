@@ -180,14 +180,14 @@ export function GithubHistory() {
                     commits.map((commit, index) => (
                         <div
                             key={commit.hash}
-                            className={`p-5 bg-zinc-950/40 border rounded-2xl flex items-center justify-between group transition-all duration-300
+                            className={`p-4 bg-zinc-950/40 border rounded-2xl flex flex-col gap-4 group transition-all duration-300
                                 ${index === 0
                                     ? 'border-purple-500/30 bg-purple-500/5 shadow-lg shadow-purple-500/5'
                                     : 'border-white/5 hover:border-white/10 hover:bg-zinc-950/60'
                                 }
                             `}
                         >
-                            <div className="flex gap-5 items-start grow min-w-0">
+                            <div className="flex gap-3 items-start w-full">
                                 <div className={`mt-1 w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-colors
                                     ${index === 0
                                         ? 'bg-purple-500/10 border-purple-500/30'
@@ -200,38 +200,37 @@ export function GithubHistory() {
                                         <Terminal className="w-5 h-5 text-zinc-500 group-hover:text-purple-400/60 transition-colors" />
                                     )}
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <div className="flex items-center gap-2 mb-1.5">
+                                <div className="min-w-0 flex-1 py-1">
+                                    <div className="flex flex-wrap items-center gap-2 mb-1">
                                         {index === 0 && (
-                                            <span className="flex items-center gap-1.5 px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded-full text-[9px] font-bold text-green-400 uppercase tracking-widest">
+                                            <span className="flex items-center gap-1.5 px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded-full text-[9px] font-bold text-green-400 uppercase tracking-widest shrink-0">
                                                 <div className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
-                                                Más Reciente
+                                                Reciente
                                             </span>
                                         )}
-                                        <span className="font-mono text-[10px] text-zinc-500 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
-                                            {commit.hash}
-                                        </span>
-                                        <span className="text-[10px] text-zinc-600 font-medium uppercase tracking-wider">
-                                            • {commit.date}
-                                        </span>
+                                        <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-mono">
+                                            <span className="bg-white/5 px-1.5 py-0.5 rounded border border-white/10">
+                                                {commit.hash.substring(0, 7)}
+                                            </span>
+                                            <span className="text-zinc-600 font-medium uppercase tracking-wider whitespace-nowrap">
+                                                • {commit.date}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <p className={`text-sm font-bold truncate transition-colors
-                                        ${index === 0 ? 'text-white' : 'text-zinc-300 group-hover:text-white'}
+                                    <p className={`text-sm font-medium break-words whitespace-pre-wrap transition-colors leading-relaxed
+                                        ${index === 0 ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-300'}
                                     `}>
                                         {commit.message}
-                                    </p>
-                                    <p className="text-[10px] text-zinc-600 mt-1 italic">
-                                        Deployment ID: <span className="font-mono text-zinc-700">{commit.hash.substring(0, 7)}</span>
                                     </p>
                                 </div>
                             </div>
 
                             <button
                                 onClick={() => startPublish(commit)}
-                                className={`ml-6 px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 border active:scale-95
+                                className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all border active:scale-[0.98] flex items-center justify-center gap-2
                                     ${index === 0
                                         ? 'bg-purple-600 text-white border-purple-500 hover:bg-purple-500 shadow-md shadow-purple-500/20'
-                                        : 'hover:bg-purple-600/10 text-purple-400 border-transparent hover:border-purple-500/30'
+                                        : 'bg-white/5 hover:bg-purple-600/10 text-zinc-400 hover:text-purple-400 border-white/5 hover:border-purple-500/30'
                                     }
                                 `}
                             >

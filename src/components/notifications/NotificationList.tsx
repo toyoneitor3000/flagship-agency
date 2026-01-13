@@ -1,6 +1,8 @@
+'use client';
+
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Bell } from 'lucide-react';
+import { Bell, Trash2 } from 'lucide-react';
 
 interface Notification {
     id: string;
@@ -53,6 +55,23 @@ export function NotificationList({ className, iconColorClass }: { className?: st
             console.error('Error marking notifications as read:', e);
         }
     };
+    const clearAll = async () => {
+        try {
+            // Optimistic update
+            const previousNotifications = notifications;
+            setNotifications([]);
+
+            const res = await fetch('/api/notifications', {
+                method: 'DELETE',
+            });
+
+            if (!res.ok) {
+                setNotifications(previousNotifications);
+            }
+        } catch (e) {
+            console.error('Error clearing notifications:', e);
+        }
+    };
 
     useEffect(() => {
         fetchNotifications();
@@ -93,7 +112,7 @@ export function NotificationList({ className, iconColorClass }: { className?: st
                 <button
                     ref={buttonRef}
                     onClick={toggleOpen}
-                    className={`relative p-2 transition-all duration-300 rounded-full hover:bg-white/5 z-50 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] opacity-80 hover:opacity-100 ${iconColorClass || 'text-zinc-400 hover:text-white'} ${className || ''}`}
+                    className={`relative p-2 transition-all duration-300 rounded-full hover:bg-white/10 z-50 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] text-zinc-300 hover:text-white ${className || ''}`}
                     aria-label="Notifications"
                 >
                     <Bell size={20} />
@@ -141,6 +160,16 @@ export function NotificationList({ className, iconColorClass }: { className?: st
                                         className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 hover:text-white transition-colors"
                                     >
                                         Leído
+                                    </button>
+                                )}
+                                {notifications.length > 0 && (
+                                    <button
+                                        onClick={clearAll}
+                                        className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-mono text-red-400/70 hover:text-red-400 transition-colors group"
+                                        title="Limpiar todas las notificaciones"
+                                    >
+                                        <Trash2 size={12} className="group-hover:scale-110 transition-transform" />
+                                        Limpiar
                                     </button>
                                 )}
                                 <button
