@@ -79,10 +79,16 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
 
                 {/* DROPDOWN MENU */}
                 {isOpen && (
-                    <div className="absolute top-full right-0 mt-3 w-64 bg-[#0A0A0B] border border-zinc-800 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-100">
+                    <div
+                        className="absolute top-full right-0 mt-3 w-64 bg-[#050505]/80 border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-100"
+                        style={{
+                            backdropFilter: 'blur(20px)',
+                            WebkitBackdropFilter: 'blur(20px)'
+                        }}
+                    >
 
                         {/* Header */}
-                        <div className="px-4 py-4 border-b border-zinc-900 bg-zinc-900/50">
+                        <div className="px-4 py-4 border-b border-white/5 bg-white/5">
                             <p className="text-sm font-bold text-white truncate">{session.user.name}</p>
                             <p className="text-xs text-zinc-500 truncate font-mono">{session.user.email}</p>
                         </div>
@@ -171,7 +177,7 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
     return (
         <button
             onClick={() => signIn("google", { prompt: "select_account" })}
-            className="px-4 py-2 rounded-full border border-zinc-700 bg-zinc-900/50 text-sm font-bold font-mono text-zinc-300 hover:text-white hover:border-zinc-500 hover:bg-zinc-900 transition-all"
+            className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-bold font-mono text-zinc-300 hover:text-white hover:border-white/20 hover:bg-white/10 transition-all"
         >
             [ INICIAR_SESIÓN ]
         </button>

@@ -67,7 +67,7 @@ export default function PurrpurrEcosystemPage() {
                             viewport={{ once: true }}
                             className="space-y-6"
                         >
-                            <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3">
+                            <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-3 font-display">
                                 <Terminal className="w-8 h-8 text-purple-500" />
                                 Inteligencia Nativa
                             </h2>
@@ -75,7 +75,7 @@ export default function PurrpurrEcosystemPage() {
                                 A diferencia de los modelos LLM genéricos que "alucinan", Purrpurr opera bajo una arquitectura de <strong>Inteligencia Nativa</strong>. Utiliza lógica determinista, matemáticas avanzadas y análisis del DOM en tiempo real.
                             </p>
                             <div className="p-6 bg-zinc-900/50 border border-purple-500/20 rounded-xl relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 p-4 opacity-10 font-mono text-6xl font-bold select-none">AI</div>
+                                <div className="absolute top-0 right-0 p-4 opacity-10 font-mono text-6xl font-bold select-none text-purple-500">AI</div>
                                 <p className="relative z-10 text-purple-200 font-medium text-lg italic">
                                     "El laboratorio no alquila inteligencia, la genera."
                                 </p>
@@ -101,6 +101,57 @@ export default function PurrpurrEcosystemPage() {
                                 </div>
                             </div>
                         </motion.div>
+                    </div>
+
+                    {/* Engineering DNA / About Us Section */}
+                    <div className="mb-32 max-w-6xl mx-auto border-t border-zinc-900 pt-32">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-center mb-16"
+                        >
+                            <span className="font-mono text-purple-500 text-xs tracking-[0.3em] uppercase mb-4 block">
+                                Engineering DNA
+                            </span>
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-display">
+                                Más que Código: <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">Mecánica Digital</span>
+                            </h2>
+                            <p className="text-zinc-400 max-w-3xl mx-auto text-lg leading-relaxed mb-12">
+                                Un auto de carreras no es rápido por casualidad; es rápido porque cada pieza tiene un propósito.
+                                En <span className="text-white font-semibold">Flagship Agency</span>, aplicamos esta misma lógica al software y a la inteligencia de Purrpurr.
+                            </p>
+                        </motion.div>
+
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div className="p-8 bg-zinc-900/30 border border-white/5 rounded-2xl">
+                                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+                                    <Zap className="w-5 h-5 text-yellow-400" />
+                                    Propósito
+                                </h3>
+                                <p className="text-zinc-500 text-sm leading-relaxed">
+                                    No agregamos nada que no mejore el rendimiento, la seguridad o la experiencia de manejo del usuario.
+                                </p>
+                            </div>
+                            <div className="p-8 bg-zinc-900/30 border border-white/5 rounded-2xl">
+                                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+                                    <Shield className="w-5 h-5 text-emerald-400" />
+                                    Esencialismo
+                                </h3>
+                                <p className="text-zinc-500 text-sm leading-relaxed font-mono italic">
+                                    "La perfección no se alcanza cuando no hay nada más que añadir, sino cuando no hay nada más que quitar."
+                                </p>
+                            </div>
+                            <div className="p-8 bg-zinc-900/30 border border-white/5 rounded-2xl">
+                                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-purple-400" />
+                                    Visión
+                                </h3>
+                                <p className="text-zinc-500 text-sm leading-relaxed">
+                                    No solo escribimos software, entendemos tu negocio. Creamos la infraestructura que ordena tu operación.
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Roles Grid */}

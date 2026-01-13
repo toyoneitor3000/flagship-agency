@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const CallToAction = () => {
     return (
-        <section className='py-32 bg-zinc-950 relative overflow-hidden' id='cta' data-section-theme='dark'>
+        <section className='py-32 relative overflow-hidden' id='cta' data-section-theme='dark'>
             {/* Background Gradients */}
             <div className='absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none' />
 

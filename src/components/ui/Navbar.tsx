@@ -103,11 +103,11 @@ export const Navbar = () => {
         transition={{ duration: 0.6 }}
         className={cn(
           'fixed top-0 w-full z-[100] transition-all duration-300 border-b flex items-center',
-          'h-16', // Slightly taller for better breathing room
+          'h-14', // Reduced height for sleeker look
           // Premium Glass properties
-          'bg-white/5 dark:bg-[#050505]/60', // More solid dark background
-          'backdrop-blur-md', // Moderate blur
-          'border-white/5 shadow-sm'
+          'bg-zinc-950/30 dark:bg-zinc-950/50', // Darker glass effect for better contrast and match with notifications
+          'backdrop-blur-xl', // More intense blur for premium feel
+          'border-white/10 shadow-2xl'
         )
         }>
         <div className='container mx-auto px-4 md:px-6 grid grid-cols-2 lg:grid-cols-12 gap-4 items-center'>
@@ -130,7 +130,7 @@ export const Navbar = () => {
                 width={160}
                 height={40}
                 className={cn(
-                  "h-10 w-auto object-contain transition-all duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]",
+                  "h-11 w-auto object-contain transition-all duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]",
                 )}
                 priority
               />
@@ -157,8 +157,8 @@ export const Navbar = () => {
               <Link href='/wiki' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
                 Wiki
               </Link>
-              <Link href='#philosophy' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
-                Nosotros
+              <Link href='/news' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+                News
               </Link>
               <Link href='#invitation' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
                 Contacto
@@ -192,12 +192,12 @@ export const Navbar = () => {
           exit={{ opacity: 0, scale: 0.95, y: '100%' }}
           className='lg:hidden fixed inset-x-4 top-[90px] bottom-8 z-[110] flex flex-col'
         >
-          <div className='flex-1 bg-zinc-950/98 backdrop-blur-2xl border border-zinc-800/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col relative'>
+          <div className='flex-1 bg-zinc-900/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col relative'>
             {/* Scanline Effect */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-[2] bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20" />
 
             {/* Decorative Terminal Header */}
-            <div className='flex items-center justify-between p-4 bg-zinc-900/50 border-b border-zinc-800'>
+            <div className='flex items-center justify-between p-4 bg-white/5 border-b border-white/10'>
               <div className='flex items-center gap-2'>
                 <div className='w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50' />
                 <div className='w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50' />
@@ -238,15 +238,15 @@ export const Navbar = () => {
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Wiki</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-cyan-500 animate-pulse">_</span>
                 </Link>
+                <Link href='/news' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
+                  <span className='text-orange-500/50 text-xs'>[06]</span>
+                  <span className="text-xl group-hover:translate-x-2 transition-transform">./News</span>
+                  <span className="ml-auto opacity-0 group-hover:opacity-100 text-orange-500 animate-pulse">_</span>
+                </Link>
                 <Link href='#pricing' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-yellow-500/50 text-xs'>[06]</span>
+                  <span className='text-yellow-500/50 text-xs'>[07]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Precios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-yellow-500 animate-pulse">_</span>
-                </Link>
-                <Link href='#philosophy' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-indigo-500/50 text-xs'>[07]</span>
-                  <span className="text-xl group-hover:translate-x-2 transition-transform">./Nosotros</span>
-                  <span className="ml-auto opacity-0 group-hover:opacity-100 text-indigo-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#invitation' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
                   <span className='text-green-500/50 text-xs'>[08]</span>
@@ -256,7 +256,7 @@ export const Navbar = () => {
               </div>
             </div>
 
-            <div className='p-6 border-t border-zinc-800 bg-zinc-900/30'>
+            <div className='p-6 border-t border-white/10 bg-white/5'>
               <div className='flex items-center justify-between mb-4 text-[10px] uppercase tracking-wider font-mono text-zinc-500'>
                 <span>Status: Ready</span>
                 <span>Latency: 12ms</span>

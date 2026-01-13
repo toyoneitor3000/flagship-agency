@@ -17,7 +17,7 @@ export async function UserFluidBackground() {
         <FluidBackground
             {...config}
             globalInteraction={true}
-            className="fixed inset-0 w-screen h-screen z-0"
+            className="fixed inset-0 w-screen h-screen z-0 pointer-events-none"
         />
     );
 }

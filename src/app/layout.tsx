@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Navbar } from '@/components/ui/Navbar';
@@ -77,12 +78,17 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${allFontVariables} antialiased bg-zinc-950 text-zinc-100 flex flex-col min-h-screen`}>
+      <body className={`${allFontVariables} antialiased text-zinc-100 flex flex-col min-h-screen bg-transparent`}>
+        {/* Solid Fallback Background */}
+        <div className="fixed inset-0 bg-[#0f0033] -z-20 pointer-events-none" />
+
         <AuthProvider>
           <MagicProvider initialContent={magicContent}>
             <PurrpurrProvider>
-              <AdminNotifications>
+              <Suspense fallback={null}>
                 <UserFluidBackground />
+              </Suspense>
+              <AdminNotifications>
                 <div className="relative z-10 font-sans">
                   <ThemeColorManager />
                   <TypographyInjector />

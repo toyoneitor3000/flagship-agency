@@ -28,7 +28,7 @@ export const Invitation = () => {
     };
 
     return (
-        <section className="py-24 relative overflow-hidden bg-zinc-950 border-t border-zinc-900" id="invitation">
+        <section className="py-24 relative overflow-hidden border-t border-zinc-900" id="invitation">
             {/* Background Elements */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
             <div className="absolute left-0 right-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
@@ -101,7 +101,7 @@ export const Invitation = () => {
                         className="relative"
                     >
                         <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl"></div>
-                        <div className="relative bg-zinc-950 border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl">
+                        <div className="relative bg-zinc-950/80 backdrop-blur-md border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl">
 
                             <AnimatePresence mode="wait">
                                 {step === 'form' ? (

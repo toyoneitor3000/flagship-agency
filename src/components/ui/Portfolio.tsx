@@ -67,7 +67,7 @@ export const Portfolio = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     return (
-        <section className='py-20 bg-zinc-950 overflow-hidden' id='philosophy' data-section-theme='dark'>
+        <section className='py-20 overflow-hidden' id='portfolio' data-section-theme='dark'>
             <div className='container mx-auto px-4'>
                 <div className='text-center mb-12'>
                     <motion.div

@@ -12,7 +12,7 @@ export const Footer = () => {
   if (isSiteViewPage) return null;
 
   return (
-    <footer className='bg-zinc-950 border-t border-zinc-900 py-12 font-mono' data-section-theme='dark'>
+    <footer className='border-t border-zinc-900 py-12 font-mono' data-section-theme='dark'>
       <div className='container mx-auto px-4'>
         <div className='flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-zinc-500'>
 

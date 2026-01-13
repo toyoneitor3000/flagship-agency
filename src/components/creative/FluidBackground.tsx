@@ -473,7 +473,15 @@ export default function FluidBackground({
         }
     }, [colors, speed, force, interactionRadius, fluidZoom, blendThresholds]);
 
-    if (globalInteraction && pathname !== '/') {
+    // List of paths where the fluid background should NOT be rendered (e.g., app-like interfaces)
+    const blacklist = ['/dashboard', '/lab', '/admin', '/academy'];
+    const currentPath = pathname || '';
+    const isBlacklisted = blacklist.some(path => currentPath.startsWith(path));
+
+    // Special case: if we are on a landing-like page that is not the home page
+    // but we want the background (like /aliados/...), we allow it.
+
+    if (globalInteraction && isBlacklisted) {
         return null;
     }
 
