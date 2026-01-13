@@ -94,23 +94,23 @@ function logo(msg: string, data: any) {
 }
 
 export async function getUserFluidConfig() {
-    const session = await auth();
-
-    if (!session?.user?.email) {
-        return null;
-    }
-
     try {
+        const session = await auth();
+
+        if (!session?.user?.email) {
+            return null;
+        }
+
         const user = await prisma.user.findUnique({
             where: { email: session.user.email },
-            select: { fluidConfig: true, fluidPresets: true } // Select presets too if we want to optimize partial fetches, but usually we want specific getters.
+            select: { fluidConfig: true, fluidPresets: true }
         });
 
         if (user?.fluidConfig) {
             return JSON.parse(user.fluidConfig);
         }
     } catch (error) {
-        console.error('Failed to fetch user config:', error);
+        console.error('Failed to fetch user fluid config:', error);
     }
 
     return null;

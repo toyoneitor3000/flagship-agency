@@ -28,6 +28,7 @@ model Contact {
   name      String
   email     String
   message   String
+  budget    String?
   createdAt DateTime @default(now())
 }
 

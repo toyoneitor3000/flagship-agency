@@ -18,7 +18,7 @@ export default function SpeedlightPartnerPage() {
 
     return (
         <div className="min-h-screen text-white selection:bg-[#00FF9C] selection:text-black">
-            <Navbar />
+// Navbar removed to avoid duplication with RootLayout
 
             <main className="pt-24 pb-24 px-4 container mx-auto max-w-4xl relative">
                 {/* Ambient Backlight */}

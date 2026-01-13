@@ -7,10 +7,11 @@ import Link from "next/link";
 export const dynamic = 'force-dynamic';
 
 export default async function NewsPage() {
-    const changelogs = await (prisma as any).changelog.findMany({
+    const changelogModel = (prisma as any).changelog || (prisma as any).Changelog;
+    const changelogs = changelogModel ? await changelogModel.findMany({
         where: { isPublished: true },
         orderBy: { publishedAt: 'desc' },
-    });
+    }) : [];
 
 
     return (
