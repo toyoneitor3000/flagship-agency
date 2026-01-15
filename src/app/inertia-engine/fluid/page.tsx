@@ -87,14 +87,22 @@ export default function CreativeLabPage() {
     const handleSaveToLanding = async () => {
         setSaveStatus('saving');
         try {
-            await saveFluidConfig(getCurrentState());
+            const result = await saveFluidConfig(getCurrentState());
+
+            if (!result.success) {
+                console.error('Save failed:', result.error);
+                setSaveStatus('error');
+                setTimeout(() => setSaveStatus('idle'), 3000);
+                return;
+            }
+
             setSaveStatus('success');
             setTimeout(() => setSaveStatus('idle'), 2000);
             router.refresh(); // Refresh to update layouts
         } catch (error) {
-            console.error(error);
+            console.error('Unexpected error saving config:', error);
             setSaveStatus('error');
-            setTimeout(() => setSaveStatus('idle'), 2000);
+            setTimeout(() => setSaveStatus('idle'), 3000);
         }
     };
 

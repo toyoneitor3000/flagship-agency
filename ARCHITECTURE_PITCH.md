@@ -68,3 +68,29 @@ El gran error es pensar que Coca-Cola o Ecopetrol tienen tecnología de punta. *
 3.  **Velocidad:** "Lo que tu equipo hace en el Q3, nosotros lo tenemos el lunes". Eso vale oro para ellos.
 
 No les vendemos "hosting" (ya tienen Azure/AWS). Les vendemos **Agilidad**.
+
+---
+
+## 6. Visualización Arquitectónica: El Modelo del Edificio
+
+Para entender (y vender) mejor nuestra arquitectura, **visualizamos a Flagship/Purrpurr como un Edificio de Alto Rendimiento**.
+
+### Estructura del Edificio (Visible en `/purrpurr/architecture`):
+
+1.  **Cimientos (Infrastructure Layer):**
+    *   No se ven, pero sostienen todo.
+    *   *Tecnología:* Vercel Edge / Coolify, Turso DB, Next.js.
+    *   *Valor:* Estabilidad, Velocidad Global, Escala.
+
+2.  **Servicios Comunes (Utilities Layer):**
+    *   Luz, Agua, Internet del edificio. Disponible para todos los apartamentos.
+    *   *Componentes:* Purrpurr ID (Auth), Purrpurr Comms (Email), Purrpurr Vault (Data).
+
+3.  **Suites Privadas (Client Layer):**
+    *   Apartamentos de lujo para cada cliente. Totalmente aislados, pero construidos sobre los mismos cimientos sólidos.
+    *   *Ejemplos:* Speed Light Suite, Pigmento Gallery, Financars Fintech.
+    *   *Personalización:* Cada cliente ve su propia decoración (Frontend), pero usa las mismas tuberías (Backend).
+
+4.  **Penthouse (Enterprise/Vision):**
+    *   El futuro. Donde vive la innovación y la expansión global.
+    *   Laboratorios de IA y estrategias para clientes "Ballena".

@@ -26,7 +26,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async session({ session, user }: any) {
             if (session.user) {
                 session.user.id = user.id;
-                session.user.role = user.role || (user.email === 'camilotoloza1136@gmail.com' ? 'admin' : 'user');
+                const adminEmails = ['camilotoloza1136@gmail.com', 'purpuregamechanger@gmail.com'];
+                // Force Admin role for specific emails, otherwise fallback to DB role
+                if (adminEmails.includes(user.email)) {
+                    session.user.role = 'admin';
+                } else {
+                    session.user.role = user.role || 'user';
+                }
             }
 
 

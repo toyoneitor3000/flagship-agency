@@ -6,19 +6,19 @@ import { Check, Info, Calculator, Sparkles, Clock, Smartphone, Database, Shoppin
 
 // PRECIOS BASE (SETUP)
 const BASE_PLANS = [
-    { id: 'landing', name: 'Landing Page', setup: 550000, annual: 350000, icon: Sparkles, desc: 'Una sola página de alto impacto.' },
-    { id: 'web', name: 'Sitio Web Pro', setup: 1200000, annual: 1440000, icon: Box, desc: 'Multi-página con CMS (Panel Admin incluido).' },
-    { id: 'store', name: 'E-Commerce', setup: 3800000, annual: 2800000, icon: ShoppingBag, desc: 'Tienda Completa (Gestión Total).' },
-    { id: 'system', name: 'Web App / Sistema', setup: 8500000, annual: 4500000, icon: Database, desc: 'Software a medida con usuarios y datos.' },
-    { id: 'venture', name: 'Venture (Startup)', setup: 25000000, annual: 0, icon: RocketIcon, desc: 'Producto digital desde cero (MVP).' }
+    { id: 'landing', name: 'Landing Page', setup: 350000, annual: 250000, icon: Sparkles, desc: 'Una sola página de alto impacto.' },
+    { id: 'web', name: 'Sitio Web Pro', setup: 850000, annual: 950000, icon: Box, desc: 'Multi-página con CMS (Panel Admin incluido).' },
+    { id: 'store', name: 'E-Commerce', setup: 2200000, annual: 1800000, icon: ShoppingBag, desc: 'Tienda Completa (Gestión Total).' },
+    { id: 'system', name: 'Web App / Sistema', setup: 4500000, annual: 2500000, icon: Database, desc: 'Software a medida con usuarios y datos.' },
+    { id: 'venture', name: 'Venture (Startup)', setup: 12000000, annual: 0, icon: RocketIcon, desc: 'Producto digital desde cero (MVP).' }
 ];
 
 // ADD-ONS (SETUP EXTRA)
 const ADDONS = [
-    { id: 'auth', name: 'Portal de Usuarios', price: 600000, icon: Database, desc: 'Registro y Perfiles Públicos' },
-    { id: 'app', name: 'App Stores (PWA)', price: 1200000, icon: Smartphone, desc: 'iOS & Android' },
-    { id: 'shop', name: 'Pasarela de Pagos', price: 350000, icon: ShoppingBag, desc: 'Recibe dinero' },
-    { id: '3d', name: 'Experiencia 3D', price: 900000, icon: Box, desc: 'WebGL inmersivo' },
+    { id: 'auth', name: 'Portal de Usuarios', price: 450000, icon: Database, desc: 'Registro y Perfiles Públicos' },
+    { id: 'app', name: 'App Stores (PWA)', price: 850000, icon: Smartphone, desc: 'iOS & Android' },
+    { id: 'shop', name: 'Pasarela de Pagos', price: 300000, icon: ShoppingBag, desc: 'Recibe dinero' },
+    { id: '3d', name: 'Experiencia 3D', price: 750000, icon: Box, desc: 'WebGL inmersivo' },
 ];
 
 // NIVELES DE SOPORTE (RECURRENTE MENSUAL)
@@ -33,7 +33,7 @@ const SUPPORT_TIERS = [
     {
         id: 'active',
         name: 'Soporte Activo',
-        monthly: 350000,
+        monthly: 250000,
         desc: 'Incluye 4 horas de cambios al mes. Ideal para mantener tu web fresca.',
         highlight: true,
         tag: 'Recomendado'
@@ -41,7 +41,7 @@ const SUPPORT_TIERS = [
     {
         id: 'partner',
         name: 'Growth Partner',
-        monthly: 1200000,
+        monthly: 950000,
         desc: '20 horas de desarrollo al mes. Somos tu departamento de IT.',
         highlight: false
     }

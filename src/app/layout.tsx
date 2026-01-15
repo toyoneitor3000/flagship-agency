@@ -66,7 +66,7 @@ import { ThemeColorManager } from "@/components/ui/ThemeColorManager";
 import { MainWrapper } from "@/components/ui/MainWrapper";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
 import { AdminNotifications } from "@/components/notifications/AdminNotifications";
-import { UserFluidBackground } from "@/components/purrpurr/UserFluidBackground";
+
 
 
 export default async function RootLayout({
@@ -85,9 +85,7 @@ export default async function RootLayout({
         <AuthProvider>
           <MagicProvider initialContent={magicContent}>
             <PurrpurrProvider>
-              <Suspense fallback={null}>
-                <UserFluidBackground />
-              </Suspense>
+
               <AdminNotifications>
                 <div className="relative z-10 font-sans">
                   <ThemeColorManager />

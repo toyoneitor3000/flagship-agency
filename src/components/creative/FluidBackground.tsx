@@ -372,27 +372,23 @@ export default function FluidBackground({
             lastScrollYRef.current = currentScrollY;
 
             if (Math.abs(scrollDelta) > 0) {
-                // Boost sensitivity: Scrolling 10px should feel like a push
-                const scrollSensitivity = scrollInfluenceRef.current * 0.5;
+                // Boost sensitivity: Scrolling should feel like a wave passing through
+                const scrollSensitivity = scrollInfluenceRef.current * 0.1;
                 // Normalized force
                 const scrollForce = (scrollDelta / window.innerHeight) * scrollSensitivity;
 
-                // 1. Add impulse to Velocity (The "Kick")
-                velocityRef.current.y += scrollForce * 50.0;
+                // 1. Add impulse to Velocity (The "Kick") - Much more subtle now
+                velocityRef.current.y += scrollForce * 2.0;
 
-                // 2. Move the Target Mouse (The "Drag")
-                // This prevents the spring force from immediately fighting the velocity
-                // If we scroll down (delta > 0), page moves up, we want virtual mouse to move up relative to window (visual consistency)
-                // Actually, if we scroll down, new content appears from bottom.
-                // Let's just create general turbulence.
-                targetMouseRef.current.y += scrollForce * 2.0;
+                // 2. Move the Target Mouse (The "Drag") - Subtly move the focus
+                targetMouseRef.current.y += scrollForce * 0.1;
 
-                // Wrap around X/Y to keep interaction alive on screen
-                targetMouseRef.current.x = (targetMouseRef.current.x + 1.0) % 1.0;
-                targetMouseRef.current.y = (targetMouseRef.current.y + 1.0) % 1.0;
+                // Clamp instead of wrap to prevent "teleporting" jumps
+                targetMouseRef.current.x = Math.max(0, Math.min(1, targetMouseRef.current.x));
+                targetMouseRef.current.y = Math.max(0, Math.min(1, targetMouseRef.current.y));
 
                 // Also update immediate mouse ref partially to reduce lag
-                mouseRef.current.y += scrollForce * 0.5;
+                mouseRef.current.y += scrollForce * 0.05;
             }
 
             // Integrate
@@ -421,7 +417,8 @@ export default function FluidBackground({
             const velocityMag = velocityRef.current.len();
             // Target speed: tiny idle movement + scaling based on mouse energy
             // We use speedRef.current as the "Sensitivity" multiplier
-            const targetSpeed = speedRef.current * (0.05 + velocityMag * 3.0);
+            // Reduced multiplier from 3.0 to 0.2 to prevent "crazy" speeds
+            const targetSpeed = speedRef.current * (0.05 + Math.min(velocityMag, 5.0) * 0.2);
 
             // Lerp current speed towards target for smooth acceleration/deceleration
             currentFlowSpeedRef.current += (targetSpeed - currentFlowSpeedRef.current) * 0.1;

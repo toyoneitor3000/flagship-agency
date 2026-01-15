@@ -44,34 +44,34 @@ export interface FluidPreset {
 export async function saveFluidConfig(data: FluidState) {
     const session = await auth();
 
-    logo("ATTEMPTING SAVE CONFIG", session?.user?.email);
+    console.log("[FLUID_ACTION] ATTEMPTING SAVE CONFIG", session?.user?.email);
 
     if (!session?.user?.email) {
-        console.error("Save failed: No session email");
+        console.error("[FLUID_ACTION] Save failed: No session email");
         return { success: false, error: 'Must be logged in to save configuration' };
     }
 
     try {
-        console.log("Saving fluid config for:", session.user.email);
+        console.log("[FLUID_ACTION] Saving fluid config for:", session.user.email);
         await prisma.user.update({
             where: { email: session.user.email },
             data: {
                 fluidConfig: JSON.stringify(data)
             }
         });
-        console.log("Save successful. Revalidating...");
+        console.log("[FLUID_ACTION] Save successful. Revalidating...");
         revalidatePath('/', 'layout');
         revalidatePath('/');
         return { success: true };
     } catch (error) {
-        console.error('Failed to save config:', error);
-        return { success: false, error: 'Failed to save configuration to user profile' };
+        console.error('[FLUID_ACTION] Failed to save config:', error);
+        return { success: false, error: `Failed to save configuration: ${error instanceof Error ? error.message : 'Unknown error'}` };
     }
 }
 
 export async function saveFluidPresets(presets: FluidPreset[]) {
     const session = await auth();
-    logo("SAVING PRESETS", session?.user?.email);
+    console.log("[FLUID_ACTION] SAVING PRESETS", session?.user?.email);
 
     if (!session?.user?.email) return { success: false, error: 'Auth required' };
 

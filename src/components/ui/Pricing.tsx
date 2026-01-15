@@ -10,9 +10,9 @@ const plansData = [
   {
     name: 'Plan Semilla (Start)',
     prices: {
-      monthly: { cop: '$19,900', usd: '$5.50' },
-      annual: { cop: '$350,000', usd: '$90.00' }, // PRECIO TOTAL ANUAL
-      setup: { cop: '$550,000', usd: '$150' }
+      monthly: { cop: '$15,000', usd: '$4.00' },
+      annual: { cop: '$250,000', usd: '$65.00' }, // PRECIO TOTAL ANUAL
+      setup: { cop: '$350,000', usd: '$95' }
     },
     description: 'El punto de partida ideal. Tu espacio digital profesional, accesible y sin barreras.',
     features: [
@@ -35,9 +35,9 @@ const plansData = [
   {
     name: 'Plan Profesional (Services)',
     prices: {
-      monthly: { cop: '$149,000', usd: '$40' },
-      annual: { cop: '$1,440,000', usd: '$380' },
-      setup: { cop: '$1,200,000', usd: '$320' }
+      monthly: { cop: '$95,000', usd: '$25' },
+      annual: { cop: '$950,000', usd: '$250' },
+      setup: { cop: '$850,000', usd: '$220' }
     },
     description: 'Para consultores y marcas. Blog, captación de clientes y presencia corporativa seria.',
     features: [
@@ -60,9 +60,9 @@ const plansData = [
   {
     name: 'Plan Comercio (Store)',
     prices: {
-      monthly: { cop: '$280,000', usd: '$75' },
-      annual: { cop: '$2,800,000', usd: '$750' },
-      setup: { cop: '$3,800,000', usd: '$1,000' }
+      monthly: { cop: '$180,000', usd: '$50' },
+      annual: { cop: '$1,800,000', usd: '$480' },
+      setup: { cop: '$2,200,000', usd: '$580' }
     },
     description: 'Tu imperio digital. No solo vendes, gestionas finanzas, inventarios y logística en un solo lugar.',
     features: [
@@ -83,9 +83,9 @@ const plansData = [
   {
     name: 'Plan Sistema (Web App)',
     prices: {
-      monthly: { cop: '$450,000', usd: '$120' },
-      annual: { cop: '$4,500,000', usd: '$1,200' },
-      setup: { cop: '$8,500,000', usd: '$2,500' }
+      monthly: { cop: '$280,000', usd: '$75' },
+      annual: { cop: '$2,500,000', usd: '$650' },
+      setup: { cop: '$4,500,000', usd: '$1,200' }
     },
     description: 'Digitaliza tu operación. Software a medida para reservas, intranets, dashboards o gestión de clientes.',
     features: [
@@ -110,7 +110,7 @@ const plansData = [
     prices: {
       monthly: { cop: 'Retainer', usd: 'Custom' },
       annual: { cop: 'A Medida', usd: 'Custom' },
-      setup: { cop: 'Desde $25M', usd: '$8k+' }
+      setup: { cop: 'Desde $12M', usd: '$3k+' }
     },
     description: 'Para Visionarios con Capital. Tienes la idea (el próximo Rappi/Uber), nosotros ponemos la ingeniería para construirlo desde cero.',
     features: [
@@ -142,15 +142,23 @@ export const Pricing = () => {
       <div className='container mx-auto px-4 relative z-10'>
         <div className='text-center mb-12'>
           <h2 className='font-display text-3xl md:text-5xl font-bold text-white mb-6'>Diseñado para <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand-primary)] to-[var(--color-brand-accent)]">PERSONAS</span></h2>
-          <div className="inline-block px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg mb-6">
-            <p className="text-indigo-400 text-sm font-bold tracking-wide uppercase flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              Tecnología que potencia tu visión, sin barreras.
-            </p>
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
+            <div className="inline-block px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+              <p className="text-indigo-400 text-[10px] md:text-sm font-bold tracking-wide uppercase flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Tecnología 2026: Eficiencia & Propiedad
+              </p>
+            </div>
+            <div className="inline-block px-4 py-2 bg-[#00FF9C]/10 border border-[#00FF9C]/20 rounded-lg shadow-[0_0_15px_rgba(0,255,156,0.1)]">
+              <p className="text-[#00FF9C] text-[10px] md:text-sm font-bold tracking-wide uppercase flex items-center gap-2">
+                <Check className="w-4 h-4" />
+                Alianza Speedlight & Loyalty Activa
+              </p>
+            </div>
           </div>
           <p className='text-zinc-400 max-w-2xl mx-auto text-lg'>
             Entendemos que detrás de cada proyecto hay un sueño. <br className="hidden md:block" />
-            Nuestros planes están pensados para acompañar cada etapa de tu crecimiento.
+            Nuestros planes están pensados para acompañar cada etapa de tu crecimiento con precios competitivos.
           </p>
         </div>
 
@@ -323,28 +331,28 @@ export const Pricing = () => {
               <div className="text-2xl mb-2">🛍️</div>
               <h4 className="font-bold text-white text-sm mb-1">E-Commerce Plus</h4>
               <p className="text-[10px] text-zinc-400 mb-2">Si necesitas más de 100 productos.</p>
-              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$350k <span className="text-[10px] text-zinc-500">COP</span></p>
+              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$250k <span className="text-[10px] text-zinc-500">COP</span></p>
             </div>
             {/* Módulo App */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-indigo-500/50 transition-colors group flex flex-col items-center">
-              <div className="text-2xl mb-2">�</div>
+              <div className="text-2xl mb-2">👤</div>
               <h4 className="font-bold text-white text-sm mb-1">Portal de Usuarios</h4>
               <p className="text-[10px] text-zinc-400 mb-2">Tus clientes se registran (Membresía).</p>
-              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$600k <span className="text-[10px] text-zinc-500">COP</span></p>
+              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$450k <span className="text-[10px] text-zinc-500">COP</span></p>
             </div>
             {/* Módulo Apps Nativas */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900 border border-indigo-500/30 p-4 rounded-2xl hover:border-indigo-400 transition-colors group flex flex-col items-center shadow-lg shadow-indigo-900/10">
               <div className="text-2xl mb-2">📲</div>
               <h4 className="font-bold text-white text-sm mb-1">App Stores (PWA)</h4>
               <p className="text-[10px] text-zinc-400 mb-2 text-center">Tu Web empacada para descargar en iPhone y Android.</p>
-              <p className="text-sm font-bold text-indigo-300">$1.2M <span className="text-[10px] text-indigo-500">Pago Único</span></p>
+              <p className="text-sm font-bold text-indigo-300">$850k <span className="text-[10px] text-indigo-500">Pago Único</span></p>
             </div>
             {/* Módulo 3D */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-purple-500/50 transition-colors group flex flex-col items-center">
               <div className="text-2xl mb-2">🧊</div>
               <h4 className="font-bold text-white text-sm mb-1">Cine & 3D</h4>
               <p className="text-[10px] text-zinc-400 mb-2 text-center">Experiencias Inmersivas WebGL.</p>
-              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$900k <span className="text-[10px] text-zinc-500">COP</span></p>
+              <p className="text-sm font-bold text-[var(--color-brand-accent)]">+$750k <span className="text-[10px] text-zinc-500">COP</span></p>
             </div>
             {/* Módulo Data */}
             <div className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] bg-zinc-900/30 border border-zinc-800 p-4 rounded-2xl hover:border-[#00FF9C]/50 transition-colors group flex flex-col items-center">
