@@ -155,69 +155,27 @@ function BuildingStack({ growthLevel, selectedFloor, onFloorClick }: { growthLev
     const visibleFloors = FLOOR_DATA.filter(f => growthLevel >= f.threshold);
 
     // Separate floors into groups for proper positioning
-    const undergroundFloors = visibleFloors.filter(f => f.level < 0).sort((a, b) => a.level - b.level); // -4 to -1
+    const undergroundFloors = visibleFloors.filter(f => f.level < 0).sort((a, b) => b.level - a.level); // -1 first, then -2, -3, -4
     const surfaceFloors = visibleFloors.filter(f => f.level >= 0 && f.level <= 10).sort((a, b) => a.level - b.level); // 0 to 10
     const cosmicFloors = visibleFloors.filter(f => f.level > 10).sort((a, b) => a.level - b.level); // 11+
 
-    // Calculate positions
-    let undergroundY = 0;
-    let surfaceY = 0;
-    let cosmicY = 0;
+    // Calculate surface tower total height (needed for cosmic placement)
+    const surfaceTotalHeight = surfaceFloors.reduce((acc, f) => acc + f.height + 0.05, 0);
 
     return (
         <group position={[0, 0, 0]}>
-            {/* Underground (below surface) */}
-            <group position={[0, -3, 0]}>
-                {undergroundFloors.map((floor, i) => {
-                    const yPos = undergroundY - floor.height / 2;
-                    undergroundY -= floor.height + 0.08;
-                    return (
-                        <Floor
-                            key={floor.name}
-                            position={[0, yPos, 0]}
-                            args={[2.2, floor.height, 2.2]}
-                            color={floor.color}
-                            name={floor.name}
-                            type={floor.type}
-                            floorData={floor}
-                            isSelected={selectedFloor === floor.level}
-                            onClick={() => onFloorClick(floor.level)}
-                        />
-                    );
-                })}
-            </group>
-
-            {/* Surface Tower (main building) */}
-            <group position={[0, -2.5, 0]}>
-                {surfaceFloors.map((floor) => {
-                    const yPos = surfaceY + floor.height / 2;
-                    surfaceY += floor.height + 0.05;
-                    return (
-                        <Floor
-                            key={floor.name}
-                            position={[0, yPos, 0]}
-                            args={[2, floor.height, 2]}
-                            color={floor.color}
-                            name={floor.name}
-                            type={floor.type}
-                            floorData={floor}
-                            isSelected={selectedFloor === floor.level}
-                            onClick={() => onFloorClick(floor.level)}
-                        />
-                    );
-                })}
-            </group>
-
-            {/* Cosmic Levels (floating above) */}
-            <group position={[0, surfaceY + 2, 0]}>
-                {cosmicFloors.map((floor, i) => {
-                    const yPos = cosmicY + floor.height / 2 + (i * 0.3); // Extra spacing between cosmic levels
-                    cosmicY += floor.height + 0.2;
-                    return (
-                        <Float key={floor.name} speed={1} rotationIntensity={0.2} floatIntensity={0.3}>
+            {/* Underground (below the grid, starting from Y=0 going down) */}
+            <group position={[0, 0, 0]}>
+                {(() => {
+                    let currentY = 0;
+                    return undergroundFloors.map((floor) => {
+                        currentY -= floor.height + 0.08; // Go down
+                        const yPos = currentY + floor.height / 2;
+                        return (
                             <Floor
+                                key={floor.name}
                                 position={[0, yPos, 0]}
-                                args={[1.6 - (i * 0.03), floor.height, 1.6 - (i * 0.03)]} // Getting smaller as they go up
+                                args={[2.2, floor.height, 2.2]}
                                 color={floor.color}
                                 name={floor.name}
                                 type={floor.type}
@@ -225,9 +183,58 @@ function BuildingStack({ growthLevel, selectedFloor, onFloorClick }: { growthLev
                                 isSelected={selectedFloor === floor.level}
                                 onClick={() => onFloorClick(floor.level)}
                             />
-                        </Float>
-                    );
-                })}
+                        );
+                    });
+                })()}
+            </group>
+
+            {/* Surface Tower (main building, starting at Y=0 going up) */}
+            <group position={[0, 0, 0]}>
+                {(() => {
+                    let currentY = 0;
+                    return surfaceFloors.map((floor) => {
+                        const yPos = currentY + floor.height / 2;
+                        currentY += floor.height + 0.05;
+                        return (
+                            <Floor
+                                key={floor.name}
+                                position={[0, yPos, 0]}
+                                args={[2, floor.height, 2]}
+                                color={floor.color}
+                                name={floor.name}
+                                type={floor.type}
+                                floorData={floor}
+                                isSelected={selectedFloor === floor.level}
+                                onClick={() => onFloorClick(floor.level)}
+                            />
+                        );
+                    });
+                })()}
+            </group>
+
+            {/* Cosmic Levels (floating above the surface tower) */}
+            <group position={[0, surfaceTotalHeight + 1.5, 0]}>
+                {(() => {
+                    let currentY = 0;
+                    return cosmicFloors.map((floor, i) => {
+                        const yPos = currentY + floor.height / 2;
+                        currentY += floor.height + 0.25; // Extra spacing for cosmic effect
+                        return (
+                            <Float key={floor.name} speed={1} rotationIntensity={0.15} floatIntensity={0.2}>
+                                <Floor
+                                    position={[0, yPos, 0]}
+                                    args={[1.6 - (i * 0.02), floor.height, 1.6 - (i * 0.02)]} // Tapered structure
+                                    color={floor.color}
+                                    name={floor.name}
+                                    type={floor.type}
+                                    floorData={floor}
+                                    isSelected={selectedFloor === floor.level}
+                                    onClick={() => onFloorClick(floor.level)}
+                                />
+                            </Float>
+                        );
+                    });
+                })()}
             </group>
         </group>
     );
@@ -339,22 +346,23 @@ export function Building3D({ growthLevel, setGrowthLevel, selectedFloor, setSele
                 {/* The Multiverse Orbiting System */}
                 <MultiverseSystem />
 
-                <group position={[0, -4, 0]}>
+                <group position={[0, 0, 0]}>
                     <BuildingStack
                         growthLevel={growthLevel}
                         selectedFloor={selectedFloor}
                         onFloorClick={handleFloorClick}
                     />
-                    {/* Ground Plane at Level 0 */}
-                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.4, 0]}>
+
+                    {/* Ground Plane at Level 0 (slightly below to avoid z-fighting) */}
+                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
                         <circleGeometry args={[12, 64]} />
-                        <meshStandardMaterial color="#000" transparent opacity={0.8} />
+                        <meshStandardMaterial color="#050510" transparent opacity={0.9} />
                     </mesh>
 
-                    {/* Connective Grid */}
-                    <gridHelper args={[60, 60, 0x333333, 0x111111]} position={[0, 0.5, 0]} />
+                    {/* Connective Grid at Y=0 */}
+                    <gridHelper args={[60, 60, 0x333333, 0x111111]} position={[0, 0, 0]} />
 
-                    <ContactShadows opacity={0.6} scale={40} blur={2.5} far={10} resolution={512} color="#000000" />
+                    <ContactShadows opacity={0.6} scale={40} blur={2.5} far={10} resolution={512} color="#000000" position={[0, 0, 0]} />
                 </group>
 
                 <OrbitControls
