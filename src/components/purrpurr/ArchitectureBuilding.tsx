@@ -8,7 +8,10 @@ import {
     Building2, Server
 } from 'lucide-react';
 
+
+
 import dynamic from 'next/dynamic';
+import { BUILDING_LEVELS } from '@/data/purrpurr-architecture';
 
 const Building3D = dynamic(() => import('./Building3D').then(mod => mod.Building3D), {
     ssr: false,
@@ -26,16 +29,10 @@ export function ArchitectureBuilding() {
     const [is3D, setIs3D] = useState(true); // Default to 3D as per request intent
 
     // Calculate which floors are unlocked based on growth
-    const milestones = [
-        { threshold: 15, name: "Foundation" },
-        { threshold: 30, name: "Academy" },
-        { threshold: 45, name: "Design" },
-        { threshold: 60, name: "Frontend" },
-        { threshold: 75, name: "Backend" },
-        { threshold: 85, name: "The Lab" },
-        { threshold: 95, name: "Ecosystem" },
-        { threshold: 100, name: "Vision" },
-    ];
+    const milestones = BUILDING_LEVELS.filter(l => l.level >= 0).map(l => ({
+        threshold: l.threshold,
+        name: l.name
+    }));
 
     const currentMilestone = milestones.findLast(m => growthLevel >= m.threshold)?.name || "Initiation";
 

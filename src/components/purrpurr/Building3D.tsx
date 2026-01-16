@@ -17,37 +17,9 @@ interface Building3DProps {
     setSelectedFloor: (floor: number | null) => void;
 }
 
-// --- FLOOR DATA (Same as ArchitectureBuilding manual) ---
-const FLOOR_DATA = [
-    {
-        level: 0, threshold: 15, name: "Fundación", color: "#10b981", type: 'base', height: 0.6,
-        title: "Fundación: Legal (De Cero a Uno)",
-        subtitle: "Protocolo SAS Colombia (2025)",
-        steps: [
-            { id: 'f-1', title: '1. El ADN (Estatutos)', status: 'operational', desc: 'Documento Privado de Constitución.\n• Capital Autorizado: Alto (100M)\n• Capital Suscrito: Bajo (1M)\n• CIIU: 6201, 6202, 7310', cost: 'Gratis' },
-            { id: 'f-2', title: '2. Plataforma VUE', status: 'operational', desc: 'vue.gov.co - DIAN + Cámara integrados.', link: 'https://www.vue.gov.co', cost: 'Gratis' },
-            { id: 'f-3', title: '3. Ley 1780 (Jóvenes)', status: 'operational', desc: 'Matrícula $0 para menores de 35.', cost: '-$200k' },
-            { id: 'f-4', title: '4. Tarifa Final', status: 'warning', desc: 'Impuesto + Formulario + Certificados', cost: '~$50k COP', solution: 'Vender 1 servicio freelance.' },
-            { id: 'f-5', title: '5. Banco & NIT', status: 'locked', desc: 'Abrir cuenta Pyme con NIT.', cost: '$0' },
-        ]
-    },
-    {
-        level: 1, threshold: 30, name: "Academia", color: "#eab308", type: 'standard', height: 0.8,
-        title: "La Academia: Conocimiento",
-        subtitle: "El Cerebro Digital",
-        steps: [
-            { id: 'a-1', title: '1. Diccionario Purrpurr', status: 'operational', desc: '• Purrpurr Cores: Bloques reutilizables.\n• Suites: Espacios de cliente.\n• The Forge: Fábrica de software.', cost: 'Intelectual' },
-            { id: 'a-2', title: '2. Wiki (GitHub/Notion)', status: 'pending', desc: 'Crear repositorio purrpurr-academy.', cost: 'Gratis' },
-            { id: 'a-3', title: '3. Tutoriales Zero-to-Hero', status: 'locked', desc: 'Videos de 5 min por Core.', cost: 'Tiempo' },
-        ]
-    },
-    { level: 2, threshold: 45, name: "Diseño", color: "#ec4899", type: 'standard', height: 0.8, title: "Diseño: UI/UX", subtitle: "Sistema Visual", steps: [] },
-    { level: 3, threshold: 60, name: "Frontend", color: "#0ea5e9", type: 'standard', height: 0.8, title: "Frontend: Cliente", subtitle: "Next.js & React", steps: [] },
-    { level: 4, threshold: 75, name: "Backend", color: "#3b82f6", type: 'standard', height: 0.8, title: "Backend: Servidor", subtitle: "API & DB", steps: [] },
-    { level: 5, threshold: 85, name: "The Lab", color: "#a855f7", type: 'lab', height: 1.2, title: "Laboratorio", subtitle: "Microservicios", steps: [] },
-    { level: 6, threshold: 95, name: "Ecosystem", color: "#6366f1", type: 'ecosystem', height: 0.6, title: "Ecosistema", subtitle: "Clientes", steps: [] },
-    { level: 7, threshold: 100, name: "Visión", color: "#ffffff", type: 'top', height: 1.0, title: "Visión Global", subtitle: "Estrategia IA", steps: [] },
-];
+import { BUILDING_LEVELS, MULTIVERSE_PROJECTS, MulitverseProject } from '@/data/purrpurr-architecture';
+
+const FLOOR_DATA = BUILDING_LEVELS;
 
 // --- FLOOR COMPONENT (Clickable) ---
 function Floor({ position, args, color, name, type, floorData, isSelected, onClick }: any) {
@@ -58,6 +30,11 @@ function Floor({ position, args, color, name, type, floorData, isSelected, onCli
 
     // Hover effect
     const [hovered, setHovered] = useState(false);
+    const isUnderground = type === 'underground';
+
+    // Helper for underground opacity
+    const materialOpacity = isUnderground ? 0.3 : 1;
+    const materialTransparent = isUnderground;
 
     useFrame(() => {
         if (meshRef.current) {
@@ -79,9 +56,11 @@ function Floor({ position, args, color, name, type, floorData, isSelected, onCli
                 onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
             >
                 <meshStandardMaterial
-                    color={isLab ? "#2e1065" : "#18181b"}
-                    metalness={0.8}
-                    roughness={0.2}
+                    color={isLab ? "#2e1065" : isUnderground ? "#0f0f10" : "#18181b"}
+                    metalness={isUnderground ? 0.9 : 0.8}
+                    roughness={isUnderground ? 0.1 : 0.2}
+                    transparent={materialTransparent}
+                    opacity={materialOpacity}
                 />
             </RoundedBox>
 
@@ -98,7 +77,7 @@ function Floor({ position, args, color, name, type, floorData, isSelected, onCli
             </RoundedBox>
 
             {/* Window Lights (Front Face) */}
-            {!isTop && !isBase && (
+            {!isTop && !isBase && !isUnderground && (
                 <group position={[0, 0, args[2] / 2 + 0.01]}>
                     <mesh position={[-0.5, 0, 0]}><planeGeometry args={[0.2, 0.4]} /><meshStandardMaterial color={color} emissive={color} emissiveIntensity={2} /></mesh>
                     <mesh position={[0, 0, 0]}><planeGeometry args={[0.2, 0.4]} /><meshStandardMaterial color={color} emissive={color} emissiveIntensity={2} /></mesh>
@@ -198,6 +177,85 @@ function BuildingStack({ growthLevel, selectedFloor, onFloorClick }: { growthLev
     );
 }
 
+// --- MULTIVERSE COMPONENT ---
+function MultiverseSystem() {
+    return (
+        <group>
+            {MULTIVERSE_PROJECTS.map((project, i) => (
+                <ProjectSatellite key={project.id} project={project} index={i} />
+            ))}
+        </group>
+    );
+}
+
+function ProjectSatellite({ project, index }: { project: MulitverseProject; index: number }) {
+    const meshRef = useRef<THREE.Group>(null);
+    const orbitRef = useRef<THREE.Group>(null);
+    const [hovered, setHovered] = useState(false);
+
+    useFrame(({ clock }) => {
+        if (orbitRef.current) {
+            // Orbit rotation
+            orbitRef.current.rotation.y = clock.getElapsedTime() * project.orbitSpeed + (index * 2);
+        }
+        if (meshRef.current) {
+            // Self rotation
+            meshRef.current.rotation.y += 0.01;
+            meshRef.current.rotation.z = Math.sin(clock.getElapsedTime() * 0.5) * 0.1;
+        }
+    });
+
+    return (
+        <group ref={orbitRef}>
+            <group position={[project.orbitRadius, 0, 0]}>
+                <group ref={meshRef}
+                    onPointerOver={() => { setHovered(true); document.body.style.cursor = 'pointer'; }}
+                    onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
+                >
+                    {/* Planet Mesh */}
+                    <mesh>
+                        <sphereGeometry args={[1.5, 32, 32]} />
+                        <meshStandardMaterial
+                            color={project.color}
+                            emissive={project.color}
+                            emissiveIntensity={hovered ? 0.5 : 0.1}
+                            metalness={0.6}
+                            roughness={0.4}
+                            wireframe={project.type === 'foundation'}
+                        />
+                    </mesh>
+
+                    {/* Rings for style */}
+                    <mesh rotation={[Math.PI / 2, 0, 0]}>
+                        <torusGeometry args={[2.2, 0.05, 16, 100]} />
+                        <meshStandardMaterial color={project.color} transparent opacity={0.3} />
+                    </mesh>
+
+                    {/* Label */}
+                    <Html distanceFactor={20} position={[0, 2.5, 0]} center style={{ pointerEvents: 'none' }}>
+                        <div className={`
+                            px-3 py-1.5 rounded-lg border backdrop-blur-md transition-all duration-300
+                            ${hovered ? 'bg-zinc-900/90 border-purple-500 scale-110' : 'bg-black/50 border-white/10 opacity-60'}
+                        `}>
+                            <p className="text-white text-xs font-bold whitespace-nowrap">{project.name}</p>
+                            {hovered && (
+                                <p className="text-[10px] text-zinc-400 max-w-[150px] mt-1">{project.description}</p>
+                            )}
+                        </div>
+                    </Html>
+                </group>
+
+                {/* Orbit Trail (Visual guide) */}
+                <mesh rotation={[Math.PI / 2, 0, 0]}>
+                    <ringGeometry args={[project.orbitRadius - 0.1, project.orbitRadius + 0.1, 64]} />
+                    <meshBasicMaterial color="white" transparent opacity={0.03} side={THREE.DoubleSide} />
+                </mesh>
+            </group>
+        </group>
+    );
+}
+
+
 // --- MAIN COMPONENT ---
 export function Building3D({ growthLevel, setGrowthLevel, selectedFloor, setSelectedFloor }: Building3DProps) {
 
@@ -205,43 +263,52 @@ export function Building3D({ growthLevel, setGrowthLevel, selectedFloor, setSele
         setSelectedFloor(selectedFloor === level ? null : level);
     };
 
-    const handleCanvasClick = () => {
-        // Deselect when clicking empty space
-        // This is handled by floor.onClick stopPropagation
-    };
-
     return (
-        <div className="fixed inset-0 bg-zinc-950 z-[5]" style={{ backgroundColor: '#09090b' }}>
+        <div className="fixed inset-0 bg-zinc-950 z-[5]" style={{ backgroundColor: '#050505' }}>
             <Canvas
-                camera={{ position: [8, 6, 8], fov: 45 }}
+                camera={{ position: [25, 20, 25], fov: 35 }}
                 onClick={() => setSelectedFloor(null)}
             >
-                <color attach="background" args={['#09090b']} />
-                <fog attach="fog" args={['#09090b', 10, 30]} />
+                <color attach="background" args={['#050505']} />
+                <fog attach="fog" args={['#050505', 30, 90]} />
 
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} />
-                <pointLight position={[-10, 5, -10]} intensity={0.5} color="#4c1d95" />
+                <ambientLight intensity={0.4} />
+                <pointLight position={[10, 20, 10]} intensity={1.5} color="#ffffff" />
+                <pointLight position={[-20, -10, -20]} intensity={1} color="#4c1d95" />
 
-                <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+                {/* Universe Stars */}
+                <Stars radius={200} depth={100} count={8000} factor={6} saturation={0} fade speed={0.5} />
+                <Sparkles count={500} scale={40} size={4} speed={0.4} opacity={0.4} color="#a855f7" />
 
-                <group position={[0, -1, 0]}>
+                {/* The Multiverse Orbiting System */}
+                <MultiverseSystem />
+
+                <group position={[0, -4, 0]}>
                     <BuildingStack
                         growthLevel={growthLevel}
                         selectedFloor={selectedFloor}
                         onFloorClick={handleFloorClick}
                     />
-                    <ContactShadows opacity={0.5} scale={20} blur={2} far={4} resolution={256} color="#000000" />
+                    {/* Ground Plane at Level 0 */}
+                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.4, 0]}>
+                        <circleGeometry args={[12, 64]} />
+                        <meshStandardMaterial color="#000" transparent opacity={0.8} />
+                    </mesh>
+
+                    {/* Connective Grid */}
+                    <gridHelper args={[60, 60, 0x333333, 0x111111]} position={[0, 0.5, 0]} />
+
+                    <ContactShadows opacity={0.6} scale={40} blur={2.5} far={10} resolution={512} color="#000000" />
                 </group>
 
                 <OrbitControls
                     enableZoom={true}
-                    minDistance={4}
-                    maxDistance={15}
-                    minPolarAngle={Math.PI / 6}
-                    maxPolarAngle={Math.PI / 2.2}
+                    minDistance={10}
+                    maxDistance={60}
+                    minPolarAngle={0}
+                    maxPolarAngle={Math.PI / 1.8}
                     autoRotate={selectedFloor === null}
-                    autoRotateSpeed={0.3}
+                    autoRotateSpeed={0.5}
                 />
             </Canvas>
 
