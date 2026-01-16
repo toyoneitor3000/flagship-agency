@@ -17,9 +17,10 @@ interface Building3DProps {
     setSelectedFloor: (floor: number | null) => void;
 }
 
-import { BUILDING_LEVELS, MULTIVERSE_PROJECTS, MulitverseProject } from '@/data/purrpurr-architecture';
+import { BUILDING_LEVELS, MULTIVERSE_PROJECTS, MultiverseProject, BuildingLevel } from '@/data/purrpurr-architecture';
 
-const FLOOR_DATA = BUILDING_LEVELS;
+// Sort floors: Underground first (most negative), then surface, then cosmic/transcendent (highest)
+const FLOOR_DATA = [...BUILDING_LEVELS].sort((a, b) => a.level - b.level);
 
 // --- FLOOR COMPONENT (Clickable) ---
 function Floor({ position, args, color, name, type, floorData, isSelected, onClick }: any) {
@@ -31,10 +32,11 @@ function Floor({ position, args, color, name, type, floorData, isSelected, onCli
     // Hover effect
     const [hovered, setHovered] = useState(false);
     const isUnderground = type === 'underground';
+    const isCosmic = type === 'cosmic' || type === 'transcendent';
 
-    // Helper for underground opacity
-    const materialOpacity = isUnderground ? 0.3 : 1;
-    const materialTransparent = isUnderground;
+    // Helper for underground/cosmic opacity
+    const materialOpacity = isUnderground ? 0.3 : isCosmic ? 0.6 : 1;
+    const materialTransparent = isUnderground || isCosmic;
 
     useFrame(() => {
         if (meshRef.current) {
@@ -56,9 +58,9 @@ function Floor({ position, args, color, name, type, floorData, isSelected, onCli
                 onPointerOut={() => { setHovered(false); document.body.style.cursor = 'auto'; }}
             >
                 <meshStandardMaterial
-                    color={isLab ? "#2e1065" : isUnderground ? "#0f0f10" : "#18181b"}
-                    metalness={isUnderground ? 0.9 : 0.8}
-                    roughness={isUnderground ? 0.1 : 0.2}
+                    color={isLab ? "#2e1065" : isUnderground ? "#0f0f10" : isCosmic ? "#0a0a1a" : "#18181b"}
+                    metalness={isUnderground ? 0.9 : isCosmic ? 0.95 : 0.8}
+                    roughness={isUnderground ? 0.1 : isCosmic ? 0.05 : 0.2}
                     transparent={materialTransparent}
                     opacity={materialOpacity}
                 />
@@ -150,29 +152,83 @@ function Floor({ position, args, color, name, type, floorData, isSelected, onCli
 
 // --- BUILDING STACK ---
 function BuildingStack({ growthLevel, selectedFloor, onFloorClick }: { growthLevel: number; selectedFloor: number | null; onFloorClick: (level: number) => void }) {
-    let currentY = 0;
     const visibleFloors = FLOOR_DATA.filter(f => growthLevel >= f.threshold);
 
-    return (
-        <group position={[0, -2, 0]}>
-            {visibleFloors.map((floor) => {
-                const yPos = currentY + floor.height / 2;
-                currentY += floor.height + 0.05;
+    // Separate floors into groups for proper positioning
+    const undergroundFloors = visibleFloors.filter(f => f.level < 0).sort((a, b) => a.level - b.level); // -4 to -1
+    const surfaceFloors = visibleFloors.filter(f => f.level >= 0 && f.level <= 10).sort((a, b) => a.level - b.level); // 0 to 10
+    const cosmicFloors = visibleFloors.filter(f => f.level > 10).sort((a, b) => a.level - b.level); // 11+
 
-                return (
-                    <Floor
-                        key={floor.name}
-                        position={[0, yPos, 0]}
-                        args={[2, floor.height, 2]}
-                        color={floor.color}
-                        name={floor.name}
-                        type={floor.type}
-                        floorData={floor}
-                        isSelected={selectedFloor === floor.level}
-                        onClick={() => onFloorClick(floor.level)}
-                    />
-                );
-            })}
+    // Calculate positions
+    let undergroundY = 0;
+    let surfaceY = 0;
+    let cosmicY = 0;
+
+    return (
+        <group position={[0, 0, 0]}>
+            {/* Underground (below surface) */}
+            <group position={[0, -3, 0]}>
+                {undergroundFloors.map((floor, i) => {
+                    const yPos = undergroundY - floor.height / 2;
+                    undergroundY -= floor.height + 0.08;
+                    return (
+                        <Floor
+                            key={floor.name}
+                            position={[0, yPos, 0]}
+                            args={[2.2, floor.height, 2.2]}
+                            color={floor.color}
+                            name={floor.name}
+                            type={floor.type}
+                            floorData={floor}
+                            isSelected={selectedFloor === floor.level}
+                            onClick={() => onFloorClick(floor.level)}
+                        />
+                    );
+                })}
+            </group>
+
+            {/* Surface Tower (main building) */}
+            <group position={[0, -2.5, 0]}>
+                {surfaceFloors.map((floor) => {
+                    const yPos = surfaceY + floor.height / 2;
+                    surfaceY += floor.height + 0.05;
+                    return (
+                        <Floor
+                            key={floor.name}
+                            position={[0, yPos, 0]}
+                            args={[2, floor.height, 2]}
+                            color={floor.color}
+                            name={floor.name}
+                            type={floor.type}
+                            floorData={floor}
+                            isSelected={selectedFloor === floor.level}
+                            onClick={() => onFloorClick(floor.level)}
+                        />
+                    );
+                })}
+            </group>
+
+            {/* Cosmic Levels (floating above) */}
+            <group position={[0, surfaceY + 2, 0]}>
+                {cosmicFloors.map((floor, i) => {
+                    const yPos = cosmicY + floor.height / 2 + (i * 0.3); // Extra spacing between cosmic levels
+                    cosmicY += floor.height + 0.2;
+                    return (
+                        <Float key={floor.name} speed={1} rotationIntensity={0.2} floatIntensity={0.3}>
+                            <Floor
+                                position={[0, yPos, 0]}
+                                args={[1.6 - (i * 0.03), floor.height, 1.6 - (i * 0.03)]} // Getting smaller as they go up
+                                color={floor.color}
+                                name={floor.name}
+                                type={floor.type}
+                                floorData={floor}
+                                isSelected={selectedFloor === floor.level}
+                                onClick={() => onFloorClick(floor.level)}
+                            />
+                        </Float>
+                    );
+                })}
+            </group>
         </group>
     );
 }
@@ -188,7 +244,7 @@ function MultiverseSystem() {
     );
 }
 
-function ProjectSatellite({ project, index }: { project: MulitverseProject; index: number }) {
+function ProjectSatellite({ project, index }: { project: MultiverseProject; index: number }) {
     const meshRef = useRef<THREE.Group>(null);
     const orbitRef = useRef<THREE.Group>(null);
     const [hovered, setHovered] = useState(false);

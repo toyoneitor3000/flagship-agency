@@ -29,12 +29,13 @@ export function ArchitectureBuilding() {
     const [is3D, setIs3D] = useState(true); // Default to 3D as per request intent
 
     // Calculate which floors are unlocked based on growth
-    const milestones = BUILDING_LEVELS.filter(l => l.level >= 0).map(l => ({
-        threshold: l.threshold,
-        name: l.name
-    }));
+    const visibleLevels = BUILDING_LEVELS.filter(l => growthLevel >= l.threshold);
+    const totalLevels = BUILDING_LEVELS.length;
 
-    const currentMilestone = milestones.findLast(m => growthLevel >= m.threshold)?.name || "Initiation";
+    // Get highest visible level name
+    const surfaceLevels = visibleLevels.filter(l => l.level >= 0);
+    const highestLevel = surfaceLevels.sort((a, b) => b.level - a.level)[0];
+    const currentMilestone = highestLevel?.name || "Iniciando";
 
     return (
         <div className="w-full max-w-7xl mx-auto p-4 md:p-12 min-h-screen flex flex-col md:flex-row gap-16 items-start justify-center bg-zinc-950">
@@ -53,7 +54,7 @@ export function ArchitectureBuilding() {
                 <div className="space-y-8">
                     <div>
                         <div className="flex justify-between items-center mb-3">
-                            <span className="text-[10px] font-bold uppercase text-zinc-500 tracking-wider">Evolution</span>
+                            <span className="text-[10px] font-bold uppercase text-zinc-500 tracking-wider">Evolución</span>
                             <span className="text-xs font-mono font-bold text-purple-400">{growthLevel}%</span>
                         </div>
                         <input
@@ -64,6 +65,9 @@ export function ArchitectureBuilding() {
                             onChange={(e) => setGrowthLevel(Number(e.target.value))}
                             className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-purple-500 hover:accent-purple-400 transition-all"
                         />
+                        <p className="text-[10px] text-zinc-500 text-right mt-2">
+                            {visibleLevels.length} / {totalLevels} Niveles Activos
+                        </p>
                     </div>
 
                     <button
