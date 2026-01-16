@@ -23,19 +23,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     secret: process.env.AUTH_SECRET,
     trustHost: true,
     callbacks: {
-        async session({ session, user }: any) {
-            if (session.user) {
-                session.user.id = user.id;
+        async jwt({ token, user }: any) {
+            // Initial sign in
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+
+                // Hardcoded Admin Check (Temporary since DB is disabled)
                 const adminEmails = ['camilotoloza1136@gmail.com', 'purpuregamechanger@gmail.com'];
-                // Force Admin role for specific emails, otherwise fallback to DB role
-                if (adminEmails.includes(user.email)) {
-                    session.user.role = 'admin';
+                if (user.email && adminEmails.includes(user.email)) {
+                    token.role = 'admin';
                 } else {
-                    session.user.role = user.role || 'user';
+                    token.role = 'user';
                 }
             }
-
-
+            return token;
+        },
+        async session({ session, token }: any) {
+            if (session.user && token) {
+                session.user.id = token.id as string;
+                session.user.role = token.role as string;
+                session.user.email = token.email as string;
+            }
             return session;
         },
     },
