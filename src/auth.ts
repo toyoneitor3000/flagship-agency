@@ -5,7 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-    adapter: PrismaAdapter(prisma),
+    // adapter: PrismaAdapter(prisma), // Disabled for Production stability (SQLite not supported on Vercel)
     providers: [
         Google({
             clientId: process.env.AUTH_GOOGLE_ID,
