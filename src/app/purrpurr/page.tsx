@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Bot, Terminal, Eye, Zap, Shield, Sparkles, Building2 } from 'lucide-react';
+import { Bot, Terminal, Eye, Zap, Shield, Sparkles, Building2, Globe } from 'lucide-react';
 import { PurrpurrGuide } from '@/components/purrpurr/PurrpurrGuide';
 import { PurrpurrGlitch } from '@/components/purrpurr/PurrpurrGlitch';
 import { Navbar } from '@/components/ui/Navbar';
@@ -223,18 +223,26 @@ export default function PurrpurrEcosystemPage() {
                         <p className="text-zinc-400 mb-8">
                             Purrpurr está activo en todos los laboratorios. Visita el Dashboard para verlo en acción.
                         </p>
-                        <a
-                            href="/lab"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(147,51,234,0.3)]"
-                        >
-                            Entrar al Laboratorio <Bot className="w-5 h-5" />
-                        </a>
-                        <a
-                            href="/purrpurr/architecture"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full font-bold transition-all hover:scale-105 border border-white/10 ml-4"
-                        >
-                            Ver Arquitectura <Building2 className="w-5 h-5" />
-                        </a>
+                        <div className="flex flex-wrap items-center justify-center gap-4">
+                            <a
+                                href="/lab"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(147,51,234,0.3)]"
+                            >
+                                Entrar al Laboratorio <Bot className="w-5 h-5" />
+                            </a>
+                            <a
+                                href="/purrpurr/multiverse"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(20,184,166,0.3)]"
+                            >
+                                El Multiverso <Globe className="w-5 h-5" />
+                            </a>
+                            <a
+                                href="/purrpurr/architecture"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full font-bold transition-all hover:scale-105 border border-white/10"
+                            >
+                                Ver Arquitectura <Building2 className="w-5 h-5" />
+                            </a>
+                        </div>
                     </motion.div>
 
                 </div>
