@@ -22,8 +22,7 @@ export const Navbar = () => {
   const router = useRouter();
 
   // Hide navbar on deployed site pages (/sites/[slug])
-  // Check if we're on /sites/something (but not just /sites)
-  const isSiteViewPage = pathname.startsWith('/sites/') && pathname !== '/sites/';
+  const isSiteViewPage = (pathname.startsWith('/sites/') && pathname !== '/sites/');
 
   if (isSiteViewPage) {
     return null;

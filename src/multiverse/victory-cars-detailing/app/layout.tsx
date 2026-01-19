@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     description: 'Expertos en Detailing y Protección Automotriz en Bogotá.',
     images: ['/logo.png'], // Fallback
   },
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   robots: {
     index: true,
     follow: true,

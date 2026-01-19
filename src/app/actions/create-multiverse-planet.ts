@@ -41,8 +41,8 @@ export async function createMultiversePlanet(name: string, description: string, 
             productionUrl: null, // New projects start without URLs
             localUrl: `/purrpurr/multiverse/${slug}`, // Internal routing
             framework: 'Next.js',
-            status: 'development',
-            type: 'Startup',
+            status: 'development' as const,
+            type: 'startup' as const,
             buildingLevels: 1, // Start as a small asteroid/station
             isSelf: false
         };
