@@ -32,10 +32,10 @@ export interface FluidConfig {
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
     config: { stiffness: 269, damping: 22, mass: 5 },
     colors: {
-        color1: '#dff0a3',
-        color2: '#cde6b7',
-        color3: '#ff0000',
-        color4: '#050505'
+        color1: '#6366f1', // Indigo
+        color2: '#00FF9C', // Spring Green
+        color3: '#000000', // Black
+        color4: '#050505'  // Deep Black
     },
     buttonPalette: {
         primary: '#8f69ff', // Indigo 500
@@ -48,7 +48,7 @@ export const FLUID_PRESET_PURRPURR: FluidConfig = {
     grainOpacity: 0.5,
     interactionRadius: 1.1,
     fluidZoom: 0.7,
-    blendThresholds: { blend1: 0.4, blend2: 0, blend3: 0 }
+    blendThresholds: { blend1: 0.2, blend2: 0.4, blend3: 0.6 }
 };
 
 // Add more presets here if needed

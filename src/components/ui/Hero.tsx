@@ -62,8 +62,6 @@ export const Hero = () => {
   return (
     <section className='relative min-h-screen flex items-center justify-center overflow-hidden pt-20 selection:bg-[#8f69ff]/30 selection:text-[#0f0033] touch-none' data-section-theme='light'>
 
-      {/* --- FLUID BACKGROUND --- */}
-      {/* --- FLUID BACKGROUND REMOVED: Using Global UserFluidBackground --- */}
 
 
       {/* 3. Invisible Contrast Box (Reduced Opacity) - KEEPING AS SECONDARY LAYER */}

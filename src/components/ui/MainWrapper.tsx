@@ -30,14 +30,21 @@ export const MainWrapper = ({ children }: MainWrapperProps) => {
     const isHomePage = pathname === '/';
     const isLabPage = pathname.startsWith('/lab');
 
+    const paths = pathname.split('/').filter(Boolean);
+    const hasPath = paths.length > 0;
+
     return (
         <main className="flex-grow">
-            {!isHomePage && !isLabPage && (
-                <div className="container mx-auto px-4 pt-16 pb-2 md:px-6">
-                    <Breadcrumbs />
+            {hasPath && (
+                <div className="fixed top-14 left-0 right-0 z-[90] bg-zinc-950/10 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
+                    <div className="container mx-auto px-4 py-2 md:px-6">
+                        <Breadcrumbs />
+                    </div>
                 </div>
             )}
-            {children}
+            <div className={hasPath ? "pt-24" : ""}>
+                {children}
+            </div>
         </main>
     );
 };

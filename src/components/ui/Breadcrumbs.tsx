@@ -20,9 +20,9 @@ export const Breadcrumbs = ({ className }: { className?: string }) => {
         <nav aria-label="Breadcrumb" className={cn("flex items-center space-x-2 font-mono text-xs md:text-sm", className)}>
             <Link
                 href="/"
-                className="text-zinc-500 hover:text-green-400 transition-colors flex items-center"
+                className="text-zinc-300 hover:text-green-400 transition-colors flex items-center"
             >
-                <Home className="w-3 h-3 md:w-4 md:h-4" />
+                <Home className="w-3.5 h-3.5" />
             </Link>
 
             {paths.map((path, index) => {
@@ -31,7 +31,7 @@ export const Breadcrumbs = ({ className }: { className?: string }) => {
 
                 // Custom Mappings
                 const labelMap: Record<string, string> = {
-                    'labs': 'Purrpurr Lab',
+                    'labs': 'Purrpurr Labs',
                     'social-labs': 'Social Labs'
                 };
 
@@ -51,7 +51,7 @@ export const Breadcrumbs = ({ className }: { className?: string }) => {
                         ) : (
                             <Link
                                 href={href}
-                                className="text-zinc-500 hover:text-zinc-300 transition-colors"
+                                className="text-zinc-300 hover:text-white transition-colors"
                             >
                                 {label}
                             </Link>

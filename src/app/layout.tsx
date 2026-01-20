@@ -66,6 +66,7 @@ import { ThemeColorManager } from "@/components/ui/ThemeColorManager";
 import { MainWrapper } from "@/components/ui/MainWrapper";
 import { AnalyticsTracker } from "@/hooks/useAnalytics";
 import { AdminNotifications } from "@/components/notifications/AdminNotifications";
+import { PurrPurrGuardian } from "@/components/purrpurr/PurrPurrGuardian";
 
 
 
@@ -96,6 +97,8 @@ export default async function RootLayout({
                   <MainWrapper>
                     {children}
                   </MainWrapper>
+
+                  <PurrPurrGuardian />
 
                   <Footer />
                 </div>

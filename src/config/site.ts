@@ -1,8 +1,8 @@
 export const siteConfig = {
-    name: "Purrpurr Development",
-    parent: "Purrpurr Lab",
-    description: "Una creación del laboratorio Purrpurr Lab.",
-    acronym: "PURRPURR_DEV",
+    name: "Purrpurr Flagship Agency",
+    parent: "Purrpurr",
+    description: "La arquitectura nativa de Purrpurr.",
+    acronym: "PURRPURR_FLAGSHIP",
     contact: {
         email: "contact@purrpurr.dev",
     },

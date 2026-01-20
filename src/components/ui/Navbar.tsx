@@ -151,7 +151,7 @@ export const Navbar = () => {
                 Lab
               </Link>
               <Link href='/purrpurr' className={cn('text-sm font-medium transition-colors hover:text-purple-400 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400')}>
-                Purrpurr AI
+                Purrpurr
               </Link>
               <Link href='/wiki' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
                 Wiki
@@ -228,27 +228,27 @@ export const Navbar = () => {
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-blue-500 animate-pulse">_</span>
                 </Link>
                 <Link href='/purrpurr' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-purple-500/50 text-xs'>[AI]</span>
+                  <span className='text-purple-500/50 text-xs'>[05]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Purrpurr</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-purple-500 animate-pulse">_</span>
                 </Link>
                 <Link href='/wiki' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-cyan-500/50 text-xs'>[05]</span>
+                  <span className='text-cyan-500/50 text-xs'>[06]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Wiki</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-cyan-500 animate-pulse">_</span>
                 </Link>
                 <Link href='/news' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-orange-500/50 text-xs'>[06]</span>
+                  <span className='text-orange-500/50 text-xs'>[07]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./News</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-orange-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#pricing' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-yellow-500/50 text-xs'>[07]</span>
+                  <span className='text-yellow-500/50 text-xs'>[08]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Precios</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-yellow-500 animate-pulse">_</span>
                 </Link>
                 <Link href='#invitation' className='flex items-center gap-4 text-zinc-400 hover:text-green-400 group p-2 hover:bg-zinc-900/50 rounded-lg transition-all drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]' onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className='text-green-500/50 text-xs'>[08]</span>
+                  <span className='text-green-500/50 text-xs'>[09]</span>
                   <span className="text-xl group-hover:translate-x-2 transition-transform">./Contacto</span>
                   <span className="ml-auto opacity-0 group-hover:opacity-100 text-green-500 animate-pulse">_</span>
                 </Link>

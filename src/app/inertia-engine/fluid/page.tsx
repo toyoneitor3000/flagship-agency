@@ -8,12 +8,21 @@ import Magnetic from '@/components/creative/Magnetic';
 import FluidBackground from '@/components/creative/FluidBackground';
 import { ArrowDown, Sliders, Activity, Palette, Droplets, Save, Plus, Trash2, MousePointerClick } from 'lucide-react';
 import { FLUID_PRESET_PURRPURR } from '@/config/creative';
-import { saveFluidConfig, saveFluidPresets, getUserFluidConfig, getUserFluidPresets, type FluidPreset } from './actions';
+import { saveFluidConfig, saveFluidPresets, getUserFluidConfig, getUserFluidPresets, saveGlobalFluidConfig, type FluidPreset } from './actions';
+import { useSession } from 'next-auth/react';
 
 import { useRouter } from 'next/navigation';
 
 export default function CreativeLabPage() {
     const router = useRouter();
+    const { data: session, status } = useSession();
+
+    // Redirect if not logged in
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push('/api/auth/signin');
+        }
+    }, [status, router]);
 
     // -- STATE --
     // We use individual states to control the sliders easily, but we could group them.
@@ -31,9 +40,12 @@ export default function CreativeLabPage() {
 
     const [userPresets, setUserPresets] = useState<FluidPreset[]>([]);
 
+    const isAdmin = session?.user?.email && ['camilotoloza1136@gmail.com', 'purpuregamechanger@gmail.com'].includes(session.user.email);
+
     const [showControls, setShowControls] = useState(true);
     const [debug, setDebug] = useState(false);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+    const [globalSaveStatus, setGlobalSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
     const [presetStatus, setPresetStatus] = useState<'idle' | 'saving'>('idle');
 
     // -- LOAD DATA ON MOUNT --
@@ -84,25 +96,29 @@ export default function CreativeLabPage() {
         buttonPalette
     });
 
-    const handleSaveToLanding = async () => {
-        setSaveStatus('saving');
+    const handleSaveToLanding = async (type: 'personal' | 'global') => {
+        const setStatus = type === 'global' ? setGlobalSaveStatus : setSaveStatus;
+        setStatus('saving');
+
         try {
-            const result = await saveFluidConfig(getCurrentState());
+            const result = type === 'global'
+                ? await saveGlobalFluidConfig(getCurrentState())
+                : await saveFluidConfig(getCurrentState());
 
             if (!result.success) {
-                console.error('Save failed:', result.error);
-                setSaveStatus('error');
-                setTimeout(() => setSaveStatus('idle'), 3000);
+                console.error(`Save ${type} failed:`, result.error);
+                setStatus('error');
+                setTimeout(() => setStatus('idle'), 3000);
                 return;
             }
 
-            setSaveStatus('success');
-            setTimeout(() => setSaveStatus('idle'), 2000);
-            router.refresh(); // Refresh to update layouts
+            setStatus('success');
+            setTimeout(() => setStatus('idle'), 2000);
+            router.refresh();
         } catch (error) {
-            console.error('Unexpected error saving config:', error);
-            setSaveStatus('error');
-            setTimeout(() => setSaveStatus('idle'), 3000);
+            console.error(`Unexpected error saving ${type} config:`, error);
+            setStatus('error');
+            setTimeout(() => setStatus('idle'), 3000);
         }
     };
 
@@ -178,21 +194,40 @@ export default function CreativeLabPage() {
                                 <div className="h-2 w-2 rounded-full bg-[#00FF9C] animate-pulse" />
                             </div>
 
-                            {/* GLOBAL SAVE ACTION */}
-                            <button
-                                onClick={handleSaveToLanding}
-                                disabled={saveStatus !== 'idle'}
-                                className={`w-full px-3 py-3 rounded border font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed
-                                    ${saveStatus === 'success' ? 'bg-green-500 border-green-500 text-black font-bold' : ''}
-                                    ${saveStatus === 'error' ? 'bg-red-500 border-red-500 text-white' : ''}
-                                    ${saveStatus === 'idle' || saveStatus === 'saving' ? 'bg-[#6D28D9] text-white border-[#6D28D9] hover:bg-[#5b21b6]' : ''}
-                                `}
-                            >
-                                {saveStatus === 'idle' && <><Save className="w-4 h-4" /> AGREGAR A LANDING</>}
-                                {saveStatus === 'saving' && <><Activity className="w-4 h-4 animate-spin" /> EXPORTANDO...</>}
-                                {saveStatus === 'success' && <div className="flex items-center gap-2">✨ ASIGNADO</div>}
-                                {saveStatus === 'error' && 'ERROR'}
-                            </button>
+                            {/* GLOBAL SAVE ACTION - DUAL BUTTONS FOR ADMIN */}
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    onClick={() => handleSaveToLanding('personal')}
+                                    disabled={saveStatus !== 'idle'}
+                                    className={`w-full px-3 py-3 rounded border font-mono text-[10px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed
+                                        ${saveStatus === 'success' ? 'bg-green-500 border-green-500 text-black font-bold' : ''}
+                                        ${saveStatus === 'error' ? 'bg-red-500 border-red-500 text-white' : ''}
+                                        ${saveStatus === 'idle' || saveStatus === 'saving' ? 'bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700' : ''}
+                                    `}
+                                >
+                                    {saveStatus === 'idle' && <><Save className="w-4 h-4" /> A LANDING PERSONAL</>}
+                                    {saveStatus === 'saving' && <><Activity className="w-4 h-4 animate-spin" /> PROCESANDO...</>}
+                                    {saveStatus === 'success' && <div className="flex items-center gap-2">✨ GUARDADO</div>}
+                                    {saveStatus === 'error' && 'ERROR'}
+                                </button>
+
+                                {isAdmin && (
+                                    <button
+                                        onClick={() => handleSaveToLanding('global')}
+                                        disabled={globalSaveStatus !== 'idle'}
+                                        className={`w-full px-3 py-3 rounded border font-mono text-[10px] uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed
+                                            ${globalSaveStatus === 'success' ? 'bg-[#00FF9C] border-[#00FF9C] text-black font-bold' : ''}
+                                            ${globalSaveStatus === 'error' ? 'bg-red-500 border-red-500 text-white' : ''}
+                                            ${globalSaveStatus === 'idle' || globalSaveStatus === 'saving' ? 'bg-[#6D28D9] text-white border-[#6D28D9] hover:bg-[#5b21b6]' : ''}
+                                        `}
+                                    >
+                                        {globalSaveStatus === 'idle' && <><Plus className="w-4 h-4" /> A LANDING GLOBAL</>}
+                                        {globalSaveStatus === 'saving' && <><Activity className="w-4 h-4 animate-spin" /> ACTUALIZANDO...</>}
+                                        {globalSaveStatus === 'success' && <div className="flex items-center gap-2">🌍 GLOBAL ACTUALIZADO</div>}
+                                        {globalSaveStatus === 'error' && 'ERROR'}
+                                    </button>
+                                )}
+                            </div>
 
                             <div className="h-px bg-zinc-800" />
 

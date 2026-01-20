@@ -1,27 +1,28 @@
+'use client';
 
+import { useState, useEffect } from "react";
 import { getUserFluidConfig } from "@/app/inertia-engine/fluid/actions";
 import FluidBackground from "@/components/creative/FluidBackground";
-import { FLUID_PRESET_PURRPURR, type FluidConfig } from "@/config/creative";
+import { FLUID_PRESET_PURRPURR } from "@/config/creative";
 
-export async function UserFluidBackground() {
-    let config: FluidConfig = FLUID_PRESET_PURRPURR;
+export function UserFluidBackground() {
+    const [config, setConfig] = useState(FLUID_PRESET_PURRPURR);
 
-    try {
-        const userConfig = await getUserFluidConfig();
-
-        if (userConfig) {
-            console.log("[UserFluidBackground] Loaded custom config from database");
-            config = userConfig;
-        } else {
-            console.log("[UserFluidBackground] No custom config found, using default preset");
-        }
-    } catch (error) {
-        console.error("[UserFluidBackground] Error loading config, falling back to default:", error);
-        // Continue with default preset
-    }
+    useEffect(() => {
+        const fetchConfig = async () => {
+            try {
+                const fetchedConfig = await getUserFluidConfig();
+                if (fetchedConfig) {
+                    setConfig(fetchedConfig);
+                }
+            } catch (error) {
+                console.error("[UserFluidBackground] Error fetching config:", error);
+            }
+        };
+        fetchConfig();
+    }, []);
 
     // Generate a unique key based on config to force remount when config changes
-    // This ensures the WebGL canvas is properly recreated
     const configKey = JSON.stringify(config.colors) + config.speed + config.force;
 
     return (

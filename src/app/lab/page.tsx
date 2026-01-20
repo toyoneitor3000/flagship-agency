@@ -10,7 +10,8 @@ import { Cockpit } from '@/components/purrpurr/Cockpit';
 import Link from 'next/link';
 import {
     Activity, AlertTriangle, Play, CheckCircle,
-    Wind, Type, Layers, User, Command, Share2
+    Wind, Type, Layers, User, Command, Share2,
+    Globe, Building2
 } from 'lucide-react';
 
 import { usePurrpurr } from '@/components/purrpurr/PurrpurrContext';
@@ -282,6 +283,36 @@ export default function PurrpurrTestPage() {
                         </motion.div>
                     </div>
                 )}
+            </div>
+
+            {/* Integration CTA - Relocated from Purrpurr public page */}
+            <div className="container mx-auto px-4 pb-32">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="max-w-4xl mx-auto text-center bg-gradient-to-br from-zinc-900 to-black border border-purple-500/30 p-12 rounded-3xl relative overflow-hidden"
+                >
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+                    <h2 className="text-3xl font-bold mb-6">Experimenta la Arquitectura</h2>
+                    <p className="text-zinc-400 mb-8 max-w-2xl mx-auto">
+                        Purrpurr está activo en todos los laboratorios. Explora el multiverso o visualiza la arquitectura técnica del sistema.
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-4">
+                        <Link
+                            href="/purrpurr/multiverse"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(20,184,166,0.3)]"
+                        >
+                            El Multiverso <Globe className="w-5 h-5" />
+                        </Link>
+                        <Link
+                            href="/purrpurr/architecture"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full font-bold transition-all hover:scale-105 border border-white/10"
+                        >
+                            Ver Arquitectura <Building2 className="w-5 h-5" />
+                        </Link>
+                    </div>
+                </motion.div>
             </div>
 
             <PurrpurrGuide

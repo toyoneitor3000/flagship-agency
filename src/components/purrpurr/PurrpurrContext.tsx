@@ -90,10 +90,10 @@ export const PurrpurrProvider = ({ children }: { children: React.ReactNode }) =>
             setMood('happy');
         }
         else {
-            // Default / Home
+            // Default / Home (Sede Tierra)
             setRole('concierge');
-            setMessage('Purrpurr System online.');
-            setMood('sleeping');
+            setMessage('¡Qué chimba que estés acá! Estás en la sede tierra de Purrpurr. Te estaba esperando para darte la bienvenida al edificio.');
+            setMood('happy');
         }
     };
 

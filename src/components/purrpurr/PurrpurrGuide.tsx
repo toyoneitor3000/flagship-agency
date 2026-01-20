@@ -53,7 +53,7 @@ export const PurrpurrGuide = ({ tip, mode = 'contextual', isVisible = true, onNe
             case 'muse': return 'CREATIVE_CORE';
             case 'guardian': return 'SYSTEM_DEFENSE';
             case 'concierge':
-            default: return 'Purrpurr_AI';
+            default: return 'Purrpurr';
         }
     };
 
