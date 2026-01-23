@@ -96,6 +96,18 @@ export function LeadsManager() {
         setLoading(true);
         try {
             const res = await fetch(`/api/demo/leads?status=${filter}`);
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`API Error (${res.status}): ${text.substring(0, 100)}`);
+            }
+
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                throw new Error(`Invalid content type: ${contentType}. Preview: ${text.substring(0, 100)}`);
+            }
+
             const data = await res.json();
             if (data.success) {
                 setDemos(data.demos);

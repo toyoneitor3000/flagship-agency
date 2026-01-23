@@ -6,7 +6,7 @@ import { Bell } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
 // Admin emails that can see notifications
-const ADMIN_EMAILS = ['purrpurrdev@gmail.com', 'camilotoloza1136@gmail.com'];
+const ADMIN_EMAILS = ['camilotoloza1136@gmail.com', 'purrpurrdev@gmail.com', 'purpuregamechanger@gmail.com'];
 
 export function LeadsNotificationBadge() {
     const { data: session, status } = useSession();
@@ -21,6 +21,21 @@ export function LeadsNotificationBadge() {
         const fetchNewLeads = async () => {
             try {
                 const res = await fetch('/api/demo/leads');
+
+                // Defensive check: ensure response is JSON
+                if (!res.ok) {
+                    const text = await res.text();
+                    console.error(`[LeadsNotificationBadge] API Error (${res.status}): Expected JSON but got ${res.headers.get('content-type')}. URL: ${res.url}. Preview: ${text.substring(0, 100)}`);
+                    return;
+                }
+
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await res.text();
+                    console.error(`[LeadsNotificationBadge] Format Error: Expected JSON but got ${contentType || 'unknown'}. URL: ${res.url}. Status: ${res.status}. Preview: ${text.substring(0, 100)}`);
+                    return;
+                }
+
                 const data = await res.json();
                 if (data.success) {
                     setNewLeads(data.newLeads || 0);

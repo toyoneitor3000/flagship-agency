@@ -116,6 +116,20 @@ export const wikiDatabase: WikiTerm[] = [
         iconType: 'biz',
         def: 'Una sección del Dashboard dedicada a ver dinero: ingresos, egresos, proyecciones y márgenes en tiempo real.'
     },
+    {
+        term: 'AOS',
+        slug: 'aos',
+        category: 'Ingeniería de Negocio',
+        iconType: 'biz',
+        def: 'Agency Operating System. La infraestructura técnica y lógica que permite a una agencia automatizar sus procesos, desde la captura de leads hasta la entrega final, eliminando el caos operativo.'
+    },
+    {
+        term: 'SAOS',
+        slug: 'saos',
+        category: 'Ingeniería de Negocio',
+        iconType: 'biz',
+        def: 'Subscription Agency Operating System. Una evolución del AOS diseñada específicamente para modelos de suscripción. Permite gestionar ingresos recurrentes, pedidos ilimitados y flujos de trabajo escalables sin aumentar la carga operativa.'
+    },
 
     // E-COMMERCE
     {

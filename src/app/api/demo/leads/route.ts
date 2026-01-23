@@ -2,12 +2,16 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/auth';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/demo/leads - List all demo requests with stats
 export async function GET(request: Request) {
+    console.log(`[API] GET /api/demo/leads called at ${new Date().toISOString()}`);
     try {
         // Check authentication
         const session = await auth();
         if (!session?.user?.email) {
+            console.warn('[API] Unauthorized access attempt to /api/demo/leads');
             return NextResponse.json(
                 { success: false, message: 'No autorizado' },
                 { status: 401 }
@@ -18,18 +22,22 @@ export async function GET(request: Request) {
         const status = searchParams.get('status');
         const limit = parseInt(searchParams.get('limit') || '50');
 
+        console.log(`[API] Fetching leads with status: ${status || 'all'}, limit: ${limit}`);
+
         // Build where clause
         const where = status && status !== 'all' ? { status } : {};
 
-        // Fetch demo requests
-        const demos = await prisma.demoRequest.findMany({
-            where,
-            orderBy: { createdAt: 'desc' },
-            take: limit,
-        });
+        // Fetch demo requests and all demos for metrics in parallel
+        const [demos, allDemos] = await Promise.all([
+            prisma.demoRequest.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                take: limit,
+            }),
+            prisma.demoRequest.findMany()
+        ]);
 
         // Calculate metrics
-        const allDemos = await prisma.demoRequest.findMany();
         const metrics = {
             total: allDemos.length,
             pending: allDemos.filter(d => d.status === 'pending').length,
@@ -48,6 +56,8 @@ export async function GET(request: Request) {
             d => d.status === 'pending' && new Date(d.createdAt) > oneDayAgo
         ).length;
 
+        console.log(`[API] Successfully fetched ${demos.length} demos. Total pending: ${metrics.pending}`);
+
         return NextResponse.json({
             success: true,
             demos,
@@ -55,9 +65,13 @@ export async function GET(request: Request) {
             newLeads,
         });
     } catch (error) {
-        console.error('Error fetching demo requests:', error);
+        console.error('[API] Error fetching demo requests:', error);
         return NextResponse.json(
-            { success: false, message: 'Error interno' },
+            {
+                success: false,
+                message: 'Error interno',
+                error: error instanceof Error ? error.message : String(error)
+            },
             { status: 500 }
         );
     }

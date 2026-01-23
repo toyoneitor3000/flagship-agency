@@ -124,6 +124,14 @@ export function usePurrpurrLab(options: UsePurrpurrLabOptions = {}): UsePurrpurr
                 throw new Error(`HTTP ${res.status}: ${res.statusText}`);
             }
 
+            // Defensive check: ensure response is JSON
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                console.error(`[usePurrpurrLab] Expected JSON but got ${contentType || 'unknown'}. URL: /api/purrpurr-lab/tools. Preview: ${text.substring(0, 100)}`);
+                throw new Error('Invalid server response format (expected JSON)');
+            }
+
             const json = await res.json();
 
             if (json.success) {

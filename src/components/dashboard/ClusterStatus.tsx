@@ -51,6 +51,16 @@ export function ClusterStatus() {
         try {
             setLoading(true);
             const res = await fetch('/api/analytics/metrics');
+
+            // Defensive check: ensure response is JSON
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                setError('Invalid server response');
+                console.error(`[ClusterStatus] Expected JSON but got ${contentType || 'unknown'}. URL: /api/analytics/metrics. Preview: ${text.substring(0, 100)}`);
+                return;
+            }
+
             const data = await res.json();
 
             if (data.success) {

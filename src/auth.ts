@@ -30,7 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.email = user.email;
 
                 // Hardcoded Admin Check (Temporary since DB is disabled)
-                const adminEmails = ['camilotoloza1136@gmail.com', 'purpuregamechanger@gmail.com'];
+                const adminEmails = ['camilotoloza1136@gmail.com', 'purrpurrdev@gmail.com', 'purpuregamechanger@gmail.com'];
                 if (user.email && adminEmails.includes(user.email)) {
                     token.role = 'admin';
                 } else {

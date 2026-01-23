@@ -11,13 +11,15 @@ import {
 import { NotificationList } from "@/components/notifications/NotificationList";
 import { ClusterStatus } from "@/components/dashboard/ClusterStatus";
 import { ProjectManager } from "@/components/dashboard/ProjectManager";
-import { User, Project, Domain, Subscription } from "@prisma/client";
+import { ServiceManager } from "@/components/dashboard/ServiceManager";
+import { User, Project, Domain, Subscription, CreativeTask } from "@prisma/client";
 
 interface ClientDashboardProps {
     user: User & {
         projects: Project[];
         domains: Domain[];
         subscription: Subscription | null;
+        creativeTasks: CreativeTask[];
     };
 }
 
@@ -97,6 +99,13 @@ export function ClientDashboard({ user }: ClientDashboardProps) {
                             ...p,
                             createdAt: p.createdAt.toISOString(),
                             updatedAt: p.updatedAt.toISOString()
+                        }))} />
+
+                        {/* SERVICE MANAGEMENT SECTION */}
+                        <ServiceManager initialTasks={user.creativeTasks.map(t => ({
+                            ...t,
+                            createdAt: t.createdAt.toISOString(),
+                            updatedAt: t.updatedAt.toISOString()
                         }))} />
 
 

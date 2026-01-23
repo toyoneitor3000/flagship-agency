@@ -45,7 +45,7 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
     // Check if user is admin
     useEffect(() => {
         // List of admin emails
-        const adminEmails = ['purrpurrdev@gmail.com', 'camilotoloza1136@gmail.com'];
+        const adminEmails = ['camilotoloza1136@gmail.com', 'purrpurrdev@gmail.com', 'purpuregamechanger@gmail.com'];
         setIsAdmin(adminEmail ? adminEmails.includes(adminEmail) : false);
     }, [adminEmail]);
 
@@ -90,6 +90,21 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
 
         try {
             const res = await fetch('/api/demo/leads?status=pending');
+
+            // Defensive check: ensure response is JSON
+            if (!res.ok) {
+                const text = await res.text();
+                console.error(`[NotificationProvider] API Error (${res.status} ${res.statusText}): Expected JSON but got ${res.headers.get('content-type')}. URL: ${res.url}. Preview: ${text.substring(0, 100)}`);
+                return;
+            }
+
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                console.error(`[NotificationProvider] Format Error: Expected JSON but got ${contentType || 'unknown'}. URL: ${res.url}. Status: ${res.status}. Preview: ${text.substring(0, 100)}`);
+                return;
+            }
+
             const data = await res.json();
 
             if (data.success) {

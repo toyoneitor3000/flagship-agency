@@ -1,19 +1,21 @@
-import { User } from "@prisma/client";
+import { Lock, Server, Workflow, Activity, Rocket } from "lucide-react";
+import { TaskOpsCenter } from "./TaskOpsCenter";
+import { CreativeTask, User } from "@prisma/client";
 import { LeadsManager } from "@/components/dashboard/LeadsManager";
 import { UserManager } from "@/components/dashboard/UserManager";
 import { ClusterStatus } from "@/components/dashboard/ClusterStatus";
 import { GithubHistory } from "@/components/dashboard/GithubHistory";
 import { NotificationList } from "@/components/notifications/NotificationList";
-import { Lock, Server, Workflow } from "lucide-react";
 import Link from "next/link";
 
 
 
 interface AdminDashboardProps {
     user: User;
+    allTasks?: (CreativeTask & { user: User | null })[];
 }
 
-export function AdminDashboard({ user }: AdminDashboardProps) {
+export function AdminDashboard({ user, allTasks = [] }: AdminDashboardProps) {
     return (
         <div className="min-h-screen text-white font-sans selection:bg-purple-500/30 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#1a0b2e] via-[#0f0033] to-black">
             {/* Navbar */}
@@ -47,6 +49,14 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                 </header>
 
                 <div className="space-y-12">
+                    {/* TASK OPERATIONS CENTER */}
+                    <section>
+                        <TaskOpsCenter initialTasks={allTasks.map(t => ({
+                            ...t,
+                            createdAt: t.createdAt.toISOString()
+                        }))} />
+                    </section>
+
                     {/* LEADS SECTION */}
                     <section>
                         <LeadsManager />
@@ -79,6 +89,17 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                                         <div className="font-semibold text-blue-300 group-hover:text-blue-200 transition-colors mb-1">Crear Demo</div>
                                         <div className="text-sm text-white/40 group-hover:text-white/60 transition-colors">Generador de prototipos para clientes.</div>
                                     </div>
+                                    <Link href="/services/creative-partner" className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl hover:border-indigo-500/50 hover:bg-indigo-500/10 transition-all duration-300 cursor-pointer group block text-left">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <div className="font-semibold text-indigo-300 group-hover:text-indigo-200 transition-colors">Creative Partner (Landing)</div>
+                                            <Rocket className="w-3 h-3 text-indigo-500" />
+                                        </div>
+                                        <div className="text-sm text-white/40 group-hover:text-white/60 transition-colors">Página de venta para el modelo de suscripción.</div>
+                                    </Link>
+                                    <Link href="/dashboard/cv" className="p-4 bg-black/20 border border-white/5 rounded-2xl hover:border-purple-500/30 hover:bg-purple-500/5 transition-all duration-300 cursor-pointer group block text-left">
+                                        <div className="font-semibold text-purple-300 group-hover:text-purple-200 transition-colors mb-1">Mi Currículum (Privado)</div>
+                                        <div className="text-sm text-white/40 group-hover:text-white/60 transition-colors">Gestión de obras, metas y exportación PDF.</div>
+                                    </Link>
                                     <Link href="/news" className="p-4 bg-black/20 border border-white/5 rounded-2xl hover:border-pink-500/30 hover:bg-pink-500/5 transition-all duration-300 cursor-pointer group block text-left">
                                         <div className="font-semibold text-pink-300 group-hover:text-pink-200 transition-colors mb-1">Ver Pu News</div>
                                         <div className="text-sm text-white/40 group-hover:text-white/60 transition-colors">Ver historial público de noticias.</div>
