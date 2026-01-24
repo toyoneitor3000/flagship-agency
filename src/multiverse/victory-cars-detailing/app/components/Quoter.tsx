@@ -80,11 +80,12 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
             return acc + (service?.prices[selectedVehicle] || 0);
         }, 0);
 
-        const discountPercentage = discountCode === 'victory50' ? 0.50 : 0.20;
+        const isFidelity = discountCode === 'victory50';
+        const discountPercentage = isFidelity ? 0.50 : 0.20;
         const discount = hasDiscount ? subtotal * discountPercentage : 0;
         const total = subtotal - discount;
 
-        return { subtotal, discount, total, percentage: discountPercentage * 100 };
+        return { subtotal, discount, total, percentage: discountPercentage * 100, isFidelity };
     }, [selectedVehicle, selectedServices, hasDiscount, discountCode]);
 
     const formatCurrency = (amount: number) => {
@@ -174,13 +175,13 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
                             <div className="flex justify-between text-emerald-400 bg-emerald-400/5 p-3 rounded-lg border border-emerald-400/20">
                                 <div className="flex items-center gap-2">
                                     <FaTag size={12} />
-                                    <span>{discountCode === 'victory50' ? 'Promo Fidelidad' : 'Bono de Descuento'} ({totals.percentage}%)</span>
+                                    <span>{totals.isFidelity ? 'Promo Fidelidad' : 'Bono de Descuento'} ({totals.percentage}%)</span>
                                     {discountCode && <span className="text-[10px] bg-emerald-400/20 px-2 py-0.5 rounded font-mono uppercase tracking-wider">{discountCode}</span>}
                                 </div>
                                 <span className="font-inter">-{formatCurrency(totals.discount)}</span>
                             </div>
                         )}
-                        {discountCode === 'victory50' && (
+                        {totals.isFidelity && (
                             <p className="text-[10px] text-brand-cyan/60 uppercase tracking-widest text-right">Aplica para los mismos servicios en el segundo vehículo</p>
                         )}
                     </div>
@@ -197,7 +198,7 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
 
                     <div className="mt-8">
                         <a
-                            href={`https://wa.me/573157742419?text=Hola!%20Acabo%20de%20hacer%20una%20cotización%20en%20el%20sitio%20web%20para%20mi%20${selectedVehicle === 'auto' ? 'Automóvil' : 'SUV'}.%0A%0AServicios%20interesados:%20${selectedServices.map(sid => SERVICES.find(s => s.id === sid)?.name).join(',%20')}%0A%0A${hasDiscount ? `Tengo%20un%20bono%20del%2020%25%20OFF!%20Código:%20${discountCode}` : ''}`}
+                            href={`https://wa.me/573157742419?text=Hola!%20Acabo%20de%20hacer%20una%20cotización%20en%20el%20sitio%20web%20para%20mi%20${selectedVehicle === 'auto' ? 'Automóvil' : 'SUV'}.%0A%0AServicios%20interesados:%20${selectedServices.map(sid => SERVICES.find(s => s.id === sid)?.name).join(',%20')}%0A%0A${hasDiscount ? `Tengo%20un%20bono%20especial!%20Código:%20${discountCode}` : ''}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block w-full bg-brand-cyan text-brand-dark-blue font-orbitron font-bold py-4 rounded-xl text-center hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(6,182,212,0.3)] uppercase tracking-wider"
