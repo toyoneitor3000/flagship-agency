@@ -80,11 +80,12 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
             return acc + (service?.prices[selectedVehicle] || 0);
         }, 0);
 
-        const discount = hasDiscount ? subtotal * 0.20 : 0;
+        const discountPercentage = discountCode === 'victory50' ? 0.50 : 0.20;
+        const discount = hasDiscount ? subtotal * discountPercentage : 0;
         const total = subtotal - discount;
 
-        return { subtotal, discount, total };
-    }, [selectedVehicle, selectedServices, hasDiscount]);
+        return { subtotal, discount, total, percentage: discountPercentage * 100 };
+    }, [selectedVehicle, selectedServices, hasDiscount, discountCode]);
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('es-CO', {
@@ -118,8 +119,8 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
                                 key={type.id}
                                 onClick={() => setSelectedVehicle(type.id as any)}
                                 className={`flex flex-col items-center gap-4 p-6 rounded-2xl border transition-all duration-300 ${selectedVehicle === type.id
-                                        ? 'bg-brand-cyan/10 border-brand-cyan text-brand-cyan shadow-[0_0_20px_rgba(6,182,212,0.2)]'
-                                        : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                                    ? 'bg-brand-cyan/10 border-brand-cyan text-brand-cyan shadow-[0_0_20px_rgba(6,182,212,0.2)]'
+                                    : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
                                     }`}
                             >
                                 <type.icon size={32} />
@@ -138,14 +139,14 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
                                 key={service.id}
                                 onClick={() => toggleService(service.id)}
                                 className={`flex items-center justify-between p-4 rounded-xl border transition-all duration-200 ${selectedServices.includes(service.id)
-                                        ? 'bg-brand-cyan/5 border-brand-cyan/50 text-white'
-                                        : 'bg-white/5 border-white/5 text-slate-300 hover:border-white/10'
+                                    ? 'bg-brand-cyan/5 border-brand-cyan/50 text-white'
+                                    : 'bg-white/5 border-white/5 text-slate-300 hover:border-white/10'
                                     }`}
                             >
                                 <div className="flex items-center gap-3 text-left">
                                     <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${selectedServices.includes(service.id)
-                                            ? 'bg-brand-cyan border-brand-cyan text-brand-dark-blue'
-                                            : 'border-white/20'
+                                        ? 'bg-brand-cyan border-brand-cyan text-brand-dark-blue'
+                                        : 'border-white/20'
                                         }`}>
                                         {selectedServices.includes(service.id) && <FaCheckCircle size={14} />}
                                     </div>
@@ -173,11 +174,14 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount = false, discountCode }) =>
                             <div className="flex justify-between text-emerald-400 bg-emerald-400/5 p-3 rounded-lg border border-emerald-400/20">
                                 <div className="flex items-center gap-2">
                                     <FaTag size={12} />
-                                    <span>Bono de Descuento (20%)</span>
+                                    <span>{discountCode === 'victory50' ? 'Promo Fidelidad' : 'Bono de Descuento'} ({totals.percentage}%)</span>
                                     {discountCode && <span className="text-[10px] bg-emerald-400/20 px-2 py-0.5 rounded font-mono uppercase tracking-wider">{discountCode}</span>}
                                 </div>
                                 <span className="font-inter">-{formatCurrency(totals.discount)}</span>
                             </div>
+                        )}
+                        {discountCode === 'victory50' && (
+                            <p className="text-[10px] text-brand-cyan/60 uppercase tracking-widest text-right">Aplica para los mismos servicios en el segundo vehículo</p>
                         )}
                     </div>
 

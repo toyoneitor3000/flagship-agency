@@ -15,27 +15,35 @@ function PromotionsContent() {
     const [couponCode, setCouponCode] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [activePromo, setActivePromo] = useState<'fidelity' | 'standard'>('fidelity');
 
     useEffect(() => {
         // Check if user came from QR or already has a code
         const savedCode = localStorage.getItem('victory_coupon');
         if (savedCode) {
             setCouponCode(savedCode);
+            if (savedCode === 'victory50') setActivePromo('fidelity');
         } else if (searchParams.get('source') === 'qr') {
             generateCode();
         }
     }, [searchParams]);
 
-    const generateCode = () => {
+    const generateCode = (type: 'fidelity' | 'standard' = 'standard') => {
         setIsGenerating(true);
+        setActivePromo(type);
         // Simulate a small delay for "generation" effect
         setTimeout(() => {
-            const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const newCode = `VICTORY20-${random}`;
+            let newCode = '';
+            if (type === 'fidelity') {
+                newCode = 'victory50';
+            } else {
+                const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+                newCode = `VICTORY20-${random}`;
+            }
             setCouponCode(newCode);
             localStorage.setItem('victory_coupon', newCode);
             setIsGenerating(false);
-        }, 1000);
+        }, 800);
     };
 
     const copyToClipboard = () => {
@@ -89,8 +97,8 @@ function PromotionsContent() {
                 <h1 className="text-4xl md:text-6xl font-orbitron font-black text-white mb-6 uppercase tracking-tighter">
                     Campañas <span className="text-brand-cyan text-glow">Exclusivas</span>
                 </h1>
-                <p className="text-slate-400 font-inter max-w-2xl mx-auto text-lg">
-                    Activa tus beneficios exclusivos escaneando nuestros códigos o participando en nuestras campañas.
+                <p className="text-slate-400 font-inter max-w-2xl mx-auto text-lg leading-relaxed">
+                    En Victory Cars premiamos la fidelidad. Por la compra de cualquier servicio para tu vehículo, <span className="text-brand-cyan font-bold">llévate el 50% de descuento en el segundo (mismos servicios).</span>
                 </p>
             </div>
 
@@ -104,14 +112,14 @@ function PromotionsContent() {
                             <div className="w-20 h-20 bg-brand-cyan/20 rounded-full flex items-center justify-center mx-auto mb-6 text-brand-cyan">
                                 <FaTicketAlt size={36} />
                             </div>
-                            <h2 className="text-2xl font-orbitron font-bold text-white mb-4 uppercase">¿Tienes un código de regalo?</h2>
-                            <p className="text-slate-400 mb-8 max-w-md mx-auto">Haz clic abajo para generar tu código único de 20% de descuento en servicios seleccionados.</p>
+                            <h2 className="text-2xl font-orbitron font-bold text-white mb-4 uppercase">¿Listo para duplicar el brillo?</h2>
+                            <p className="text-slate-400 mb-8 max-w-md mx-auto">Activa nuestro beneficio de 50% OFF en tu segundo vehículo por la compra de cualquier servicio.</p>
                             <button
-                                onClick={generateCode}
+                                onClick={() => generateCode('fidelity')}
                                 disabled={isGenerating}
                                 className="bg-brand-cyan text-brand-dark-blue font-orbitron font-bold py-4 px-10 rounded-full hover:bg-white transition-all duration-300 disabled:opacity-50 shadow-[0_0_30px_rgba(6,182,212,0.4)]"
                             >
-                                {isGenerating ? 'GENERANDO...' : 'RECLAMAR MI BONO'}
+                                {isGenerating ? 'ACTIVANDO BENEFICIO...' : 'RECLAMAR 50% OFF'}
                             </button>
                         </div>
                     ) : (
@@ -120,10 +128,10 @@ function PromotionsContent() {
                                 <div>
                                     <div className="flex items-center gap-3 text-brand-cyan mb-4">
                                         <FaCheck className="animate-pulse" />
-                                        <span className="text-xs font-orbitron uppercase tracking-widest">Bono Activado</span>
+                                        <span className="text-xs font-orbitron uppercase tracking-widest">{activePromo === 'fidelity' ? 'Promo Fidelidad Activa' : 'Bono Activado'}</span>
                                     </div>
                                     <h2 className="text-3xl font-orbitron font-bold text-white mb-4 uppercase leading-tight">
-                                        Tu código de <span className="text-brand-cyan">Descuento</span>
+                                        Tu código de <span className="text-brand-cyan">Victoria</span>
                                     </h2>
                                     <div className="flex gap-2 mb-6">
                                         <div className="flex-grow bg-black/50 border border-brand-cyan/30 rounded-xl p-4 flex items-center justify-between">
@@ -139,21 +147,21 @@ function PromotionsContent() {
                                     <div className="flex items-start gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
                                         <FaInfoCircle className="text-brand-cyan mt-1 shrink-0" />
                                         <p className="text-xs text-slate-400 leading-relaxed">
-                                            Presenta este código al momento de tu peritaje en nuestras instalaciones para redimir tu 20% de descuento.
+                                            Presenta este código al momento de tu agendamiento para redimir un {activePromo === 'fidelity' ? '50% de descuento en el segundo vehículo (mismos servicios).' : '20% de descuento en servicios seleccionados.'}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-center gap-4">
                                     <div className="scale-75 md:scale-90 origin-center">
                                         <div id="flyer-content">
-                                            <PromoFlyer />
+                                            <PromoFlyer discount={activePromo === 'fidelity' ? "50%" : "20%"} promoTitle={activePromo === 'fidelity' ? "Promo Fidelidad" : "Bono de Regalo"} />
                                         </div>
                                     </div>
                                     <button
                                         onClick={downloadPDF}
                                         className="w-full bg-white/10 hover:bg-white text-white hover:text-brand-dark-blue border border-white/10 font-orbitron font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
                                     >
-                                        DESCARGAR PDF
+                                        DESCARGAR BONO PDF
                                     </button>
                                 </div>
                             </div>

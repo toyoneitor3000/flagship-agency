@@ -5,7 +5,15 @@ import { FaInstagram, FaWhatsapp, FaGlobe } from 'react-icons/fa';
 import { QRCodeSVG } from 'qrcode.react';
 import { ASSETS } from './PromoAssets';
 
-const PromoFlyer = () => {
+interface PromoFlyerProps {
+    discount?: string;
+    promoTitle?: string;
+}
+
+const PromoFlyer: React.FC<PromoFlyerProps> = ({
+    discount = "20%",
+    promoTitle = "Bono de Regalo"
+}) => {
     return (
         <div id="flyer-content" className="relative w-full max-w-[600px] aspect-[4/5] mx-auto overflow-hidden rounded-2xl shadow-2xl border border-white/10 group bg-[#020617]">
             {/* Background Image */}
@@ -64,11 +72,11 @@ const PromoFlyer = () => {
                     <div className="space-y-1 relative">
                         <div className="absolute -left-6 top-0 w-1 md:w-1.5 h-full bg-brand-cyan shadow-[0_0_20px_rgba(6,182,212,0.8)]" />
                         <h2 className="text-brand-cyan font-orbitron text-sm md:text-xl tracking-[0.2em] md:tracking-[0.4em] uppercase opacity-70 mb-0.5 md:mb-2 font-bold leading-none">
-                            Bono de Regalo
+                            {promoTitle}
                         </h2>
                         <div className="flex items-center gap-3 md:gap-8">
                             <h1 className="text-6xl md:text-9xl font-orbitron font-black text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] tracking-tighter leading-none">
-                                20%
+                                {discount}
                             </h1>
                             <div className="flex flex-col">
                                 <span className="text-3xl md:text-7xl font-orbitron font-black text-brand-cyan leading-none">OFF</span>
