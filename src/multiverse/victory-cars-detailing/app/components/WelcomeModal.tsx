@@ -73,17 +73,17 @@ const WelcomeModal = () => {
                     <div className="flex flex-col sm:flex-row gap-4 mt-4">
                         <button
                             onClick={() => handleAction('promociones')}
-                            className="group flex-1 py-4 bg-brand-cyan text-brand-dark-blue font-orbitron font-bold rounded-xl hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2"
+                            className="group flex-1 py-4 px-6 bg-brand-cyan text-brand-dark-blue font-orbitron font-bold rounded-xl hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2"
                         >
                             <Tag size={20} />
-                            <span>VER PROMOCIONES</span>
+                            <span>PROMOCIONES</span>
                         </button>
                         <button
                             onClick={() => handleAction('services')}
-                            className="group flex-1 py-4 bg-transparent border border-white/20 text-white font-orbitron font-bold rounded-xl hover:bg-white/5 hover:border-brand-cyan/50 transition-all duration-300 flex items-center justify-center gap-2"
+                            className="group flex-1 py-4 px-6 bg-transparent border border-white/20 text-white font-orbitron font-bold rounded-xl hover:bg-white/5 hover:border-brand-cyan/50 transition-all duration-300 flex items-center justify-center gap-2"
                         >
                             <Car size={20} className="text-brand-slate group-hover:text-brand-cyan transition-colors" />
-                            <span>VER SERVICIOS</span>
+                            <span>SERVICIOS</span>
                         </button>
                     </div>
                 </div>

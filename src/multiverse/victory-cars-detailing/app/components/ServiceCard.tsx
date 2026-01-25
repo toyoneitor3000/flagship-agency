@@ -70,7 +70,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, imageUrl,
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-brand-cyan flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-brand-slate font-light leading-snug">{benefit}</span>
+                  <span className="text-sm text-white font-medium leading-snug">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -78,7 +78,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, imageUrl,
         )}
 
         {/* Description */}
-        <div className="text-brand-slate text-sm mb-6 flex-grow leading-relaxed">
+        <div className="text-slate-200 text-sm mb-6 flex-grow leading-relaxed">
           {typeof description === 'string' ? <p className="font-light">{description}</p> : description}
         </div>
 

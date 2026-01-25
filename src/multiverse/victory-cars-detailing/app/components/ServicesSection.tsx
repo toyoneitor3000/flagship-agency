@@ -19,389 +19,257 @@ const ServicesSection: React.FC = () => {
               Servicios Premium 2025
             </span>
           </h2>
-          <p className="text-xl md:text-2xl text-brand-slate max-w-3xl mx-auto mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-8 leading-relaxed italic">
             Tecnología de vanguardia y atención al detalle que transforma tu vehículo
           </p>
           <div className="h-1.5 w-32 bg-gradient-to-r from-brand-cyan to-brand-light-blue mx-auto rounded-full shadow-[0_0_20px_rgba(76,201,240,0.5)]"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal">
-          {/* PROTECCIÓN CERÁMICA - SYLEX 9H */}
+          {/* GTECHNIQ PREMIUM */}
           <ServiceCard
-            title="Protección Cerámica SYLEX 9H"
-            imageUrl="/services/silex.png"
-            promotion="3 AÑOS GARANTÍA"
+            title="GTECHNIQ Crystal Serum Light"
+            imageUrl="/services/csl.png"
+            promotion="ELITE 9H+ UK"
             benefits={[
-              "Cerámico en todos los vidrios incluido",
-              "Corrección de pintura profesional 95%",
-              "Primer lavado de mantenimiento GRATIS",
-              "Lavado completo de tapicería GRATIS",
-              "Lavado detallado de motor GRATIS"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$1&#39;090.000</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-brand-slate block">SUV</span>
-                  <span className="text-xl font-bold text-brand-cyan">$1&#39;290.000</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* CRYSTAL SYSTEM X */}
-          <ServiceCard
-            title="Crystal System X USA"
-            imageUrl="/services/systemx.png"
-            promotion="5 AÑOS GARANTÍA"
-            benefits={[
-              "Tecnología americana de élite",
-              "Cerámico en todos los vidrios",
-              "Corrección de pintura 95%",
-              "Lavado de tapicería GRATIS",
+              "Máxima dureza y brillo nivel concurso",
+              "Resistencia química certificada",
+              "Corrección de pintura profesional",
+              "Sellado de vidrios incluido",
               "Mantenimiento inicial GRATIS"
             ]}
             description={
               <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
                 <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$1&#39;390.000</span>
+                  <span className="text-xs text-white/70 block">Automóvil</span>
+                  <span className="text-xl font-bold text-brand-cyan">$1'690.000</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-brand-slate block">SUV</span>
-                  <span className="text-xl font-bold text-brand-cyan">$1&#39;590.000</span>
+                  <span className="text-xs text-white/70 block">SUV</span>
+                  <span className="text-xl font-bold text-brand-cyan">$1'890.000</span>
                 </div>
               </div>
             }
           />
 
-          {/* GTECHNIQ PREMIUM */}
+          {/* RESTAURACIÓN CON CERA */}
           <ServiceCard
-            title="GTECHNIQ Crystal Serum Light"
-            imageUrl="/services/csl.png"
-            promotion="5 AÑOS PREMIUM UK"
-            benefits={[
-              "Tecnología británica de élite mundial",
-              "Máxima dureza y brillo 9H+",
-              "Corrección de pintura profesional",
-              "Cerámico en vidrios incluido",
-              "Paquete completo VIP"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$1&#39;690.000</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-brand-slate block">SUV</span>
-                  <span className="text-xl font-bold text-brand-cyan">$1&#39;890.000</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* LAVADO PREMIUM AQUA WASH */}
-          <ServiceCard
-            title="Lavado Premium Aqua Wash"
-            imageUrl="/services/aqua-wash.jpg"
-            benefits={[
-              "Exterior completo profesional",
-              "Limpieza interior detallada",
-              "Hidratación de neumáticos",
-              "Secado sin contacto (Aire)"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$125.000</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Camioneta</span>
-                  <span className="text-xl font-bold text-brand-cyan">$135.000</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* LAVADO NORMAL */}
-          <ServiceCard
-            title="Lavado Normal"
-            imageUrl="/services/basic-wash.jpg"
-            benefits={[
-              "Lavado exterior completo",
-              "Shampoo pH neutro",
-              "Secado profesional",
-              "Servicio rápido y eficiente"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$35.000</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Camioneta</span>
-                  <span className="text-xl font-bold text-brand-cyan">$45.000</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* LAVADO LLANTA A LLANTA */}
-          <ServiceCard
-            title="Lavado Llanta a Llanta"
-            imageUrl="/services/wheel-wash.jpg"
-            benefits={[
-              "Desmontaje de llanta por llanta",
-              "Limpieza y descontaminación de cáliper",
-              "Lavado profundo de paso rueda y suspensión",
-              "Lavado de rines (cara interna y externa)",
-              "Descontaminación ferrosa completa"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div className="w-full text-center">
-                  <span className="text-xs text-brand-slate block">Tarifa Única</span>
-                  <span className="text-xl font-bold text-brand-cyan">$350.000</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* LAVADO DETAILING COMPLETO */}
-          <ServiceCard
-            title="Lavado Detailing Completo"
+            title="Restauración con Cera Premium"
             imageUrl="/services/detailing-pro-finish.jpg"
+            promotion="BRILLO & SHOWROOM"
             benefits={[
-              "Externo + Interno profesional",
-              "Restauración de plásticos",
-              "Limpieza profunda de rines",
-              "Acabado espejo premium"
+              "Elimina hologramas y rayas leves",
+              "Restauración profunda de brillo",
+              "Cera de alta gama aplicada",
+              "Alternativa ideal al cerámico",
+              "Protección UV de larga duración"
             ]}
             description={
               <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
                 <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$180.000</span>
+                  <span className="text-xs text-white/70 block">Automóvil</span>
+                  <span className="text-xl font-bold text-brand-cyan">$650.000</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Camioneta</span>
-                  <span className="text-xl font-bold text-brand-cyan">$210.000</span>
+                  <span className="text-xs text-white/70 block">SUV</span>
+                  <span className="text-xl font-bold text-brand-cyan">$750.000</span>
                 </div>
               </div>
             }
           />
 
-          {/* TAPICERÍA FULL CLEAN */}
+          {/* PPF KITS EXPLAINED */}
           <ServiceCard
-            title="Tapicería Full Clean"
-            imageUrl="/services/upholstery.jpg"
-            benefits={[
-              "Inyección-succión profunda",
-              "Vapor a 140°C en ductos",
-              "Hidratación de cuero premium",
-              "Eliminación total de olores",
-              "Desinfección completa"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$255.000</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Camioneta</span>
-                  <span className="text-xl font-bold text-brand-cyan">$300.000</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* POLARIZADO SUN GUARD */}
-          <ServiceCard
-            title="Polarizado SUN GUARD Premium"
-            imageUrl="/services/sun-guard.jpg"
-            benefits={[
-              "Rechazo de calor IR hasta 90%",
-              "Protección UV 99.9%",
-              "Visibilidad nocturna HD",
-              "Tonos permitidos por ley",
-              "Garantía de instalación"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">Desde $750k</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Camioneta</span>
-                  <span className="text-xl font-bold text-brand-cyan">$850k - $1.2M</span>
-                </div>
-              </div>
-            }
-          />
-
-          {/* PPF PROTECTION */}
-          <ServiceCard
-            title="PPF Protection Shield"
+            title="PPF Ultra Protection (Kits)"
             imageUrl="/services/ppf.jpg"
             promotion="10 AÑOS GARANTÍA"
             benefits={[
-              "Poliuretano termoplástico premium",
-              "Autorregeneración con calor",
-              "Invisible a simple vista",
-              "Protección contra rayones",
-              "Resistencia a químicos"
+              "PPF Completo: Protección 100%",
+              "Kit Frontal: Bumper, Capó y Alas",
+              "Kit Puertas e Interior disponible",
+              "Autorregenerable con calor",
+              "Invisible a simple vista"
             ]}
             description={
               <div className="border-t border-white/10 pt-4 mt-4">
-                <p className="text-brand-cyan font-bold text-center text-lg">
-                  💎 Cotización Personalizada
-                </p>
-                <p className="text-xs text-brand-slate text-center mt-2">
-                  Según vehículo y cobertura deseada
-                  Según pieza, color y tipo de daño
-                </p>
+                <div className="flex justify-between mb-2">
+                  <span className="text-xs text-white/70">Kit Frontal</span>
+                  <span className="text-sm font-bold text-brand-cyan">Desde $2.8M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-white/70">Full Body SUV</span>
+                  <span className="text-sm font-bold text-brand-cyan">$12M - $14M</span>
+                </div>
+                <p className="text-[10px] text-white/40 text-center mt-3 italic">* Requiere valoración física</p>
               </div>
             }
           />
 
-          {/* BRILLADO DE VIDRIOS */}
+          {/* PPF BUMPERS */}
           <ServiceCard
-            title="Brillado de Vidrios Crystal Shine"
-            imageUrl="/services/ceramic-coating.jpg"
+            title="PPF Bumpers (Puntas y Bordes)"
+            imageUrl="/services/ppf.jpg"
+            promotion="CUIDADO URBANO"
             benefits={[
-              "Pulido profesional de vidrios",
-              "Cerámico hidrofóbico aplicado",
-              "Visibilidad mejorada 300%",
-              "Repelente de agua extremo",
-              "Efecto lluvia invisible"
+              "Protección puntual en Bumper Delantero",
+              "Protección en Bumper Trasero",
+              "Ideal para evitar rayones de parqueo",
+              "El film más resistente del mercado",
+              "Mantiene la pintura original intacta"
             ]}
             description={
               <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
                 <div>
-                  <span className="text-xs text-brand-slate block">Parabrisas</span>
-                  <span className="text-xl font-bold text-brand-cyan">$300.000</span>
+                  <span className="text-xs text-white/70 block">Auto</span>
+                  <span className="text-xl font-bold text-brand-cyan">$1'800.000</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Laterales</span>
-                  <span className="text-xl font-bold text-brand-cyan">$120k c/u</span>
+                  <span className="text-xs text-white/70 block">SUV</span>
+                  <span className="text-xl font-bold text-brand-cyan">$2'200.000</span>
                 </div>
               </div>
             }
           />
 
-
-          {/* PDR - SACATOCOS */}
+          {/* CERÁMICO PARA PPF - HALO */}
           <ServiceCard
-            title="PDR - Sacatocos (Sin Pintar)"
-            imageUrl="/services/pdr-repair.png"
+            title="Cerámico HALO (Especial para PPF)"
+            imageUrl="/services/systemx.png"
+            promotion="SELLADO TÉCNICO"
             benefits={[
-              "Elimina golpes manteniendo pintura original",
-              "Sin masilla ni repintado agresivo",
-              "Conserva el valor comercial del vehículo",
-              "Tiempo récord (servicios en el día)",
-              "Técnica artesanal de precisión"
+              "Producto específico para film flex",
+              "Evita amarillamiento prematuro",
+              "Máxima hidrofobia sobre PPF/Wrap",
+              "Aplicación rápida de 2 horas",
+              "Facilita lavado de superficies"
             ]}
             description={
-              <div className="border-t border-white/10 pt-4 mt-4">
-                <span className="text-sm text-brand-slate block mb-2">Desde</span>
-                <span className="text-2xl font-bold text-brand-cyan block">$80.000</span>
-                <p className="text-xs text-brand-slate mt-2">Por golpe / Según complejidad y ubicación</p>
+              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
+                <div>
+                  <span className="text-xs text-white/70 block">Inversión</span>
+                  <span className="text-xl font-bold text-brand-cyan">$750k - $900k</span>
+                </div>
+                <div className="text-right italic text-[10px] text-white/50 text-glow">
+                  Ideal post-PPF
+                </div>
               </div>
             }
           />
 
-          {/* PINTURA DE PIEZAS */}
+          {/* WRAP COMPLETO */}
           <ServiceCard
-            title="Pintura de Piezas Premium"
-            imageUrl="/services/paint-booth.png"
-            benefits={[
-              "Colorimetría computarizada exacta",
-              "Cabina de pintura profesional",
-              "Barniz de altos sólidos (Mayor brillo)",
-              "Cero piel de naranja",
-              "Garantía de color y acabado"
-            ]}
-            description={
-              <div className="border-t border-white/10 pt-4 mt-4">
-                <span className="text-sm text-brand-slate block mb-2">Pieza Completa Desde</span>
-                <span className="text-2xl font-bold text-brand-cyan block">$220.000</span>
-                <p className="text-xs text-brand-slate mt-2">Incluye preparación y difuminado si requiere</p>
-              </div>
-            }
-          />
-
-          {/* PERSONALIZACIÓN STYLE WRAP */}
-          <ServiceCard
-            title="Personalización Style Wrap"
+            title="Wrap Completo (Cambio Color)"
             imageUrl="/services/style-wrap.jpg"
-            promotion="NUEVO 2025"
+            promotion="PERSONALIZACIÓN"
             benefits={[
-              "Envinilado total (Full Wrap)",
-              "Forrado de calipers premium",
-              "Wrap de detalles y piezas",
-              "Personalización gráfica custom",
-              "Vinilo premium importado"
-            ]}
-            description={
-              <div className="border-t border-white/10 pt-4 mt-4">
-                <span className="text-sm text-brand-slate block mb-2">Desde</span>
-                <span className="text-2xl font-bold text-brand-cyan block">$250k - $6.5M</span>
-                <p className="text-xs text-brand-slate mt-2">Según tipo de personalización</p>
-              </div>
-            }
-          />
-
-          {/* DETALLADO DE MOTOR */}
-          <ServiceCard
-            title="Detallado de Motor"
-            imageUrl="/services/enginewash.jpeg"
-            benefits={[
-              "Desengrase profesional profundo",
-              "Limpieza de componentes",
-              "Protección de plásticos",
-              "Acabado de exhibición"
+              "Vinilo de alta gama importado",
+              "Acabados Mate, Satinado o Gloss",
+              "Protección de pintura original",
+              "Aplicable a piezas específicas",
+              "Diferentes texturas disponibles"
             ]}
             description={
               <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
                 <div>
-                  <span className="text-xs text-brand-slate block">Básico</span>
-                  <span className="text-xl font-bold text-brand-cyan">$50.000</span>
+                  <span className="text-xs text-white/70 block">Rango Inversión</span>
+                  <span className="text-xl font-bold text-brand-cyan">$6.5M - $12.5M</span>
+                </div>
+                <div className="text-right italic text-[10px] text-white/50">
+                  Según material
+                </div>
+              </div>
+            }
+          />
+
+          {/* PDR - SIN PINTAR */}
+          <ServiceCard
+            title="PDR (Paintless Dent Repair)"
+            imageUrl="/services/pdr-repair.png"
+            promotion="ARTE SIN PINTAR"
+            benefits={[
+              "Elimina golpes sin masilla ni soldadura",
+              "Conserva la pintura de fábrica",
+              "Técnica artesanal de alta precisión",
+              "Mantiene el valor original del auto",
+              "Servicio rápido en el mismo día"
+            ]}
+            description={
+              <div className="border-t border-white/10 pt-4 mt-4 text-center">
+                <span className="text-xs text-white/70 block">Desde</span>
+                <span className="text-2xl font-bold text-brand-cyan">$150.000</span>
+                <p className="text-[10px] text-white/40 mt-1 italic">Sujeto a valoración técnica</p>
+              </div>
+            }
+          />
+
+          {/* SACATOCOS - LATONERÍA */}
+          <ServiceCard
+            title="Sacatocos (Latonería Estética)"
+            imageUrl="/services/paint-booth.png"
+            promotion="REQUIERE PINTURA"
+            benefits={[
+              "Para golpes con afectación de pintura",
+              "Uso de sacatocos neumático/soldadura",
+              "Restauración estructural de pieza",
+              "Incluye proceso de repintado",
+              "Cabina profesional de pintura"
+            ]}
+            description={
+              <div className="border-t border-white/10 pt-4 mt-4 text-center">
+                <span className="text-xs text-white/70 block">Desde</span>
+                <span className="text-2xl font-bold text-brand-cyan">$350.000</span>
+                <p className="text-[10px] text-white/40 mt-1 italic">Pieza + Valoración física</p>
+              </div>
+            }
+          />
+
+          {/* RINES & MORDAZAS */}
+          <ServiceCard
+            title="Pintura de Rines & Mordazas"
+            imageUrl="/services/wheel-wash.jpg"
+            promotion="SPORT LOOK"
+            benefits={[
+              "Pintura horneada para rines (Set x4)",
+              "Color custom en Mordazas/Calipers",
+              "Resistencia a altas temperaturas",
+              "Remoción de rayones de andén",
+              "Estética de alto rendimiento"
+            ]}
+            description={
+              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
+                <div>
+                  <span className="text-xs text-white/70 block">Rines x4</span>
+                  <span className="text-xl font-bold text-brand-cyan">$650.000</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Premium</span>
+                  <span className="text-xs text-white/70 block">Mordazas</span>
+                  <span className="text-xl font-bold text-brand-cyan">$450.000</span>
+                </div>
+              </div>
+            }
+          />
+
+          {/* MASTER CLEAN */}
+          <ServiceCard
+            title="Master Clean (Motor & Interior)"
+            imageUrl="/services/enginewash.jpeg"
+            promotion="DETALLADO TOTAL"
+            benefits={[
+              "Lavado de motor seguro (Vapor)",
+              "Interior con inyección-succión",
+              "Desinfección profunda de ductos",
+              "Hidratación de cueros/plásticos",
+              "Limpieza de techos y alfombras"
+            ]}
+            description={
+              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
+                <div>
+                  <span className="text-xs text-white/70 block">Motor</span>
                   <span className="text-xl font-bold text-brand-cyan">$90.000</span>
                 </div>
-              </div>
-            }
-          />
-
-          {/* MANTENIMIENTO CERÁMICO */}
-          <ServiceCard
-            title="Mantenimiento Cerámico"
-            imageUrl="/services/ceramic-coating.jpg"
-            benefits={[
-              "Shampoo con SiO₂ premium",
-              "Refuerzo de brillo intenso",
-              "Restauración de hidrofobia",
-              "Topper cerámico incluido"
-            ]}
-            description={
-              <div className="flex justify-between items-end border-t border-white/10 pt-4 mt-4">
-                <div>
-                  <span className="text-xs text-brand-slate block">Automóvil</span>
-                  <span className="text-xl font-bold text-brand-cyan">$200.000</span>
-                </div>
                 <div className="text-right">
-                  <span className="text-xs text-brand-slate block">Camioneta</span>
-                  <span className="text-xl font-bold text-brand-cyan">$250.000</span>
+                  <span className="text-xs text-white/70 block">Interior Full</span>
+                  <span className="text-xl font-bold text-brand-cyan">$300.000</span>
                 </div>
               </div>
             }
