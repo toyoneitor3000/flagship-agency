@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Sparkles, Car, ArrowRight } from 'lucide-react';
+import { X, Tag, Sparkles, Car, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
 const WelcomeModal = () => {
@@ -15,11 +15,15 @@ const WelcomeModal = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    const handleAction = (id: string) => {
+    const handleAction = (action: string) => {
         setIsOpen(false);
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+        if (action === 'promociones') {
+            window.location.href = '/promociones';
+        } else {
+            const element = document.getElementById(action);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     };
 
@@ -68,11 +72,11 @@ const WelcomeModal = () => {
 
                     <div className="flex flex-col sm:flex-row gap-4 mt-4">
                         <button
-                            onClick={() => handleAction('contact')}
+                            onClick={() => handleAction('promociones')}
                             className="group flex-1 py-4 bg-brand-cyan text-brand-dark-blue font-orbitron font-bold rounded-xl hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2"
                         >
-                            <Calendar size={20} />
-                            <span>AGENDAR CITA</span>
+                            <Tag size={20} />
+                            <span>VER PROMOCIONES</span>
                         </button>
                         <button
                             onClick={() => handleAction('services')}
