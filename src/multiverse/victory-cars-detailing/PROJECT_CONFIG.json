@@ -1,0 +1,8 @@
+{
+    "project_name": "Victory Cars Detailing",
+    "production_url": "https://victorycarsdetailing.com",
+    "owner": "Camilo Toloza",
+    "whatsapp_contact": "+573157742419",
+    "address": "Calle 128 #47-36, Bogotá",
+    "rules_path": ".agent/rules/dominio.md"
+}

@@ -16,3 +16,7 @@ git push origin main
 
 4. Ejecutar procesamiento local (Build)
 npm run deploy
+
+5. Verificación de Dominio (CRÍTICO)
+Al finalizar, NO dar el link que sale en la consola de Vercel. 
+El link oficial SIEMPRE es: https://victorycarsdetailing.com
