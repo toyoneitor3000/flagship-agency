@@ -197,6 +197,26 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount: initialHasDiscount = false
                 });
             }
 
+            // --- Lógica de exclusión de PPF (Solicitada) ---
+
+            // Si el servicio actual es PPF COMPLETO
+            if (id === 'ppf-full') {
+                // Quitar cualquier otro PPF parcial
+                filtered = filtered.filter(sid => !['ppf-front', 'ppf-bumpers', 'ppf-doors', 'ppf-interior'].includes(sid));
+            }
+            // Si el servicio actual es un PPF PARCIAL
+            else if (['ppf-front', 'ppf-bumpers', 'ppf-doors', 'ppf-interior'].includes(id)) {
+                // Quitar el PPF Completo si estaba seleccionado
+                filtered = filtered.filter(sid => sid !== 'ppf-full');
+
+                // Exclusión específica: Frontal vs Bumpers (el frontal ya incluye el bumper frontal)
+                if (id === 'ppf-front') {
+                    filtered = filtered.filter(sid => sid !== 'ppf-bumpers');
+                } else if (id === 'ppf-bumpers') {
+                    filtered = filtered.filter(sid => sid !== 'ppf-front');
+                }
+            }
+
             return [...filtered, id];
         });
     };
