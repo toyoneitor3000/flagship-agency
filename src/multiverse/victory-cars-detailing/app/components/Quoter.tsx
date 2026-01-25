@@ -189,14 +189,6 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount: initialHasDiscount = false
                 });
             }
 
-            if (service.category === 'Lavado') {
-                // Solo 1 lavado a la vez
-                filtered = prev.filter(sid => {
-                    const s = SERVICES.find(srv => srv.id === sid);
-                    return s?.category !== 'Lavado';
-                });
-            }
-
             // --- Lógica de exclusión de PPF (Solicitada) ---
 
             // Si el servicio actual es PPF COMPLETO
@@ -301,7 +293,7 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount: initialHasDiscount = false
                     {[
                         { title: 'Protección Cerámica', cat: 'Cerámicos', icon: '💎', single: true },
                         { title: 'Protección Avanzada', cat: 'Protección', icon: '🛡️', single: false },
-                        { title: 'Lavados Premium', cat: 'Lavado', icon: '🚿', single: true },
+                        { title: 'Lavados Premium', cat: 'Lavado', icon: '🚿', single: false },
                         { title: 'Interior Detailing', cat: 'Interior', icon: '🪑', single: false },
                         { title: 'Personalización', cat: 'Personalización', icon: '🎨', single: false },
                         { title: 'Reparación Estética', cat: 'Reparación', icon: '🛠️', single: false },
