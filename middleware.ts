@@ -31,13 +31,14 @@ export default async function middleware(req: NextRequest) {
     if (currentDomain) {
         // Reescribir la URL para que Next.js renderice el contenido de _sites/[slug]
         // Ejemplo: victorycarsdetailing.com/promociones -> /_sites/victory-cars-detailing/promociones
-        const rewritePath = `/_sites/${currentDomain.slug}${url.pathname}`;
-        url.pathname = rewritePath;
+        url.pathname = `/_sites/${currentDomain.slug}${url.pathname}`;
 
-        // Add a custom header to identify this as a tenant site request
+        // Use cookie instead of header for tenant detection (headers don't propagate through rewrites)
         const response = NextResponse.rewrite(url);
-        response.headers.set('x-pathname', rewritePath);
-        response.headers.set('x-is-tenant-site', 'true');
+        response.cookies.set('x-tenant-site', currentDomain.slug, {
+            path: '/',
+            sameSite: 'lax'
+        });
         return response;
     }
 

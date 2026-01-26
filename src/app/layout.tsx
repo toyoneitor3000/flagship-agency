@@ -4,7 +4,6 @@ import "./globals.css";
 import { Navbar } from '@/components/ui/Navbar';
 import { Footer } from '@/components/ui/Footer';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
-import { headers } from 'next/headers';
 
 export const viewport: Viewport = {
   // themeColor removed to allow iOS transparent status bar
@@ -78,9 +77,11 @@ export default async function RootLayout({
 }>) {
   const magicContent = await getMagicContent();
 
-  // Detect if this is a multi-tenant site request
-  const headersList = await headers();
-  const isTenantSite = headersList.get('x-is-tenant-site') === 'true';
+  // Detect if this is a multi-tenant site request via cookie (headers don't propagate through rewrites)
+  const { cookies } = await import('next/headers');
+  const cookieStore = await cookies();
+  const tenantSlug = cookieStore.get('x-tenant-site')?.value;
+  const isTenantSite = !!tenantSlug;
 
   // For tenant sites, render minimal wrapper without Purrpurr UI
   if (isTenantSite) {
