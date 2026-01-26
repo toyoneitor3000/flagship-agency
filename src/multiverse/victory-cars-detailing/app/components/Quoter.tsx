@@ -124,9 +124,9 @@ const SERVICES = [
     {
         id: 'caliper-paint',
         name: 'Pintura de Mordazas (Set x4)',
-        prices: { auto: 450000, suv: 550000 },
+        prices: { auto: 750000, suv: 750000 },
         category: 'Personalización',
-        benefits: ["Alta temperatura", "Look deportivo custom"]
+        benefits: ["Alta temperatura", "Look deportivo custom", "Forrado de Mordazas incluido"]
     },
     {
         id: 'pdr',
