@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-Zap,
+import {
+    Zap,
     Infinity,
     ShieldCheck,
     ArrowRight,
