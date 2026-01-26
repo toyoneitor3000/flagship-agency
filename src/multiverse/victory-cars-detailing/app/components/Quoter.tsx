@@ -11,31 +11,31 @@ const VEHICLE_TYPES = [
 const SERVICES = [
     {
         id: 'sylex',
-        name: 'Protección Cerámica SYLEX 9H',
+        name: 'SYLEX 9H – USA (3 años)',
         prices: { auto: 1090000, suv: 1290000 },
         category: 'Cerámicos',
-        benefits: ["Cerámico en todos los vidrios incluido", "Corrección de pintura profesional 95%", "Mantenimiento inicial GRATIS", "Lavado de tapicería incluido"]
+        benefits: ["Cerámico en todos los vidrios", "Corrección de pintura profesional 95%", "Primer mantenimiento GRATIS", "Lavado de tapicería GRATIS", "Lavado detallado de motor GRATIS"]
     },
     {
         id: 'systemx',
-        name: 'Crystal System X USA (5 Años)',
+        name: 'Crystal System X – USA (5 años)',
         prices: { auto: 1390000, suv: 1590000 },
         category: 'Cerámicos',
-        benefits: ["Tecnología americana de élite", "Garantía certificada", "Cerámico en todos los vidrios", "Protección extrema UV"]
+        benefits: ["Cerámico en todos los vidrios", "Corrección de pintura profesional 95%", "Primer mantenimiento GRATIS", "Lavado de tapicería GRATIS", "Lavado detallado de motor GRATIS"]
     },
     {
         id: 'gtechniq',
-        name: 'GTECHNIQ Crystal Serum Light',
+        name: 'GTECHNIQ Crystal Serum Light – UK (5 años)',
         prices: { auto: 1690000, suv: 1890000 },
         category: 'Cerámicos',
-        benefits: ["Tecnología británica 9H+", "Máximo brillo espejo", "Corrección de pintura nivel concurso", "Resistencia química superior"]
+        benefits: ["Cerámico en todos los vidrios", "Corrección de pintura profesional 95%", "Primer mantenimiento GRATIS", "Lavado de tapicería GRATIS", "Lavado detallado de motor GRATIS"]
     },
     {
-        id: 'wax-restoration',
-        name: 'Restauración con Cera Premium',
-        prices: { auto: 650000, suv: 750000 },
-        category: 'Cerámicos',
-        benefits: ["Corrección de pintura (Hologramas)", "Cera de alta gama aplicada", "Brillo profundo restaurado", "Opción ideal sin cerámico"]
+        id: 'ceramic-ppf',
+        name: 'Cerámico HALO (Especial PPF)',
+        prices: { auto: 750000, suv: 900000 },
+        category: 'Protección',
+        benefits: ["Sellado específico para film", "Máxima hidrofobia", "Aplicación de 2 horas", "Protección UV"]
     },
     {
         id: 'ppf-full',
@@ -73,30 +73,58 @@ const SERVICES = [
         benefits: ["Protección consolas y pantallas", "Evita micro-rayones", "Precio base aproximado"]
     },
     {
-        id: 'ceramic-ppf',
-        name: 'Cerámico HALO (Especial PPF)',
-        prices: { auto: 750000, suv: 900000 },
-        category: 'Protección',
-        benefits: ["Sellado específico para film", "Máxima hidrofobia", "Aplicación de 2 horas", "Protección UV"]
-    },
-    {
-        id: 'polarizado',
+        id: 'sun-guard',
         name: 'Polarizado SUN GUARD Premium',
         prices: { auto: 750000, suv: 850000 },
         category: 'Protección',
         benefits: ["Rechazo de calor IR 90%", "Protección UV 99.9%", "Visibilidad nocturna HD"]
     },
     {
-        id: 'aqua-wash',
+        id: 'glass-polish',
+        name: 'Brillado de Vidrios (Panorámico)',
+        prices: { auto: 300000, suv: 300000 },
+        category: 'Protección',
+        benefits: ["Pulido + cerámico hidrofóbico", "Mejora visibilidad lluvia"]
+    },
+    {
+        id: 'wash-normal',
+        name: 'Lavado Normal',
+        prices: { auto: 35000, suv: 45000 },
+        category: 'Lavado',
+        benefits: ["Limpieza exterior rápida", "Aspirado básico"]
+    },
+    {
+        id: 'wash-wheels',
+        name: 'Lavado Llanta a Llanta',
+        prices: { auto: 45000, suv: 55000 },
+        category: 'Lavado',
+        benefits: ["Exterior completo", "Rines y pasos de rueda detallados"]
+    },
+    {
+        id: 'wash-aqua',
         name: 'Lavado Premium Aqua Wash',
         prices: { auto: 125000, suv: 135000 },
         category: 'Lavado',
         benefits: ["Exterior profesional", "Interior detallado", "Hidratación neumáticos"]
     },
     {
-        id: 'engine',
-        name: 'Detallado de Motor',
-        prices: { auto: 70000, suv: 90000 },
+        id: 'wash-detailing',
+        name: 'Lavado Detailing (Externo + Interno Pro)',
+        prices: { auto: 180000, suv: 210000 },
+        category: 'Lavado',
+        benefits: ["Máximo nivel de limpieza", "Detallado exhaustivo", "Protección de plásticos"]
+    },
+    {
+        id: 'engine-basic',
+        name: 'Detallado de Motor Básico',
+        prices: { auto: 50000, suv: 50000 },
+        category: 'Lavado',
+        benefits: ["Eliminación de grasa superficial", "Limpieza de cubiertas"]
+    },
+    {
+        id: 'engine-premium',
+        name: 'Detallado de Motor Premium',
+        prices: { auto: 90000, suv: 90000 },
         category: 'Lavado',
         benefits: ["Desengrase profundo", "Protección de plásticos", "Seguro para componentes"]
     },
@@ -115,6 +143,20 @@ const SERVICES = [
         benefits: ["Vinilo de alta gama", "Cambio estético radical", "Precio relativo al material"]
     },
     {
+        id: 'caliper-paint',
+        name: 'Pintura de Mordazas (Set x4)',
+        prices: { auto: 650000, suv: 650000 },
+        category: 'Personalización',
+        benefits: ["Alta temperatura", "Look deportivo custom", "Garantía de color"]
+    },
+    {
+        id: 'caliper-wrap',
+        name: 'Forrado de Mordazas (Set x4)',
+        prices: { auto: 650000, suv: 650000 },
+        category: 'Personalización',
+        benefits: ["Look agresivo", "Diferentes texturas disponibles", "Fácil remoción"]
+    },
+    {
         id: 'rims-paint',
         name: 'Pintura de Rines (Set x4)',
         prices: { auto: 650000, suv: 750000 },
@@ -122,25 +164,11 @@ const SERVICES = [
         benefits: ["Pintura horneada", "Remoción de rayones de andén"]
     },
     {
-        id: 'caliper-paint',
-        name: 'Pintura de Mordazas (Set x4)',
-        prices: { auto: 750000, suv: 750000 },
-        category: 'Personalización',
-        benefits: ["Alta temperatura", "Look deportivo custom", "Forrado de Mordazas incluido"]
-    },
-    {
         id: 'pdr',
-        name: 'PDR (Sin Pintar)',
+        name: 'PDR (Vara Sacabollos)',
         prices: { auto: 150000, suv: 150000 },
         category: 'Reparación',
         benefits: ["Mantiene pintura original", "Sin masilla ni soldadura", "Técnica artesanal rápida"]
-    },
-    {
-        id: 'sacatocos',
-        name: 'Sacatocos (Latonería - Requiere Pintura)',
-        prices: { auto: 350000, suv: 350000 },
-        category: 'Reparación',
-        benefits: ["Soldadura de pieza", "Requiere repintado", "Reparación estructural estética"]
     },
     {
         id: 'painting',
@@ -207,6 +235,20 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount: initialHasDiscount = false
                 } else if (id === 'ppf-bumpers') {
                     filtered = filtered.filter(sid => sid !== 'ppf-front');
                 }
+            }
+
+            // --- Lógica de exclusión de Motor (Nueva) ---
+            if (id === 'engine-basic') {
+                filtered = filtered.filter(sid => sid !== 'engine-premium');
+            } else if (id === 'engine-premium') {
+                filtered = filtered.filter(sid => sid !== 'engine-basic');
+            }
+
+            // --- Lógica de exclusión de Mordazas (Solicitada) ---
+            if (id === 'caliper-paint') {
+                filtered = filtered.filter(sid => sid !== 'caliper-wrap');
+            } else if (id === 'caliper-wrap') {
+                filtered = filtered.filter(sid => sid !== 'caliper-paint');
             }
 
             return [...filtered, id];
