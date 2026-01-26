@@ -8,7 +8,7 @@
     "postinstall": "prisma generate",
     "start": "next start -p 3002",
     "lint": "eslint",
-    "deploy": "vercel build --prod && vercel deploy --prebuilt --prod",
+    "deploy": "vercel build --prod --yes && vercel deploy --prebuilt --prod --yes",
     "deployment": "vercel build --prod && vercel deploy --prebuilt --prod",
     "subir": "./subir.sh"
   },
