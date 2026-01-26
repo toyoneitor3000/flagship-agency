@@ -31,8 +31,14 @@ export default async function middleware(req: NextRequest) {
     if (currentDomain) {
         // Reescribir la URL para que Next.js renderice el contenido de _sites/[slug]
         // Ejemplo: victorycarsdetailing.com/promociones -> /_sites/victory-cars-detailing/promociones
-        url.pathname = `/_sites/${currentDomain.slug}${url.pathname}`;
-        return NextResponse.rewrite(url);
+        const rewritePath = `/_sites/${currentDomain.slug}${url.pathname}`;
+        url.pathname = rewritePath;
+
+        // Add a custom header to identify this as a tenant site request
+        const response = NextResponse.rewrite(url);
+        response.headers.set('x-pathname', rewritePath);
+        response.headers.set('x-is-tenant-site', 'true');
+        return response;
     }
 
     return NextResponse.next();
