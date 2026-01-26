@@ -15,32 +15,22 @@ function PromotionsContent() {
     const [couponCode, setCouponCode] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [activePromo, setActivePromo] = useState<'fidelity' | 'standard'>('fidelity');
-    const [inputCode, setInputCode] = useState('');
-    const [codeError, setCodeError] = useState(false);
 
     useEffect(() => {
         const savedCode = localStorage.getItem('victory_coupon');
-        if (savedCode) {
+        if (savedCode && savedCode.startsWith('VICTORY20')) {
             setCouponCode(savedCode);
-            if (savedCode === 'victory50') setActivePromo('fidelity');
-            else if (savedCode.startsWith('VICTORY20')) setActivePromo('standard');
         } else if (searchParams.get('source') === 'qr') {
-            generateCode('fidelity');
+            // Desde QR físico, generar código de 20%
+            generateCode();
         }
     }, [searchParams]);
 
-    const generateCode = (type: 'fidelity' | 'standard') => {
+    const generateCode = () => {
         setIsGenerating(true);
-        setActivePromo(type);
         setTimeout(() => {
-            let newCode = '';
-            if (type === 'fidelity') {
-                newCode = 'victory50';
-            } else {
-                const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-                newCode = `VICTORY20-${random}`;
-            }
+            const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+            const newCode = `VICTORY20-${random}`;
             setCouponCode(newCode);
             localStorage.setItem('victory_coupon', newCode);
             setIsGenerating(false);
@@ -100,6 +90,65 @@ function PromotionsContent() {
                 </p>
             </div>
 
+            {/* Banner de Bono 20% */}
+            <section className="mb-12 max-w-4xl mx-auto">
+                {!couponCode ? (
+                    <button
+                        onClick={() => generateCode()}
+                        disabled={isGenerating}
+                        className="w-full group relative overflow-hidden bg-gradient-to-r from-emerald-600/30 via-brand-cyan/30 to-emerald-600/30 backdrop-blur-md border-2 border-emerald-400/50 rounded-3xl p-8 md:p-10 text-center hover:border-emerald-400 hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all duration-500"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-center gap-3 mb-4">
+                                <span className="text-4xl">🎁</span>
+                                <h2 className="text-2xl md:text-3xl font-orbitron font-black text-white uppercase tracking-tight">
+                                    Bono <span className="text-emerald-400">20% OFF</span>
+                                </h2>
+                            </div>
+                            <p className="text-white/80 text-sm md:text-base mb-4 max-w-xl mx-auto">
+                                ¡Haz clic aquí para generar tu código exclusivo! Úsalo tú mismo o regálalo a alguien especial.
+                            </p>
+                            <span className="inline-flex items-center gap-2 text-emerald-400 font-orbitron text-sm uppercase tracking-wider group-hover:scale-105 transition-transform">
+                                <FaTicketAlt /> {isGenerating ? 'Generando...' : 'Obtener mi código gratis'}
+                            </span>
+                        </div>
+                    </button>
+                ) : couponCode.startsWith('VICTORY20') ? (
+                    <div className="bg-gradient-to-r from-emerald-600/20 via-brand-cyan/20 to-emerald-600/20 backdrop-blur-md border-2 border-emerald-400/50 rounded-3xl p-8 md:p-10 text-center">
+                        <div className="flex items-center justify-center gap-3 mb-4">
+                            <span className="text-4xl">🎉</span>
+                            <h2 className="text-2xl md:text-3xl font-orbitron font-black text-white uppercase tracking-tight">
+                                ¡Tu Bono está Listo!
+                            </h2>
+                        </div>
+                        <p className="text-white/70 text-sm mb-6">
+                            Copia este código y pégalo en el cotizador para aplicar tu <span className="text-emerald-400 font-bold">20% de descuento</span>
+                        </p>
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <div className="bg-black/50 border-2 border-emerald-400 rounded-xl px-8 py-4">
+                                <span className="font-mono text-2xl md:text-3xl font-black text-emerald-400 tracking-widest">{couponCode}</span>
+                            </div>
+                            <button
+                                onClick={copyToClipboard}
+                                className="bg-emerald-500/20 border border-emerald-400 text-emerald-400 p-4 rounded-xl hover:bg-emerald-500 hover:text-white transition-all"
+                            >
+                                {copied ? <FaCheck size={20} /> : <FaCopy size={20} />}
+                            </button>
+                        </div>
+                        <p className="text-white/50 text-xs italic">
+                            💡 Tip: También puedes compartir este código con amigos o familiares
+                        </p>
+                        <button
+                            onClick={resetPromo}
+                            className="mt-4 text-white/40 text-xs underline hover:text-white/70 transition-colors"
+                        >
+                            Generar un código nuevo
+                        </button>
+                    </div>
+                ) : null}
+            </section>
+
             {/* Quoter Section - THE MAIN FOCUS */}
             <section className="mb-24">
                 <Quoter />
@@ -120,7 +169,7 @@ function PromotionsContent() {
                     </div>
                     <h3 className="text-white font-orbitron text-xl mb-4 uppercase tracking-tighter font-bold">Obtén tu Beneficio</h3>
                     <p className="text-white/60 text-sm leading-relaxed">
-                        Consigue códigos exclusivos en nuestro **Instagram**, mediante **bonos físicos** entregados en el taller o escaneando nuestros **códigos QR** publicitarios. Prueba con `VICTORY50` para activar el 50% OFF.
+                        Genera tu código de 20% de descuento haciendo clic en el banner de arriba. También puedes obtener bonos físicos en el taller o promociones especiales siguiéndonos en Instagram.
                     </p>
                 </div>
                 <div className="bg-brand-mid-blue/20 backdrop-blur-md border border-white/5 p-10 rounded-3xl group hover:border-brand-cyan/30 transition-all">

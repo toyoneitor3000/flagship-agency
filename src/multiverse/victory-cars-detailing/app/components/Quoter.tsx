@@ -145,7 +145,7 @@ const SERVICES = [
     {
         id: 'caliper-paint',
         name: 'Pintura de Mordazas (Set x4)',
-        prices: { auto: 650000, suv: 650000 },
+        prices: { auto: 750000, suv: 750000 },
         category: 'Personalización',
         benefits: ["Alta temperatura", "Look deportivo custom", "Garantía de color"]
     },
@@ -154,28 +154,28 @@ const SERVICES = [
         name: 'Forrado de Mordazas (Set x4)',
         prices: { auto: 650000, suv: 650000 },
         category: 'Personalización',
-        benefits: ["Look agresivo", "Diferentes texturas disponibles", "Fácil remoción"]
+        benefits: ["Vinilo reflectivo alta temperatura", "Diferentes tonos disponibles", "Look espectacular nocturno"]
     },
     {
         id: 'rims-paint',
         name: 'Pintura de Rines (Set x4)',
         prices: { auto: 650000, suv: 750000 },
         category: 'Personalización',
-        benefits: ["Pintura horneada", "Remoción de rayones de andén"]
+        benefits: ["Precio desde (varía según tamaño)", "Pintura horneada", "Remoción de rayones de andén"]
     },
     {
         id: 'pdr',
         name: 'PDR (Vara Sacabollos)',
         prices: { auto: 150000, suv: 150000 },
         category: 'Reparación',
-        benefits: ["Mantiene pintura original", "Sin masilla ni soldadura", "Técnica artesanal rápida"]
+        benefits: ["Precio desde (varía según tamaño)", "Mantiene pintura original", "Sin masilla ni soldadura", "Técnica artesanal rápida"]
     },
     {
         id: 'painting',
         name: 'Pintura de Piezas',
         prices: { auto: 280000, suv: 350000 },
         category: 'Reparación',
-        benefits: ["Colorimetría computarizada", "Barniz altos sólidos", "Cabina profesional"]
+        benefits: ["Precio desde (varía según tamaño)", "Colorimetría computarizada", "Barniz altos sólidos", "Cabina profesional"]
     }
 ];
 
