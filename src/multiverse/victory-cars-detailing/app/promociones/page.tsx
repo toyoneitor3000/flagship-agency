@@ -90,6 +90,37 @@ function PromotionsContent() {
                 </p>
             </div>
 
+            {/* Banner Promo 50% - Solo visible hasta el 28 de febrero 2026 */}
+            {new Date() < new Date('2026-02-28T23:59:59') && (
+                <section className="mb-8 max-w-4xl mx-auto">
+                    <a
+                        href="https://www.instagram.com/victorycars_paintdetailing/reel/DT-42y_iaX7/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full group relative overflow-hidden bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 backdrop-blur-md border-2 border-amber-400/50 rounded-3xl p-6 md:p-8 text-center hover:border-amber-400 hover:shadow-[0_0_40px_rgba(245,158,11,0.3)] transition-all duration-500"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-center gap-3 mb-3">
+                                <span className="text-3xl">🔥</span>
+                                <h2 className="text-xl md:text-2xl font-orbitron font-black text-white uppercase tracking-tight">
+                                    ¿Buscas el <span className="text-amber-400">50% OFF</span> en el segundo vehículo?
+                                </h2>
+                            </div>
+                            <p className="text-white/80 text-sm md:text-base mb-3 max-w-xl mx-auto">
+                                ¡Sigue vigente! Encuentra el código en nuestra publicación de Instagram.
+                            </p>
+                            <div className="flex items-center justify-center gap-2">
+                                <span className="inline-flex items-center gap-2 text-amber-400 font-orbitron text-sm uppercase tracking-wider group-hover:scale-105 transition-transform">
+                                    📲 Ver en Instagram
+                                </span>
+                                <span className="text-white/50 text-xs">• Válido hasta 28 Feb 2026</span>
+                            </div>
+                        </div>
+                    </a>
+                </section>
+            )}
+
             {/* Banner de Bono 20% */}
             <section className="mb-12 max-w-4xl mx-auto">
                 {!couponCode ? (

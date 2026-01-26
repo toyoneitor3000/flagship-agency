@@ -274,9 +274,17 @@ const Quoter: React.FC<QuoterProps> = ({ hasDiscount: initialHasDiscount = false
 
     const handleValidateCode = () => {
         const code = inputCode.toUpperCase();
+        const victory50ExpiryDate = new Date('2026-02-28T23:59:59');
+
         if (code === 'VICTORY50') {
-            setInternalDiscount({ active: true, code: 'VICTORY50' });
-            setCodeError(false);
+            // Verificar si la promo del 50% sigue vigente
+            if (new Date() > victory50ExpiryDate) {
+                setCodeError(true);
+                // Podrías mostrar un mensaje específico de expiración
+            } else {
+                setInternalDiscount({ active: true, code: 'VICTORY50' });
+                setCodeError(false);
+            }
         } else if (code.startsWith('VICTORY20-') && code.length >= 11) {
             setInternalDiscount({ active: true, code });
             setCodeError(false);
