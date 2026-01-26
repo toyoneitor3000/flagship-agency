@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import {
-    Zap,
+Zap,
     Infinity,
     ShieldCheck,
     ArrowRight,
@@ -12,7 +11,8 @@ import {
     Layers,
     MessageSquare,
     MousePointerClick,
-    Users
+    Users,
+    Loader2
 } from 'lucide-react';
 import Link from 'next/link';
 
