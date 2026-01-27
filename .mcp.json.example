@@ -1,0 +1,100 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "mcpServers": {
+    "vercel-ai-sdk": {
+      "description": "Vercel AI SDK MCP Server - Interact with Vercel deployments and AI features",
+      "command": "npx",
+      "args": ["-y", "@vercel/ai-sdk-mcp-server"],
+      "env": {
+        "VERCEL_API_TOKEN": "tu_token_aqui"
+      },
+      "disabled": true
+    },
+    "next-devtools": {
+      "description": "Next.js 16 DevTools MCP Server - Enhanced Next.js development experience",
+      "command": "npx",
+      "args": ["next-devtools-mcp"],
+      "disabled": true
+    },
+    "github": {
+      "description": "GitHub MCP Server - Interact with GitHub repositories, issues, PRs",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "tu_github_token_aqui"
+      },
+      "disabled": true
+    },
+    "filesystem": {
+      "description": "Filesystem MCP Server - Safe filesystem operations",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Camilo Toloza\\Documents\\flagship-agency"
+      ],
+      "disabled": true
+    },
+    "postgresql": {
+      "description": "PostgreSQL/LibSQL MCP Server - Database queries (compatible with Turso)",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "libsql://tu-database-url.turso.io"
+      },
+      "disabled": true
+    },
+    "web-search": {
+      "description": "Web Search MCP Server - Search and fetch web content",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "tu_brave_api_key_aqui"
+      },
+      "disabled": true
+    },
+    "git": {
+      "description": "Git MCP Server - Git operations (status, commit, push, etc)",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "C:\\Users\\Camilo Toloza\\Documents\\flagship-agency"
+      ],
+      "disabled": true
+    },
+    "fetch": {
+      "description": "Fetch MCP Server - HTTP requests to external APIs",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "disabled": false
+    },
+    "memory": {
+      "description": "Memory MCP Server - Persistent knowledge graph for the agent",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "disabled": true
+    },
+    "puppeteer": {
+      "description": "Puppeteer MCP Server - Browser automation for testing and screenshots",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "disabled": true
+    },
+    "slack": {
+      "description": "Slack MCP Server - Send messages and interact with Slack workspace",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "xoxb-tu-token-aqui",
+        "SLACK_TEAM_ID": "T12345678"
+      },
+      "disabled": true
+    }
+  },
+  "global": {
+    "timeout": 30000,
+    "retries": 3
+  }
+}

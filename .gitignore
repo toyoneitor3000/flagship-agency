@@ -42,3 +42,7 @@ next-env.d.ts
 
 /src/generated/prisma
 .env*.local
+
+# MCP Configuration (contains API tokens)
+.mcp.json
+temp-skills/
