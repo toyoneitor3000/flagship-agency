@@ -5,11 +5,12 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
-  swMinify: true,
+  swMinify: false,
   disable: process.env.NODE_ENV === "development", // Disable in dev to avoid reload loops
   workboxOptions: {
     disableDevLogs: true,
   },
+  buildExcludes: [/middleware-manifest\.json$/],
 });
 
 const nextConfig: NextConfig = {
