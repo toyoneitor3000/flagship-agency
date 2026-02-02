@@ -58,12 +58,33 @@
   --font-space: var(--font-righteous);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains);
+  
+  /* Typography Scale - Apple-inspired */
+  --text-base-size: 1rem;
+  --line-height-body: 1.6;
+  --line-height-heading: 1.2;
+  --letter-spacing-tight: -0.02em;
 }
 
 body {
   background-color: var(--color-zinc-950);
   color: var(--color-zinc-100);
   font-family: var(--font-sans);
+  line-height: var(--line-height-body);
+}
+
+/* Typography Utilities */
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-heading);
+}
+
+h1 {
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* Readable text over complex backgrounds */
+.text-readable {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Custom Scrollbar Styles */

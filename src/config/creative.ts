@@ -30,7 +30,7 @@ export interface FluidConfig {
 }
 
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
-    config: { stiffness: 269, damping: 22, mass: 5 },
+    config: { stiffness: 150, damping: 30, mass: 5 },
     colors: {
         color1: '#6366f1', // Indigo
         color2: '#00FF9C', // Spring Green
@@ -42,10 +42,10 @@ export const FLUID_PRESET_PURRPURR: FluidConfig = {
         accent: '#00FF9C',  // Spring Green
         text: '#000000'
     },
-    speed: 1.77,
-    force: 0.9,
+    speed: 0.5,
+    force: 0.4,
     blurStrength: 200,
-    grainOpacity: 0.5,
+    grainOpacity: 0.2,
     interactionRadius: 1.1,
     fluidZoom: 0.7,
     blendThresholds: { blend1: 0.2, blend2: 0.4, blend3: 0.6 }

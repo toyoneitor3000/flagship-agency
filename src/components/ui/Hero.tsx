@@ -64,21 +64,9 @@ export const Hero = () => {
 
 
 
-      {/* 3. Invisible Contrast Box (Reduced Opacity) - KEEPING AS SECONDARY LAYER */}
+      {/* Subtle Contrast Box - Apple Minimalist Style */}
       <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
-        <div className="w-full max-w-4xl h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.3)_0%,transparent_60%)] blur-3xl opacity-60" />
-      </div>
-
-      {/* 4. DESIGNER UI: 3D PERSPECTIVE GRID FLOOR (The "Cyber Floor") */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute bottom-[-20%] left-[-50%] right-[-50%] h-[80vh] bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
-          style={{
-            transform: 'perspective(1000px) rotateX(60deg)',
-          }}
-        />
-        {/* Floor Shadow Gradient (Smooth Transition) */}
-        <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent pointer-events-none" />
+        <div className="w-full max-w-4xl h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.2)_0%,transparent_60%)] blur-2xl opacity-40" />
       </div>
 
 
@@ -89,27 +77,16 @@ export const Hero = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="grid grid-cols-4 md:grid-cols-12 gap-x-4 gap-y-8 md:gap-y-10 items-center"
         >
-          {/* Badge - Focused Center (Cols 5-8) */}
-          <div className="col-span-4 md:col-start-5 md:col-span-4 flex justify-center">
-            <div className='flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-950/80 border border-[#6D28D9]/50 backdrop-blur-md shadow-lg'>
-              <div className="relative flex items-center justify-center w-2 h-2">
-                <div className="absolute w-full h-full bg-[#a78bfa] rounded-full animate-ping opacity-75"></div>
-                <div className="relative w-1.5 h-1.5 rounded-full bg-[#a78bfa]"></div>
-              </div>
-              <span className='font-mono text-[10px] font-bold tracking-[0.2em] text-white uppercase'>
-                SYSTEM_STATUS: ONLINE
-              </span>
-            </div>
-          </div>
+          {/* Badge removed for Apple minimalist aesthetic */}
 
           {/* H1 - Wide Impact (Cols 1-12 or 2-11) */}
           <h1
             className='col-span-4 md:col-span-12 relative font-display font-bold text-center transition-all duration-300 w-full z-20 mb-4 pointer-events-none'
             style={{
-              fontSize: 'clamp(2rem, 6vw, 8rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 10rem)',
               letterSpacing: '-0.04em',
               lineHeight: '0.95',
-              textShadow: '0 10px 30px rgba(0,0,0,0.5)'
+              textShadow: '0 4px 12px rgba(0,0,0,0.4)'
             }}
           >
             <span className="relative z-20 text-white mix-blend-exclusion" style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3)) drop-shadow(0 10px 15px rgba(0,0,0,0.2))' }}>
@@ -125,7 +102,7 @@ export const Hero = () => {
           <div className="col-span-4 md:col-start-2 md:col-span-10 flex justify-center z-10 pointer-events-none">
             <div className="max-w-3xl mx-auto text-center px-4">
               <p className='font-mono text-white leading-relaxed tracking-wide font-medium drop-shadow-md'
-                style={{ fontSize: 'clamp(0.875rem, 1.25vw, 1.5rem)' }}>
+                style={{ fontSize: 'clamp(1.125rem, 1.75vw, 1.875rem)' }}>
                 <span className="text-[#a78bfa] font-bold">&gt; </span>
                 <MagicText id="hero.description_v11" defaultText="No solo escribimos software, entendemos tu negocio. Creamos la infraestructura digital que ordena tu operación y te devuelve el control." />
               </p>
@@ -167,8 +144,8 @@ export const Hero = () => {
 
 
 
-          {/* Side Indicators - Decorative (Absolute, not grid) mostly visuals */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-60 pointer-events-none">
+          {/* Side Indicators - Subtle Decorative */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-40 pointer-events-none">
             <div className="h-24 w-[1px] bg-[#a78bfa]/30"></div>
             <span className="text-[10px] font-mono text-[#a78bfa] uppercase [writing-mode:vertical-rl] tracking-widest">
               System_Architecture_Below
