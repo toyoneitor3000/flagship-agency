@@ -41,7 +41,7 @@ export function UserFluidBackground() {
     }
 
     return (
-        <div className="absolute inset-0 w-full h-screen z-0 pointer-events-none opacity-30">
+        <div className="absolute inset-0 w-full h-screen z-0 pointer-events-none opacity-45">
             <FluidBackground
                 key={configKey}
                 {...config}

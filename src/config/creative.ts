@@ -32,19 +32,19 @@ export interface FluidConfig {
 export const FLUID_PRESET_PURRPURR: FluidConfig = {
     config: { stiffness: 150, damping: 30, mass: 5 },
     colors: {
-        color1: '#6366f1', // Indigo
-        color2: '#00FF9C', // Spring Green
-        color3: '#000000', // Black
-        color4: '#050505'  // Deep Black
+        color1: '#8f69ff', // Púrpura Purrpurr (Core)
+        color2: '#6d42e5', // Púrpura Profundo (Profundidad)
+        color3: '#709600', // Verde Eco (Crecimiento)
+        color4: '#1a0b40'  // Noche Violeta (Fondo)
     },
     buttonPalette: {
-        primary: '#8f69ff', // Indigo 500
-        accent: '#00FF9C',  // Spring Green
-        text: '#000000'
+        primary: '#8f69ff', // Púrpura Purrpurr
+        accent: '#709600',  // Verde Eco
+        text: '#f0ffcc'     // Lima Claro
     },
-    speed: 0.5,
-    force: 0.4,
-    blurStrength: 200,
+    speed: 0.6,
+    force: 0.6,
+    blurStrength: 160,
     grainOpacity: 0.2,
     interactionRadius: 1.1,
     fluidZoom: 0.7,
