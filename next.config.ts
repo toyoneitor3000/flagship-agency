@@ -6,7 +6,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
   swMinify: false,
-  disable: process.env.NODE_ENV === "development", // Disable in dev to avoid reload loops
+  disable: true, // Temporarily disabled to fix build error
   workboxOptions: {
     disableDevLogs: true,
   },
