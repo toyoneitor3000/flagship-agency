@@ -26,7 +26,7 @@ export const Hero = () => {
           </video>
 
           {/* Horizontal Gradient: 85% -> 20% Opacity */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/30" />
         </div>
       </div>
 
