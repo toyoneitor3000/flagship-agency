@@ -4,6 +4,7 @@
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-display: var(--font-space), "Space Grotesk", sans-serif;
+  --font-unbounded: var(--font-unbounded), sans-serif;
 
 
   /* New Palette from Illustrator & Derived Shades */
@@ -58,7 +59,7 @@
   --font-space: var(--font-righteous);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains);
-  
+
   /* Typography Scale - Apple-inspired */
   --text-base-size: 1rem;
   --line-height-body: 1.6;
@@ -74,7 +75,12 @@ body {
 }
 
 /* Typography Utilities */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: var(--line-height-heading);
 }
 

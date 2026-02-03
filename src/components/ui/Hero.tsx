@@ -25,8 +25,8 @@ export const Hero = () => {
             <source src="/assets/copy_BCA36671-AD77-4CA4-ABF8-82B1492F4BCC.MOV" />
           </video>
 
-          {/* Horizontal Gradient: 85% -> 10% Opacity */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 via-[#0f0033]/70 via-60% to-[#0f0033]/10" />
+          {/* Horizontal Gradient: 85% -> 20% Opacity */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/20" />
         </div>
       </div>
 
@@ -43,14 +43,14 @@ export const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            <span className="font-mono text-xs md:text-sm tracking-widest text-[#8f69ff] uppercase opacity-80">
+            <span className="font-mono text-sm md:text-base tracking-widest text-[#8f69ff] uppercase font-bold">
               purrpurr.dev — Software Empresarial
             </span>
           </motion.div>
 
           {/* Title - Left Aligned */}
           <motion.h1
-            className='font-light tracking-tight text-white mb-8'
+            className='font-unbounded font-medium tracking-tight text-white mb-8'
             style={{
               fontSize: 'clamp(2.5rem, 5vw, 5rem)',
               letterSpacing: '-0.02em',
@@ -75,9 +75,9 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
           >
             <p
-              className='font-light text-zinc-300 leading-relaxed'
+              className='font-medium text-zinc-100 leading-relaxed'
               style={{
-                fontSize: 'clamp(1rem, 1.5vw, 1.25rem)',
+                fontSize: 'clamp(1.125rem, 1.5vw, 1.35rem)',
                 letterSpacing: '0.01em',
               }}
             >

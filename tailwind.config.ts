@@ -14,6 +14,7 @@ const config: Config = {
         sans: ['var(--font-sans)'],
         mono: ['var(--font-mono)'],
         display: ['var(--font-space)', 'var(--font-sans)'],
+        unbounded: ['var(--font-unbounded)', 'sans-serif'],
         orbitron: ['var(--font-orbitron)', 'sans-serif'],
         'style-script': ['var(--font-style-script)', 'cursive'],
       },
