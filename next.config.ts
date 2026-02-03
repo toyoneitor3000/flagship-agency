@@ -1,18 +1,5 @@
 import type { NextConfig } from "next";
 
-const withPWA = require("@ducanh2912/next-pwa").default({
-  dest: "public",
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
-  reloadOnOnline: true,
-  swMinify: false,
-  disable: true, // Temporarily disabled to fix build error
-  workboxOptions: {
-    disableDevLogs: true,
-  },
-  buildExcludes: [/middleware-manifest\.json$/],
-});
-
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@libsql/client", "libsql", "@prisma/adapter-libsql"],
   typescript: {
@@ -49,4 +36,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPWA(nextConfig);
+export default nextConfig;
