@@ -29,7 +29,7 @@ export default function Home() {
       {/* HERO SECTION - White Background */}
       <section className="relative bg-white text-brand-black py-32 md:py-48 overflow-hidden">
         {/* Grid de puntos de fondo */}
-        <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+        <div className="absolute inset-0 opacity-20 bg-dot-pattern pointer-events-none"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             {/* Left side - Text content */}
@@ -66,7 +66,7 @@ export default function Home() {
                   transition={{ delay: 0.6 }}
                   className="text-xl md:text-2xl text-gray-700 mb-12 font-medium max-w-xl leading-relaxed"
                 >
-                  Desde stickers de colección hasta branding corporativo completo. Calidad 8K, vinilos importados y cortes de precisión.
+                  Desde stickers de colección hasta branding corporativo completo. Alta resolución, vinilos importados y cortes de precisión.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}

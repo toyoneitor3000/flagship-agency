@@ -70,7 +70,7 @@ export default function StatsCounter() {
     const stats = [
         { value: 2500, label: "Clientes Felices", suffix: "+", icon: <Users className="w-7 h-7" /> },
         { value: 15000, label: "Stickers Entregados", suffix: "+", icon: <Package className="w-7 h-7" /> },
-        { value: 5, label: "Años de Experiencia", suffix: "", icon: <Star className="w-7 h-7" /> },
+        { value: 9, label: "Años de Experiencia", suffix: "", icon: <Star className="w-7 h-7" /> },
         { value: 98, label: "Satisfacción", suffix: "%", icon: <Sparkles className="w-7 h-7" /> },
     ];
 
