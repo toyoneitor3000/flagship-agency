@@ -51,15 +51,15 @@ function AnimatedStat({ value, label, suffix = "", icon, delay = 0 }: StatProps)
             transition={{ delay: delay / 1000 }}
             className="text-center group"
         >
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-brand-yellow/10 rounded-2xl mb-4 group-hover:bg-brand-yellow group-hover:scale-110 transition-all duration-300">
-                <div className="text-brand-yellow group-hover:text-black transition-colors">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-brand-black/10 rounded-2xl mb-4 group-hover:bg-brand-black group-hover:scale-110 transition-all duration-300">
+                <div className="text-brand-black group-hover:text-brand-yellow transition-colors">
                     {icon}
                 </div>
             </div>
-            <div className="text-5xl md:text-6xl font-black text-white mb-2">
+            <div className="text-5xl md:text-6xl font-black text-brand-black mb-2">
                 {count.toLocaleString()}{suffix}
             </div>
-            <div className="text-gray-400 font-medium uppercase tracking-widest text-sm">
+            <div className="text-gray-700 font-medium uppercase tracking-widest text-sm">
                 {label}
             </div>
         </motion.div>
@@ -75,11 +75,11 @@ export default function StatsCounter() {
     ];
 
     return (
-        <section className="py-24 bg-brand-black relative overflow-hidden">
+        <section className="py-24 bg-brand-yellow relative overflow-hidden">
             {/* Background decoration */}
             <div className="absolute inset-0 opacity-5">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-yellow rounded-full blur-3xl" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-yellow rounded-full blur-3xl" />
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-black rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-black rounded-full blur-3xl" />
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
@@ -89,8 +89,8 @@ export default function StatsCounter() {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <span className="text-brand-yellow font-bold tracking-widest uppercase text-sm">Números que hablan</span>
-                    <h2 className="text-4xl md:text-5xl font-black text-white mt-4">NUESTRA TRAYECTORIA</h2>
+                    <span className="text-brand-black font-bold tracking-widest uppercase text-sm bg-white px-4 py-2 rounded-full">Números que hablan</span>
+                    <h2 className="text-4xl md:text-5xl font-black text-brand-black mt-4">NUESTRA TRAYECTORIA</h2>
                 </motion.div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">

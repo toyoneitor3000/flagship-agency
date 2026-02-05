@@ -49,7 +49,7 @@ export default function Gallery() {
     };
 
     return (
-        <section className="py-24 bg-gray-50">
+        <section className="py-24 bg-white">
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -71,8 +71,8 @@ export default function Gallery() {
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
                             className={`px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wide transition-all ${activeCategory === cat.id
-                                    ? "bg-brand-black text-white shadow-lg"
-                                    : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                                ? "bg-brand-black text-white shadow-lg"
+                                : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                                 }`}
                         >
                             {cat.label}

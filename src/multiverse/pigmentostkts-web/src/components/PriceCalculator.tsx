@@ -43,7 +43,7 @@ export default function PriceCalculator() {
     };
 
     return (
-        <section className="py-24 bg-gradient-to-br from-gray-900 via-brand-black to-gray-900">
+        <section className="py-24 bg-brand-black">
             <div className="container mx-auto px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -80,8 +80,8 @@ export default function PriceCalculator() {
                                             key={m.id}
                                             onClick={() => setMaterial(m)}
                                             className={`p-4 rounded-xl text-left transition-all ${material.id === m.id
-                                                    ? "bg-brand-yellow text-black"
-                                                    : "bg-white/5 text-white hover:bg-white/10"
+                                                ? "bg-brand-yellow text-black"
+                                                : "bg-white/5 text-white hover:bg-white/10"
                                                 }`}
                                         >
                                             <span className="font-bold block">{m.name}</span>
@@ -102,8 +102,8 @@ export default function PriceCalculator() {
                                             key={s.id}
                                             onClick={() => setSize(s)}
                                             className={`p-4 rounded-xl text-left transition-all ${size.id === s.id
-                                                    ? "bg-brand-yellow text-black"
-                                                    : "bg-white/5 text-white hover:bg-white/10"
+                                                ? "bg-brand-yellow text-black"
+                                                : "bg-white/5 text-white hover:bg-white/10"
                                                 }`}
                                         >
                                             <span className="font-bold block">{s.name}</span>
