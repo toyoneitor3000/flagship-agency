@@ -104,9 +104,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 185000,
-            cc_laminate: 190000,
-            hybrid_laminate: 200000
+            sc_laminate: 195000,   // +10k
+            cc_laminate: 200000,   // +10k
+            hybrid_laminate: 210000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/metalizado-plateado.png',
         finishOptions: true,
@@ -120,9 +123,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 155000,
-            cc_laminate: 160000,
-            hybrid_laminate: 170000
+            sc_laminate: 165000,   // +10k
+            cc_laminate: 170000,   // +10k
+            hybrid_laminate: 180000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/blanco-holografico.png',
         finishOptions: false,
@@ -136,9 +142,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 155000,
-            cc_laminate: 160000,
-            hybrid_laminate: 170000
+            sc_laminate: 165000,   // +10k
+            cc_laminate: 170000,   // +10k
+            hybrid_laminate: 180000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/escarchado.png',
         finishOptions: false,
@@ -152,9 +161,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 155000,
-            cc_laminate: 160000,
-            hybrid_laminate: 170000
+            sc_laminate: 165000,   // +10k
+            cc_laminate: 170000,   // +10k
+            hybrid_laminate: 180000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/canvas.png',
         finishOptions: false,
@@ -168,9 +180,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 155000,
-            cc_laminate: 160000,
-            hybrid_laminate: 170000
+            sc_laminate: 165000,   // +10k
+            cc_laminate: 170000,   // +10k
+            hybrid_laminate: 180000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/ojo-gato.png',
         finishOptions: false,
@@ -258,18 +273,25 @@ export default function PriceCalculator() {
         const totalStickerCount = bestCount * sheetQuantity;
         setTotalStickers(totalStickerCount);
 
-        // Determine price per sheet based on cut type
+        // Determine price per sheet based on cut type and width
         let pricePerSheet = 0;
+        const is60cm = material.hasWidthOptions && materialWidth === 60;
 
         if (cutType.id === 'hybrid') {
             // Hybrid cut (Semicorte + Corte Completo) - Premium option
-            pricePerSheet = material.pricing.hybrid_laminate || material.pricing.cc_laminate;
+            pricePerSheet = is60cm
+                ? (material.pricing.hybrid_laminate_60 || 149900)
+                : (material.pricing.hybrid_laminate || material.pricing.cc_laminate);
         } else if (cutType.id === 'sc') {
             // Semi Corte
-            pricePerSheet = material.pricing.sc_laminate;
+            pricePerSheet = is60cm
+                ? (material.pricing.sc_laminate_60 || 149900)
+                : material.pricing.sc_laminate;
         } else {
             // Corte Completo (cc)
-            pricePerSheet = material.pricing.cc_laminate;
+            pricePerSheet = is60cm
+                ? (material.pricing.cc_laminate_60 || 149900)
+                : material.pricing.cc_laminate;
         }
 
         const calculatedPrice = pricePerSheet * sheetQuantity;
@@ -281,7 +303,7 @@ export default function PriceCalculator() {
         } else {
             setDiscountedPrice(0);
         }
-    }, [widthCm, heightCm, sheetQuantity, material, cutType, laminate, coupon]);
+    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, coupon]);
 
     // If we are in initial decision phase (currentStep === 0 or waiting for design/project type)
     if (currentStep === 0) {
