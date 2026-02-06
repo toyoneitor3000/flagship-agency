@@ -102,8 +102,12 @@ model OrderItem {
   id        String  @id @default(cuid())
   orderId   String
   order     Order   @relation(fields: [orderId], references: [id])
-  productId Int
-  product   Product @relation(fields: [productId], references: [id])
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id])
   quantity  Int
   price     Int     // Precio en el momento de la compra
+  
+  // Metadata para stickers personalizados
+  metadata  String? // JSON string con configuración (material, corte, medidas)
+  fileUrl   String? // Link al archivo de diseño
 }

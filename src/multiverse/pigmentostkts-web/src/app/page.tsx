@@ -25,9 +25,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative">
+    <main className="min-h-screen relative overflow-x-hidden">
       {/* HERO SECTION - White Background */}
-      <section id="hero" data-theme="light" className="relative bg-white text-brand-black py-32 md:py-48 overflow-hidden">
+      <section id="hero" data-theme="light" className="relative bg-white text-brand-black min-h-[100dvh] flex items-center py-20 md:py-0 overflow-hidden">
         {/* Grid de puntos de fondo */}
         <div className="absolute inset-0 opacity-20 bg-dot-pattern pointer-events-none"></div>
         <div className="container mx-auto px-4 relative z-10">
@@ -42,7 +42,7 @@ export default function Home() {
                 >
                   Soluciones Visuales Premium
                 </motion.span>
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
+                <h1 className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 leading-[0.9] sm:leading-[0.9]">
                   <motion.span
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -64,7 +64,7 @@ export default function Home() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
-                  className="text-xl md:text-2xl text-gray-700 mb-12 font-medium max-w-xl leading-relaxed"
+                  className="text-lg md:text-2xl text-gray-700 mb-12 font-medium max-w-xl leading-relaxed"
                 >
                   Desde stickers de colección hasta branding corporativo completo. Alta resolución, vinilos importados y cortes de precisión.
                 </motion.p>
@@ -77,7 +77,7 @@ export default function Home() {
                   <ScaleOnHover>
                     <a
                       href="#calculator"
-                      className="inline-flex items-center justify-center bg-brand-yellow text-brand-black hover:bg-white font-black text-lg px-10 py-5 rounded-full transition-all uppercase tracking-wide shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40"
+                      className="inline-flex items-center justify-center bg-brand-yellow text-brand-black hover:bg-white font-black text-base md:text-lg px-6 py-3 md:px-10 md:py-5 rounded-full transition-all uppercase tracking-wide shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40"
                     >
                       Cotizar Proyecto <ArrowRight className="ml-2 w-5 h-5" />
                     </a>
@@ -85,7 +85,7 @@ export default function Home() {
                   <ScaleOnHover>
                     <Link
                       href="/packs"
-                      className="inline-flex items-center justify-center bg-transparent border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-white font-black text-lg px-10 py-5 rounded-full transition-all uppercase tracking-wide"
+                      className="inline-flex items-center justify-center bg-transparent border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-white font-black text-base md:text-lg px-6 py-3 md:px-10 md:py-5 rounded-full transition-all uppercase tracking-wide"
                     >
                       Ver Packs
                     </Link>
@@ -111,7 +111,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
@@ -122,6 +122,11 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </section>
+
+      {/* PRICE CALCULATOR - MOVED TO SECOND SECTION */}
+      <div id="calculator" data-theme="dark" className="scroll-mt-[46px] md:scroll-mt-32">
+        <PriceCalculator />
+      </div>
 
       {/* STATS COUNTER SECTION */}
       <StatsCounter />
@@ -200,10 +205,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PRICE CALCULATOR */}
-      <div id="calculator" data-theme="dark">
-        <PriceCalculator />
-      </div>
+
 
       {/* DESIGN TEASER - Yellow Background */}
       <section id="design" className="py-24 bg-brand-yellow">

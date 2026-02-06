@@ -56,7 +56,7 @@ function AnimatedStat({ value, label, suffix = "", icon, delay = 0 }: StatProps)
                     {icon}
                 </div>
             </div>
-            <div className="text-5xl md:text-6xl font-black text-brand-black mb-2">
+            <div className="text-3xl sm:text-4xl md:text-6xl font-black text-brand-black mb-2">
                 {count.toLocaleString()}{suffix}
             </div>
             <div className="text-gray-700 font-medium uppercase tracking-widest text-sm">

@@ -16,7 +16,12 @@
           "originalSource": "/:path*"
         }
       ],
-      "wasm": [],
+      "wasm": [
+        {
+          "name": "wasm_232a8c068638351d8b9a286185310c89c43ec967",
+          "filePath": "server/edge-chunks/wasm_232a8c068638351d8b9a286185310c89c43ec967.wasm"
+        }
+      ],
       "assets": []
     }
   },

@@ -37,7 +37,7 @@ const Navbar = () => {
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-300",
         isScrolled
-          ? "bg-[#121212]/70 backdrop-blur-xl border-b border-white/5 py-[3px]"
+          ? "bg-[#121212] md:bg-[#121212]/70 backdrop-blur-xl border-b border-white/5 py-[3px]"
           : "bg-white/5 backdrop-blur-[1px] py-[3px]"
       )}
     >
@@ -47,7 +47,7 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center md:flex-1 md:justify-start">
             <Link href="/" className={cn(
               "relative transition-all duration-300 hover:scale-105 active:scale-95",
-              isScrolled ? "w-64 h-[70px]" : "w-96 h-[90px]"
+              isScrolled ? "w-32 md:w-64 h-[40px] md:h-[70px]" : "w-40 md:w-96 h-[50px] md:h-[90px]"
             )}>
               <Image
                 src="/brand/logo.png"
