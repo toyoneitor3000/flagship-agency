@@ -8,9 +8,13 @@ import { Button } from "@/components/ui/button";
 
 // Configuración de Materiales (Precio fijo por pliego)
 interface MaterialPricing {
-    sc_laminate: number;       // Semi Corte con laminado (precio por pliego)
-    cc_laminate: number;       // Corte Completo con laminado (precio por pliego)
-    hybrid_laminate?: number;  // Semicorte + Corte Completo (precio por pliego)
+    sc_laminate: number;       // Semi Corte con laminado (precio por pliego 120cm)
+    cc_laminate: number;       // Corte Completo con laminado (precio por pliego 120cm)
+    hybrid_laminate?: number;  // Semicorte + Corte Completo (precio por pliego 120cm)
+    // Pricing for 60cm width (if hasWidthOptions is true)
+    sc_laminate_60?: number;   // Semi Corte 60cm width
+    cc_laminate_60?: number;   // Corte Completo 60cm width
+    hybrid_laminate_60?: number; // Hybrid 60cm width
 }
 
 interface Material {
@@ -33,9 +37,9 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'El estándar para stickers. Base blanca pura.',
         sheetSize: { width: 99, height: 99 },
         pricing: {
-            sc_laminate: 119900,
-            cc_laminate: 124900,
-            hybrid_laminate: 135000
+            sc_laminate: 129900,   // +10k
+            cc_laminate: 134900,   // +10k
+            hybrid_laminate: 145000 // +10k
         },
         imageSrc: '/materials/blanco-brillante.png',
         finishOptions: true,
@@ -47,9 +51,9 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Fondo invisible. Ideal para vidrio o superficies claras.',
         sheetSize: { width: 99, height: 99 },
         pricing: {
-            sc_laminate: 119900,
-            cc_laminate: 124900,
-            hybrid_laminate: 135000
+            sc_laminate: 129900,   // +10k
+            cc_laminate: 134900,   // +10k
+            hybrid_laminate: 145000 // +10k
         },
         imageSrc: '/materials/transparente-brillante.png',
         finishOptions: true,
@@ -62,9 +66,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 180900,
-            cc_laminate: 185900,
-            hybrid_laminate: 195000
+            sc_laminate: 190900,   // +10k
+            cc_laminate: 195900,   // +10k
+            hybrid_laminate: 205000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/tornasol.png',
         finishOptions: true,
@@ -78,9 +85,12 @@ const MATERIALS_CONFIG: Material[] = [
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
         pricing: {
-            sc_laminate: 185000,
-            cc_laminate: 190000,
-            hybrid_laminate: 200000
+            sc_laminate: 195000,   // +10k
+            cc_laminate: 200000,   // +10k
+            hybrid_laminate: 210000, // +10k
+            sc_laminate_60: 149900,
+            cc_laminate_60: 149900,
+            hybrid_laminate_60: 149900
         },
         imageSrc: '/materials/metalizado-dorado.png',
         finishOptions: true,
