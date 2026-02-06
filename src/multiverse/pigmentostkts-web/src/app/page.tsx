@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <main className="min-h-screen relative">
       {/* HERO SECTION - White Background */}
-      <section className="relative bg-white text-brand-black py-32 md:py-48 overflow-hidden">
+      <section id="hero" data-theme="light" className="relative bg-white text-brand-black py-32 md:py-48 overflow-hidden">
         {/* Grid de puntos de fondo */}
         <div className="absolute inset-0 opacity-20 bg-dot-pattern pointer-events-none"></div>
         <div className="container mx-auto px-4 relative z-10">
@@ -76,8 +76,7 @@ export default function Home() {
                 >
                   <ScaleOnHover>
                     <a
-                      href={PIGMENTO_DATA.contact.whatsappUrl}
-                      target="_blank"
+                      href="#calculator"
                       className="inline-flex items-center justify-center bg-brand-yellow text-brand-black hover:bg-white font-black text-lg px-10 py-5 rounded-full transition-all uppercase tracking-wide shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40"
                     >
                       Cotizar Proyecto <ArrowRight className="ml-2 w-5 h-5" />
@@ -128,7 +127,7 @@ export default function Home() {
       <StatsCounter />
 
       {/* SERVICES GRID - Black Background */}
-      <section className="py-32 bg-brand-black relative z-10">
+      <section id="services" data-theme="dark" className="py-32 bg-brand-black relative z-10">
         <div className="container mx-auto px-4">
           <FadeIn delay={0.2}>
             <div className="text-center mb-20">
@@ -161,8 +160,50 @@ export default function Home() {
       {/* GALLERY SECTION */}
       <Gallery />
 
+      {/* FEATURED PACKS SECTION */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-brand-black to-transparent opacity-5"></div>
+        <div className="container mx-auto px-4">
+          <FadeIn>
+            <div className="text-center mb-16">
+              <span className="text-brand-yellow font-bold tracking-widest uppercase text-sm bg-brand-black px-4 py-2 rounded-full">Best Sellers</span>
+              <h2 className="text-4xl md:text-6xl font-black text-brand-black mt-6 tracking-tighter">PACKS DE COLECCIÓN</h2>
+              <p className="text-xl text-gray-500 max-w-2xl mx-auto mt-4">La forma más inteligente de empezar tu colección. Más stickers, mejor precio.</p>
+            </div>
+          </FadeIn>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {PIGMENTO_DATA.pricing.megaPacks.map((pack, idx) => (
+              <FadeIn key={pack.name} delay={idx * 0.1}>
+                <div className="group relative bg-white rounded-[2rem] border-2 border-brand-black p-8 hover:-translate-y-2 transition-all duration-300 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(255,214,0,1)]">
+                  <div className="absolute top-0 right-0 bg-brand-yellow text-black font-black text-xs px-3 py-1 rounded-bl-xl border-l-2 border-b-2 border-brand-black">
+                    POPULAR
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-4xl font-black text-brand-black mb-2 uppercase italic">{pack.name}</h3>
+                    <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-brand-black to-gray-600 mb-4">
+                      {pack.qty}
+                      <span className="text-lg text-gray-400 block font-bold tracking-widest -mt-2">STICKERS</span>
+                    </div>
+                    <div className="w-full h-px bg-gray-100 my-6"></div>
+                    <div className="text-3xl font-black text-brand-black mb-6">
+                      ${pack.price.toLocaleString()}
+                    </div>
+                    <Link href="/packs" className="block w-full py-4 bg-brand-black text-white font-bold rounded-xl hover:bg-brand-yellow hover:text-black transition-colors uppercase tracking-wide">
+                      COMPRAR PACK
+                    </Link>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* PRICE CALCULATOR */}
-      <PriceCalculator />
+      <div id="calculator" data-theme="dark">
+        <PriceCalculator />
+      </div>
 
       {/* DESIGN TEASER - Yellow Background */}
       <section id="design" className="py-24 bg-brand-yellow">

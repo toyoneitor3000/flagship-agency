@@ -50,10 +50,10 @@ export const PIGMENTO_DATA = {
   ],
   pricing: {
     materials: [
-      { name: "Vinilo Blanco", price: 134900, speedlight: 75000, unit: "m²" },
-      { name: "Transparente", price: 134900, speedlight: 75000, unit: "m²" },
-      { name: "Tornasol", price: 161700, speedlight: 80850, unit: "m²" },
-      { name: "Vinilo de Corte", price: 155000, speedlight: 77500, unit: "m²" }
+      { name: "Vinilo Blanco", price: 134900, memberPrice: 75000, unit: "m²" },
+      { name: "Transparente", price: 134900, memberPrice: 75000, unit: "m²" },
+      { name: "Tornasol", price: 161700, memberPrice: 80850, unit: "m²" },
+      { name: "Vinilo de Corte", price: 155000, memberPrice: 77500, unit: "m²" }
     ],
     packs: [
       { qty: 6, price: 12000 },

@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: "Pigmento Stickers | Stickers Premium y Diseño Gráfico",
   description: "Stickers personalizados, vinilo de corte, diseño gráfico y branding. Calidad 8K, vinilos importados y cortes de precisión. Envíos a toda Colombia.",
   keywords: "stickers, vinilo, diseño gráfico, branding, Colombia, personalizado",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +28,6 @@ export default function RootLayout({
     <html lang="es">
       <body className={inter.className}>
         <Providers>
-          <Navbar />
           {children}
           <FloatingWhatsApp />
         </Providers>

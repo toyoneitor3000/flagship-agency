@@ -9,6 +9,14 @@
 
 
 
+html,
+body {
+  background-color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
@@ -37,7 +45,6 @@
   background-size: 32px 32px;
 }
 
-/* Aplicar fuente heading a todos los encabezados automáticamente */
 h1,
 h2,
 h3,
@@ -45,4 +52,36 @@ h4,
 h5,
 h6 {
   font-family: var(--font-space);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NAVBAR - Mix Blend Mode Styles
+   Estos estilos hacen que el texto del menú se invierta automáticamente
+   según el color de fondo detrás de él.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.navbar-blend-text {
+  color: #FFFFFF !important;
+  mix-blend-mode: difference;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CUSTOM SCROLLBAR
+   Estilo minimalista oscuro para listas y contenedores.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
