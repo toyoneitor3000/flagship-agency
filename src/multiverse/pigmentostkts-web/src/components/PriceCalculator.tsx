@@ -967,6 +967,11 @@ export default function PriceCalculator() {
                                                 <span className="block text-[10px] text-brand-yellow capitalize">
                                                     Laminado {laminate}
                                                 </span>
+                                                {material.hasWidthOptions && (
+                                                    <span className="block text-[10px] text-gray-400">
+                                                        Ancho: {materialWidth}cm
+                                                    </span>
+                                                )}
                                             </>
                                         ) : <span className="text-gray-600 italic">Por elegir...</span>}
                                     </span>
