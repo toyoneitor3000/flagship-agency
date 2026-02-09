@@ -14,7 +14,8 @@ export async function POST(req: Request) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        const filename = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+        const safeName = file.name.toLowerCase().replace(/[^a-z0-9.]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+        const filename = `${Date.now()}-${safeName}`;
         const relativePath = `/uploads/${filename}`;
         const absolutePath = path.join(process.cwd(), 'public', 'uploads', filename);
 

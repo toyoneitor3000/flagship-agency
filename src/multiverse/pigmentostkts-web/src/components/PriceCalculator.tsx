@@ -1060,8 +1060,9 @@ export default function PriceCalculator() {
                                                     const data = await response.json();
 
                                                     // 2. Abrir WhatsApp con el resumen actualizado
-                                                    const fullFileUrl = `${window.location.origin}${fileUrl}`;
-                                                    const message = `Hola Pigmento! 🎨 He creado un pedido en la plataforma (ID: ${data.orderId}).\n\n*Detalles:* ${sheetQuantity} ${sheetQuantity === 1 ? 'metro' : 'metros'} de ${material.name}\n*Corte:* ${cutType.name}\n*Medidas:* ${widthCm}x${heightCm}cm\n*Archivo:* ${fullFileUrl}\n\n*Total:* $${discountedPrice.toLocaleString()}`;
+                                                    const filename = fileUrl?.split('/').pop();
+                                                    const viewerUrl = `${window.location.origin}/view-design/${filename}`;
+                                                    const message = `Hola Pigmento! 🎨 He creado un pedido en la plataforma (ID: ${data.orderId}).\n\n*Detalles:* ${sheetQuantity} ${sheetQuantity === 1 ? 'metro' : 'metros'} de ${material.name}\n*Corte:* ${cutType.name}\n*Medidas:* ${widthCm}x${heightCm}cm\n\nArchivo de diseño:\n${viewerUrl}\n\n*Total:* $${discountedPrice.toLocaleString()}`;
                                                     window.open(`${PIGMENTO_DATA.contact.whatsappUrl}?text=${encodeURIComponent(message)}`, '_blank');
                                                 } catch (err) {
                                                     console.error(err);

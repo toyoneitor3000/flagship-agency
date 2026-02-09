@@ -57,8 +57,8 @@ export function OrderHistory({ orders, isAdmin = false }: OrderProps) {
                   value={order.status}
                   onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
                   className={`text-xs font-bold px-3 py-1 rounded-full outline-none border-none transition-all cursor-pointer ${order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                      order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                        order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                    order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                      order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
                     }`}
                 >
                   <option value="PENDING">Procesando</option>
@@ -69,8 +69,8 @@ export function OrderHistory({ orders, isAdmin = false }: OrderProps) {
                 </select>
               ) : (
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${order.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                    order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                      order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
+                  order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                    order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
                   }`}>
                   {order.status === 'COMPLETED' ? 'Entregado' :
                     order.status === 'PENDING' ? 'Procesando' :
@@ -121,7 +121,7 @@ export function OrderHistory({ orders, isAdmin = false }: OrderProps) {
                     <p className="text-sm font-black text-gray-900">{formatPrice(item.price * item.quantity)}</p>
                     {item.fileUrl && (
                       <a
-                        href={item.fileUrl}
+                        href={`/view-design/${item.fileUrl.split('/').pop()}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-brand-black text-white text-[10px] font-black px-3 py-1.5 rounded-lg hover:bg-brand-yellow hover:text-black transition-all uppercase tracking-tight"
