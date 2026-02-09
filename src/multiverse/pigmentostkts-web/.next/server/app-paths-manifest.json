@@ -1,13 +1,13 @@
 {
   "/_not-found": "app/_not-found.js",
   "/api/orders/[id]/route": "app/api/orders/[id]/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/api/orders/stickers/route": "app/api/orders/stickers/route.js",
   "/api/create-payment-intent/route": "app/api/create-payment-intent/route.js",
-  "/page": "app/page.js",
-  "/checkout/page": "app/checkout/page.js",
+  "/api/orders/stickers/route": "app/api/orders/stickers/route.js",
   "/api/upload/route": "app/api/upload/route.js",
+  "/checkout/page": "app/checkout/page.js",
   "/checkout/success/page": "app/checkout/success/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/stickers/[id]/page": "app/stickers/[id]/page.js",
   "/packs/page": "app/packs/page.js"

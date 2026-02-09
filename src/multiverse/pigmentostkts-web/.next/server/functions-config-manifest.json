@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/auth/[...nextauth]":{},"/stickers/[id]":{},"/packs":{}}}
+{"version":1,"functions":{"/api/auth/[...nextauth]":{},"/packs":{},"/stickers/[id]":{}}}
