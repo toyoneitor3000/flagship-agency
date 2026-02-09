@@ -962,14 +962,17 @@ export default function PriceCalculator() {
                                                                             body: formData
                                                                         });
 
-                                                                        if (!response.ok) throw new Error('Error al subir');
+                                                                        if (!response.ok) {
+                                                                            const errorData = await response.json().catch(() => ({}));
+                                                                            throw new Error(errorData.error || 'Error al subir el archivo');
+                                                                        }
 
                                                                         const data = await response.json();
                                                                         setFileUrl(data.fileUrl);
                                                                         setFileName(data.fileName);
-                                                                    } catch (err) {
-                                                                        console.error(err);
-                                                                        alert('No se pudo subir el archivo. Intenta con uno más pequeño o en otro formato.');
+                                                                    } catch (err: any) {
+                                                                        console.error('Upload error details:', err);
+                                                                        alert(`No se pudo subir el archivo: ${err.message}. Intenta con uno más pequeño (ej. < 20MB) o en otro formato.`);
                                                                     } finally {
                                                                         setIsUploading(false);
                                                                     }
