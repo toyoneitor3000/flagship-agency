@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Download, ArrowLeft, ExternalLink, ShieldCheck, FileText, FileCode, Layers, Info } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -12,8 +13,11 @@ interface PageProps {
 
 export default function ViewDesignPage({ params }: PageProps) {
     const { filename } = params;
-    const fileUrl = `/uploads/${filename}`;
-    const extension = filename.split('.').pop()?.toLowerCase();
+    const searchParams = useSearchParams();
+    const externalUrl = searchParams.get("url");
+
+    const fileUrl = externalUrl || `/uploads/${filename}`;
+    const extension = fileUrl.split('.').pop()?.split('?')[0].toLowerCase();
 
     // Determine content type
     const isPdf = extension === 'pdf';

@@ -8,18 +8,16 @@ export default function CartButton() {
   const { totalItems, toggleCart } = useCart();
 
   return (
-    <Button 
-      variant="default" 
+    <button
       onClick={toggleCart}
-      className="bg-brand-black hover:bg-brand-yellow hover:text-brand-black text-brand-white font-bold transition-all duration-300 border-2 border-transparent hover:border-brand-black"
+      className="relative p-2 transition-transform hover:scale-110 active:scale-95 group"
     >
-      <ShoppingBag className="w-4 h-4 md:mr-2" />
-      <span className="hidden md:inline">CARRITO</span>
+      <ShoppingBag className="w-6 h-6 text-white transition-colors group-hover:text-brand-yellow" strokeWidth={2.5} />
       {totalItems > 0 && (
-        <span className="absolute -top-2 -right-2 bg-brand-yellow text-brand-black text-[10px] font-black h-5 w-5 flex items-center justify-center rounded-full border-2 border-brand-white shadow-sm">
+        <span className="absolute -top-1 -right-1 bg-brand-yellow text-brand-black text-[10px] font-black h-5 w-5 flex items-center justify-center rounded-full shadow-lg border-2 border-brand-black">
           {totalItems}
         </span>
       )}
-    </Button>
+    </button>
   );
 }

@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Calculator, ArrowRight, Check, AlertCircle, Plus, Minus } from "lucide-react";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
+import { uploadFiles } from "@/lib/uploadthing";
+
+// Helper to use uploadFiles if needed, or I'll just use the button.
+// Actually, let's keep it simple.
 
 // Configuración de Materiales (Precio fijo por pliego)
 interface MaterialPricing {
@@ -228,6 +233,7 @@ interface CustomStickerOrder {
 }
 
 export default function PriceCalculator() {
+    const { addItem, toggleCart } = useCart();
     // State for Stepper
     // Step 0: Initial Decisions (Design & Type)
     // Step 1: Cut Type
@@ -327,8 +333,8 @@ export default function PriceCalculator() {
         setVolumeDiscountedPrice(vPrice);
 
         // Final Price (including coupon if any)
-        if (coupon.trim().length > 0) {
-            setDiscountedPrice(Math.round(vPrice * 0.9));
+        if (coupon.trim().toUpperCase() === "SPEEDLIGHT20") {
+            setDiscountedPrice(Math.round(vPrice * 0.8));
         } else {
             setDiscountedPrice(vPrice);
         }
@@ -414,7 +420,7 @@ export default function PriceCalculator() {
                                                 Atrás
                                             </button>
                                             <a
-                                                href={`${PIGMENTO_DATA.contact.whatsappUrl}?text=Hola! No tengo diseño y necesito ayuda para crear mis stickers.`}
+                                                href={`${PIGMENTO_DATA.contact.whatsappUrl}?text = Hola! No tengo diseño y necesito ayuda para crear mis stickers.`}
                                                 target="_blank"
                                                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-blue-500/20 text-lg"
                                             >
@@ -515,7 +521,7 @@ export default function PriceCalculator() {
                 <div className="w-full max-w-xl mx-auto h-1 bg-white/10 rounded-full mb-3 md:mb-6 overflow-hidden">
                     <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${progress}%` }}
+                        animate={{ width: `${progress}% ` }}
                         className="h-full bg-brand-yellow transition-all duration-500"
                     />
                 </div>
@@ -583,7 +589,7 @@ export default function PriceCalculator() {
                                                 <div className="flex gap-4 justify-center pt-2">
                                                     <button onClick={() => setHasDesign(null)} className="text-gray-400 hover:text-white underline text-sm">Volver</button>
                                                     <a
-                                                        href={`${PIGMENTO_DATA.contact.whatsappUrl}?text=Hola! No tengo diseño y necesito ayuda para crear mis stickers.`}
+                                                        href={`${PIGMENTO_DATA.contact.whatsappUrl}?text = Hola! No tengo diseño y necesito ayuda para crear mis stickers.`}
                                                         target="_blank"
                                                         className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 transition-all"
                                                     >
@@ -687,7 +693,7 @@ export default function PriceCalculator() {
                                                     </div>
 
                                                     {/* Content */}
-                                                    <div className="relative z-10">
+                                                    <div className="relative z-10 w-full">
                                                         <div className="flex justify-between items-center mb-0.5">
                                                             <span className={`font-black text-[10px] sm:text-lg block leading-tight ${cutType.id === c.id ? 'text-brand-yellow' : 'text-white'}`}>{c.name}</span>
                                                             {cutType.id === c.id && <div className="bg-brand-yellow text-black rounded-full p-0.5 sm:p-1 scale-75 sm:scale-100"><Check className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" strokeWidth={3} /></div>}
@@ -954,25 +960,17 @@ export default function PriceCalculator() {
                                                                     try {
                                                                         setIsUploading(true);
 
-                                                                        const formData = new FormData();
-                                                                        formData.append('file', file);
-
-                                                                        const response = await fetch('/api/upload', {
-                                                                            method: 'POST',
-                                                                            body: formData
+                                                                        const [res] = await uploadFiles("stickerUploader", {
+                                                                            files: [file],
                                                                         });
 
-                                                                        if (!response.ok) {
-                                                                            const errorData = await response.json().catch(() => ({}));
-                                                                            throw new Error(errorData.error || 'Error al subir el archivo');
+                                                                        if (res) {
+                                                                            setFileUrl(res.url);
+                                                                            setFileName(res.name);
                                                                         }
-
-                                                                        const data = await response.json();
-                                                                        setFileUrl(data.fileUrl);
-                                                                        setFileName(data.fileName);
                                                                     } catch (err: any) {
                                                                         console.error('Upload error details:', err);
-                                                                        alert(`No se pudo subir el archivo: ${err.message}. Intenta con uno más pequeño (ej. < 20MB) o en otro formato.`);
+                                                                        alert(`No se pudo subir el archivo: ${err.message}. Intenta con uno más pequeño o en otro formato.`);
                                                                     } finally {
                                                                         setIsUploading(false);
                                                                     }
@@ -1029,61 +1027,38 @@ export default function PriceCalculator() {
                                                 (currentStep === 3 && cutType.id === 'cc' && (widthCm < 4 || heightCm < 4)) ||
                                                 (currentStep === 3 && cutType.id === 'sc' && (widthCm < 2 || heightCm < 2))
                                             }
-                                            className={`bg-white text-black hover:bg-gray-200 font-bold px-5 py-2 rounded-xl flex items-center gap-2 transition-all text-sm ${(currentStep === 3 && material.finishOptions && !laminate) || (currentStep === 3 && cutType.id === 'cc' && (widthCm < 4 || heightCm < 4)) || (currentStep === 3 && cutType.id === 'sc' && (widthCm < 2 || heightCm < 2)) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            className={`bg-white text-black hover:bg-gray-200 font-bold px-5 py-2 rounded-xl flex items-center gap-2 transition-all text-sm ${(currentStep === 3 && material.finishOptions && !laminate) || (currentStep === 3 && cutType.id === 'cc' && (widthCm < 4 || heightCm < 4)) || (currentStep === 3 && cutType.id === 'sc' && (widthCm < 2 || heightCm < 2)) ? 'opacity-50 cursor-not-allowed' : ''} `}
                                         >
                                             Siguiente <ArrowRight size={16} />
                                         </button>
                                     ) : (
                                         <button
-                                            onClick={async () => {
-                                                try {
-                                                    setIsSubmitting(true);
-
-                                                    // 1. Crear la orden en la base de datos
-                                                    const response = await fetch('/api/orders/stickers', {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({
-                                                            materialId: material.id,
-                                                            materialName: material.name,
-                                                            cutTypeId: cutType.id,
-                                                            cutTypeName: cutType.name,
-                                                            width: widthCm,
-                                                            height: heightCm,
-                                                            quantity: sheetQuantity,
-                                                            laminate: laminate,
-                                                            price: discountedPrice,
-                                                            fileUrl: fileUrl,
-                                                            fileName: fileName
-                                                        })
-                                                    });
-
-                                                    if (!response.ok) throw new Error('Error al crear el pedido');
-
-                                                    const data = await response.json();
-
-                                                    // 2. Abrir WhatsApp con el resumen actualizado
-                                                    const filename = fileUrl?.split('/').pop();
-                                                    const viewerUrl = `${window.location.origin}/view-design/${filename}`;
-                                                    const message = `Hola Pigmento! 🎨 He creado un pedido en la plataforma (ID: ${data.orderId}).\n\n*Detalles:* ${sheetQuantity} ${sheetQuantity === 1 ? 'metro' : 'metros'} de ${material.name}\n*Corte:* ${cutType.name}\n*Medidas:* ${widthCm}x${heightCm}cm\n\nArchivo de diseño:\n${viewerUrl}\n\n*Total:* $${discountedPrice.toLocaleString()}`;
-                                                    window.open(`${PIGMENTO_DATA.contact.whatsappUrl}?text=${encodeURIComponent(message)}`, '_blank');
-                                                } catch (err) {
-                                                    console.error(err);
-                                                    alert('Hubo un problema al procesar tu pedido. Por favor intenta de nuevo.');
-                                                } finally {
-                                                    setIsSubmitting(false);
-                                                }
+                                            onClick={() => {
+                                                const customItem = {
+                                                    id: Date.now(),
+                                                    name: `STK PERSONALIZADO: ${material.name}`,
+                                                    price: discountedPrice / sheetQuantity,
+                                                    displayPrice: (discountedPrice / sheetQuantity).toLocaleString(),
+                                                    image: material.imageSrc,
+                                                    category: 'Personalizado',
+                                                    description: `${cutType.name} | ${widthCm}x${heightCm}cm | ${laminate || 'Sin'} acabado`,
+                                                    quantity: sheetQuantity,
+                                                    fileUrl: fileUrl || undefined,
+                                                    fileName: fileName || undefined,
+                                                    features: [
+                                                        `Material: ${material.name}`,
+                                                        `Corte: ${cutType.name}`,
+                                                        `Medidas: ${widthCm}x${heightCm}cm`,
+                                                        `Acabado: ${laminate || 'N/A'}`
+                                                    ]
+                                                };
+                                                addItem(customItem);
+                                                toggleCart();
                                             }}
-                                            disabled={!fileUrl || isSubmitting}
-                                            className={`bg-brand-yellow hover:bg-brand-yellow/90 text-black font-black px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-yellow-500/20 text-sm ${(!fileUrl || isSubmitting) ? 'opacity-50 pointer-events-none' : ''}`}
+                                            disabled={!fileUrl}
+                                            className={`bg-brand-yellow hover:bg-brand-yellow/90 text-black font-black px-6 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-yellow-500/20 text-sm ${(!fileUrl) ? 'opacity-50 pointer-events-none' : ''}`}
                                         >
-                                            {isSubmitting ? (
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" /> Procesando...
-                                                </div>
-                                            ) : (
-                                                <>Enviar a Producción <ArrowRight size={18} /></>
-                                            )}
+                                            AGREGAR AL CARRITO <ArrowRight size={18} />
                                         </button>
                                     )}
                                 </div>

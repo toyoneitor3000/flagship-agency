@@ -2,42 +2,28 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Laptop, Bike, Gamepad2, Sparkles } from "lucide-react";
-
-interface GalleryItem {
-    id: number;
-    title: string;
-    category: string;
-    gradient: string;
-    icon: React.ReactNode;
-}
-
-const galleryItems: GalleryItem[] = [
-    { id: 1, title: "Gaming Setup", category: "gaming", gradient: "from-purple-600 to-pink-600", icon: <Gamepad2 className="w-12 h-12" /> },
-    { id: 2, title: "Moto Custom", category: "motos", gradient: "from-orange-500 to-red-600", icon: <Bike className="w-12 h-12" /> },
-    { id: 3, title: "Laptop Art", category: "laptops", gradient: "from-blue-500 to-cyan-500", icon: <Laptop className="w-12 h-12" /> },
-    { id: 4, title: "Colección Anime", category: "coleccion", gradient: "from-pink-500 to-rose-500", icon: <Sparkles className="w-12 h-12" /> },
-    { id: 5, title: "Racing Decals", category: "motos", gradient: "from-yellow-500 to-orange-500", icon: <Bike className="w-12 h-12" /> },
-    { id: 6, title: "Sticker Bomb", category: "laptops", gradient: "from-green-500 to-emerald-500", icon: <Laptop className="w-12 h-12" /> },
-    { id: 7, title: "Retro Gaming", category: "gaming", gradient: "from-indigo-500 to-purple-600", icon: <Gamepad2 className="w-12 h-12" /> },
-    { id: 8, title: "Street Art", category: "coleccion", gradient: "from-red-500 to-pink-500", icon: <Sparkles className="w-12 h-12" /> },
-];
+import { X, ChevronLeft, ChevronRight, Package, Zap } from "lucide-react";
+import { stickers, Sticker } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const categories = [
     { id: "all", label: "Todos" },
-    { id: "motos", label: "Motos" },
-    { id: "laptops", label: "Laptops" },
-    { id: "gaming", label: "Gaming" },
-    { id: "coleccion", label: "Colección" },
+    { id: "Gameboy Pack", label: "Gameboy Pack" },
+    { id: "Sushi Pack", label: "Sushi Pack" },
+    { id: "Unicorn Pack", label: "Unicorn Pack" },
+    { id: "Colecciones", label: "Colecciones" },
+    { id: "Tornasol", label: "Tornasol" },
+    { id: "Varios", label: "Varios" },
 ];
 
 export default function Gallery() {
     const [activeCategory, setActiveCategory] = useState("all");
-    const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+    const [selectedItem, setSelectedItem] = useState<Sticker | null>(null);
 
     const filteredItems = activeCategory === "all"
-        ? galleryItems
-        : galleryItems.filter(item => item.category === activeCategory);
+        ? stickers
+        : stickers.filter(item => item.category === activeCategory);
 
     const navigateGallery = (direction: "prev" | "next") => {
         if (!selectedItem) return;
@@ -49,31 +35,39 @@ export default function Gallery() {
     };
 
     return (
-        <section className="py-24 bg-white">
-            <div className="container mx-auto px-4">
+        <section className="py-24 bg-white relative" id="colecciones">
+            <div className="absolute inset-0 bg-[radial-gradient(#00000010_1px,transparent_1px)] [background-size:30px_30px] opacity-10 pointer-events-none"></div>
+
+            <div className="container mx-auto px-4 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="text-center mb-12"
                 >
-                    <span className="text-brand-yellow font-bold tracking-widest uppercase text-sm bg-brand-black px-4 py-2 rounded-full">Portfolio</span>
-                    <h2 className="text-4xl md:text-5xl font-black text-brand-black mt-6 mb-4">NUESTROS TRABAJOS</h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                        Mira lo que hemos creado para nuestros clientes. Cada sticker cuenta una historia.
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                        <span className="text-brand-black font-black tracking-[0.2em] uppercase text-xs bg-brand-yellow px-5 py-2 rounded-full shadow-lg">Catálogo Real</span>
+                        <span className="bg-brand-black text-brand-yellow font-black text-[10px] px-3 py-1 rounded-md uppercase animate-pulse">Inspiración</span>
+                    </div>
+                    <h2 className="text-5xl md:text-7xl font-black text-brand-black mt-2 mb-6 uppercase italic tracking-tighter leading-none text-center">STICKERS DE COLECCIÓN</h2>
+                    <p className="text-xl text-gray-600 max-w-2xl mx-auto font-bold leading-tight">
+                        Estos son solo algunos <span className="text-brand-black underline decoration-brand-yellow decoration-4">ejemplos de diseños</span> que pueden venir en tus packs. <br />
+                        Cada paquete es una selección sorpresa de calidad suprema.
                     </p>
                 </motion.div>
 
                 {/* Category Filter */}
-                <div className="flex flex-wrap justify-center gap-3 mb-12">
+                <div className="flex flex-wrap justify-center gap-3 mb-16">
                     {categories.map((cat) => (
                         <button
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
-                            className={`px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wide transition-all ${activeCategory === cat.id
-                                ? "bg-brand-black text-white shadow-lg"
-                                : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
-                                }`}
+                            className={cn(
+                                "px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all",
+                                activeCategory === cat.id
+                                    ? "bg-brand-black text-white shadow-[6px_6px_0px_0px_rgba(255,225,0,1)] -translate-x-1 -translate-y-1"
+                                    : "bg-white text-gray-500 hover:bg-gray-100 border-2 border-gray-100"
+                            )}
                         >
                             {cat.label}
                         </button>
@@ -83,34 +77,50 @@ export default function Gallery() {
                 {/* Gallery Grid */}
                 <motion.div
                     layout
-                    className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+                    className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-10"
                 >
                     <AnimatePresence mode="popLayout">
-                        {filteredItems.map((item, idx) => (
-                            <motion.div
-                                key={item.id}
-                                layout
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                                transition={{ delay: idx * 0.05 }}
-                                onClick={() => setSelectedItem(item)}
-                                className={`relative aspect-square rounded-3xl overflow-hidden cursor-pointer group bg-gradient-to-br ${item.gradient}`}
-                            >
-                                {/* Placeholder content - replace with real images */}
-                                <div className="absolute inset-0 flex items-center justify-center text-white/30">
-                                    {item.icon}
-                                </div>
+                        {filteredItems.map((item, idx) => {
+                            const getBorderColor = (cat: string) => {
+                                if (cat === "Gameboy Pack") return "border-red-500 shadow-[6px_6px_0px_0px_rgba(239,68,68,0.8)]";
+                                if (cat === "Sushi Pack") return "border-blue-500 shadow-[6px_6px_0px_0px_rgba(59,130,246,0.8)]";
+                                if (cat === "Unicorn Pack") return "border-purple-500 shadow-[6px_6px_0px_0px_rgba(168,85,247,0.8)]";
+                                if (cat === "Tornasol") return "border-brand-yellow shadow-[6px_6px_0px_0px_rgba(255,183,0,0.8)]";
+                                return "border-brand-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]";
+                            };
 
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <div className="text-center text-white transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                                        <p className="font-bold text-lg">{item.title}</p>
-                                        <p className="text-sm text-gray-300 capitalize">{item.category}</p>
+                            return (
+                                <motion.div
+                                    key={item.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ delay: idx * 0.02 }}
+                                    onClick={() => setSelectedItem(item)}
+                                    className={cn(
+                                        "relative aspect-square rounded-[2rem] overflow-hidden cursor-pointer group bg-gray-50 border-4 transition-all hover:-translate-y-2 active:scale-95",
+                                        getBorderColor(item.category)
+                                    )}
+                                >
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+
+                                    {/* Hover overlay with vibrant design */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-brand-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-6">
+                                        <div className="text-center translate-y-4 group-hover:translate-y-0 transition-transform">
+                                            <p className="font-black text-sm text-white uppercase italic tracking-tighter leading-none mb-2">{item.name}</p>
+                                            <div className="bg-brand-yellow text-brand-black text-[8px] font-black px-3 py-1 rounded-full inline-block uppercase tracking-widest">
+                                                {item.category}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                </motion.div>
+                            );
+                        })}
                     </AnimatePresence>
                 </motion.div>
 
@@ -121,43 +131,49 @@ export default function Gallery() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+                            className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 md:p-8"
                             onClick={() => setSelectedItem(null)}
                         >
                             <button
                                 onClick={() => setSelectedItem(null)}
-                                className="absolute top-6 right-6 text-white hover:text-brand-yellow transition-colors"
+                                className="absolute top-6 right-6 text-white hover:text-brand-yellow transition-colors z-[110]"
                             >
                                 <X className="w-8 h-8" />
                             </button>
 
                             <button
                                 onClick={(e) => { e.stopPropagation(); navigateGallery("prev"); }}
-                                className="absolute left-6 text-white hover:text-brand-yellow transition-colors"
+                                className="absolute left-4 md:left-10 text-white hover:text-brand-yellow transition-colors hidden md:block"
                             >
-                                <ChevronLeft className="w-10 h-10" />
+                                <ChevronLeft className="w-12 h-12" />
                             </button>
 
                             <motion.div
-                                initial={{ scale: 0.8 }}
-                                animate={{ scale: 1 }}
-                                exit={{ scale: 0.8 }}
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.8, opacity: 0 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className={`relative w-full max-w-3xl aspect-square rounded-3xl overflow-hidden bg-gradient-to-br ${selectedItem.gradient}`}
+                                className="relative w-full max-w-4xl max-h-[90vh] flex flex-col items-center"
                             >
-                                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                                    {selectedItem.icon}
-                                    <h3 className="text-3xl font-black mt-6">{selectedItem.title}</h3>
-                                    <p className="text-lg text-white/70 capitalize mt-2">{selectedItem.category}</p>
-                                    <p className="text-sm text-white/50 mt-4">Reemplaza con imagen real</p>
+                                <div className="relative w-full aspect-square md:aspect-video rounded-3xl overflow-hidden bg-brand-black/50 border border-white/10">
+                                    <img
+                                        src={selectedItem.image}
+                                        alt={selectedItem.name}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                                <div className="mt-6 text-center text-white">
+                                    <h3 className="text-3xl font-black uppercase italic tracking-tighter text-brand-yellow">{selectedItem.name}</h3>
+                                    <p className="text-lg text-gray-400 font-bold mt-1">{selectedItem.category}</p>
+                                    <p className="mt-4 text-gray-500 max-w-xl mx-auto">{selectedItem.description}</p>
                                 </div>
                             </motion.div>
 
                             <button
                                 onClick={(e) => { e.stopPropagation(); navigateGallery("next"); }}
-                                className="absolute right-6 text-white hover:text-brand-yellow transition-colors"
+                                className="absolute right-4 md:right-10 text-white hover:text-brand-yellow transition-colors hidden md:block"
                             >
-                                <ChevronRight className="w-10 h-10" />
+                                <ChevronRight className="w-12 h-12" />
                             </button>
                         </motion.div>
                     )}

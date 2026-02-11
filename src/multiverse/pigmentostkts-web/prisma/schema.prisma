@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -46,7 +46,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          String    @default("USER") // SQLite no soporta enums nativos, usamos String
+  role          Role      @default(USER)
   accounts      Account[]
   sessions      Session[]
   orders        Order[]

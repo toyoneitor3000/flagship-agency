@@ -15,8 +15,8 @@ export const PIGMENTO_DATA = {
     { name: "Efecty", detail: "CC 1019089803" }
   ],
   shipping: {
-    cundinamarca: { price: 7500, time: "1 día" },
-    nacional: { price: 13500, time: "2-3 días" }
+    cundinamarca: { price: 9000, time: "1 día" },
+    nacional: { price: 18800, time: "2-3 días" }
   },
   services: [
     {
@@ -56,15 +56,20 @@ export const PIGMENTO_DATA = {
       { name: "Vinilo de Corte", price: 155000, memberPrice: 77500, unit: "m²" }
     ],
     packs: [
-      { qty: 6, price: 12000 },
-      { qty: 9, price: 18000 },
-      { qty: 12, price: 24000 },
-      { qty: 15, price: 30000 }
+      { qty: 12, price: 25000 },
+      { qty: 30, price: 45000 },
+      { qty: 60, price: 78000 }
     ],
     megaPacks: [
-      { name: "Coleccionista", qty: 100, price: 125000 },
-      { name: "Premium", qty: 300, price: 250000 },
+      { name: "Mega Pack", qty: 100, price: 98000 },
+      { name: "Ultra Pack", qty: 300, price: 240000 },
       { name: "Legendario", qty: 500, price: 350000 }
+    ],
+    collectionPacks: [
+      { name: "Gameboy Pack", qty: 12, price: 25000, description: "12 Stickers Retro Mate (Vinilo Blanco)", finish: "Mate", image: "/fotos stickers coleccion/Gameboy Pack/IMG_7373.jpg" },
+      { name: "Sushi Pack", qty: 12, price: 25000, description: "12 Stickers Kawaii Mate (Vinilo Blanco)", finish: "Mate", image: "/fotos stickers coleccion/Sushi Pack/IMG_7401.jpg" },
+      { name: "Unicorn Pack", qty: 9, price: 22000, description: "9 Stickers Fantasía Mate (Vinilo Blanco)", finish: "Mate", image: "/fotos stickers coleccion/Unicorn Pack/IMG_7392.jpg" },
+      { name: "Tornasol Pack", qty: 6, price: 18000, description: "6 Stickers Efecto Tornasol Brillante", finish: "Brillante", image: "/fotos stickers coleccion/Colecciones img/coleccion tornasol/IMG_4482.JPG" }
     ]
   },
   faqs: [

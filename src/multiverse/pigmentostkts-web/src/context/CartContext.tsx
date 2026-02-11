@@ -16,6 +16,7 @@ interface CartContextType {
   totalPrice: number;
   isCartOpen: boolean;
   toggleCart: () => void;
+  updateQuantity: (id: number, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -41,7 +42,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Validamos que no sea el render inicial vacío para no borrar datos existentes
     if (items.length > 0) {
-       localStorage.setItem('pigmento-cart', JSON.stringify(items));
+      localStorage.setItem('pigmento-cart', JSON.stringify(items));
     }
   }, [items]);
 
@@ -57,7 +58,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...sticker, quantity: 1 }];
     });
-    setIsCartOpen(true);
   };
 
   const removeItem = (id: number) => {
@@ -66,6 +66,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => setItems([]);
   const toggleCart = () => setIsCartOpen(!isCartOpen);
+
+  const updateQuantity = (id: number, quantity: number) => {
+    if (quantity < 1) {
+      removeItem(id);
+      return;
+    }
+    setItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+    );
+  };
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -82,6 +92,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalPrice,
         isCartOpen,
         toggleCart,
+        updateQuantity,
       }}
     >
       {children}

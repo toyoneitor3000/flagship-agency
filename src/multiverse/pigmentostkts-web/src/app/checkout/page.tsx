@@ -13,6 +13,21 @@ import { motion } from "framer-motion";
 export default function CheckoutPage() {
   const { items, totalPrice } = useCart();
   const router = useRouter();
+  const [coupon, setCoupon] = useState("");
+  const [discount, setDiscount] = useState(0);
+
+  const applyCoupon = () => {
+    // SPEEDLIGHT20 da 20% de descuento
+    if (coupon.toUpperCase() === "SPEEDLIGHT20") {
+      setDiscount(0.2);
+    } else {
+      setDiscount(0);
+      alert("Cupón no válido");
+    }
+  };
+
+  const discountedTotal = totalPrice * (1 - discount);
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -45,12 +60,33 @@ export default function CheckoutPage() {
     message += `*Tel:* ${formData.phone}%0A`;
     message += `*Dirección:* ${formData.address}, ${formData.city}%0A%0A`;
     message += `*PEDIDO:*%0A`;
-    
+
     items.forEach(item => {
-      message += `• ${item.quantity}x ${item.name} - $${(item.price * item.quantity).toLocaleString()}%0A`;
+      if (item.category === 'Personalizado') {
+        message += `• *${item.quantity}x ${item.name}* - $${(item.price * item.quantity).toLocaleString()}%0A`;
+        message += `  _Detalles: ${item.description}_%0A`;
+        if (item.features && item.features.length > 0) {
+          message += `  _Especificaciones: ${item.features.join(', ')}_%0A`;
+        }
+        if (item.fileUrl) {
+          const fileName = item.fileUrl.split('/').pop();
+          const viewerUrl = item.fileUrl.startsWith('http')
+            ? `${window.location.origin}/view-design/${fileName}?url=${encodeURIComponent(item.fileUrl)}`
+            : `${window.location.origin}/view-design/${fileName}`;
+
+          message += `  _Ver Diseño:_ ${viewerUrl}%0A`;
+        }
+      } else {
+        message += `• ${item.quantity}x ${item.name} - $${(item.price * item.quantity).toLocaleString()}%0A`;
+      }
     });
 
-    message += `%0A*TOTAL A PAGAR: $${totalPrice.toLocaleString()}*`;
+    if (discount > 0) {
+      message += `%0A*Subtotal:* $${totalPrice.toLocaleString()}`;
+      message += `%0A*Cupón:* ${coupon.toUpperCase()} (-${discount * 100}%)`;
+    }
+
+    message += `%0A*TOTAL A PAGAR: $${discountedTotal.toLocaleString()}*`;
     message += `%0A%0AQuedo atento a los datos de pago (Nequi/Bancolombia).`;
 
     // Abrir WhatsApp
@@ -60,149 +96,213 @@ export default function CheckoutPage() {
   if (items.length === 0) return null;
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-24 pb-12">
-      <div className="container mx-auto px-4">
-        <Link href="/" className="inline-flex items-center text-sm text-gray-500 hover:text-brand-black mb-8">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Volver a la tienda
+    <main className="min-h-screen bg-white pt-32 pb-24 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03] bg-dot-pattern brightness-0"></div>
+      <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] bg-brand-yellow/10 rounded-full blur-[120px]"></div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        <Link
+          href="/packs"
+          className="inline-flex items-center text-xs font-black uppercase tracking-[0.2em] text-gray-400 hover:text-brand-yellow mb-12 transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          Volver a la tienda
         </Link>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          
+        <div className="grid lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
+
           {/* COLUMNA IZQUIERDA: DATOS */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-8"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-10"
           >
-            <div>
-              <h1 className="text-4xl font-black text-brand-black mb-2">FINALIZAR PEDIDO</h1>
-              <p className="text-gray-500">Completa tus datos para el envío.</p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-10 bg-brand-yellow rounded-full"></div>
+                <h1 className="text-5xl md:text-6xl font-black text-black italic tracking-tighter uppercase leading-none">
+                  FINALIZAR <br />PEDIDO
+                </h1>
+              </div>
+              <p className="text-gray-500 font-medium text-lg max-w-md">Completa tus datos para enviarte tus stickers premium.</p>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
-              <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                <MapPin className="text-brand-yellow" />
-                <h2 className="font-bold text-lg">Información de Envío</h2>
+            <div className="bg-gray-50/50 backdrop-blur-sm p-8 md:p-10 rounded-[2.5rem] border border-gray-100 space-y-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-brand-yellow/10 rounded-2xl">
+                  <MapPin className="text-brand-yellow w-6 h-6" />
+                </div>
+                <h2 className="font-black text-xl text-black uppercase tracking-tighter italic">Información de Envío</h2>
               </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Nombre Completo</label>
-                  <Input 
-                    name="name" 
-                    placeholder="Ej: Juan Pérez" 
-                    className="bg-gray-50 border-gray-200 h-12 focus:ring-brand-yellow" 
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Nombre Completo</label>
+                  <Input
+                    name="name"
+                    placeholder="Ej: Juan Pérez"
+                    className="bg-white border-gray-200 h-14 rounded-2xl text-black placeholder:text-gray-400 focus:border-brand-yellow focus:ring-brand-yellow transition-all"
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Teléfono / WhatsApp</label>
-                  <Input 
-                    name="phone" 
-                    placeholder="Ej: 300 123 4567" 
-                    className="bg-gray-50 border-gray-200 h-12 focus:ring-brand-yellow" 
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Teléfono / WhatsApp</label>
+                  <Input
+                    name="phone"
+                    placeholder="Ej: 300 123 4567"
+                    className="bg-white border-gray-200 h-14 rounded-2xl text-black placeholder:text-gray-400 focus:border-brand-yellow focus:ring-brand-yellow transition-all"
                     onChange={handleInputChange}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700">Dirección Completa</label>
-                <Input 
-                  name="address" 
-                  placeholder="Calle 123 # 45-67, Apto 201" 
-                  className="bg-gray-50 border-gray-200 h-12 focus:ring-brand-yellow" 
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Dirección Completa</label>
+                <Input
+                  name="address"
+                  placeholder="Calle 123 # 45-67, Apto 201"
+                  className="bg-white border-gray-200 h-14 rounded-2xl text-black placeholder:text-gray-400 focus:border-brand-yellow focus:ring-brand-yellow transition-all"
                   onChange={handleInputChange}
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Ciudad / Municipio</label>
-                  <Input 
-                    name="city" 
-                    placeholder="Ej: Bogotá D.C." 
-                    className="bg-gray-50 border-gray-200 h-12 focus:ring-brand-yellow" 
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Ciudad / Municipio</label>
+                  <Input
+                    name="city"
+                    placeholder="Ej: Bogotá D.C."
+                    className="bg-white border-gray-200 h-14 rounded-2xl text-black placeholder:text-gray-400 focus:border-brand-yellow focus:ring-brand-yellow transition-all"
                     onChange={handleInputChange}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-700">Email (Opcional)</label>
-                  <Input 
-                    name="email" 
-                    type="email" 
-                    placeholder="juan@ejemplo.com" 
-                    className="bg-gray-50 border-gray-200 h-12 focus:ring-brand-yellow" 
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Email <span className="text-gray-400 italic">(Opcional)</span></label>
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="juan@ejemplo.com"
+                    className="bg-white border-gray-200 h-14 rounded-2xl text-black placeholder:text-gray-400 focus:border-brand-yellow focus:ring-brand-yellow transition-all"
                     onChange={handleInputChange}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-blue-50 p-6 rounded-2xl flex items-start gap-4 border border-blue-100">
-              <ShieldCheck className="text-blue-600 shrink-0" />
+            <div className="bg-brand-yellow/5 p-6 rounded-3xl flex items-start gap-5 border border-brand-yellow/10">
+              <div className="p-3 bg-brand-yellow/20 rounded-2xl shrink-0">
+                <ShieldCheck className="text-brand-yellow w-7 h-7" />
+              </div>
               <div>
-                <h3 className="font-bold text-blue-900">Pago Seguro al Recibir o Transferencia</h3>
-                <p className="text-sm text-blue-700 mt-1">
-                  No te cobraremos nada en este sitio. Coordinaremos el pago (Nequi/Bancolombia) directamente por WhatsApp para tu seguridad.
+                <h3 className="font-black text-black uppercase italic tracking-tighter text-lg leading-tight">Pago Seguro al Recibir</h3>
+                <p className="text-gray-500 font-medium mt-1 leading-relaxed">
+                  No te cobraremos nada en este sitio. Coordinaremos el pago (Nequi/Bancolombia) directamente por WhatsApp para tu total seguridad.
                 </p>
               </div>
             </div>
           </motion.div>
 
           {/* COLUMNA DERECHA: RESUMEN */}
-          <motion.div 
-             initial={{ opacity: 0, x: 20 }}
-             animate={{ opacity: 1, x: 0 }}
-             transition={{ delay: 0.2 }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="relative"
           >
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 sticky top-32">
-              <h2 className="font-black text-2xl mb-6 flex items-center gap-2">
-                <CreditCard className="w-6 h-6" /> RESUMEN
-              </h2>
+            <div className="bg-white p-10 rounded-[3rem] border border-gray-100 sticky top-32 shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
+              <div className="flex items-baseline justify-between mb-8 border-b border-gray-50 pb-6">
+                <h2 className="font-black text-3xl text-black uppercase italic tracking-tighter flex items-center gap-3">
+                  <CreditCard className="w-6 h-6 text-brand-yellow" /> RESUMEN
+                </h2>
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{items.length} ARTÍCULOS</span>
+              </div>
 
-              <div className="space-y-4 mb-8 max-h-80 overflow-y-auto pr-2 scrollbar-thin">
+              <div className="space-y-6 mb-10 max-h-[350px] overflow-y-auto pr-4 custom-scrollbar">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 py-4 border-b border-gray-50 last:border-0">
-                    <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
-                      <img src={item.image} className="w-full h-full object-cover" alt={item.name} />
+                  <div key={item.id} className="flex gap-5 group">
+                    <div className="w-20 h-20 bg-gray-50 rounded-2xl overflow-hidden p-1 border border-gray-100 shrink-0">
+                      <img src={item.image} className="w-full h-full object-contain p-2" alt={item.name} />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-gray-900 line-clamp-1">{item.name}</h4>
-                      <p className="text-sm text-gray-500">Cant: {item.quantity}</p>
+                    <div className="flex-1 flex flex-col justify-center">
+                      <h4 className="font-black text-black text-base leading-tight uppercase tracking-tighter line-clamp-1">{item.name}</h4>
+                      <p className="text-[10px] font-black text-brand-yellow uppercase tracking-widest mt-1">CANT: {item.quantity}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold">${(item.price * item.quantity).toLocaleString()}</p>
+                    <div className="text-right flex flex-col justify-center">
+                      <p className="font-black text-black text-lg tracking-tighter">${(item.price * item.quantity).toLocaleString()}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="space-y-3 py-6 border-t border-gray-100">
-                <div className="flex justify-between text-gray-500">
+              {/* CUPON SECTION */}
+              <div className="pb-8 border-b border-gray-50">
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 block">¿Tienes un cupón?</label>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="INGRESAR CÓDIGO"
+                    value={coupon}
+                    onChange={(e) => setCoupon(e.target.value)}
+                    className="bg-gray-50 border-gray-100 h-12 rounded-xl text-black placeholder:text-gray-400 focus:border-brand-yellow focus:ring-brand-yellow transition-all uppercase font-black tracking-widest text-xs"
+                  />
+                  <Button
+                    onClick={applyCoupon}
+                    className="h-12 bg-gray-900 hover:bg-black text-white font-black uppercase text-[10px] tracking-widest px-4 rounded-xl"
+                  >
+                    APLICAR
+                  </Button>
+                </div>
+                {discount > 0 && (
+                  <p className="text-[10px] text-green-600 font-black uppercase tracking-widest mt-2 ml-1">
+                    ¡CUPÓN APLICADO! -{(discount * 100)}% DCTO
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-5 py-8 border-t border-gray-50">
+                <div className="flex justify-between text-xs font-black text-gray-400 uppercase tracking-widest">
                   <span>Subtotal</span>
-                  <span>${totalPrice.toLocaleString()}</span>
+                  <span className="text-black">${totalPrice.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>Envío (A coordinar)</span>
-                  <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">CALCULAR EN WHATSAPP</span>
+                {discount > 0 && (
+                  <div className="flex justify-between text-xs font-black text-green-600 uppercase tracking-widest">
+                    <span>Descuento</span>
+                    <span>-${(totalPrice * discount).toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center text-xs font-black text-gray-400 uppercase tracking-widest">
+                  <span>Envío <span className="text-[8px] opacity-40 ml-1">(NACIONAL)</span></span>
+                  <span className="text-brand-yellow italic">CALCULAR EN WHATSAPP</span>
                 </div>
-                <div className="flex justify-between text-2xl font-black text-brand-black pt-4">
-                  <span>TOTAL</span>
-                  <span>${totalPrice.toLocaleString()}</span>
+                <div className="flex justify-between items-end pt-4">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Estimado</span>
+                    <span className="text-5xl font-black text-brand-yellow italic tracking-tighter">TOTAL</span>
+                  </div>
+                  <span className="text-5xl font-black text-black tracking-tighter leading-none">${discountedTotal.toLocaleString()}</span>
                 </div>
               </div>
 
-              <Button 
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleWhatsAppOrder}
-                className="w-full h-16 text-lg font-black bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full h-20 bg-[#25D366] hover:bg-[#20bd5b] text-white rounded-3xl shadow-[0_20px_40px_rgba(37,211,102,0.15)] flex flex-col items-center justify-center gap-0 transition-all group overflow-hidden relative"
               >
-                <MessageCircle className="w-6 h-6" />
-                CONFIRMAR POR WHATSAPP
-              </Button>
-              <p className="text-center text-xs text-gray-400 mt-4">
-                Al hacer clic, se abrirá WhatsApp con los detalles de tu pedido pre-cargados.
-              </p>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                <div className="flex items-center gap-3">
+                  <MessageCircle className="w-7 h-7" />
+                  <span className="text-xl font-black uppercase tracking-widest">CONFIRMAR PEDIDO</span>
+                </div>
+                <span className="text-[10px] font-bold opacity-80 uppercase tracking-widest mt-0.5">Te atenderemos al instante</span>
+              </motion.button>
+
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <ShieldCheck className="w-4 h-4 text-gray-300" />
+                <p className="text-[9px] text-gray-300 font-black uppercase tracking-[0.2em]">
+                  Transacción 100% Protegida vía WhatsApp
+                </p>
+              </div>
             </div>
           </motion.div>
 

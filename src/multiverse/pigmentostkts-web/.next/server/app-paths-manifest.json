@@ -1,6 +1,6 @@
 {
+  "/packs/page": "app/packs/page.js",
   "/page": "app/page.js",
-  "/api/orders/stickers/route": "app/api/orders/stickers/route.js",
-  "/view-design/[filename]/page": "app/view-design/[filename]/page.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
+  "/checkout/page": "app/checkout/page.js",
+  "/view-design/[filename]/page": "app/view-design/[filename]/page.js"
 }

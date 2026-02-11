@@ -162,8 +162,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* GALLERY SECTION */}
-      <Gallery />
+      {/* GALLERY SECTION REMOVED FROM HERE (MOVED UP) */}
 
       {/* FEATURED PACKS SECTION */}
       <section className="py-24 bg-white relative overflow-hidden">

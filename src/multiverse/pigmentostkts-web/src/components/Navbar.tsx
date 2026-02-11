@@ -7,11 +7,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { cn } from "@/lib/utils";
+import CartButton from "@/components/CartButton";
 
 const navLinks = [
-  { name: "Stickers Personalizados", href: "/#stickers-custom" },
-  { name: "Cubre Placas", href: "/#cubreplacas" },
-  { name: "Packs de Colección", href: "/packs" },
+  { name: "Colecciones", href: "/packs#colecciones" },
+  { name: "Personalizados", href: "/#calculator" },
+  { name: "Packs", href: "/packs" },
   { name: "Diseño", href: "/#design" },
 ];
 
@@ -75,8 +76,9 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Action Button */}
-          <div className="hidden md:flex items-center md:flex-1 md:justify-end">
+          {/* Action Button & Cart */}
+          <div className="hidden md:flex items-center md:flex-1 md:justify-end gap-4">
+            <CartButton />
             <Link
               href={PIGMENTO_DATA.contact.whatsappUrl}
               target="_blank"
@@ -87,8 +89,9 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile menu button & Cart */}
+          <div className="md:hidden flex items-center gap-2">
+            <CartButton />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={cn(
