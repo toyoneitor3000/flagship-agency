@@ -16,15 +16,18 @@ export default function ViewDesignPage({ params }: PageProps) {
     const searchParams = useSearchParams();
     const externalUrl = searchParams.get("url");
 
-    // Si no hay ?url=, revisamos si el filename es una llave de Uploadthing (sin punto y larga)
+    // Si no hay ?url=, revisamos si el filename es una llave de Uploadthing
     const isUTKey = !filename.includes('.') && filename.length > 20;
     const fileUrl = externalUrl || (isUTKey ? `https://utfs.io/f/${filename}` : `/uploads/${filename}`);
 
-    const extension = fileUrl.split('.').pop()?.split('?')[0].toLowerCase();
+    // Obtenemos la extensión de forma más segura (solo lo que está después del último punto en el nombre del archivo)
+    const urlParts = fileUrl.split('/');
+    const lastPart = urlParts[urlParts.length - 1];
+    const extension = lastPart.includes('.') ? lastPart.split('.').pop()?.split('?')[0].toLowerCase() : 'unknown';
 
     // Determine content type
     const isPdf = extension === 'pdf';
-    const isImage = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(extension || '');
+    const isImage = ['png', 'jpg', 'jpeg', 'webp', 'svg', 'unknown'].includes(extension || '');
     const isAdobe = ['ai', 'psd'].includes(extension || '');
 
     return (
@@ -111,7 +114,7 @@ export default function ViewDesignPage({ params }: PageProps) {
                                             {extension === 'ai' ? <FileCode size={48} /> : <Layers size={48} />}
                                         </div>
                                         <h3 className="text-2xl font-black text-brand-black uppercase tracking-tight mb-2">
-                                            Archivo .{extension?.toUpperCase()} detective
+                                            Archivo de Diseño
                                         </h3>
                                         <p className="text-gray-500 text-sm leading-relaxed mb-8">
                                             Este es un formato de diseño profesional que no puede previsualizarse directamente en el navegador. <br /><strong>El archivo ha sido recibido correctamente.</strong>
@@ -131,7 +134,7 @@ export default function ViewDesignPage({ params }: PageProps) {
                         <div className="p-8 md:p-10 bg-white grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-50">
                             <div className="space-y-1">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tipo de Archivo</p>
-                                <p className="text-sm font-bold text-brand-black">{extension?.toUpperCase()} Document</p>
+                                <p className="text-sm font-bold text-brand-black">{extension === 'unknown' ? 'Documento' : extension?.toUpperCase()}</p>
                             </div>
                             <div className="space-y-1">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Estado de Carga</p>
