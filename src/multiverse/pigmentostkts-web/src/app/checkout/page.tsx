@@ -62,7 +62,7 @@ export default function CheckoutPage() {
     message += `*PEDIDO:*%0A`;
 
     items.forEach(item => {
-      if (item.category === 'Personalizado') {
+      if (item.category === 'Personalizado' || item.category === 'Cubreplacas') {
         message += `• *${item.quantity}x ${item.name}* - $${(item.price * item.quantity).toLocaleString()}%0A`;
         message += `  _Detalles: ${item.description}_%0A`;
         if (item.features && item.features.length > 0) {

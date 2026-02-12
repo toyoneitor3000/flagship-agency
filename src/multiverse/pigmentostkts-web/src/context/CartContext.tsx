@@ -9,7 +9,7 @@ interface CartItem extends Sticker {
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (sticker: Sticker) => void;
+  addItem: (sticker: Sticker, quantity?: number) => void;
   removeItem: (id: number) => void;
   clearCart: () => void;
   totalItems: number;
@@ -46,17 +46,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items]);
 
-  const addItem = (sticker: Sticker) => {
+  const addItem = (sticker: Sticker, quantity: number = 1) => {
     setItems((prev) => {
       const existing = prev.find((item) => item.id === sticker.id);
       if (existing) {
         return prev.map((item) =>
           item.id === sticker.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { ...sticker, quantity: 1 }];
+      return [...prev, { ...sticker, quantity }];
     });
   };
 

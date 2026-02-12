@@ -13,6 +13,7 @@ const navLinks = [
   { name: "Colecciones", href: "/packs#colecciones" },
   { name: "Personalizados", href: "/#calculator" },
   { name: "Packs", href: "/packs" },
+  { name: "Cubreplacas", href: "/#cubreplacas" },
   { name: "Diseño", href: "/#design" },
 ];
 
@@ -33,6 +34,24 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Si es un link con hash (ej: /#calculator o #calculator)
+    if (href.includes("#")) {
+      const [path, hash] = href.split("#");
+      const currentPath = window.location.pathname;
+
+      // Si ya estamos en la página del hash (ej: estamos en / y el link es /#calculator o #calculator)
+      if (currentPath === path || (path === "/" && currentPath === "/") || path === "") {
+        const element = document.getElementById(hash);
+        if (element) {
+          e.preventDefault();
+          element.scrollIntoView({ behavior: "smooth" });
+          setIsOpen(false);
+        }
+      }
+    }
+  };
+
   return (
     <nav
       className={cn(
@@ -48,7 +67,7 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center md:flex-1 md:justify-start">
             <Link href="/" className={cn(
               "relative transition-all duration-300 hover:scale-105 active:scale-95",
-              isScrolled ? "w-32 md:w-64 h-[40px] md:h-[70px]" : "w-40 md:w-96 h-[50px] md:h-[90px]"
+              isScrolled ? "w-28 md:w-48 h-[35px] md:h-[60px]" : "w-36 md:w-64 h-[45px] md:h-[80px]"
             )}>
               <Image
                 src="/brand/logo.png"
@@ -66,6 +85,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={cn(
                   "text-[12px] font-semibold tracking-tight uppercase transition-colors duration-200",
                   isScrolled ? "text-white hover:text-brand-yellow" : "text-brand-black hover:text-brand-yellow"
@@ -119,7 +139,10 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    handleNavClick(e, link.href);
+                    setIsOpen(false);
+                  }}
                   className="block text-2xl font-black text-white hover:text-brand-yellow transition-colors italic uppercase tracking-tighter"
                 >
                   {link.name}

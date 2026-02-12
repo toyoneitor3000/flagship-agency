@@ -1,8 +1,0 @@
-{
-  "/packs/page": "app/packs/page.js",
-  "/page": "app/page.js",
-  "/view-design/[filename]/page": "app/view-design/[filename]/page.js",
-  "/checkout/page": "app/checkout/page.js",
-  "/not-found": "app/not-found.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
-}

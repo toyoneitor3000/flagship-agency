@@ -124,7 +124,8 @@ export default function Home() {
       </section>
 
       {/* PRICE CALCULATOR - MOVED TO SECOND SECTION */}
-      <div id="calculator" data-theme="dark" className="scroll-mt-[46px] md:scroll-mt-32">
+      <div id="calculator" data-theme="dark" className="scroll-mt-[46px] md:scroll-mt-32 relative">
+        <div id="cubreplacas" className="absolute -top-32" />
         <PriceCalculator />
       </div>
 
