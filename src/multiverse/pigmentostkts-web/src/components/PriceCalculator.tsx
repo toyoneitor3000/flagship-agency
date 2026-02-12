@@ -296,7 +296,7 @@ export default function PriceCalculator() {
                             {!hasDesign && hasDesign !== false && (
                                 <div className="text-center space-y-4 sm:space-y-8">
                                     <h3 className="text-white font-bold text-lg sm:text-3xl">¿Tienes el diseño listo?</h3>
-                                    <div className="grid grid-cols-2 gap-2 sm:gap-6 max-w-2xl mx-auto w-full">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto w-full">
                                         <button onClick={() => setHasDesign(true)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all group">
                                             <Check className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-white group-hover:text-brand-yellow" />
                                             <span className="text-white font-black text-xs sm:text-2xl block">SÍ, LO TENGO</span>
@@ -324,20 +324,61 @@ export default function PriceCalculator() {
 
                             {hasDesign === true && !projectType && (
                                 <div className="text-center space-y-6">
-                                    <h3 className="text-white font-bold text-2xl">¿Qué buscas hoy?</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <button onClick={() => { setProjectType('printed'); setCurrentStep(1); }} className="p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all">
-                                            <span className="text-white font-bold block mb-1">IMPRESOS FULL COLOR</span>
-                                            <span className="text-xs text-gray-400">Illustraciones, fotos, logos</span>
-                                        </button>
-                                        <button onClick={() => { setProjectType('cut'); }} className="p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-purple-500/10 hover:border-purple-500 transition-all">
-                                            <span className="text-white font-bold block mb-1">VINILO DE CORTE</span>
-                                            <span className="text-xs text-gray-400">Colores sólidos, troquelados</span>
-                                        </button>
-                                        <button onClick={() => { setProjectType('cubreplacas'); setCurrentStep(1); }} className="p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-red-500/10 hover:border-red-500 transition-all">
-                                            <span className="text-white font-bold block mb-1">CUBREPLACAS PREMIUM</span>
-                                            <span className="text-xs text-gray-400">Protección y estilo</span>
-                                        </button>
+                                    <h3 className="text-white font-bold text-lg sm:text-2xl">¿Qué buscas hoy?</h3>
+                                    <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
+                                        {[
+                                            {
+                                                id: 'printed' as const,
+                                                name: 'IMPRESOS FULL COLOR',
+                                                desc: 'Ilustraciones, fotos, logos',
+                                                img: '/project-types/printed-stickers.png',
+                                                color: 'from-yellow-600/80 to-yellow-900/90',
+                                                border: 'hover:border-brand-yellow',
+                                                step: 1
+                                            },
+                                            {
+                                                id: 'cut' as const,
+                                                name: 'VINILO DE CORTE',
+                                                desc: 'Colores sólidos, troquelados',
+                                                img: '/project-types/cut-vinyl.png',
+                                                color: 'from-purple-600/80 to-purple-900/90',
+                                                border: 'hover:border-purple-500',
+                                                step: null
+                                            },
+                                            {
+                                                id: 'cubreplacas' as const,
+                                                name: 'CUBREPLACAS PREMIUM',
+                                                desc: 'Protección y estilo',
+                                                img: '/materials/blanco-brillante.png',
+                                                color: 'from-red-600/80 to-red-900/90',
+                                                border: 'hover:border-red-500',
+                                                step: 1
+                                            }
+                                        ].map((option) => (
+                                            <button
+                                                key={option.id}
+                                                onClick={() => {
+                                                    if (option.id === 'cut') {
+                                                        setProjectType('cut');
+                                                    } else {
+                                                        setProjectType(option.id);
+                                                        setCurrentStep(option.step!);
+                                                    }
+                                                }}
+                                                className={`relative overflow-hidden rounded-2xl border border-white/10 ${option.border} transition-all duration-300 group h-28 sm:h-32`}
+                                            >
+                                                <img
+                                                    src={option.img}
+                                                    alt={option.name}
+                                                    className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 group-hover:scale-110 transition-all duration-500"
+                                                />
+                                                <div className={`absolute inset-0 bg-gradient-to-r ${option.color}`} />
+                                                <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
+                                                    <span className="text-white font-black text-lg sm:text-xl tracking-wide drop-shadow-lg">{option.name}</span>
+                                                    <span className="text-white/70 text-xs sm:text-sm mt-1">{option.desc}</span>
+                                                </div>
+                                            </button>
+                                        ))}
                                     </div>
                                     {projectType === 'cut' && (
                                         <div className="text-purple-200 bg-purple-500/10 p-4 rounded-lg">

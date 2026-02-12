@@ -7,6 +7,7 @@ import { ArrowRight, Check, Scissors, Palette, StickyNote, Shield } from "lucide
 import { FadeIn, ScaleOnHover } from "@/components/ui/motion";
 import { motion } from "framer-motion";
 import * as React from "react";
+import { usePreloader } from "@/context/PreloaderContext";
 
 // Import new components
 import FloatingStickers from "@/components/FloatingStickers";
@@ -15,6 +16,8 @@ import Gallery from "@/components/Gallery";
 import PriceCalculator from "@/components/PriceCalculator";
 
 export default function Home() {
+  const { isPreloaderDone } = usePreloader();
+
   const getIcon = (id: string) => {
     switch (id) {
       case 'plotter': return <Scissors className="w-8 h-8" />;
@@ -33,28 +36,29 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             {/* Left side - Text content */}
-            <FadeIn className="flex-1">
+            <div className="flex-1">
               <div className="max-w-2xl">
                 <motion.span
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={isPreloaderDone ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.1, duration: 0.6 }}
                   className="text-brand-yellow font-bold tracking-widest uppercase mb-6 block"
                 >
                   Soluciones Visuales Premium
                 </motion.span>
-                <h1 className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 leading-[0.9] sm:leading-[0.9]">
+                <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-[-0.06em] mb-8 leading-[0.85]">
                   <motion.span
                     initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
+                    animate={isPreloaderDone ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: 0.2, duration: 0.6 }}
                     className="block"
                   >
                     TU VISIÓN,
                   </motion.span>
                   <motion.span
                     initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 }}
+                    animate={isPreloaderDone ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: 0.35, duration: 0.6 }}
                     className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-600 block"
                   >
                     NUESTRA TINTA.
@@ -62,16 +66,16 @@ export default function Home() {
                 </h1>
                 <motion.p
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 }}
+                  animate={isPreloaderDone ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.5, duration: 0.6 }}
                   className="text-lg md:text-2xl text-gray-700 mb-12 font-medium max-w-xl leading-relaxed"
                 >
                   Desde stickers de colección hasta branding corporativo completo. Alta resolución, vinilos importados y cortes de precisión.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
+                  animate={isPreloaderDone ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.65, duration: 0.6 }}
                   className="flex flex-col sm:flex-row gap-4"
                 >
                   <ScaleOnHover>
@@ -92,13 +96,13 @@ export default function Home() {
                   </ScaleOnHover>
                 </motion.div>
               </div>
-            </FadeIn>
+            </div>
 
             {/* Right side - Floating Stickers Animation */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
+              animate={isPreloaderDone ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: 0.4, duration: 0.8 }}
               className="flex-1 hidden lg:block"
             >
               <FloatingStickers />

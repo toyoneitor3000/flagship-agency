@@ -98,7 +98,7 @@ const Navbar = () => {
 
           {/* Action Button & Cart */}
           <div className="hidden md:flex items-center md:flex-1 md:justify-end gap-4">
-            <CartButton />
+            <CartButton isScrolled={isScrolled} />
             <Link
               href={PIGMENTO_DATA.contact.whatsappUrl}
               target="_blank"
@@ -111,7 +111,7 @@ const Navbar = () => {
 
           {/* Mobile menu button & Cart */}
           <div className="md:hidden flex items-center gap-2">
-            <CartButton />
+            <CartButton isScrolled={isScrolled} />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={cn(
