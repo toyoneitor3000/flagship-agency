@@ -16,7 +16,10 @@ export default function ViewDesignPage({ params }: PageProps) {
     const searchParams = useSearchParams();
     const externalUrl = searchParams.get("url");
 
-    const fileUrl = externalUrl || `/uploads/${filename}`;
+    // Si no hay ?url=, revisamos si el filename es una llave de Uploadthing (sin punto y larga)
+    const isUTKey = !filename.includes('.') && filename.length > 20;
+    const fileUrl = externalUrl || (isUTKey ? `https://utfs.io/f/${filename}` : `/uploads/${filename}`);
+
     const extension = fileUrl.split('.').pop()?.split('?')[0].toLowerCase();
 
     // Determine content type

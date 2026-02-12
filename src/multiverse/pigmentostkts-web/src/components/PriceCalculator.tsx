@@ -255,7 +255,6 @@ export default function PriceCalculator() {
     const [heightCm, setHeightCm] = useState(5);
     const [sheetQuantity, setSheetQuantity] = useState(1);
     const [organizationMode, setOrganizationMode] = useState<'manual' | 'auto' | null>(null);
-    const [coupon, setCoupon] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -332,13 +331,9 @@ export default function PriceCalculator() {
         const vPrice = Math.round(calculatedPrice * (1 - vDiscount));
         setVolumeDiscountedPrice(vPrice);
 
-        // Final Price (including coupon if any)
-        if (coupon.trim().toUpperCase() === "SPEEDLIGHT20") {
-            setDiscountedPrice(Math.round(vPrice * 0.8));
-        } else {
-            setDiscountedPrice(vPrice);
-        }
-    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, coupon]);
+        // Final Price
+        setDiscountedPrice(vPrice);
+    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate]);
 
     // If we are in initial decision phase (currentStep === 0 or waiting for design/project type)
     if (currentStep === 0) {
@@ -982,20 +977,6 @@ export default function PriceCalculator() {
                                             </div>
                                         </div>
 
-                                        {/* CUPON DESCUENTO */}
-                                        <div className="mb-6">
-                                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">¿Tienes un cupón?</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    value={coupon}
-                                                    onChange={(e) => setCoupon(e.target.value)}
-                                                    placeholder="Ingresa código de descuento"
-                                                    className="w-full bg-white/5 border border-white/20 rounded-xl py-3 px-4 text-white placeholder-gray-600 focus:border-brand-yellow outline-none transition-all"
-                                                />
-                                                {coupon && <div className="absolute right-3 top-3 text-green-500"><Check size={20} /></div>}
-                                            </div>
-                                        </div>
                                     </motion.div>
                                 )}
                             </AnimatePresence>

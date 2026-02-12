@@ -70,10 +70,7 @@ export default function CheckoutPage() {
         }
         if (item.fileUrl) {
           const fileName = item.fileUrl.split('/').pop();
-          const viewerUrl = item.fileUrl.startsWith('http')
-            ? `${window.location.origin}/view-design/${fileName}?url=${encodeURIComponent(item.fileUrl)}`
-            : `${window.location.origin}/view-design/${fileName}`;
-
+          const viewerUrl = `${window.location.origin}/view-design/${fileName}`;
           message += `  _Ver Diseño:_ ${viewerUrl}%0A`;
         }
       } else {
