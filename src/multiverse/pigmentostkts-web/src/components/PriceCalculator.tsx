@@ -97,7 +97,7 @@ const MATERIALS_CONFIG: Material[] = [
         pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
         imageSrc: '/materials/blanco-holografico.png',
         finishOptions: false,
-        requiresLaminate: true,
+        requiresLaminate: false,
         hasWidthOptions: true
     },
     {
@@ -109,7 +109,7 @@ const MATERIALS_CONFIG: Material[] = [
         pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
         imageSrc: '/materials/escarchado.png',
         finishOptions: false,
-        requiresLaminate: true,
+        requiresLaminate: false,
         hasWidthOptions: true
     },
     {
@@ -121,7 +121,7 @@ const MATERIALS_CONFIG: Material[] = [
         pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
         imageSrc: '/materials/canvas.png',
         finishOptions: false,
-        requiresLaminate: true,
+        requiresLaminate: false,
         hasWidthOptions: true
     },
     {
@@ -133,7 +133,7 @@ const MATERIALS_CONFIG: Material[] = [
         pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
         imageSrc: '/materials/ojo-gato.png',
         finishOptions: false,
-        requiresLaminate: true,
+        requiresLaminate: false,
         hasWidthOptions: true
     }
 ];
@@ -183,6 +183,7 @@ export default function PriceCalculator() {
 
     // Upload & Feedback
     const [isUploading, setIsUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const [fileUrl, setFileUrl] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
 
@@ -213,6 +214,13 @@ export default function PriceCalculator() {
         window.addEventListener('hashchange', handleHashChange);
         return () => window.removeEventListener('hashchange', handleHashChange);
     }, []);
+
+    // Enforce min size when cut type changes
+    useEffect(() => {
+        const minSize = cutType.id === 'sc' ? 2 : 3;
+        if (widthCm < minSize) setWidthCm(minSize);
+        if (heightCm < minSize) setHeightCm(minSize);
+    }, [cutType]);
 
     // Price Calculation
     useEffect(() => {
@@ -325,14 +333,14 @@ export default function PriceCalculator() {
                             {hasDesign === true && !projectType && (
                                 <div className="text-center space-y-6">
                                     <h3 className="text-white font-bold text-lg sm:text-2xl">¿Qué buscas hoy?</h3>
-                                    <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto w-full">
                                         {[
                                             {
                                                 id: 'printed' as const,
                                                 name: 'IMPRESOS FULL COLOR',
                                                 desc: 'Ilustraciones, fotos, logos',
                                                 img: '/project-types/printed-stickers.png',
-                                                color: 'from-yellow-600/80 to-yellow-900/90',
+                                                color: 'from-yellow-600/30 to-yellow-900/70',
                                                 border: 'hover:border-brand-yellow',
                                                 step: 1
                                             },
@@ -341,7 +349,7 @@ export default function PriceCalculator() {
                                                 name: 'VINILO DE CORTE',
                                                 desc: 'Colores sólidos, troquelados',
                                                 img: '/project-types/cut-vinyl.png',
-                                                color: 'from-purple-600/80 to-purple-900/90',
+                                                color: 'from-purple-600/30 to-purple-900/70',
                                                 border: 'hover:border-purple-500',
                                                 step: null
                                             },
@@ -349,8 +357,8 @@ export default function PriceCalculator() {
                                                 id: 'cubreplacas' as const,
                                                 name: 'CUBREPLACAS PREMIUM',
                                                 desc: 'Protección y estilo',
-                                                img: '/materials/blanco-brillante.png',
-                                                color: 'from-red-600/80 to-red-900/90',
+                                                img: '/project-types/cubreplacas.png',
+                                                color: 'from-red-600/30 to-red-900/70',
                                                 border: 'hover:border-red-500',
                                                 step: 1
                                             }
@@ -365,17 +373,17 @@ export default function PriceCalculator() {
                                                         setCurrentStep(option.step!);
                                                     }
                                                 }}
-                                                className={`relative overflow-hidden rounded-2xl border border-white/10 ${option.border} transition-all duration-300 group h-28 sm:h-32`}
+                                                className={`relative overflow-hidden rounded-[2rem] border border-white/10 ${option.border} transition-all duration-300 group aspect-square flex flex-col items-center justify-center p-4`}
                                             >
                                                 <img
                                                     src={option.img}
                                                     alt={option.name}
-                                                    className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 group-hover:scale-110 transition-all duration-500"
+                                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"
                                                 />
-                                                <div className={`absolute inset-0 bg-gradient-to-r ${option.color}`} />
-                                                <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
-                                                    <span className="text-white font-black text-lg sm:text-xl tracking-wide drop-shadow-lg">{option.name}</span>
-                                                    <span className="text-white/70 text-xs sm:text-sm mt-1">{option.desc}</span>
+                                                <div className={`absolute inset-0 bg-gradient-to-b ${option.color}`} />
+                                                <div className="relative z-10 flex flex-col items-center text-center px-2">
+                                                    <span className="text-white font-black text-sm sm:text-base tracking-tighter leading-none italic uppercase mb-1">{option.name}</span>
+                                                    <span className="text-white/70 text-[9px] sm:text-[10px] font-medium tracking-wide leading-tight">{option.desc}</span>
                                                 </div>
                                             </button>
                                         ))}
@@ -396,22 +404,26 @@ export default function PriceCalculator() {
         );
     }
 
-    const progress = (currentStep / 4) * 100;
+    const progress = (currentStep / 3) * 100;
 
     return (
-        <section id="cotizador" className="w-full relative min-h-dvh flex flex-col justify-center bg-brand-black overflow-hidden py-8 md:py-16 scroll-mt-0">
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+        <section id="cotizador" className="w-full relative py-4 md:py-6 scroll-mt-0">
 
-            <div className="container mx-auto px-4 relative z-10 w-full max-w-6xl">
-                <div className="text-center mb-8 md:mb-12">
-                    <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div className="text-center mb-4 md:mb-6">
+                    <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-1">
                         {projectType === 'cubreplacas' ? <>Cotiza tus <span className="text-red-500">Cubreplacas</span></> : <>Cotiza tus <span className="text-brand-yellow">Stickers</span></>}
                     </h2>
+                    <p className="text-gray-400 text-xs md:text-sm font-medium max-w-2xl mx-auto">
+                        Personaliza tu pedido paso a paso para obtener un presupuesto exacto al instante.
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                    <div className="lg:col-span-2">
-                        <div className="bg-brand-black/50 backdrop-blur-md rounded-3xl border border-white/10 p-6 shadow-2xl relative">
+                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl mx-auto' : 'lg:grid-cols-4'} gap-4 md:gap-6 ${currentStep === 3 ? 'items-stretch' : 'items-start'}`}>
+                    {/* Main Content Area */}
+                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-2 lg:order-1`}>
+                        <div className="bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden h-full">
                             <AnimatePresence mode="wait">
                                 {currentStep === 1 && (
                                     <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
@@ -437,11 +449,30 @@ export default function PriceCalculator() {
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="grid grid-cols-3 gap-4">
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                                                 {CUT_TYPES.map(c => (
-                                                    <button key={c.id} onClick={() => setCutType(c)} className={`p-4 rounded-xl border ${cutType.id === c.id ? 'border-brand-yellow' : 'border-white/10'}`}>
-                                                        <img src={c.imageSrc} alt={c.name} className="w-full h-20 object-contain mb-2" />
-                                                        <span className="text-white font-bold text-xs">{c.name}</span>
+                                                    <button
+                                                        key={c.id}
+                                                        onClick={() => setCutType(c)}
+                                                        className={`relative overflow-hidden rounded-[1.5rem] border transition-all duration-300 group aspect-[4/3] flex flex-col items-center justify-end p-4 pb-5 text-center ${cutType.id === c.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
+                                                    >
+                                                        {/* Background Image */}
+                                                        <img
+                                                            src={c.imageSrc}
+                                                            alt={c.name}
+                                                            className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"
+                                                        />
+                                                        {/* Gradient Overlay */}
+                                                        <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/30 to-brand-black/80`} />
+
+                                                        {/* Content */}
+                                                        <div className="relative z-10 w-full px-2">
+                                                            <div className={`w-6 h-6 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
+                                                                <CheckCircle2 size={12} />
+                                                            </div>
+                                                            <span className="text-white font-black text-xs sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{c.name}</span>
+                                                            <p className="text-white/60 text-[10px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{c.description}</p>
+                                                        </div>
                                                     </button>
                                                 ))}
                                             </div>
@@ -464,21 +495,70 @@ export default function PriceCalculator() {
                                                 </button>
                                             </div>
                                         ) : (
-                                            <div className="grid grid-cols-3 gap-2">
-                                                {MATERIALS_CONFIG.map(m => (
-                                                    <button key={m.id} onClick={() => setMaterial(m)} className={`p-2 rounded-xl border ${material.id === m.id ? 'border-brand-yellow' : 'border-white/10'}`}>
-                                                        <img src={m.imageSrc} className="w-full h-16 object-cover mb-2 rounded" />
-                                                        <span className="text-white text-[10px] block">{m.name}</span>
-                                                    </button>
-                                                ))}
+                                            <div className="space-y-3">
+                                                {material.hasWidthOptions && (
+                                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 bg-white/5 rounded-xl border border-brand-yellow/20 animate-in fade-in slide-in-from-top-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-7 h-7 rounded-lg bg-brand-yellow/10 flex items-center justify-center text-brand-yellow">
+                                                                <Palette size={16} />
+                                                            </div>
+                                                            <div className="text-left leading-none">
+                                                                <span className="text-white font-bold block text-xs italic">ANCHO DISPONIBLE</span>
+                                                                <span className="text-gray-500 text-[9px]">Elige la medida del material</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex p-0.5 bg-black/40 rounded-lg border border-white/5">
+                                                            <button
+                                                                onClick={() => setMaterialWidth(60)}
+                                                                className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 60 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                            >
+                                                                60CM
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setMaterialWidth(120)}
+                                                                className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 120 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                            >
+                                                                120CM
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+                                                    {MATERIALS_CONFIG.map(m => (
+                                                        <button
+                                                            key={m.id}
+                                                            onClick={() => setMaterial(m)}
+                                                            className={`relative overflow-hidden rounded-[1.5rem] border transition-all duration-300 group aspect-[4/3] flex flex-col items-center justify-end p-4 pb-5 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
+                                                        >
+                                                            {/* Background Image */}
+                                                            <img
+                                                                src={m.imageSrc}
+                                                                alt={m.name}
+                                                                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"
+                                                            />
+                                                            {/* Gradient Overlay */}
+                                                            <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/30 to-brand-black/80`} />
+
+                                                            {/* Content */}
+                                                            <div className="relative z-10 w-full px-2">
+                                                                <div className={`w-6 h-6 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
+                                                                    <CheckCircle2 size={12} />
+                                                                </div>
+                                                                <span className="text-white font-black text-xs sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{m.name}</span>
+                                                                <p className="text-white/60 text-[10px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{m.description}</p>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
                                         )}
                                     </motion.div>
                                 )}
 
                                 {currentStep === 3 && (
-                                    <motion.div key="step3" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
-                                        <h3 className="text-white font-bold text-lg mb-4">{projectType === 'cubreplacas' ? 'Carga de Logo' : 'Detalles'}</h3>
+                                    <motion.div key="step3" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-3">
+                                        <h3 className="text-white font-bold text-base mb-2">{projectType === 'cubreplacas' ? 'Carga de Logo' : 'Detalles'}</h3>
 
                                         {projectType === 'cubreplacas' ? (
                                             <div className="space-y-4">
@@ -489,44 +569,113 @@ export default function PriceCalculator() {
                                                     </div>
                                                 ) : (
                                                     <div className="space-y-2">
-                                                        <button onClick={() => {
-                                                            const input = document.createElement('input');
-                                                            input.type = 'file';
-                                                            input.onchange = async (e) => {
-                                                                const file = (e.target as HTMLInputElement).files?.[0];
-                                                                if (file) {
-                                                                    setIsUploading(true);
-                                                                    const res = await uploadFiles("stickerUploader", { files: [file] });
-                                                                    setFileUrl(res[0].url);
-                                                                    setFileName(file.name);
-                                                                    setIsUploading(false);
-                                                                }
-                                                            };
-                                                            input.click();
-                                                        }} className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200">
-                                                            {isUploading ? 'Subiendo...' : 'SUBIR LOGO'}
-                                                        </button>
-                                                        <button onClick={() => { alert('Redirigiendo a diseño...'); window.location.href = '/#design'; }} className="text-gray-500 text-xs underline block mx-auto">No tengo logo</button>
+                                                        {isUploading ? (
+                                                            <div className="space-y-2">
+                                                                <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                                                                    <div className="bg-brand-yellow h-full rounded-full transition-all duration-300" style={{ width: `${uploadProgress}%` }}></div>
+                                                                </div>
+                                                                <p className="text-gray-400 text-xs text-center">{uploadProgress}% subido</p>
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <button onClick={() => {
+                                                                    const input = document.createElement('input');
+                                                                    input.type = 'file';
+                                                                    input.onchange = async (e) => {
+                                                                        const file = (e.target as HTMLInputElement).files?.[0];
+                                                                        if (file) {
+                                                                            setIsUploading(true);
+                                                                            setUploadProgress(0);
+                                                                            const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
+                                                                            setFileUrl(res[0].url);
+                                                                            setFileName(file.name);
+                                                                            setIsUploading(false);
+                                                                            setUploadProgress(0);
+                                                                        }
+                                                                    };
+                                                                    input.click();
+                                                                }} className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200">
+                                                                    SUBIR LOGO
+                                                                </button>
+                                                                <button onClick={() => { alert('Redirigiendo a diseño...'); window.location.href = '/#design'; }} className="text-gray-500 text-xs underline block mx-auto">No tengo logo</button>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="space-y-4">
-                                                {/* Sticker Dimensions Logic omitted for brevity, keeping simple for fix */}
-                                                <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                                                    <label className="text-white text-xs block mb-2">Medidas (cm)</label>
-                                                    <div className="flex gap-4">
-                                                        <input type="number" value={widthCm} onChange={e => setWidthCm(Number(e.target.value))} className="bg-black/50 border border-white/20 text-white p-2 rounded w-full" />
-                                                        <span className="text-white self-center">x</span>
-                                                        <input type="number" value={heightCm} onChange={e => setHeightCm(Number(e.target.value))} className="bg-black/50 border border-white/20 text-white p-2 rounded w-full" />
+                                            <div className="space-y-2">
+                                                {/* Upload de diseño */}
+                                                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                                                    <label className="text-white text-[10px] block mb-1">Diseño</label>
+                                                    {fileUrl ? (
+                                                        <div className="bg-green-500/10 border border-green-500 p-3 rounded-lg flex justify-between items-center">
+                                                            <span className="text-white text-xs truncate">{fileName}</span>
+                                                            <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-xs ml-2 shrink-0">Cambiar</button>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="space-y-1">
+                                                            {isUploading ? (
+                                                                <div className="space-y-2">
+                                                                    <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden">
+                                                                        <div className="bg-brand-yellow h-full rounded-full transition-all duration-300" style={{ width: `${uploadProgress}%` }}></div>
+                                                                    </div>
+                                                                    <p className="text-gray-400 text-[10px] text-center">{uploadProgress}% subido</p>
+                                                                </div>
+                                                            ) : (
+                                                                <>
+                                                                    <button onClick={() => {
+                                                                        const input = document.createElement('input');
+                                                                        input.type = 'file';
+                                                                        input.onchange = async (e) => {
+                                                                            const file = (e.target as HTMLInputElement).files?.[0];
+                                                                            if (file) {
+                                                                                setIsUploading(true);
+                                                                                setUploadProgress(0);
+                                                                                const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
+                                                                                setFileUrl(res[0].url);
+                                                                                setFileName(file.name);
+                                                                                setIsUploading(false);
+                                                                                setUploadProgress(0);
+                                                                            }
+                                                                        };
+                                                                        input.click();
+                                                                    }} className="w-full py-2.5 bg-white text-black font-bold rounded-lg hover:bg-gray-200 text-xs">
+                                                                        SUBIR DISEÑO
+                                                                    </button>
+                                                                    <button onClick={() => { window.location.href = '/#design'; }} className="text-gray-500 text-[10px] underline block mx-auto">No tengo diseño</button>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {material.requiresLaminate && (
+                                                    <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                                                        <label className="text-white text-[10px] block mb-1">Laminado</label>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => setLaminate('brillante')} className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${laminate === 'brillante' ? 'bg-brand-yellow text-black' : 'bg-white/10 text-gray-400 hover:text-white'}`}>
+                                                                Brillante
+                                                            </button>
+                                                            <button onClick={() => setLaminate('mate')} className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${laminate === 'mate' ? 'bg-brand-yellow text-black' : 'bg-white/10 text-gray-400 hover:text-white'}`}>
+                                                                Mate
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                                                    <label className="text-white text-[10px] block mb-1">Medidas (cm) <span className="text-gray-500 font-normal">— mín. {cutType.id === 'sc' ? '2x2' : '3x3'}</span></label>
+                                                    <div className="flex gap-3">
+                                                        <input type="number" min={cutType.id === 'sc' ? 2 : 3} value={widthCm} onChange={e => setWidthCm(Math.max(cutType.id === 'sc' ? 2 : 3, Number(e.target.value)))} className="bg-black/50 border border-white/20 text-white p-1.5 text-sm rounded w-full" />
+                                                        <span className="text-white self-center text-xs">x</span>
+                                                        <input type="number" min={cutType.id === 'sc' ? 2 : 3} value={heightCm} onChange={e => setHeightCm(Math.max(cutType.id === 'sc' ? 2 : 3, Number(e.target.value)))} className="bg-black/50 border border-white/20 text-white p-1.5 text-sm rounded w-full" />
                                                     </div>
                                                 </div>
-                                                <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                                                    <label className="text-white text-xs block mb-2">Cantidad (Hojas)</label>
-                                                    <div className="flex items-center gap-4">
-                                                        <button onClick={() => setSheetQuantity(Math.max(1, sheetQuantity - 1))} className="text-white bg-white/10 p-2 rounded">-</button>
-                                                        <span className="text-white font-bold text-xl">{sheetQuantity}</span>
-                                                        <button onClick={() => setSheetQuantity(sheetQuantity + 1)} className="text-white bg-white/10 p-2 rounded">+</button>
+                                                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                                                    <label className="text-white text-[10px] block mb-1">Cantidad (Hojas)</label>
+                                                    <div className="flex items-center gap-3">
+                                                        <button onClick={() => setSheetQuantity(Math.max(1, sheetQuantity - 1))} className="text-white bg-white/10 p-1.5 rounded text-xs">-</button>
+                                                        <span className="text-white font-bold text-lg">{sheetQuantity}</span>
+                                                        <button onClick={() => setSheetQuantity(sheetQuantity + 1)} className="text-white bg-white/10 p-1.5 rounded text-xs">+</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -534,43 +683,18 @@ export default function PriceCalculator() {
                                     </motion.div>
                                 )}
 
-                                {currentStep === 4 && (
-                                    <motion.div key="step4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
-                                        <h3 className="text-white font-bold text-lg mb-4">Resumen Final</h3>
-                                        <div className="bg-white/5 p-6 rounded-xl border border-white/10 text-center">
-                                            <p className="text-gray-400 text-sm mb-2">Total Estimado</p>
-                                            <p className="text-4xl font-black text-brand-yellow">${totalPrice.toLocaleString()}</p>
 
-                                            <Button onClick={() => {
-                                                addItem({
-                                                    id: Date.now(),
-                                                    name: projectType === 'cubreplacas' ? 'Cubreplacas Custom' : `${material.name} (${cutType.name})`,
-                                                    price: discountedPrice,
-                                                    displayPrice: discountedPrice.toLocaleString(),
-                                                    image: projectType === 'cubreplacas' ? '/brand/logo.png' : material.imageSrc,
-                                                    category: projectType === 'cubreplacas' ? 'Cubreplacas' : 'Stickers',
-                                                    description: projectType === 'cubreplacas' ? `${cubreplacasBase} / ${cubreplacasFinish}` : `${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
-                                                    features: projectType === 'cubreplacas' ? [`Base: ${cubreplacasBase}`, `Acabado: ${cubreplacasFinish}`] : [`Material: ${material.name}`, `Corte: ${cutType.name}`],
-                                                    fileUrl: fileUrl || undefined
-                                                });
-                                                if (toggleCart) toggleCart();
-                                            }} className="w-full mt-6 bg-brand-yellow text-black font-bold h-12 text-lg">
-                                                AGREGAR AL CARRITO
-                                            </Button>
-                                        </div>
-                                    </motion.div>
-                                )}
                             </AnimatePresence>
 
                             {/* Navigation */}
                             {currentStep > 0 && (
-                                <div className="flex justify-between mt-6 pt-4 border-t border-white/10">
-                                    <button onClick={() => setCurrentStep(Math.max(0, currentStep - 1))} className="text-gray-400 hover:text-white flex items-center gap-2">
-                                        <ArrowRight className="rotate-180" size={16} /> Atrás
+                                <div className="flex justify-between mt-4 pt-3 border-t border-white/10">
+                                    <button onClick={() => setCurrentStep(Math.max(0, currentStep - 1))} className="text-gray-400 hover:text-white flex items-center gap-1.5 text-xs sm:text-sm">
+                                        <ArrowRight className="rotate-180" size={14} /> Atrás
                                     </button>
-                                    {currentStep < 4 && (
-                                        <button onClick={() => setCurrentStep(currentStep + 1)} className="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-gray-200 flex items-center gap-2">
-                                            Siguiente <ArrowRight size={16} />
+                                    {currentStep < 3 && (
+                                        <button onClick={() => setCurrentStep(currentStep + 1)} className="bg-white text-black px-4 py-1.5 rounded-lg font-bold hover:bg-gray-200 flex items-center gap-1.5 text-xs sm:text-sm">
+                                            Siguiente <ArrowRight size={14} />
                                         </button>
                                     )}
                                 </div>
@@ -578,53 +702,108 @@ export default function PriceCalculator() {
                         </div>
                     </div>
 
-                    {/* Summary Sidebar */}
-                    <div className="hidden lg:block">
-                        <div className="bg-white/5 rounded-3xl border border-white/10 p-6 sticky top-24">
-                            <h3 className="text-white font-bold mb-4 flex items-center gap-2"><Calculator size={20} /> Resumen</h3>
-                            <div className="space-y-4 text-sm text-gray-300">
-                                <div className="flex justify-between">
-                                    <span>Proyecto:</span>
-                                    <span className="text-white font-bold uppercase">{projectType || '---'}</span>
+                    {/* Sidebar Summary - Only visible after initial selections */}
+                    {projectType && (projectType === 'cubreplacas' || currentStep >= 2) && (
+                        <div className="lg:col-span-1 order-1 lg:order-2 h-full">
+                            <div className={`bg-zinc-900/50 backdrop-blur-sm p-4 rounded-2xl border border-white/10 h-full ${currentStep !== 3 ? 'sticky top-32' : ''}`}>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <div className="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-white">
+                                        <Calculator size={14} />
+                                    </div>
+                                    <h3 className="text-white font-bold text-sm">Resumen</h3>
                                 </div>
-                                {projectType === 'cubreplacas' ? (
-                                    <>
-                                        <div className="flex justify-between">
-                                            <span>Base:</span>
-                                            <span className="text-white">{cubreplacasBase}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span>Acabado:</span>
-                                            <span className="text-white">{cubreplacasFinish}</span>
-                                        </div>
-                                        <div className="flex justify-between pt-4 border-t border-white/10">
-                                            <span>Precio:</span>
-                                            <span className="text-brand-yellow font-bold text-lg">${totalPrice.toLocaleString()}</span>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="flex justify-between">
-                                            <span>Material:</span>
-                                            <span className="text-white">{material.name}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span>Corte:</span>
-                                            <span className="text-white">{cutType.name}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span>Cantidad:</span>
-                                            <span className="text-white">{sheetQuantity} hojas</span>
-                                        </div>
-                                        <div className="flex justify-between pt-4 border-t border-white/10">
-                                            <span>Total:</span>
-                                            <span className="text-brand-yellow font-bold text-lg">${totalPrice.toLocaleString()}</span>
-                                        </div>
-                                    </>
+
+                                <div className="space-y-2 text-[11px] text-gray-400">
+                                    <div className="flex justify-between">
+                                        <span>Proyecto:</span>
+                                        <span className="text-white font-bold uppercase">{projectType}</span>
+                                    </div>
+
+                                    {projectType === 'cubreplacas' ? (
+                                        <>
+                                            <div className="flex justify-between">
+                                                <span>Base:</span>
+                                                <span className="text-white font-bold">{cubreplacasBase}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Acabado:</span>
+                                                <span className="text-white font-bold">{cubreplacasFinish}</span>
+                                            </div>
+                                            <div className="flex justify-between pt-4 border-t border-white/10">
+                                                <span>Total:</span>
+                                                <span className="text-brand-yellow font-bold text-lg">${totalPrice.toLocaleString()}</span>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="flex justify-between">
+                                                <span>Material:</span>
+                                                <span className={currentStep >= 2 ? "text-white font-bold" : "text-gray-500 italic"}>
+                                                    {currentStep >= 2 ? material.name : 'Pendiente'}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Corte:</span>
+                                                <span className={currentStep >= 1 ? "text-white font-bold" : "text-gray-500 italic"}>
+                                                    {currentStep >= 1 ? cutType.name : 'Pendiente'}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Acabado:</span>
+                                                <span className={currentStep >= 3 ? "text-white font-bold" : "text-gray-500 italic"}>
+                                                    {currentStep >= 3 ? (material.requiresLaminate ? (laminate === 'brillante' ? 'Brillante' : 'Mate') : 'Incluido') : 'Pendiente'}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Medidas:</span>
+                                                <span className={currentStep >= 3 ? "text-white font-bold" : "text-gray-500 italic"}>
+                                                    {currentStep >= 3 ? `${widthCm} x ${heightCm} cm` : 'Pendiente'}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span>Cantidad:</span>
+                                                <span className={currentStep >= 3 ? "text-white font-bold" : "text-gray-500 italic"}>
+                                                    {currentStep >= 3 ? `${sheetQuantity} hojas` : 'Pendiente'}
+                                                </span>
+                                            </div>
+                                            {currentStep >= 3 && (
+                                                <div className="flex justify-between">
+                                                    <span>Stickers (aprox.):</span>
+                                                    <span className="text-white font-bold">~{totalStickers}</span>
+                                                </div>
+                                            )}
+                                            {currentStep >= 3 && (
+                                                <div className="flex justify-between pt-4 border-t border-white/10">
+                                                    <span>Total:</span>
+                                                    <span className="text-brand-yellow font-bold text-lg">${totalPrice.toLocaleString()}</span>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+
+                                {/* Add to Cart Button */}
+                                {currentStep >= 3 && (
+                                    <Button onClick={() => {
+                                        addItem({
+                                            id: Date.now(),
+                                            name: projectType === 'cubreplacas' ? 'Cubreplacas Custom' : `${material.name} (${cutType.name})`,
+                                            price: discountedPrice,
+                                            displayPrice: discountedPrice.toLocaleString(),
+                                            image: projectType === 'cubreplacas' ? '/brand/logo.png' : material.imageSrc,
+                                            category: projectType === 'cubreplacas' ? 'Cubreplacas' : 'Stickers',
+                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase} / ${cubreplacasFinish}` : `${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
+                                            features: projectType === 'cubreplacas' ? [`Base: ${cubreplacasBase}`, `Acabado: ${cubreplacasFinish}`] : [`Material: ${material.name}`, `Corte: ${cutType.name}`],
+                                            fileUrl: fileUrl || undefined
+                                        });
+                                        if (toggleCart) toggleCart();
+                                    }} className="w-full mt-4 bg-brand-yellow text-black font-bold h-10 text-sm hover:bg-yellow-400 transition-colors">
+                                        AGREGAR AL CARRITO
+                                    </Button>
                                 )}
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </section>

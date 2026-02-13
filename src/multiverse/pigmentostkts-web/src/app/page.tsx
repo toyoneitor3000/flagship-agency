@@ -8,6 +8,7 @@ import { FadeIn, ScaleOnHover } from "@/components/ui/motion";
 import { motion } from "framer-motion";
 import * as React from "react";
 import { usePreloader } from "@/context/PreloaderContext";
+import { useFullPageScroll } from "@/hooks/useFullPageScroll";
 
 // Import new components
 import FloatingStickers from "@/components/FloatingStickers";
@@ -17,6 +18,9 @@ import PriceCalculator from "@/components/PriceCalculator";
 
 export default function Home() {
   const { isPreloaderDone } = usePreloader();
+
+  // Activate TikTok-style fullpage scroll
+  useFullPageScroll("main", "[data-section]");
 
   const getIcon = (id: string) => {
     switch (id) {
@@ -30,7 +34,7 @@ export default function Home() {
   return (
     <main className="min-h-screen relative overflow-x-hidden">
       {/* HERO SECTION - White Background */}
-      <section id="hero" data-theme="light" className="relative bg-white text-brand-black min-h-[100dvh] flex items-center py-20 md:py-0 overflow-hidden">
+      <section data-section id="hero" data-theme="light" className="relative bg-white text-brand-black min-h-screen flex items-center py-20 md:py-0 overflow-hidden">
         {/* Grid de puntos de fondo */}
         <div className="absolute inset-0 opacity-20 bg-dot-pattern pointer-events-none"></div>
         <div className="container mx-auto px-4 relative z-10">
@@ -128,16 +132,21 @@ export default function Home() {
       </section>
 
       {/* PRICE CALCULATOR - MOVED TO SECOND SECTION */}
-      <div id="calculator" data-theme="dark" className="scroll-mt-[46px] md:scroll-mt-32 relative">
-        <div id="cubreplacas" className="absolute -top-32" />
-        <PriceCalculator />
-      </div>
+      <section data-section id="calculator" data-theme="dark" className="h-screen overflow-y-auto flex items-center justify-center relative bg-brand-black">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+        <div className="relative w-full">
+          <div id="cubreplacas" className="absolute -top-32" />
+          <PriceCalculator />
+        </div>
+      </section>
 
       {/* STATS COUNTER SECTION */}
-      <StatsCounter />
+      <div data-section className="min-h-screen flex items-center justify-center bg-brand-yellow">
+        <StatsCounter />
+      </div>
 
       {/* SERVICES GRID - Black Background */}
-      <section id="services" data-theme="dark" className="py-32 bg-brand-black relative z-10">
+      <section data-section id="services" data-theme="dark" className="min-h-screen flex flex-col justify-center py-32 bg-brand-black relative z-10">
         <div className="container mx-auto px-4">
           <FadeIn delay={0.2}>
             <div className="text-center mb-20">
@@ -170,7 +179,7 @@ export default function Home() {
       {/* GALLERY SECTION REMOVED FROM HERE (MOVED UP) */}
 
       {/* FEATURED PACKS SECTION */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section data-section className="min-h-screen flex flex-col justify-center py-24 bg-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-brand-black to-transparent opacity-5"></div>
         <div className="container mx-auto px-4">
           <FadeIn>
@@ -212,7 +221,7 @@ export default function Home() {
 
 
       {/* DESIGN TEASER - Yellow Background */}
-      <section id="design" className="py-24 bg-brand-yellow">
+      <section data-section id="design" className="min-h-screen flex flex-col justify-center py-24 bg-brand-yellow">
         <div className="container mx-auto px-4">
           <FadeIn>
             <div className="bg-brand-black rounded-[3rem] p-10 md:p-20 flex flex-col md:flex-row items-center gap-16 relative overflow-hidden">
@@ -260,7 +269,7 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIALS PREVIEW - White Background */}
-      <section className="py-24 bg-white">
+      <section data-section className="min-h-screen flex flex-col justify-center py-24 bg-white">
         <div className="container mx-auto px-4">
           <FadeIn>
             <div className="text-center mb-16">
