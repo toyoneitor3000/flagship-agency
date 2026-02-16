@@ -9,8 +9,13 @@ interface WikiLinkerProps {
 }
 
 export const WikiLinker: React.FC<WikiLinkerProps> = ({ text, className = '' }) => {
-    // 1. Sort terms by length (descending) to match "Landing Page" before "Page"
-    const sortedTerms = [...wikiDatabase].sort((a, b) => b.term.length - a.term.length);
+    // Sort by length (longest first) to avoid partial replacements of shorter terms inside longer ones
+    // SAFETY: Filter out bad entries first to avoid build crashes
+    const sortedTerms = React.useMemo(() => {
+        return [...wikiDatabase]
+            .filter(t => t && t.term)
+            .sort((a, b) => b.term.length - a.term.length);
+    }, []);
 
     // 2. Escape regex special characters in terms
     const escapeRegExp = (string: string) => {

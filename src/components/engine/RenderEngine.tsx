@@ -66,7 +66,7 @@ const AuthoritySection = ({ content }: { content: any }) => (
     <section className="py-20 border-y border-white/5 bg-zinc-950/20">
         <div className="max-w-6xl mx-auto px-6">
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60">
-                {content.logos.map((logo: string, i: number) => (
+                {(content.logos || []).map((logo: string, i: number) => (
                     <div key={i} className="flex flex-col items-center">
                         <div className="text-sm font-light text-white tracking-[0.2em] uppercase">{logo}</div>
                     </div>
@@ -83,7 +83,7 @@ const ValuePropSection = ({ content }: { content: any }) => (
                 {content.headline}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                {content.cards.map((card: any, i: number) => (
+                {(content.cards || []).map((card: any, i: number) => (
                     <div key={i} className="group">
                         <div className="text-[10px] font-light text-zinc-600 mb-6 tracking-widest uppercase">0{i + 1} —</div>
                         <h3 className="text-lg font-normal mb-4 text-white uppercase tracking-widest">{card.title}</h3>
@@ -246,7 +246,7 @@ export function RenderEngine({ buildId, slug, architecture }: { buildId: string;
             </nav>
 
             <div className="flex flex-col relative z-10 pt-20">
-                {architecture.sections.map((section) => {
+                {architecture.sections?.map((section) => {
                     switch (section.type) {
                         case 'HERO': return <HeroSection key={section.id} content={section.content} identity={architecture.identity} />;
                         case 'AUTHORITY': return <AuthoritySection key={section.id} content={section.content} />;
