@@ -6,7 +6,7 @@ import AddToCartBtn from "@/components/AddToCartBtn";
 import { Check } from "lucide-react";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // Generar rutas estáticas
@@ -16,8 +16,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function StickerPage({ params }: Props) {
-  const id = parseInt(params.id);
+export default async function StickerPage({ params }: Props) {
+  const { id: rawId } = await params;
+  const id = parseInt(rawId);
   const sticker = getStickerById(id);
 
   if (!sticker) {
@@ -27,9 +28,9 @@ export default function StickerPage({ params }: Props) {
   return (
     <main className="container mx-auto px-4 py-12 min-h-screen bg-brand-white">
       <div className="mb-8">
-         <Button variant="outline" size="sm" className="rounded-none border-2 border-brand-black font-bold hover:bg-brand-black hover:text-white uppercase tracking-wider" asChild>
-            <Link href="/">← Volver al Catálogo</Link>
-         </Button>
+        <Button variant="outline" size="sm" className="rounded-none border-2 border-brand-black font-bold hover:bg-brand-black hover:text-white uppercase tracking-wider" asChild>
+          <Link href="/">← Volver al Catálogo</Link>
+        </Button>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
@@ -48,14 +49,14 @@ export default function StickerPage({ params }: Props) {
         <div className="space-y-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-                <span className="inline-block px-3 py-1 bg-brand-yellow text-brand-black text-xs font-black uppercase tracking-widest border border-brand-black">
+              <span className="inline-block px-3 py-1 bg-brand-yellow text-brand-black text-xs font-black uppercase tracking-widest border border-brand-black">
                 {sticker.category}
-                </span>
-                <span className="inline-block px-3 py-1 bg-brand-black text-brand-white text-xs font-black uppercase tracking-widest">
+              </span>
+              <span className="inline-block px-3 py-1 bg-brand-black text-brand-white text-xs font-black uppercase tracking-widest">
                 EN STOCK
-                </span>
+              </span>
             </div>
-            
+
             <h1 className="text-5xl md:text-6xl font-black text-brand-black mb-4 tracking-tighter leading-none uppercase">
               {sticker.name}
             </h1>

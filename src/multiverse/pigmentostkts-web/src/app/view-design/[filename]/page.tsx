@@ -5,14 +5,17 @@ import Link from "next/link";
 import { Download, ArrowLeft, ExternalLink, ShieldCheck, FileText, FileCode, Layers, Info } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
+import { use } from "react";
+// ... other imports
+
 interface PageProps {
-    params: {
+    params: Promise<{
         filename: string;
-    };
+    }>;
 }
 
 export default function ViewDesignPage({ params }: PageProps) {
-    const { filename } = params;
+    const { filename } = use(params);
     const searchParams = useSearchParams();
     const externalUrl = searchParams.get("url");
 
