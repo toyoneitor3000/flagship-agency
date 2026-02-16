@@ -37,6 +37,7 @@ export const Hero = () => {
               poster="/assets/hero-bg.webp"
               className="w-full h-full object-cover"
             >
+              <source src="/assets/vertical-bg.mp4" type="video/mp4" />
               <source src="/assets/vertical-bg.webm" type="video/webm" />
             </video>
           ) : isMobile === false ? (

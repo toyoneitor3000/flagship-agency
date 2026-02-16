@@ -166,6 +166,7 @@ export default function PriceCalculator() {
     const [currentStep, setCurrentStep] = useState(0);
     const [hasDesign, setHasDesign] = useState<boolean | null>(null);
     const [projectType, setProjectType] = useState<'printed' | 'cut' | 'cubreplacas' | null>(null);
+    const [designDescription, setDesignDescription] = useState("");
 
     // Cubreplacas States
     const [cubreplacasBase, setCubreplacasBase] = useState<'negro' | 'ppf' | 'fibra' | 'especial' | 'impreso'>('negro');
@@ -320,14 +321,59 @@ export default function PriceCalculator() {
                             )}
 
                             {hasDesign === false && (
-                                <div className="text-center space-y-6">
-                                    <h3 className="text-white font-bold text-2xl">¡Te ayudamos a diseñar!</h3>
-                                    <p className="text-gray-300">Servicio de Diseño desde $75,000 COP</p>
-                                    <div className="flex gap-4 justify-center">
-                                        <button onClick={() => setHasDesign(null)} className="text-gray-400 hover:text-white underline">Volver</button>
-                                        <a href={`${PIGMENTO_DATA.contact.whatsappUrl}?text=Hola! Necesito diseño.`} target="_blank" className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2">
-                                            Solicitar Diseño <ArrowRight size={18} />
-                                        </a>
+                                <div className="text-center space-y-6 animate-in fade-in zoom-in duration-300">
+                                    <div className="space-y-2">
+                                        <h3 className="text-white font-bold text-2xl sm:text-3xl">¡Te ayudamos a diseñar!</h3>
+                                        <p className="text-gray-300 text-sm sm:text-base max-w-md mx-auto">
+                                            Nuestro equipo de diseñadores profesionales creará algo único para ti.
+                                            <span className="block text-brand-yellow font-bold mt-1">Costo del servicio: $75,000 COP</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="max-w-md mx-auto space-y-4 bg-white/5 p-6 rounded-3xl border border-white/5">
+                                        <div className="text-left space-y-2">
+                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest pl-1">Cuéntanos tu idea</label>
+                                            <textarea
+                                                value={designDescription}
+                                                onChange={(e) => setDesignDescription(e.target.value)}
+                                                placeholder="Ej: Quiero un gato samurai comiendo pizza en el espacio..."
+                                                className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:border-brand-yellow/50 focus:ring-1 focus:ring-brand-yellow/50 min-h-[120px] resize-none text-sm transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col gap-3">
+                                            <Button
+                                                onClick={() => {
+                                                    addItem({
+                                                        id: 999999,
+                                                        name: "Servicio de Diseño Premium",
+                                                        price: 75000,
+                                                        displayPrice: "$75.000",
+                                                        image: "/project-types/printed-stickers.png",
+                                                        category: "Servicios",
+                                                        description: designDescription || "Diseño personalizado a medida",
+                                                        features: ["Personalizado", "Alta Resolución", "Archivos Editables"],
+                                                    });
+                                                    toggleCart();
+                                                }}
+                                                className="w-full bg-brand-yellow text-black hover:bg-white h-14 text-base font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(230,194,0,0.3)] hover:shadow-[0_0_30px_rgba(230,194,0,0.5)]"
+                                            >
+                                                AGREGAR AL CARRITO <Plus className="ml-2 w-5 h-5" />
+                                            </Button>
+
+                                            <div className="flex items-center justify-between px-2 pt-2">
+                                                <button onClick={() => setHasDesign(null)} className="text-gray-500 hover:text-white text-xs underline decoration-white/30 underline-offset-4">
+                                                    Volver
+                                                </button>
+                                                <a
+                                                    href={`${PIGMENTO_DATA.contact.whatsappUrl}?text=Hola! Necesito diseño y tengo dudas: ${encodeURIComponent(designDescription)}`}
+                                                    target="_blank"
+                                                    className="text-blue-400 hover:text-blue-300 text-xs font-medium flex items-center gap-1.5 transition-colors"
+                                                >
+                                                    Prefiero hablar por WhatsApp <ArrowRight size={12} />
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )}
