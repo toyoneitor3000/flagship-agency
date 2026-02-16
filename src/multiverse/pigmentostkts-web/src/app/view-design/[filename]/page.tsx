@@ -1,4 +1,6 @@
 "use client";
+// Force rebuild for Next.js 15 params fix
+
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
