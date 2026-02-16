@@ -29,11 +29,16 @@ export const Hero = () => {
         <div className="relative w-full h-full">
           {isMobile === true ? (
             /* High Quality Mobile Hero (user requested hero-bg.webp) */
-            <img
-              src="/assets/hero-bg.webp"
-              alt="Purrpurr Background"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/assets/hero-bg.webp"
               className="w-full h-full object-cover"
-            />
+            >
+              <source src="/assets/vertical-bg.webm" type="video/webm" />
+            </video>
           ) : isMobile === false ? (
             /* Video for Desktop - High Quality */
             <video
