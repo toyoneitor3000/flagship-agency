@@ -3,17 +3,11 @@
 import { useEffect, useRef, useCallback } from "react";
 
 /**
- * useFullPageScroll — TikTok-style section scrolling.
- * Intercepts wheel and touch events on the given container,
- * and programmatically scrolls to the next/previous section.
+ * useFullPageScroll — Hybrid scroll with overflow awareness.
  *
- * Supports sections with overflowing content: if a section is taller than
- * the viewport, the user can scroll internally first. Only when they reach
- * the top or bottom of the overflow does the section-to-section navigation
- * kick in.
- *
- * @param containerSelector - CSS selector for the scrollable container (e.g. "main")
- * @param sectionSelector   - CSS selector for each section (e.g. "[data-section]")
+ * - Short sections (fit in viewport): snap on any intentional scroll.
+ * - Tall sections (content taller than viewport): allow natural internal
+ *   scrolling. Only snap when the user has reached the TOP or BOTTOM edge.
  */
 export function useFullPageScroll(
     containerSelector: string = "main",
@@ -22,9 +16,8 @@ export function useFullPageScroll(
     const isScrolling = useRef(false);
     const currentIndex = useRef(0);
     const touchStartY = useRef(0);
-    // Track accumulated delta for overflowing sections at the edge
     const edgeDelta = useRef(0);
-    const edgeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const edgeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const scrollToSection = useCallback((index: number) => {
         const sections = document.querySelectorAll(sectionSelector);
@@ -32,42 +25,74 @@ export function useFullPageScroll(
 
         isScrolling.current = true;
         currentIndex.current = index;
+        edgeDelta.current = 0;
 
-        sections[index].scrollIntoView({ behavior: "smooth" });
+        const section = sections[index] as HTMLElement;
+        const navbar = document.querySelector("nav");
+        const navOffset = navbar ? navbar.offsetHeight : 0;
+        const targetTop = section.offsetTop - navOffset;
 
-        // Unlock after animation completes
+        window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior: "smooth"
+        });
+
         setTimeout(() => {
             isScrolling.current = false;
-            edgeDelta.current = 0;
-        }, 800);
+        }, 1000);
     }, [sectionSelector]);
 
     useEffect(() => {
-        // Determine which section is currently closest on mount
         const sections = document.querySelectorAll(sectionSelector);
         if (sections.length === 0) return;
 
-        // Always start at the top
-        window.scrollTo(0, 0);
-        currentIndex.current = 0;
+        // --- Helpers ---
 
-        /**
-         * Check whether the current section overflows vertically and whether
-         * we're at the edge of that overflow.
-         */
-        const getSectionScrollState = () => {
-            const sections = document.querySelectorAll(sectionSelector);
-            const section = sections[currentIndex.current] as HTMLElement;
-            if (!section) return { overflows: false, atTop: true, atBottom: true };
-
-            const overflows = section.scrollHeight > section.clientHeight + 2; // ~2px tolerance
-            const atTop = section.scrollTop <= 2;
-            const atBottom = section.scrollTop + section.clientHeight >= section.scrollHeight - 2;
-
-            return { overflows, atTop, atBottom };
+        const getNavHeight = () => {
+            const navbar = document.querySelector("nav");
+            return navbar ? navbar.offsetHeight : 0;
         };
 
-        const EDGE_THRESHOLD = 100; // Accumulated deltaY needed to trigger section change
+        /** Sync currentIndex with natural page scroll */
+        const syncIndex = () => {
+            if (isScrolling.current) return;
+            const navH = getNavHeight();
+            const scrollPos = window.pageYOffset + navH + 20;
+            const allSections = document.querySelectorAll(sectionSelector);
+            let active = 0;
+            allSections.forEach((s, i) => {
+                if ((s as HTMLElement).offsetTop <= scrollPos) active = i;
+            });
+            currentIndex.current = active;
+        };
+
+        /**
+         * Check if the current section is TALLER than the viewport
+         * and whether the user is at or near top/bottom edges.
+         */
+        const getEdgeState = () => {
+            const allSections = document.querySelectorAll(sectionSelector);
+            const section = allSections[currentIndex.current] as HTMLElement;
+            if (!section) return { tall: false, atTop: true, atBottom: true };
+
+            const navH = getNavHeight();
+            const viewH = window.innerHeight;
+            const sectionH = section.offsetHeight;
+
+            // Section is "tall" if it's significantly taller than the viewport
+            const tall = sectionH > viewH + 50;
+
+            const scrollY = window.pageYOffset;
+            const sectionTop = section.offsetTop - navH;
+            const sectionBottom = section.offsetTop + sectionH - viewH;
+
+            const atTop = scrollY <= sectionTop + 10;
+            const atBottom = scrollY >= sectionBottom - 10;
+
+            return { tall, atTop, atBottom };
+        };
+
+        // --- Event Handlers ---
 
         const handleWheel = (e: WheelEvent) => {
             if (isScrolling.current) {
@@ -75,53 +100,39 @@ export function useFullPageScroll(
                 return;
             }
 
-            // Only respond to significant scroll gestures
-            if (Math.abs(e.deltaY) < 30) return;
+            const absDelta = Math.abs(e.deltaY);
+            if (absDelta < 5) return;
 
-            const { overflows, atTop, atBottom } = getSectionScrollState();
+            const goingDown = e.deltaY > 0;
+            const { tall, atTop, atBottom } = getEdgeState();
 
-            if (overflows) {
-                const goingDown = e.deltaY > 0;
-                const goingUp = e.deltaY < 0;
-
-                // If we can still scroll internally, let the browser handle it
-                if ((goingDown && !atBottom) || (goingUp && !atTop)) {
-                    edgeDelta.current = 0;
-                    return; // Don't prevent default — allow natural scroll
+            // ── TALL SECTION (content overflows viewport) ──
+            if (tall) {
+                // If NOT at an edge, let the browser scroll naturally inside the section
+                if ((goingDown && !atBottom) || (!goingDown && !atTop)) {
+                    return; // natural scroll
                 }
 
-                // We're at the edge. Accumulate delta for a "pronounced" scroll gesture.
-                edgeDelta.current += Math.abs(e.deltaY);
-
-                // Clear accumulator after a pause (resets if user stops scrolling)
-                if (edgeTimeout.current) clearTimeout(edgeTimeout.current);
-                edgeTimeout.current = setTimeout(() => {
-                    edgeDelta.current = 0;
-                }, 300);
-
-                // Only navigate when enough edge-delta has accumulated
-                if (edgeDelta.current < EDGE_THRESHOLD) {
-                    e.preventDefault();
-                    return;
-                }
-
-                edgeDelta.current = 0;
+                // AT the edge of a tall section: accumulate delta to require "pushing"
                 e.preventDefault();
+                edgeDelta.current += absDelta;
 
-                if (goingDown) {
-                    scrollToSection(currentIndex.current + 1);
-                } else {
-                    scrollToSection(currentIndex.current - 1);
+                if (edgeTimer.current) clearTimeout(edgeTimer.current);
+                edgeTimer.current = setTimeout(() => { edgeDelta.current = 0; }, 300);
+
+                // Need to accumulate ~150px of delta to break out
+                if (edgeDelta.current >= 150) {
+                    edgeDelta.current = 0;
+                    scrollToSection(goingDown ? currentIndex.current + 1 : currentIndex.current - 1);
                 }
-            } else {
-                // Section does NOT overflow — classic full-page behavior
+                return;
+            }
+
+            // ── SHORT SECTION (fits in viewport) ──
+            // Snap on any intentional scroll (> 50 delta)
+            if (absDelta > 50) {
                 e.preventDefault();
-
-                if (e.deltaY > 0) {
-                    scrollToSection(currentIndex.current + 1);
-                } else {
-                    scrollToSection(currentIndex.current - 1);
-                }
+                scrollToSection(goingDown ? currentIndex.current + 1 : currentIndex.current - 1);
             }
         };
 
@@ -132,67 +143,63 @@ export function useFullPageScroll(
         const handleTouchEnd = (e: TouchEvent) => {
             if (isScrolling.current) return;
 
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY.current - touchEndY;
+            const diff = touchStartY.current - e.changedTouches[0].clientY;
+            const absDiff = Math.abs(diff);
+            if (absDiff < 60) return;
 
-            // Only respond to significant swipes (>50px)
-            if (Math.abs(diff) < 50) return;
+            const goingDown = diff > 0;
+            const { tall, atTop, atBottom } = getEdgeState();
 
-            const { overflows, atTop, atBottom } = getSectionScrollState();
-
-            if (overflows) {
-                const goingDown = diff > 0;
-                const goingUp = diff < 0;
-
-                // If we can still scroll internally, don't navigate
-                if ((goingDown && !atBottom) || (goingUp && !atTop)) {
-                    return;
-                }
-
-                // At the edge and a big swipe — navigate
-                if (Math.abs(diff) < 80) return; // Require bigger swipe at edges
+            // If inside a tall section and not at edge, ignore
+            if (tall && ((goingDown && !atBottom) || (!goingDown && !atTop))) {
+                return;
             }
 
-            if (diff > 0) {
-                // Swipe up → scroll down
-                scrollToSection(currentIndex.current + 1);
-            } else {
-                // Swipe down → scroll up
-                scrollToSection(currentIndex.current - 1);
+            if (absDiff > 120) {
+                scrollToSection(goingDown ? currentIndex.current + 1 : currentIndex.current - 1);
             }
         };
 
         const handleKeydown = (e: KeyboardEvent) => {
             if (isScrolling.current) return;
 
+            const { tall, atTop, atBottom } = getEdgeState();
+
             if (e.key === "ArrowDown" || e.key === "PageDown") {
-                e.preventDefault();
-                scrollToSection(currentIndex.current + 1);
+                if (!tall || atBottom) {
+                    e.preventDefault();
+                    scrollToSection(currentIndex.current + 1);
+                }
             } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-                e.preventDefault();
-                scrollToSection(currentIndex.current - 1);
+                if (!tall || atTop) {
+                    e.preventDefault();
+                    scrollToSection(currentIndex.current - 1);
+                }
             } else if (e.key === "Home") {
                 e.preventDefault();
                 scrollToSection(0);
             } else if (e.key === "End") {
                 e.preventDefault();
-                const sections = document.querySelectorAll(sectionSelector);
-                scrollToSection(sections.length - 1);
+                const allSections = document.querySelectorAll(sectionSelector);
+                scrollToSection(allSections.length - 1);
             }
         };
 
-        // Add listeners with passive: false to allow preventDefault
+        // --- Mount ---
+
+        window.addEventListener("scroll", syncIndex, { passive: true });
         window.addEventListener("wheel", handleWheel, { passive: false });
         window.addEventListener("touchstart", handleTouchStart, { passive: true });
         window.addEventListener("touchend", handleTouchEnd, { passive: true });
         window.addEventListener("keydown", handleKeydown);
 
         return () => {
+            window.removeEventListener("scroll", syncIndex);
             window.removeEventListener("wheel", handleWheel);
             window.removeEventListener("touchstart", handleTouchStart);
             window.removeEventListener("touchend", handleTouchEnd);
             window.removeEventListener("keydown", handleKeydown);
-            if (edgeTimeout.current) clearTimeout(edgeTimeout.current);
+            if (edgeTimer.current) clearTimeout(edgeTimer.current);
         };
     }, [sectionSelector, scrollToSection]);
 

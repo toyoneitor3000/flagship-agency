@@ -18,7 +18,7 @@ export const Footer = () => {
 
           {/* Brand & Rights */}
           <div className="flex flex-col items-center md:items-start gap-1">
-            <p className="font-bold text-zinc-300">PURRPURR FLAGSHIP AGENCY</p>
+            <p className="font-bold text-zinc-300">PURRPURR DEV</p>
             <p className="text-xs text-zinc-500 mb-2">La idea que definió a la agencia líder.</p>
             <p className="text-zinc-700 text-[10px]">&copy; {new Date().getFullYear()} Todos los derechos reservados.</p>
           </div>

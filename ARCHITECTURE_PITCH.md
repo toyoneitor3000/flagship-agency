@@ -73,7 +73,7 @@ No les vendemos "hosting" (ya tienen Azure/AWS). Les vendemos **Agilidad**.
 
 ## 6. Visualización Arquitectónica: El Modelo del Edificio
 
-Para entender (y vender) mejor nuestra arquitectura, **visualizamos a Flagship/Purrpurr como un Edificio de Alto Rendimiento**.
+Para entender (y vender) mejor nuestra arquitectura, **visualizamos a Purrpurr Dev como un Edificio de Alto Rendimiento**.
 
 ### Estructura del Edificio (Visible en `/purrpurr/architecture`):
 

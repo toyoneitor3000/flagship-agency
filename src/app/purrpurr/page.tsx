@@ -57,7 +57,7 @@ export default function PurrpurrEcosystemPage() {
                                     </div>
                                     <h2 className="text-6xl md:text-8xl font-black font-display leading-[0.85] tracking-tighter">
                                         Nacida como <br />
-                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-500">Purrpurr Flagship</span>
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-purple-500">Purrpurr Dev</span>
                                     </h2>
                                     <p className="text-purple-100/50 text-2xl leading-relaxed font-light">
                                         Purrpurr no es una herramienta externa; es el tejido conectivo desarrollado internamente para garantizar la coherencia absoluta.
@@ -140,10 +140,10 @@ export default function PurrpurrEcosystemPage() {
                         </div>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
-                            <Link href="/purrpurr/flagship" className="block h-full group">
+                            <Link href="/purrpurr/dev" className="block h-full group">
                                 <RoleCard
                                     icon={<Building2 className="w-6 h-6 text-purple-400" />}
-                                    title="Purrpurr Flagship Agency"
+                                    title="Purrpurr Dev"
                                     subtitle="Identidad & Estrategia"
                                     description="El origen de todo. Creación de marca, pulido de ideas, naming y arquitectura de marca absoluta."
                                     color="border-zinc-800 group-hover:border-purple-500/30"

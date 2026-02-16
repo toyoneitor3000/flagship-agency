@@ -126,7 +126,7 @@ const Terminal = () => {
           <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
           <div className="w-3 h-3 rounded-full bg-green-500/50" />
         </div>
-        <div className="text-[#8f69ff]/50 text-xs">root@flagship-server: ~</div>
+        <div className="text-[#8f69ff]/50 text-xs">root@purrpurr-dev: ~</div>
       </div>
 
       {/* Code Content */}

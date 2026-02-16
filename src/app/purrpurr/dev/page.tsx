@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Building2, Sparkles, Zap, Shield, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function PurrpurrFlagshipPage() {
+export default function PurrpurrDevPage() {
     return (
         <div className="min-h-screen bg-zinc-950 text-white font-sans selection:bg-purple-500/30">
 
@@ -35,7 +35,7 @@ export default function PurrpurrFlagshipPage() {
                             className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 leading-[0.85]"
                         >
                             PURRPURR <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-300 to-zinc-600 italic pr-6 inline-block">FLAGSHIP</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-300 to-zinc-600 italic pr-6 inline-block">DEV</span>
                         </motion.h1>
 
                         <motion.p
@@ -81,7 +81,7 @@ export default function PurrpurrFlagshipPage() {
                                     <div className="absolute -inset-10 bg-purple-500/20 blur-[100px] rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
                                     <div className="aspect-square bg-black/60 border border-white/10 rounded-[3rem] flex items-center justify-center relative overflow-hidden backdrop-blur-xl shadow-2xl">
                                         <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                                        <span className="text-[12rem] font-bold text-white/5 font-display select-none group-hover:text-purple-500/10 transition-all duration-700 scale-90 group-hover:scale-100">PF</span>
+                                        <span className="text-[12rem] font-bold text-white/5 font-display select-none group-hover:text-purple-500/10 transition-all duration-700 scale-90 group-hover:scale-100">PD</span>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@ export default function PurrpurrFlagshipPage() {
                         <div className="relative z-10 max-w-4xl mx-auto px-6">
                             <h2 className="text-5xl md:text-7xl font-bold mb-10 tracking-tighter">¿Listo para definir <br />tu propia era?</h2>
                             <p className="text-zinc-400 text-lg mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-                                Únete a la arquitectura que está redefiniendo el estándar digital. Tu marca merece ser la Flagship de su industria.
+                                Únete a la arquitectura que está redefiniendo el estándar digital. Tu marca merece ser la Purrpurr Dev de su industria.
                             </p>
                             <Link
                                 href="#invitation"

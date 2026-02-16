@@ -195,7 +195,7 @@ export default function PriceCalculator() {
     const [volumeDiscountedPrice, setVolumeDiscountedPrice] = useState(0);
     const [discountedPrice, setDiscountedPrice] = useState(0);
 
-    // Hash Logic
+    // Hash & Step Scroll Logic
     useEffect(() => {
         const handleHashChange = () => {
             if (window.location.hash === '#cubreplacas') {
@@ -206,14 +206,16 @@ export default function PriceCalculator() {
                 if (calculatorSection) {
                     calculatorSection.scrollIntoView({ behavior: 'smooth' });
                 }
-            } else if (window.location.hash === '#calculator') {
-                // Reset flow
             }
         };
+
+        // Note: Section positioning is handled by useFullPageScroll hook.
+        // No internal auto-scroll needed here.
+
         handleHashChange();
         window.addEventListener('hashchange', handleHashChange);
         return () => window.removeEventListener('hashchange', handleHashChange);
-    }, []);
+    }, [currentStep]);
 
     // Enforce min size when cut type changes
     useEffect(() => {
@@ -288,7 +290,7 @@ export default function PriceCalculator() {
     // Initial Screen (Step 0)
     if (currentStep === 0) {
         return (
-            <section id="cotizador" className="w-full relative min-h-dvh flex flex-col justify-center bg-brand-black overflow-hidden py-8 md:py-16 scroll-mt-0">
+            <section id="cotizador" className="w-full relative min-h-dvh flex flex-col justify-center bg-brand-black overflow-hidden py-12 md:py-20">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
 
                 <div className="container mx-auto px-4 relative z-10 w-full max-w-4xl">
@@ -304,12 +306,12 @@ export default function PriceCalculator() {
                             {!hasDesign && hasDesign !== false && (
                                 <div className="text-center space-y-4 sm:space-y-8">
                                     <h3 className="text-white font-bold text-lg sm:text-3xl">¿Tienes el diseño listo?</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto w-full">
-                                        <button onClick={() => setHasDesign(true)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all group">
+                                    <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-w-2xl mx-auto w-full">
+                                        <button onClick={() => setHasDesign(true)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-full">
                                             <Check className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-white group-hover:text-brand-yellow" />
                                             <span className="text-white font-black text-xs sm:text-2xl block">SÍ, LO TENGO</span>
                                         </button>
-                                        <button onClick={() => setHasDesign(false)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-blue-500/10 hover:border-blue-500 transition-all group">
+                                        <button onClick={() => setHasDesign(false)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-blue-500/10 hover:border-blue-500 transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-full">
                                             <Calculator className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-white group-hover:text-blue-500" />
                                             <span className="text-white font-black text-xs sm:text-2xl block">NO LO TENGO</span>
                                         </button>
@@ -333,7 +335,7 @@ export default function PriceCalculator() {
                             {hasDesign === true && !projectType && (
                                 <div className="text-center space-y-6">
                                     <h3 className="text-white font-bold text-lg sm:text-2xl">¿Qué buscas hoy?</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto w-full">
+                                    <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-6 max-w-4xl mx-auto w-full">
                                         {[
                                             {
                                                 id: 'printed' as const,
@@ -373,7 +375,7 @@ export default function PriceCalculator() {
                                                         setCurrentStep(option.step!);
                                                     }
                                                 }}
-                                                className={`relative overflow-hidden rounded-[2rem] border border-white/10 ${option.border} transition-all duration-300 group aspect-square flex flex-col items-center justify-center p-4`}
+                                                className={`relative overflow-hidden rounded-[1.5rem] border border-white/10 ${option.border} transition-all duration-300 group w-[calc(50%-0.5rem)] sm:w-full aspect-square flex flex-col items-center justify-center p-3 sm:p-4`}
                                             >
                                                 <img
                                                     src={option.img}
@@ -382,8 +384,8 @@ export default function PriceCalculator() {
                                                 />
                                                 <div className={`absolute inset-0 bg-gradient-to-b ${option.color}`} />
                                                 <div className="relative z-10 flex flex-col items-center text-center px-2">
-                                                    <span className="text-white font-black text-sm sm:text-base tracking-tighter leading-none italic uppercase mb-1">{option.name}</span>
-                                                    <span className="text-white/70 text-[9px] sm:text-[10px] font-medium tracking-wide leading-tight">{option.desc}</span>
+                                                    <span className="text-white font-black text-base sm:text-base tracking-tighter leading-none italic uppercase mb-1">{option.name}</span>
+                                                    <span className="text-white/70 text-[11px] sm:text-[10px] font-medium tracking-wide leading-tight">{option.desc}</span>
                                                 </div>
                                             </button>
                                         ))}
@@ -407,22 +409,35 @@ export default function PriceCalculator() {
     const progress = (currentStep / 3) * 100;
 
     return (
-        <section id="cotizador" className="w-full relative py-4 md:py-6 scroll-mt-0">
+        <section id="cotizador" className="w-full relative px-0 bg-brand-black">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-6 md:pt-10 pb-20">
+                {/* Progress Bar */}
+                <div className="max-w-4xl mx-auto mb-8">
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-[10px] font-black text-brand-yellow uppercase tracking-widest italic">Paso {currentStep} de 3</span>
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{Math.round(progress)}%</span>
+                    </div>
+                    <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden border border-white/5">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progress}%` }}
+                            className="bg-brand-yellow h-full shadow-[0_0_10px_rgba(230,194,0,0.5)]"
+                        />
+                    </div>
+                </div>
 
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-                <div className="text-center mb-4 md:mb-6">
-                    <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-1">
-                        {projectType === 'cubreplacas' ? <>Cotiza tus <span className="text-red-500">Cubreplacas</span></> : <>Cotiza tus <span className="text-brand-yellow">Stickers</span></>}
+                <div className="text-center mb-6 md:mb-10">
+                    <h2 className="text-2xl md:text-5xl font-black text-white uppercase tracking-tighter mb-1 leading-none">
+                        {projectType === 'cubreplacas' ? <>Cotiza tus <span className="text-red-500 italic">Cubreplacas</span></> : <>Cotiza tus <span className="text-brand-yellow italic">Stickers</span></>}
                     </h2>
-                    <p className="text-gray-400 text-xs md:text-sm font-medium max-w-2xl mx-auto">
+                    <p className="text-gray-400 text-[11px] md:text-xs font-medium max-w-2xl mx-auto uppercase tracking-wider">
                         Personaliza tu pedido paso a paso para obtener un presupuesto exacto al instante.
                     </p>
                 </div>
 
-                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl mx-auto' : 'lg:grid-cols-4'} gap-4 md:gap-6 ${currentStep === 3 ? 'items-stretch' : 'items-start'}`}>
+                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl mx-auto' : 'lg:grid-cols-4'} gap-4 md:gap-8 ${currentStep === 3 ? 'items-stretch' : 'items-start'}`}>
                     {/* Main Content Area */}
-                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-2 lg:order-1`}>
+                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-1`}>
                         <div className="bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden h-full">
                             <AnimatePresence mode="wait">
                                 {currentStep === 1 && (
@@ -449,12 +464,12 @@ export default function PriceCalculator() {
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                                            <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-4">
                                                 {CUT_TYPES.map(c => (
                                                     <button
                                                         key={c.id}
                                                         onClick={() => setCutType(c)}
-                                                        className={`relative overflow-hidden rounded-[1.5rem] border transition-all duration-300 group aspect-[4/3] flex flex-col items-center justify-end p-4 pb-5 text-center ${cutType.id === c.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
+                                                        className={`relative overflow-hidden rounded-[1.25rem] border transition-all duration-300 group w-[calc(50%-0.5rem)] sm:w-full aspect-square sm:aspect-[4/3] flex flex-col items-center justify-end p-3 sm:p-4 pb-4 sm:pb-5 text-center ${cutType.id === c.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
                                                     >
                                                         {/* Background Image */}
                                                         <img
@@ -467,11 +482,11 @@ export default function PriceCalculator() {
 
                                                         {/* Content */}
                                                         <div className="relative z-10 w-full px-2">
-                                                            <div className={`w-6 h-6 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
-                                                                <CheckCircle2 size={12} />
+                                                            <div className={`w-7 h-7 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
+                                                                <CheckCircle2 size={14} />
                                                             </div>
-                                                            <span className="text-white font-black text-xs sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{c.name}</span>
-                                                            <p className="text-white/60 text-[10px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{c.description}</p>
+                                                            <span className="text-white font-black text-sm sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{c.name}</span>
+                                                            <p className="text-white/60 text-[11px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{c.description}</p>
                                                         </div>
                                                     </button>
                                                 ))}
@@ -524,12 +539,12 @@ export default function PriceCalculator() {
                                                     </div>
                                                 )}
 
-                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+                                                <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-3">
                                                     {MATERIALS_CONFIG.map(m => (
                                                         <button
                                                             key={m.id}
                                                             onClick={() => setMaterial(m)}
-                                                            className={`relative overflow-hidden rounded-[1.5rem] border transition-all duration-300 group aspect-[4/3] flex flex-col items-center justify-end p-4 pb-5 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
+                                                            className={`relative overflow-hidden rounded-[1.25rem] border transition-all duration-300 group w-[calc(50%-0.5rem)] sm:w-full aspect-square sm:aspect-[4/3] flex flex-col items-center justify-end p-3 sm:p-4 pb-4 sm:pb-5 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
                                                         >
                                                             {/* Background Image */}
                                                             <img
@@ -542,11 +557,11 @@ export default function PriceCalculator() {
 
                                                             {/* Content */}
                                                             <div className="relative z-10 w-full px-2">
-                                                                <div className={`w-6 h-6 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
-                                                                    <CheckCircle2 size={12} />
+                                                                <div className={`w-7 h-7 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
+                                                                    <CheckCircle2 size={14} />
                                                                 </div>
-                                                                <span className="text-white font-black text-xs sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{m.name}</span>
-                                                                <p className="text-white/60 text-[10px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{m.description}</p>
+                                                                <span className="text-white font-black text-sm sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{m.name}</span>
+                                                                <p className="text-white/60 text-[11px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{m.description}</p>
                                                             </div>
                                                         </button>
                                                     ))}
@@ -704,7 +719,7 @@ export default function PriceCalculator() {
 
                     {/* Sidebar Summary - Only visible after initial selections */}
                     {projectType && (projectType === 'cubreplacas' || currentStep >= 2) && (
-                        <div className="lg:col-span-1 order-1 lg:order-2 h-full">
+                        <div className="lg:col-span-1 h-full order-2">
                             <div className={`bg-zinc-900/50 backdrop-blur-sm p-4 rounded-2xl border border-white/10 h-full ${currentStep !== 3 ? 'sticky top-32' : ''}`}>
                                 <div className="flex items-center gap-2 mb-3">
                                     <div className="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-white">

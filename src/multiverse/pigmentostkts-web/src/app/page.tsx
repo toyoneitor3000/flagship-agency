@@ -132,7 +132,7 @@ export default function Home() {
       </section>
 
       {/* PRICE CALCULATOR - MOVED TO SECOND SECTION */}
-      <section data-section id="calculator" data-theme="dark" className="h-screen overflow-y-auto flex items-center justify-center relative bg-brand-black">
+      <section data-section id="calculator" data-theme="dark" className="min-h-screen flex items-center justify-center relative bg-brand-black">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
         <div className="relative w-full">
           <div id="cubreplacas" className="absolute -top-32" />
