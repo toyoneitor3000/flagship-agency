@@ -1,29 +1,55 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { MagicText } from '@/components/magic/MagicText';
 
 
 export const Hero = () => {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Parallax scroll effects
   const { scrollY } = useScroll();
   const contentY = useTransform(scrollY, [0, 500], [0, -100]);
   const contentOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section className='relative min-h-screen flex items-center overflow-hidden bg-transparent'>
-      {/* Video Background Layer */}
+    <section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f0033]'>
+      {/* Background Layer */}
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-full">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="/assets/copy_BCA36671-AD77-4CA4-ABF8-82B1492F4BCC.MOV" />
-          </video>
+          {isMobile === true ? (
+            /* WebP Animated for Mobile - High Quality & Guaranteed Autoplay */
+            <img
+              src="/assets/hero-bg-mobile.webp"
+              alt="Background animation"
+              className="w-full h-full object-cover"
+            />
+          ) : isMobile === false ? (
+            /* Video for Desktop - High Quality */
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/assets/purrpurr_labs_hub_portal.png"
+              className="w-full h-full object-cover"
+            >
+              <source src="/assets/copy_BCA36671-AD77-4CA4-ABF8-82B1492F4BCC.MOV" />
+            </video>
+          ) : (
+            /* Initial state matching theme color */
+            <div className="w-full h-full bg-[#0f0033]" />
+          )}
 
           {/* Horizontal Gradient: 85% -> 20% Opacity */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/30" />
