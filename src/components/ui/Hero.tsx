@@ -28,10 +28,10 @@ export const Hero = () => {
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-full">
           {isMobile === true ? (
-            /* WebP Animated for Mobile - High Quality & Guaranteed Autoplay */
+            /* High Quality Mobile Hero (user requested hero-bg.webp) */
             <img
-              src="/assets/hero-bg-mobile.webp"
-              alt="Background animation"
+              src="/assets/hero-bg.webp"
+              alt="Purrpurr Background"
               className="w-full h-full object-cover"
             />
           ) : isMobile === false ? (
