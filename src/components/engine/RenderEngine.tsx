@@ -215,15 +215,15 @@ const DEFAULT_THEME = { color1: '#000000', color2: '#080808', color3: '#111111',
 export function RenderEngine({ buildId, slug, architecture }: { buildId: string; slug: string; architecture: ProjectDNA }) {
 
     // 1. Theme Configuration
-    const themeColors = architecture.identity.brand.themeColors
-        || ARCHETYPE_COLORS[architecture.identity.category]
+    const themeColors = architecture?.identity?.brand?.themeColors
+        || (architecture?.identity?.category ? ARCHETYPE_COLORS[architecture.identity.category] : null)
         || DEFAULT_THEME;
 
     return (
         <main className="bg-black text-white min-h-screen selection:bg-white/10 font-sans relative overflow-x-hidden">
             {/* SEO Metadata Override */}
-            <title>{architecture.identity.seo.title}</title>
-            <meta name="description" content={architecture.identity.seo.description} />
+            <title>{architecture?.identity?.seo?.title || 'Project'}</title>
+            <meta name="description" content={architecture?.identity?.seo?.description || ''} />
 
             {/* Clean Static Background */}
             <div className="fixed inset-0 z-0">
@@ -237,7 +237,7 @@ export function RenderEngine({ buildId, slug, architecture }: { buildId: string;
 
             {/* Global Navbar */}
             <nav className="fixed top-0 left-0 right-0 z-50 p-8 flex justify-between items-center bg-black/20 backdrop-blur-md ">
-                <span className="font-light text-xl tracking-[0.4em] text-white uppercase">{architecture.identity.name}</span>
+                <span className="font-light text-xl tracking-[0.4em] text-white uppercase">{architecture?.identity?.name || 'Project'}</span>
                 <div className="hidden md:flex gap-12 text-[9px] font-medium tracking-[0.5em] text-zinc-500 uppercase">
                     <span className="cursor-pointer hover:text-white transition-colors">Galería</span>
                     <span className="cursor-pointer hover:text-white transition-colors">Servicios</span>
