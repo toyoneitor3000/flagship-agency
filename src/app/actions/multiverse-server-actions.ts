@@ -1,13 +1,6 @@
 'use server';
 
-import { spawn, exec } from 'child_process';
-import { promisify } from 'util';
-import path from 'path';
-import net from 'net';
-import fs from 'fs';
-import dotenv from 'dotenv';
-
-const execAsync = promisify(exec);
+const IS_DEV = process.env.NODE_ENV === 'development';
 
 const PROJECTS_CONFIG: Record<string, { path: string; port: number; command: string }> = {
     'p-2': { // Pigmento Stickers
@@ -36,37 +29,50 @@ const PROJECTS_CONFIG: Record<string, { path: string; port: number; command: str
  * Checks if a port is currently in use (server is likely running)
  */
 export async function checkServerStatus(projectId: string): Promise<boolean> {
+    // In production, these local servers don't exist in the container context
+    if (!IS_DEV) return false;
+
     const config = PROJECTS_CONFIG[projectId];
     if (!config) return false;
 
-    return new Promise((resolve) => {
-        const client = new net.Socket();
+    try {
+        const net = (await import('net')).default || await import('net');
 
-        client.setTimeout(1000); // 1s timeout
+        return new Promise((resolve) => {
+            const client = new net.Socket();
 
-        client.on('connect', () => {
-            client.destroy();
-            resolve(true); // Port is open, server is running
+            client.setTimeout(1000); // 1s timeout
+
+            client.on('connect', () => {
+                client.destroy();
+                resolve(true); // Port is open, server is running
+            });
+
+            client.on('timeout', () => {
+                client.destroy();
+                resolve(false);
+            });
+
+            client.on('error', () => {
+                client.destroy();
+                resolve(false); // Connection refused, server is down
+            });
+
+            client.connect(config.port, 'localhost');
         });
-
-        client.on('timeout', () => {
-            client.destroy();
-            resolve(false);
-        });
-
-        client.on('error', () => {
-            client.destroy();
-            resolve(false); // Connection refused, server is down
-        });
-
-        client.connect(config.port, 'localhost');
-    });
+    } catch (e) {
+        return false;
+    }
 }
 
 /**
  * Starts the development server for a project
  */
 export async function startProjectServer(projectId: string) {
+    if (!IS_DEV) {
+        return { success: false, error: 'Server orchestration is disabled in production environment.' };
+    }
+
     const config = PROJECTS_CONFIG[projectId];
     if (!config) return { success: false, error: 'Project configuration not found.' };
 
@@ -74,12 +80,14 @@ export async function startProjectServer(projectId: string) {
     if (isRunning) return { success: true, message: 'Server is already running.' };
 
     try {
+        // Dynamic imports to prevent bundling in production
+        const { spawn } = await import('child_process');
+        const path = (await import('path')).default || await import('path');
+        const fs = (await import('fs')).default || await import('fs');
+        const dotenv = (await import('dotenv')).default || await import('dotenv');
+
         const absolutePath = path.join(process.cwd(), config.path);
         console.log(`🚀 Starting server for ${projectId} in ${absolutePath}`);
-
-        // Ensure we are using the correct command for the platform
-        const shellCmd = process.platform === 'win32' ? 'cmd.exe' : '/bin/sh';
-        const shellArgs = process.platform === 'win32' ? ['/c', config.command] : ['-c', config.command];
 
         // Load project-specific environment variables
         const envFiles = ['.env', '.env.local'];
@@ -168,10 +176,16 @@ export async function startProjectServer(projectId: string) {
  * Stops any process running on the project's port
  */
 export async function stopProjectServer(projectId: string) {
+    if (!IS_DEV) return { success: false, error: 'Disabled in production' };
+
     const config = PROJECTS_CONFIG[projectId];
     if (!config) return { success: false, error: 'Project configuration not found.' };
 
     try {
+        const { exec } = await import('child_process');
+        const promisify = (await import('util')).promisify;
+        const execAsync = promisify(exec);
+
         // Find PID by port - using a more robust approach
         console.log(`🔍 Searching for process on port ${config.port}...`);
         const { stdout } = await execAsync(`lsof -t -i :${config.port}`);
