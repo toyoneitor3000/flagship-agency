@@ -1,36 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-import { existsSync, unwatchFile } from 'fs';
 
-// Helper to find file by name recursively in src
-async function findComponentFile(dir: string, componentName: string): Promise<string | null> {
-    const entries = await fs.readdir(dir, { withFileTypes: true });
+// NOTE: fs and path are dynamically imported in POST to avoid Vercel bundling the entire filesystem.
 
-    // 1. Exact match check first in current dir
-    for (const entry of entries) {
-        if (entry.isFile()) {
-            const name = entry.name;
-            const nameNoExt = name.split('.')[0];
-            if (nameNoExt === componentName && (name.endsWith('.tsx') || name.endsWith('.ts') || name.endsWith('.jsx'))) {
-                return path.join(dir, name);
-            }
-        }
-    }
-
-    // 2. Recursive search
-    for (const entry of entries) {
-        if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.next') {
-            const result = await findComponentFile(path.join(dir, entry.name), componentName);
-            if (result) return result;
-        }
-    }
-
-    return null;
-}
 
 export async function POST(req: NextRequest) {
+    // -------------------------------------------------------------------------
+    // SECURITY & PERFORMANCE GUARD
+    // -------------------------------------------------------------------------
+    if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json({
+            success: false,
+            error: 'Source Access Disabled: This API is for local development only.'
+        }, { status: 403 });
+    }
+
     try {
+        // Dynamic imports to prevent Vercel form bundling the entire filesystem
+        const fs = (await import('fs')).promises;
+        const path = (await import('path')).default;
+
         const body = await req.json();
         const { filePath, lineNumber, lineCount = 20 } = body;
 
@@ -40,6 +28,31 @@ export async function POST(req: NextRequest) {
 
         const projectRoot = process.cwd();
         let targetPath = filePath;
+
+        // Recursive helper defined inside to access dynamic modules
+        async function findComponentFile(dir: string, componentName: string): Promise<string | null> {
+            const entries = await fs.readdir(dir, { withFileTypes: true });
+
+            // 1. Exact match check first in current dir
+            for (const entry of entries) {
+                if (entry.isFile()) {
+                    const name = entry.name;
+                    const nameNoExt = name.split('.')[0];
+                    if (nameNoExt === componentName && (name.endsWith('.tsx') || name.endsWith('.ts') || name.endsWith('.jsx'))) {
+                        return path.join(dir, name);
+                    }
+                }
+            }
+
+            // 2. Recursive search
+            for (const entry of entries) {
+                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.next') {
+                    const result = await findComponentFile(path.join(dir, entry.name), componentName);
+                    if (result) return result;
+                }
+            }
+            return null;
+        }
 
         // --- SEARCH STRATEGY ---
         if (filePath === 'SEARCH' && body.componentName) {

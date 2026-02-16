@@ -1,11 +1,7 @@
 // --- MAGIC SERVER STORAGE v2.0 ---
 // Handles persistence across Local Dev (Filesystem) and Production (Vercel KV / Memory Fallback)
 
-import fs from 'fs/promises';
-import path from 'path';
 import contentData from '../data/content.json';
-
-const CONTENT_PATH = path.join(process.cwd(), 'src/data/content.json');
 
 // Memory Cache for Production Fallback (volatile, but prevents crashes)
 let MEMORY_CACHE: any = null;
@@ -50,6 +46,11 @@ export async function updateMagicContent(pathKey: string, value: string) {
 
         // 3. Persist based on Environment
         if (IS_DEV) {
+            // Lazy load fs/path ONLY in development to avoid Vercel bundling issues
+            const fs = (await import('fs')).promises;
+            const path = (await import('path')).default;
+            const CONTENT_PATH = path.join(process.cwd(), 'src/data/content.json');
+
             // Local formatting for dev experience
             await fs.writeFile(CONTENT_PATH, JSON.stringify(content, null, 2));
         } else {
