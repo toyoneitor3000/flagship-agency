@@ -23,7 +23,7 @@ export const Hero = () => {
   const contentOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f0033]'>
+    <section className='relative min-h-[100dvh] flex items-center overflow-hidden bg-[#0f0033]'>
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-full">

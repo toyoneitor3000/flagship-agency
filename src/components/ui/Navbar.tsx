@@ -102,7 +102,7 @@ export const Navbar = () => {
         transition={{ duration: 0.6 }}
         className={cn(
           'fixed top-0 w-full z-[100] transition-all duration-300 border-b flex items-center',
-          'h-14', // Reduced height for sleeker look
+          'h-[calc(3.5rem+env(safe-area-inset-top))] pt-[env(safe-area-inset-top)]', // Dynamic adaptation for all iPhone models (11, 12, 13, 14, 15, 17...)
           // Premium Glass properties
           'bg-zinc-950/30 dark:bg-zinc-950/50', // Darker glass effect for better contrast and match with notifications
           'backdrop-blur-xl', // More intense blur for premium feel
