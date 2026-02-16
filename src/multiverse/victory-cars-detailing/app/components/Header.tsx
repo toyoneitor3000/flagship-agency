@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Menu, X } from 'lucide-react';
@@ -14,6 +14,17 @@ const navLinks = [
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Cerrar menú si la pantalla se agranda a escritorio
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1280) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
 
 
@@ -51,8 +62,8 @@ const Header = () => {
           {/* Contenido del navbar */}
           <div className="container mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-5 relative">
 
-            {/* ===== VERSIÓN MÓVIL Y TABLET (< 1024px) ===== */}
-            <div className="lg:hidden flex items-center justify-between">
+            {/* ===== VERSIÓN MÓVIL Y TABLET (< 1280px) ===== */}
+            <div className="xl:hidden flex items-center justify-between">
               {/* Espaciador invisible (para centrar el logo) */}
               <div className="w-10" />
 
@@ -86,10 +97,10 @@ const Header = () => {
               </button>
             </div>
 
-            {/* ===== VERSIÓN ESCRITORIO (>= 1024px) ===== */}
-            <div className="hidden lg:flex items-center justify-between">
+            {/* ===== VERSIÓN ESCRITORIO (>= 1280px) ===== */}
+            <div className="hidden xl:flex items-center justify-between">
               {/* Páginas a la IZQUIERDA */}
-              <nav className="flex items-center gap-10">
+              <nav className="flex items-center gap-6">
                 {navLinks.map(link => (
                   <Link
                     key={link.href}
@@ -133,7 +144,7 @@ const Header = () => {
 
       {/* ===== MENÚ MÓVIL FULLSCREEN ===== */}
       <div
-        className={`lg:hidden fixed inset-0 z-[60] transition-all duration-500 ease-in-out ${isMobileMenuOpen
+        className={`xl:hidden fixed inset-0 z-[60] transition-all duration-500 ease-in-out ${isMobileMenuOpen
           ? 'opacity-100 visible'
           : 'opacity-0 invisible'
           }`}

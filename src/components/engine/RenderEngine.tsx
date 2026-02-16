@@ -245,15 +245,20 @@ export function RenderEngine({ buildId, slug, architecture }: { buildId: string;
                 </div>
             </nav>
 
+            {/* SECTIONS RENDERING */}
             <div className="flex flex-col relative z-10 pt-20">
-                {architecture.sections?.map((section) => {
+                {(architecture?.sections || []).map((section, idx) => {
+                    if (!section) return null;
+                    const sectionId = section.id || `section-${idx}`;
+                    const content = section.content || {};
+
                     switch (section.type) {
-                        case 'HERO': return <HeroSection key={section.id} content={section.content} identity={architecture.identity} />;
-                        case 'AUTHORITY': return <AuthoritySection key={section.id} content={section.content} />;
-                        case 'VALUE_PROP': return <ValuePropSection key={section.id} content={section.content} />;
-                        case 'DEMO': return <DemoSection key={section.id} content={section.content} />;
-                        case 'PRICING': return <PricingSection key={section.id} content={section.content} />;
-                        case 'CONTACT': return <ContactSection key={section.id} content={section.content} />;
+                        case 'HERO': return <HeroSection key={sectionId} content={content} identity={architecture?.identity} />;
+                        case 'AUTHORITY': return <AuthoritySection key={sectionId} content={content} />;
+                        case 'VALUE_PROP': return <ValuePropSection key={sectionId} content={content} />;
+                        case 'DEMO': return <DemoSection key={sectionId} content={content} />;
+                        case 'PRICING': return <PricingSection key={sectionId} content={content} />;
+                        case 'CONTACT': return <ContactSection key={sectionId} content={content} />;
                         default: return null;
                     }
                 })}
