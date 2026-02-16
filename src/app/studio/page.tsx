@@ -100,8 +100,8 @@ export default function StudioPage() {
                             logoUrl: '',
                             fontStyle: arch.identity.brand.typography,
                             description: arch.identity.seo.description,
-                            location: arch.sections.find((s: any) => s.type === 'CONTACT')?.content.location || '',
-                            whatsapp: arch.sections.find((s: any) => s.type === 'CONTACT')?.content.whatsapp || '',
+                            location: arch.sections?.find((s: any) => s.type === 'CONTACT')?.content.location || '',
+                            whatsapp: arch.sections?.find((s: any) => s.type === 'CONTACT')?.content.whatsapp || '',
                             complexity: arch.ui.theme === 'COMMERCE_PRO' ? 'HIGH' : 'STANDARD'
                         });
 
@@ -306,8 +306,8 @@ export default function StudioPage() {
                         <div className={`flex items-center gap-2 ${stage === 'FINISHED' ? 'text-emerald-500 animate-pulse' : ''}`}>
                             <ShieldCheck className="w-3 h-3" /> security_headers.json
                         </div>
-                        <div className={`flex items-center gap-2 ${designConfig.sections.length > 0 ? 'text-indigo-400' : 'text-zinc-600'}`}>
-                            <FileJson className="w-3 h-3" /> sections_config.json ({designConfig.sections.length})
+                        <div className={`flex items-center gap-2 ${(designConfig.sections?.length || 0) > 0 ? 'text-indigo-400' : 'text-zinc-600'}`}>
+                            <FileJson className="w-3 h-3" /> sections_config.json ({designConfig.sections?.length || 0})
                         </div>
                     </div>
                 </div>
@@ -468,9 +468,9 @@ export default function StudioPage() {
                                 </p>
 
                                 {/* Active Sections Display */}
-                                {designConfig.sections.length > 0 && stage === 'FINISHED' && (
+                                {designConfig.sections?.length > 0 && stage === 'FINISHED' && (
                                     <div className="flex flex-wrap justify-center gap-2 pt-4">
-                                        {designConfig.sections.map((section, i) => (
+                                        {designConfig.sections?.map((section, i) => (
                                             <span
                                                 key={section}
                                                 className="px-3 py-1 text-[10px] font-mono rounded-full border"

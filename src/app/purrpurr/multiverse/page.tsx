@@ -28,7 +28,7 @@ interface MultiverseWorld extends MultiverseProject {
 
 const MULTIVERSE_WORLDS: MultiverseWorld[] = [
     {
-        ...MULTIVERSE_PROJECTS.find(p => p.id === 'p-1')!,
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-1') || MULTIVERSE_PROJECTS[0]),
         name: 'Purrpurr', // Renombrado de Flagship Agency a Purrpurr
         productionUrl: 'https://flagshipagency.co',
         localUrl: 'http://localhost:3002', // Este ES el proyecto actual
@@ -38,7 +38,7 @@ const MULTIVERSE_WORLDS: MultiverseWorld[] = [
         isSelf: true, // Marcador de que este es el proyecto actual
     },
     {
-        ...MULTIVERSE_PROJECTS.find(p => p.id === 'p-2')!,
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-2') || MULTIVERSE_PROJECTS[0]),
         productionUrl: 'https://pigmentostkts.com',
         localUrl: 'http://localhost:3001',
         framework: 'Next.js 15',
@@ -46,7 +46,7 @@ const MULTIVERSE_WORLDS: MultiverseWorld[] = [
         buildingLevels: 8,
     },
     {
-        ...MULTIVERSE_PROJECTS.find(p => p.id === 'p-3')!,
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-3') || MULTIVERSE_PROJECTS[0]),
         productionUrl: 'https://victorycarsdetailing.com',
         localUrl: 'http://localhost:3003',
         framework: 'Next.js 15',
@@ -54,7 +54,7 @@ const MULTIVERSE_WORLDS: MultiverseWorld[] = [
         buildingLevels: 6,
     },
     {
-        ...MULTIVERSE_PROJECTS.find(p => p.id === 'p-4')!,
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-4') || MULTIVERSE_PROJECTS[0]),
         productionUrl: 'https://speedlightculture.com',
         localUrl: 'http://localhost:3000',
         framework: 'Next.js 15',
@@ -62,7 +62,7 @@ const MULTIVERSE_WORLDS: MultiverseWorld[] = [
         buildingLevels: 4,
     },
     {
-        ...MULTIVERSE_PROJECTS.find(p => p.id === 'p-5')!,
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-5') || MULTIVERSE_PROJECTS[0]),
         productionUrl: 'https://financars.co',
         localUrl: 'http://localhost:3005',
         framework: 'Next.js 15',

@@ -347,7 +347,7 @@ export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: De
                 {/* 🎨 COLORES */}
                 <Tab id="colors" icon={Palette} label="Paleta de Colores">
                     <div className="grid grid-cols-4 gap-2">
-                        {tools.colorPalettes.map((palette) => (
+                        {tools.colorPalettes?.map((palette) => (
                             <button
                                 key={palette.id}
                                 onClick={() => handleColorPresetSelect(palette)}
@@ -399,7 +399,7 @@ export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: De
                 {/* 📐 LAYOUT */}
                 <Tab id="layout" icon={Layout} label="Estructura">
                     <div className="grid grid-cols-2 gap-2">
-                        {tools.layoutOptions.map((layout) => {
+                        {tools.layoutOptions?.map((layout) => {
                             const IconComponent = getIcon(layout.icon);
                             return (
                                 <button
@@ -425,10 +425,10 @@ export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: De
                         Arrastra para reordenar • Click para activar/desactivar
                     </p>
                     <div className="space-y-2">
-                        {tools.sectionTemplates.map((section) => {
+                        {tools.sectionTemplates?.map((section) => {
                             const sectionId = section.slug.toUpperCase();
-                            const isActive = config.sections.includes(sectionId);
-                            const orderIndex = config.sections.indexOf(sectionId);
+                            const isActive = config.sections?.includes(sectionId);
+                            const orderIndex = config.sections?.indexOf(sectionId);
                             const IconComponent = getIcon(section.icon);
 
                             return (
@@ -497,7 +497,7 @@ export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: De
                         <div className="pt-3 border-t border-white/10">
                             <p className="text-[10px] text-zinc-500 font-mono mb-2">PATRÓN GENERATIVO:</p>
                             <div className="grid grid-cols-3 gap-1.5">
-                                {tools.generativePatterns.map((pattern) => (
+                                {tools.generativePatterns?.map((pattern) => (
                                     <button
                                         key={pattern.id}
                                         onClick={() => handlePatternSelect(pattern)}
@@ -517,7 +517,7 @@ export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: De
                         <div className="pt-3 border-t border-white/10">
                             <p className="text-[10px] text-zinc-500 font-mono mb-2">CAPAS FX:</p>
                             <div className="flex flex-wrap gap-1.5">
-                                {tools.visualEffects.map((effect) => {
+                                {tools.visualEffects?.map((effect) => {
                                     const isActive = config.effects.overlays?.includes(effect.slug);
                                     return (
                                         <button
@@ -564,7 +564,7 @@ export const DesignLab = ({ config, onConfigChange, onLog, hasPower = true }: De
                             COMBINACIONES RECOMENDADAS:
                         </p>
                         <div className="space-y-2">
-                            {tools.fontPairings.map((pairing) => {
+                            {tools.fontPairings?.map((pairing) => {
                                 const isActive = config.typography?.display === pairing.displayFont;
                                 return (
                                     <button
