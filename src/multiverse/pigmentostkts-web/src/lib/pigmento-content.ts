@@ -23,7 +23,7 @@ export const PIGMENTO_DATA = {
       id: "stickers-custom",
       title: "Stickers Personalizados",
       description: "Vinilo blanco, transparente, tornasol y de corte.",
-      priceStart: "$75,000/m² (Speedlight)",
+      priceStart: "$135,000/m²",
       icon: "Sticker"
     },
     {
@@ -84,6 +84,18 @@ export const PIGMENTO_DATA = {
     {
       q: "¿Política de devoluciones?",
       a: "48 horas para reportar defectos. Reimpresión sin costo si es error nuestro."
+    },
+    {
+      q: "¿De qué material son los cubreplacas?",
+      a: "Base en acrílico y vinilo de alta resistencia. Disponibles en Negro, Fibra de Carbono, PPF o diseños personalizados."
+    },
+    {
+      q: "¿Son legales para transitar?",
+      a: "Sí, nuestros diseños aseguran que la placa sea visible y cumpla con la normativa, protegiéndola del desgaste."
+    },
+    {
+      q: "¿Qué precio tienen los cubreplacas?",
+      a: "Desde $55.000 el par. El precio varía según el material (Fibra, PPF) y el acabado que elijas."
     }
   ]
 };

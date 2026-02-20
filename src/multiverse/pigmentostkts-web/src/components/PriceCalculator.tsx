@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calculator, ArrowRight, Check, AlertCircle, Plus, Minus, Shield, CheckCircle2, Palette } from "lucide-react";
+import { Calculator, ArrowRight, Check, AlertCircle, Plus, Minus, Shield, CheckCircle2, Palette, Scissors, Sparkles, Briefcase, Zap, Info } from "lucide-react";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -58,7 +58,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Efecto iridiscente que cambia de color según la luz.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 190900, cc_laminate: 195900, hybrid_laminate: 205000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
         imageSrc: '/materials/tornasol.png',
         finishOptions: true,
         requiresLaminate: true,
@@ -70,20 +70,32 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Acabado espejo dorado brillante. Lujo y distinción.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 195000, cc_laminate: 200000, hybrid_laminate: 210000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
         imageSrc: '/materials/metalizado-dorado.png',
         finishOptions: true,
         requiresLaminate: true,
         hasWidthOptions: true
     },
     {
-        id: 'metalizado-plateado',
-        name: 'Vinilo Metalizado Plateado',
+        id: 'metalizado-plateado-espejo',
+        name: 'Vinilo Metalizado Plateado Espejo',
         description: 'Acabado espejo plateado cromado.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 195000, cc_laminate: 200000, hybrid_laminate: 210000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
-        imageSrc: '/materials/metalizado-plateado.png',
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        imageSrc: '/materials/metalizado-cromo.png',
+        finishOptions: true,
+        requiresLaminate: true,
+        hasWidthOptions: true
+    },
+    {
+        id: 'plateado-cepillado',
+        name: 'Plateado Cepillado Brush',
+        description: 'Acabado cepillado con textura metálica.',
+        sheetSize: { width: 120, height: 100 },
+        alternativeSheetSize: { width: 60, height: 100 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        imageSrc: '/materials/metalizado-brush.png',
         finishOptions: true,
         requiresLaminate: true,
         hasWidthOptions: true
@@ -167,6 +179,7 @@ export default function PriceCalculator() {
     const [hasDesign, setHasDesign] = useState<boolean | null>(null);
     const [projectType, setProjectType] = useState<'printed' | 'cut' | 'cubreplacas' | null>(null);
     const [designDescription, setDesignDescription] = useState("");
+    const [designTier, setDesignTier] = useState<'sticker' | 'vector' | 'logo_basic' | 'logo_pro'>('sticker');
 
     // Cubreplacas States
     const [cubreplacasBase, setCubreplacasBase] = useState<'negro' | 'ppf' | 'fibra' | 'especial' | 'impreso'>('negro');
@@ -207,6 +220,34 @@ export default function PriceCalculator() {
                 if (calculatorSection) {
                     calculatorSection.scrollIntoView({ behavior: 'smooth' });
                 }
+            } else if (window.location.hash === '#cotizar-diseno') {
+                setHasDesign(false); // Mode: No Design (Service)
+                setProjectType(null);
+                const calculatorSection = document.getElementById('cotizador');
+                if (calculatorSection) {
+                    calculatorSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (window.location.hash.startsWith('#design-')) {
+                const tier = window.location.hash.replace('#design-', '') as 'sticker' | 'vector' | 'logo_basic' | 'logo_pro';
+                if (['sticker', 'vector', 'logo_basic', 'logo_pro'].includes(tier)) {
+                    setHasDesign(false);
+                    setProjectType(null);
+                    setDesignTier(tier);
+                    setCurrentStep(0);
+                    const calculatorSection = document.getElementById('cotizador');
+                    if (calculatorSection) {
+                        calculatorSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            } else if (window.location.hash === '#calculator' || window.location.hash === '#cotizador') {
+                // Reset to initial state for generic links
+                setHasDesign(null);
+                setProjectType(null);
+                setCurrentStep(0);
+                const calculatorSection = document.getElementById('cotizador');
+                if (calculatorSection) {
+                    calculatorSection.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         };
 
@@ -216,7 +257,7 @@ export default function PriceCalculator() {
         handleHashChange();
         window.addEventListener('hashchange', handleHashChange);
         return () => window.removeEventListener('hashchange', handleHashChange);
-    }, [currentStep]);
+    }, []);
 
     // Enforce min size when cut type changes
     useEffect(() => {
@@ -291,28 +332,28 @@ export default function PriceCalculator() {
     // Initial Screen (Step 0)
     if (currentStep === 0) {
         return (
-            <section id="cotizador" className="w-full relative min-h-dvh flex flex-col justify-center bg-brand-black overflow-hidden py-12 md:py-20">
-                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+            <section id="cotizador" className="w-full h-full relative flex flex-col justify-center items-center bg-transparent overflow-hidden px-4">
+                {/* Background moved to parent page */}
 
-                <div className="container mx-auto px-4 relative z-10 w-full max-w-4xl">
-                    <div className="text-center mb-8 md:mb-12">
-                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                <div className="w-full max-w-5xl relative z-10 flex flex-col h-full justify-center max-h-[90dvh]">
+                    <div className="text-center mb-4 md:mb-8 shrink-0">
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-2">
                             Empecemos tu Cotización
                         </h2>
                         <div className="h-1 w-16 bg-brand-yellow mx-auto rounded-full shadow-[0_0_10px_rgba(230,194,0,0.5)]" />
                     </div>
 
-                    <div className="bg-[#1a1a1a]/80 backdrop-blur-xl rounded-[2.5rem] border border-white/5 p-6 sm:p-12 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative flex flex-col justify-center overflow-hidden min-h-[400px]">
-                        <div className="space-y-4 sm:space-y-8 flex-grow flex flex-col justify-center">
+                    <div className="bg-[#1a1a1a]/90 backdrop-blur-xl rounded-[2rem] border border-white/5 p-4 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative flex flex-col justify-center overflow-auto max-h-full shrink-1">
+                        <div className="space-y-4 flex-grow flex flex-col justify-center">
                             {!hasDesign && hasDesign !== false && (
                                 <div className="text-center space-y-4 sm:space-y-8">
                                     <h3 className="text-white font-bold text-lg sm:text-3xl">¿Tienes el diseño listo?</h3>
                                     <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-w-2xl mx-auto w-full">
-                                        <button onClick={() => setHasDesign(true)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-full">
+                                        <button onClick={() => setHasDesign(true)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.75rem)]">
                                             <Check className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-white group-hover:text-brand-yellow" />
                                             <span className="text-white font-black text-xs sm:text-2xl block">SÍ, LO TENGO</span>
                                         </button>
-                                        <button onClick={() => setHasDesign(false)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-blue-500/10 hover:border-blue-500 transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-full">
+                                        <button onClick={() => setHasDesign(false)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-blue-500/10 hover:border-blue-500 transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.75rem)]">
                                             <Calculator className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-white group-hover:text-blue-500" />
                                             <span className="text-white font-black text-xs sm:text-2xl block">NO LO TENGO</span>
                                         </button>
@@ -321,65 +362,217 @@ export default function PriceCalculator() {
                             )}
 
                             {hasDesign === false && (
-                                <div className="text-center space-y-6 animate-in fade-in zoom-in duration-300">
-                                    <div className="space-y-2">
-                                        <h3 className="text-white font-bold text-2xl sm:text-3xl">¡Te ayudamos a diseñar!</h3>
-                                        <p className="text-gray-300 text-sm sm:text-base max-w-md mx-auto">
-                                            Nuestro equipo de diseñadores profesionales creará algo único para ti.
-                                            <span className="block text-brand-yellow font-bold mt-1">Costo del servicio: $75,000 COP</span>
+                                <div className="space-y-2 animate-in fade-in zoom-in duration-300 w-full">
+                                    <div className="text-center space-y-1">
+                                        <h3 className="text-white font-bold text-xl sm:text-2xl">Estudio de Diseño</h3>
+                                        <p className="text-gray-400 text-xs max-w-lg mx-auto">
+                                            Elige el nivel de intervención que necesita tu marca.
                                         </p>
                                     </div>
 
-                                    <div className="max-w-md mx-auto space-y-4 bg-white/5 p-6 rounded-3xl border border-white/5">
-                                        <div className="text-left space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest pl-1">Cuéntanos tu idea</label>
+                                    {/* Design Tiers */}
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-5xl mx-auto">
+                                        {/* Tier 1: Idea (Sticker) */}
+                                        <button
+                                            onClick={() => setDesignTier('sticker')}
+                                            className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group h-full flex flex-col justify-between ${designTier === 'sticker' ? 'border-pink-500 bg-pink-500/10 ring-1 ring-pink-500' : 'border-white/10 bg-white/5 hover:border-pink-500/30'}`}
+                                        >
+                                            <div className="relative z-10 w-full">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className={`p-1.5 rounded-lg ${designTier === 'sticker' ? 'bg-pink-500 text-white' : 'bg-white/10 text-white'}`}>
+                                                        <Sparkles size={14} />
+                                                    </div>
+                                                    <span className="text-xs font-black text-pink-400">$35k</span>
+                                                </div>
+                                                <h4 className="text-white font-bold text-xs mb-1 line-clamp-1">Sticker</h4>
+                                                <p className="text-gray-400 text-[9px] leading-tight line-clamp-2">
+                                                    Ideas simples. Personajes, frases.
+                                                </p>
+                                            </div>
+                                        </button>
+
+                                        {/* Tier 2: Vector (Fix) */}
+                                        <button
+                                            onClick={() => setDesignTier('vector')}
+                                            className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group h-full flex flex-col justify-between ${designTier === 'vector' ? 'border-brand-yellow bg-brand-yellow/10 ring-1 ring-brand-yellow' : 'border-white/10 bg-white/5 hover:border-brand-yellow/30'}`}
+                                        >
+                                            <div className="relative z-10 w-full">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className={`p-1.5 rounded-lg ${designTier === 'vector' ? 'bg-brand-yellow text-black' : 'bg-white/10 text-white'}`}>
+                                                        <Scissors size={14} />
+                                                    </div>
+                                                    <span className="text-xs font-black text-brand-yellow">$75k</span>
+                                                </div>
+                                                <h4 className="text-white font-bold text-xs mb-1 line-clamp-1">Vectorizar</h4>
+                                                <p className="text-gray-400 text-[9px] leading-tight line-clamp-2">
+                                                    Digitalizar bocetos o logos.
+                                                </p>
+                                            </div>
+                                        </button>
+
+                                        {/* Tier 3: Logo Basic */}
+                                        <button
+                                            onClick={() => setDesignTier('logo_basic')}
+                                            className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group h-full flex flex-col justify-between ${designTier === 'logo_basic' ? 'border-blue-500 bg-blue-500/10 ring-1 ring-blue-500' : 'border-white/10 bg-white/5 hover:border-blue-500/30'}`}
+                                        >
+                                            <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-bl-lg">PYME</div>
+                                            <div className="relative z-10 w-full">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className={`p-1.5 rounded-lg ${designTier === 'logo_basic' ? 'bg-blue-500 text-white' : 'bg-white/10 text-white'}`}>
+                                                        <Zap size={14} />
+                                                    </div>
+                                                    <span className="text-xs font-black text-blue-400">$250k</span>
+                                                </div>
+                                                <h4 className="text-white font-bold text-xs mb-1 line-clamp-1">Logo Sencillo</h4>
+                                                <p className="text-gray-400 text-[9px] leading-tight line-clamp-2">
+                                                    Propuesta tipográfica simple.
+                                                </p>
+                                            </div>
+                                        </button>
+
+                                        {/* Tier 4: Logo Pro */}
+                                        <button
+                                            onClick={() => setDesignTier('logo_pro')}
+                                            className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden group h-full flex flex-col justify-between ${designTier === 'logo_pro' ? 'border-purple-600 bg-purple-600/10 ring-1 ring-purple-600' : 'border-white/10 bg-white/5 hover:border-purple-600/30'}`}
+                                        >
+                                            <div className="absolute top-0 right-0 bg-purple-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-bl-lg">EMPRESA</div>
+                                            <div className="relative z-10 w-full">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className={`p-1.5 rounded-lg ${designTier === 'logo_pro' ? 'bg-purple-600 text-white' : 'bg-white/10 text-white'}`}>
+                                                        <Briefcase size={14} />
+                                                    </div>
+                                                    <span className="text-xs font-black text-purple-400">$650k</span>
+                                                </div>
+                                                <h4 className="text-white font-bold text-xs mb-1 line-clamp-1">Logo Pro</h4>
+                                                <p className="text-gray-400 text-[9px] leading-tight line-clamp-2">
+                                                    Identidad visual completa.
+                                                </p>
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    <div className="max-w-2xl mx-auto mt-2 bg-white/5 p-3 rounded-2xl border border-white/5 animate-in slide-in-from-bottom-4 duration-500">
+
+                                        {/* Features List */}
+                                        <div className="mb-3 bg-black/30 p-3 rounded-lg border border-white/5">
+                                            <h5 className="text-white font-bold text-xs mb-2 flex items-center">
+                                                <Info size={14} className="mr-1.5 text-brand-yellow" />
+                                                Lo que incluye:
+                                            </h5>
+                                            <ul className="space-y-1.5">
+                                                {designTier === 'sticker' && (
+                                                    <>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-pink-500 shrink-0" /> Diseño de 1 personaje/frase.</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-pink-500 shrink-0" /> Estilo caricatura/texto.</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-pink-500 shrink-0" /> Entrega PNG HR (No vector).</li>
+                                                    </>
+                                                )}
+                                                {designTier === 'vector' && (
+                                                    <>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-brand-yellow shrink-0" /> Redibujado manual (No auto).</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-brand-yellow shrink-0" /> Ajuste color Impresión.</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-brand-yellow shrink-0" /> Editable (.AI / .PDF).</li>
+                                                    </>
+                                                )}
+                                                {designTier === 'logo_basic' && (
+                                                    <>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-blue-400 shrink-0" /> 2 Propuestas de diseño.</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-blue-400 shrink-0" /> Concepto Único.</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-blue-400 shrink-0" /> Vectores + PNG.</li>
+                                                    </>
+                                                )}
+                                                {designTier === 'logo_pro' && (
+                                                    <>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-purple-400 shrink-0" /> Logo Maestro + Variantes.</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-purple-400 shrink-0" /> 3 Visualizaciones (Mockups).</li>
+                                                        <li className="text-[10px] text-gray-300 flex items-start"><Check size={12} className="mr-1.5 mt-0.5 text-purple-400 shrink-0" /> Kit Completo y Editables.</li>
+                                                    </>
+                                                )}
+                                            </ul>
+                                        </div>
+
+                                        <div className="text-left space-y-1">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
+                                                {designTier === 'sticker' ? 'Describe tu idea' :
+                                                    designTier === 'vector' ? 'Instrucciones' :
+                                                        'Nombre y Rubro'}
+                                            </label>
                                             <textarea
                                                 value={designDescription}
                                                 onChange={(e) => setDesignDescription(e.target.value)}
-                                                placeholder="Ej: Quiero un gato samurai comiendo pizza en el espacio..."
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:border-brand-yellow/50 focus:ring-1 focus:ring-brand-yellow/50 min-h-[120px] resize-none text-sm transition-all"
+                                                placeholder={
+                                                    designTier === 'sticker' ? "Ej: Quiero un gato gordo comiendo pizza, estilo cartoon..." :
+                                                        designTier === 'vector' ? "Ej: Redibujar este logo, cambiar el rojo por azul..." :
+                                                            "Ej: 'Burger King', venta de hamburguesas. Queremos vernos premium y rústicos..."
+                                                }
+                                                className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white placeholder-white/20 focus:outline-none focus:border-brand-yellow/50 focus:ring-1 focus:ring-brand-yellow/50 min-h-[60px] resize-none text-xs transition-all"
                                             />
                                         </div>
 
-                                        <div className="flex flex-col gap-3">
+                                        <div className="flex flex-col gap-2 mt-3">
                                             <Button
                                                 onClick={() => {
+                                                    let price = 55000;
+                                                    let name = "Vectorización";
+                                                    let desc = "Ajuste técnico";
+                                                    let features: string[] = [];
+
+                                                    if (designTier === 'sticker') {
+                                                        price = 35000;
+                                                        name = "Diseño de Sticker (Idea Simple)";
+                                                        desc = designDescription || "Diseño de personaje o idea simple";
+                                                        features = ["1 Personaje/Frase", "Entrega PNG", "Uso Personal"];
+                                                    } else if (designTier === 'vector') {
+                                                        price = 75000;
+                                                        name = "Servicio de Vectorización / Arreglo";
+                                                        desc = designDescription || "Vectorización técnica de logo/imagen";
+                                                        features = ["Redibujado Manual", "Vectores .AI/.PDF", "Ajuste Color"];
+                                                    } else if (designTier === 'logo_basic') {
+                                                        price = 250000;
+                                                        name = "Diseño de Logo Sencillo";
+                                                        desc = designDescription || "Propuesta de logo simple para emprendimiento";
+                                                        features = ["2 Propuestas", "Concepto Único", "Vectores + PNG"];
+                                                    } else if (designTier === 'logo_pro') {
+                                                        price = 650000;
+                                                        name = "Diseño de Logo Empresarial";
+                                                        desc = designDescription || "Identidad Corporativa Completa";
+                                                        features = ["Logo Maestro + Variantes", "3 Visualizaciones", "Kit Completo (BN/Neg/Pos)"];
+                                                    }
+
                                                     addItem({
-                                                        id: 999999,
-                                                        name: "Servicio de Diseño Premium",
-                                                        price: 75000,
-                                                        displayPrice: "$75.000",
+                                                        id: 900000 + price,
+                                                        name: name,
+                                                        price: price,
+                                                        displayPrice: `$${price.toLocaleString()}`,
                                                         image: "/project-types/printed-stickers.png",
                                                         category: "Servicios",
-                                                        description: designDescription || "Diseño personalizado a medida",
-                                                        features: ["Personalizado", "Alta Resolución", "Archivos Editables"],
+                                                        description: desc,
+                                                        features: features,
                                                     });
                                                     toggleCart();
                                                 }}
-                                                className="w-full bg-brand-yellow text-black hover:bg-white h-14 text-base font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(230,194,0,0.3)] hover:shadow-[0_0_30px_rgba(230,194,0,0.5)]"
+                                                className={`w-full text-white h-10 text-xs sm:text-sm font-black uppercase tracking-widest rounded-xl transition-all shadow-lg 
+                                                    ${designTier === 'logo_pro' ? 'bg-purple-600 hover:bg-purple-500 shadow-purple-500/20' :
+                                                        designTier === 'logo_basic' ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/20' :
+                                                            designTier === 'sticker' ? 'bg-pink-600 hover:bg-pink-500 shadow-pink-500/20' :
+                                                                'bg-brand-yellow text-black hover:bg-white shadow-brand-yellow/20'}`}
                                             >
-                                                AGREGAR AL CARRITO <Plus className="ml-2 w-5 h-5" />
+                                                {designTier === 'logo_pro' ? `CONTRATAR - $${(650000).toLocaleString()}` :
+                                                    designTier === 'logo_basic' ? `CONTRATAR - $${(250000).toLocaleString()}` :
+                                                        designTier === 'sticker' ? `CONTRATAR - $${(35000).toLocaleString()}` :
+                                                            `AGREGAR - $${(75000).toLocaleString()}`} <Plus className="ml-2 w-4 h-4" />
                                             </Button>
 
-                                            <div className="flex items-center justify-between px-2 pt-2">
-                                                <button onClick={() => setHasDesign(null)} className="text-gray-500 hover:text-white text-xs underline decoration-white/30 underline-offset-4">
-                                                    Volver
-                                                </button>
-                                                <a
-                                                    href={`${PIGMENTO_DATA.contact.whatsappUrl}?text=Hola! Necesito diseño y tengo dudas: ${encodeURIComponent(designDescription)}`}
-                                                    target="_blank"
-                                                    className="text-blue-400 hover:text-blue-300 text-xs font-medium flex items-center gap-1.5 transition-colors"
-                                                >
-                                                    Prefiero hablar por WhatsApp <ArrowRight size={12} />
-                                                </a>
-                                            </div>
+                                            <button onClick={() => setHasDesign(null)} className="text-gray-500 hover:text-white text-[10px] underline decoration-white/30 underline-offset-4 mx-auto pb-1">
+                                                Volver
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             )}
 
                             {hasDesign === true && !projectType && (
-                                <div className="text-center space-y-6">
+                                <div className="text-center space-y-4">
                                     <h3 className="text-white font-bold text-lg sm:text-2xl">¿Qué buscas hoy?</h3>
                                     <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-6 max-w-4xl mx-auto w-full">
                                         {[
@@ -446,20 +639,20 @@ export default function PriceCalculator() {
                                 </div>
                             )}
                         </div>
-                    </div>
-                </div>
-            </section>
+                    </div >
+                </div >
+            </section >
         );
     }
 
     const progress = (currentStep / 3) * 100;
 
     return (
-        <section id="cotizador" className="w-full relative px-0 bg-brand-black">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-6 md:pt-10 pb-20">
+        <section id="cotizador" className="w-full h-full relative flex flex-col bg-transparent overflow-hidden">
+            <div className="max-w-7xl w-full mx-auto px-2 sm:px-4 lg:px-8 relative z-10 flex flex-col h-full pt-4 md:pt-6 pb-2">
                 {/* Progress Bar */}
-                <div className="max-w-4xl mx-auto mb-8">
-                    <div className="flex justify-between items-center mb-2">
+                <div className="w-full max-w-4xl mx-auto mb-4 shrink-0">
+                    <div className="flex justify-between items-center mb-1">
                         <span className="text-[10px] font-black text-brand-yellow uppercase tracking-widest italic">Paso {currentStep} de 3</span>
                         <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{Math.round(progress)}%</span>
                     </div>
@@ -472,19 +665,19 @@ export default function PriceCalculator() {
                     </div>
                 </div>
 
-                <div className="text-center mb-6 md:mb-10">
-                    <h2 className="text-2xl md:text-5xl font-black text-white uppercase tracking-tighter mb-1 leading-none">
+                <div className="text-center mb-4 shrink-0">
+                    <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter mb-1 leading-none">
                         {projectType === 'cubreplacas' ? <>Cotiza tus <span className="text-red-500 italic">Cubreplacas</span></> : <>Cotiza tus <span className="text-brand-yellow italic">Stickers</span></>}
                     </h2>
-                    <p className="text-gray-400 text-[11px] md:text-xs font-medium max-w-2xl mx-auto uppercase tracking-wider">
-                        Personaliza tu pedido paso a paso para obtener un presupuesto exacto al instante.
+                    <p className="text-gray-400 text-[10px] md:text-xs font-medium max-w-2xl mx-auto uppercase tracking-wider hidden sm:block">
+                        Personaliza tu pedido paso a paso para obtener un presupuesto exacto.
                     </p>
                 </div>
 
-                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl mx-auto' : 'lg:grid-cols-4'} gap-4 md:gap-8 ${currentStep === 3 ? 'items-stretch' : 'items-start'}`}>
+                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl mx-auto' : 'lg:grid-cols-4'} gap-4 md:gap-6 items-start flex-grow min-h-0`}>
                     {/* Main Content Area */}
-                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-1`}>
-                        <div className="bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden h-full">
+                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-1 h-full flex flex-col`}>
+                        <div className="bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-y-auto h-auto max-h-full scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
                             <AnimatePresence mode="wait">
                                 {currentStep === 1 && (
                                     <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
@@ -585,12 +778,12 @@ export default function PriceCalculator() {
                                                     </div>
                                                 )}
 
-                                                <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-3">
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                                     {MATERIALS_CONFIG.map(m => (
                                                         <button
                                                             key={m.id}
                                                             onClick={() => setMaterial(m)}
-                                                            className={`relative overflow-hidden rounded-[1.25rem] border transition-all duration-300 group w-[calc(50%-0.5rem)] sm:w-full aspect-square sm:aspect-[4/3] flex flex-col items-center justify-end p-3 sm:p-4 pb-4 sm:pb-5 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
+                                                            className={`relative overflow-hidden rounded-[1.25rem] border transition-all duration-300 group w-full aspect-[4/3] sm:aspect-[3/2] flex flex-col items-center justify-end p-2 sm:p-3 pb-3 sm:pb-4 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
                                                         >
                                                             {/* Background Image */}
                                                             <img
@@ -658,7 +851,11 @@ export default function PriceCalculator() {
                                                                 }} className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200">
                                                                     SUBIR LOGO
                                                                 </button>
-                                                                <button onClick={() => { alert('Redirigiendo a diseño...'); window.location.href = '/#design'; }} className="text-gray-500 text-xs underline block mx-auto">No tengo logo</button>
+                                                                <button onClick={() => {
+                                                                    setHasDesign(false);
+                                                                    setProjectType(null);
+                                                                    setCurrentStep(0);
+                                                                }} className="text-gray-500 text-xs underline block mx-auto">No tengo logo</button>
                                                             </>
                                                         )}
                                                     </div>
@@ -704,7 +901,11 @@ export default function PriceCalculator() {
                                                                     }} className="w-full py-2.5 bg-white text-black font-bold rounded-lg hover:bg-gray-200 text-xs">
                                                                         SUBIR DISEÑO
                                                                     </button>
-                                                                    <button onClick={() => { window.location.href = '/#design'; }} className="text-gray-500 text-[10px] underline block mx-auto">No tengo diseño</button>
+                                                                    <button onClick={() => {
+                                                                        setHasDesign(false);
+                                                                        setProjectType(null);
+                                                                        setCurrentStep(0);
+                                                                    }} className="text-gray-500 text-[10px] underline block mx-auto">No tengo diseño</button>
                                                                 </>
                                                             )}
                                                         </div>
@@ -766,7 +967,7 @@ export default function PriceCalculator() {
                     {/* Sidebar Summary - Only visible after initial selections */}
                     {projectType && (projectType === 'cubreplacas' || currentStep >= 2) && (
                         <div className="lg:col-span-1 h-full order-2">
-                            <div className={`bg-zinc-900/50 backdrop-blur-sm p-4 rounded-2xl border border-white/10 h-full ${currentStep !== 3 ? 'sticky top-32' : ''}`}>
+                            <div className={`bg-zinc-900/50 backdrop-blur-sm p-4 rounded-2xl border border-white/10 h-auto max-h-full ${currentStep !== 3 ? 'sticky top-32' : ''}`}>
                                 <div className="flex items-center gap-2 mb-3">
                                     <div className="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-white">
                                         <Calculator size={14} />

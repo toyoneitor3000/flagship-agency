@@ -47,7 +47,18 @@ export default function Preloader() {
                 setTimeout(() => {
                     setIsLoading(false);
                     document.body.style.overflow = '';
-                    window.scrollTo(0, 0);
+
+                    if (!window.location.hash) {
+                        window.scrollTo(0, 0);
+                    } else {
+                        // Re-trigger hash scroll after preloader
+                        const id = window.location.hash.substring(1);
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+
                     setPreloaderDone();
                 }, 300);
             }

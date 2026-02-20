@@ -66,6 +66,22 @@ export function useFullPageScroll(
             currentIndex.current = active;
         };
 
+        // Handle initial hash navigation
+        if (window.location.hash) {
+            const id = window.location.hash.substring(1);
+            const targetSection = document.getElementById(id);
+            if (targetSection) {
+                // Find index of section
+                const allSections = Array.from(document.querySelectorAll(sectionSelector));
+                const index = allSections.indexOf(targetSection);
+                if (index !== -1) {
+                    currentIndex.current = index;
+                    // Small delay to ensure layout is ready
+                    setTimeout(() => scrollToSection(index), 100);
+                }
+            }
+        }
+
         /**
          * Check if the current section is TALLER than the viewport
          * and whether the user is at or near top/bottom edges.

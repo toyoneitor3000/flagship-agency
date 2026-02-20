@@ -45,21 +45,19 @@ function AnimatedStat({ value, label, suffix = "", icon, delay = 0 }: StatProps)
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: delay / 1000 }}
-            className="text-center group"
+            className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-brand-yellow/30 transition-all duration-300 group"
         >
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-brand-black/10 rounded-2xl mb-4 group-hover:bg-brand-black group-hover:scale-110 transition-all duration-300">
-                <div className="text-brand-black group-hover:text-brand-yellow transition-colors">
-                    {icon}
-                </div>
+            <div className="mb-3 text-brand-yellow/80 group-hover:text-brand-yellow transition-colors group-hover:scale-110 duration-300">
+                {icon}
             </div>
-            <div className="text-3xl sm:text-4xl md:text-6xl font-black text-brand-black mb-2">
+            <div className="text-3xl font-black text-white mb-1 tracking-tight">
                 {count.toLocaleString()}{suffix}
             </div>
-            <div className="text-gray-700 font-medium uppercase tracking-widest text-sm">
+            <div className="text-gray-400 font-medium uppercase tracking-widest text-[10px] text-center">
                 {label}
             </div>
         </motion.div>
@@ -68,35 +66,35 @@ function AnimatedStat({ value, label, suffix = "", icon, delay = 0 }: StatProps)
 
 export default function StatsCounter() {
     const stats = [
-        { value: 2500, label: "Clientes Felices", suffix: "+", icon: <Users className="w-7 h-7" /> },
-        { value: 15000, label: "Stickers Entregados", suffix: "+", icon: <Package className="w-7 h-7" /> },
-        { value: 9, label: "Años de Experiencia", suffix: "", icon: <Star className="w-7 h-7" /> },
-        { value: 98, label: "Satisfacción", suffix: "%", icon: <Sparkles className="w-7 h-7" /> },
+        { value: 2500, label: "Clientes Felices", suffix: "+", icon: <Users className="w-6 h-6" /> },
+        { value: 15000, label: "Stickers Entregados", suffix: "+", icon: <Package className="w-6 h-6" /> },
+        { value: 9, label: "Años de Experiencia", suffix: "", icon: <Star className="w-6 h-6" /> },
+        { value: 98, label: "Satisfacción", suffix: "%", icon: <Sparkles className="w-6 h-6" /> },
     ];
 
     return (
-        <section className="py-24 bg-brand-yellow relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute inset-0 opacity-5">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-black rounded-full blur-3xl" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-black rounded-full blur-3xl" />
-            </div>
+        <section className="py-12 bg-brand-black border-y border-white/10 relative overflow-hidden">
+            {/* Background Gradients */}
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[100px] pointer-events-none"></div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <span className="text-brand-black font-bold tracking-widest uppercase text-sm bg-white px-4 py-2 rounded-full">Números que hablan</span>
-                    <h2 className="text-4xl md:text-5xl font-black text-brand-black mt-4">NUESTRA TRAYECTORIA</h2>
-                </motion.div>
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 max-w-6xl mx-auto">
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-                    {stats.map((stat, idx) => (
-                        <AnimatedStat key={stat.label} {...stat} delay={idx * 200} />
-                    ))}
+                    <div className="text-left md:w-1/3">
+                        <span className="text-brand-yellow font-bold tracking-widest uppercase text-xs mb-2 block">
+                            Nuestra Trayectoria
+                        </span>
+                        <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">
+                            RESULTADOS QUE <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-600">HABLAN POR SÍ SOLOS</span>
+                        </h3>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full md:w-2/3">
+                        {stats.map((stat, idx) => (
+                            <AnimatedStat key={stat.label} {...stat} delay={idx * 150} />
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

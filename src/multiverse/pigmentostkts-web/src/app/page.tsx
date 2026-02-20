@@ -1,26 +1,99 @@
-"use client"; // <--- LA LLAVE MAESTRA 
+"use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
-import { ArrowRight, Check, Scissors, Palette, StickyNote, Shield } from "lucide-react";
+import { ArrowRight, ArrowUp, ArrowDown, Scissors, Palette, StickyNote, Shield } from "lucide-react";
 import { FadeIn, ScaleOnHover } from "@/components/ui/motion";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import * as React from "react";
 import { usePreloader } from "@/context/PreloaderContext";
-import { useFullPageScroll } from "@/hooks/useFullPageScroll";
 
 // Import new components
-import FloatingStickers from "@/components/FloatingStickers";
+import HomeMenu from "@/components/HomeMenu";
 import StatsCounter from "@/components/StatsCounter";
-import Gallery from "@/components/Gallery";
-import PriceCalculator from "@/components/PriceCalculator";
+
+import ParallaxGrid from "@/components/ui/ParallaxGrid";
+import ProductShowcase from "@/components/ProductShowcase";
+
+import { useNavTheme } from "@/context/NavThemeContext";
+
+import { Footer } from "@/components/Footer";
+import CallToAction from "@/components/CallToAction";
+
+const SECTION_IDS = ['hero', 'stats', 'services', 'packs', 'footer'];
 
 export default function Home() {
   const { isPreloaderDone } = usePreloader();
+  const { setTheme } = useNavTheme();
 
-  // Activate TikTok-style fullpage scroll
-  useFullPageScroll("main", "[data-section]");
+  // Custom scroll logic for manual navigation buttons and scroll snap
+  const mainRef = React.useRef<HTMLElement>(null);
+  const [currentSectionIndex, setCurrentSectionIndex] = React.useState(0);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isAtBottom, setIsAtBottom] = React.useState(false);
+  const [isAtTop, setIsAtTop] = React.useState(true);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (!mainRef.current) return;
+
+      const scrollTop = mainRef.current.scrollTop;
+      setIsScrolled(scrollTop > 100);
+      setIsAtTop(scrollTop < 50); // Updated condition for isAtTop
+
+      const atBottom = mainRef.current.scrollHeight - scrollTop - mainRef.current.clientHeight < 10; // Check if at bottom of the scrollable element
+      setIsAtBottom(atBottom);
+
+      // Determine current section and update theme
+      // Use a smaller offset (5% of viewport) to ensure we switch sections only when they are close to the top.
+      const scrollPosition = scrollTop + window.innerHeight * 0.05;
+
+      SECTION_IDS.forEach((id, index) => {
+        const section = document.getElementById(id);
+        if (section && section.offsetTop <= scrollPosition) {
+          setCurrentSectionIndex(index);
+
+          // Theme logic
+          if (id === 'hero' || id === 'packs') {
+            setTheme('light');
+          } else { // stats, services, footer
+            setTheme('dark');
+          }
+        }
+      });
+
+      // Force last section if at bottom (fixes issue with short footers)
+      if (atBottom) { // Use the new atBottom variable
+        setCurrentSectionIndex(SECTION_IDS.length - 1);
+        setTheme('dark');
+      }
+    };
+
+    // Initial theme set
+    setTheme('light');
+
+    const mainElement = mainRef.current;
+    if (mainElement) {
+      mainElement.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (mainElement) {
+        mainElement.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [setTheme]);
+
+  const scrollToSection = (index: number) => {
+    if (index >= 0 && index < SECTION_IDS.length && mainRef.current) {
+      const section = document.getElementById(SECTION_IDS[index]);
+      if (section) {
+        mainRef.current.scrollTo({
+          top: section.offsetTop,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
 
   const getIcon = (id: string) => {
     switch (id) {
@@ -32,25 +105,32 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-x-hidden">
+    <main ref={mainRef} className="h-screen overflow-y-scroll snap-y snap-proximity scroll-smooth relative overflow-x-hidden">
+
       {/* HERO SECTION - White Background */}
-      <section data-section id="hero" data-theme="light" className="relative bg-white text-brand-black min-h-screen flex items-center py-20 md:py-0 overflow-hidden">
-        {/* Grid de puntos de fondo */}
-        <div className="absolute inset-0 opacity-20 bg-dot-pattern pointer-events-none"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
+      <section id="hero" data-theme="light" className="snap-start relative bg-white text-brand-black min-h-screen flex items-center pt-24 pb-16 md:py-0 overflow-hidden">
+        {/* Parallax Grid Background */}
+        <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
+          <ParallaxGrid />
+        </div>
+
+        {/* Bottom Fade Gradient - Black to Transparent */}
+        <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-brand-black via-brand-black/40 to-transparent pointer-events-none z-0"></div>
+
+        <div className="w-full max-w-[95%] 2xl:max-w-screen-2xl mx-auto px-4 md:px-8 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10 h-full justify-center">
             {/* Left side - Text content */}
-            <div className="flex-1">
-              <div className="max-w-2xl">
+            <div className="w-full lg:w-[32%] flex-shrink-0 flex flex-col justify-center">
+              <div className="max-w-xl mx-auto lg:mx-0">
                 <motion.span
                   initial={{ opacity: 0, y: 20 }}
                   animate={isPreloaderDone ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.1, duration: 0.6 }}
-                  className="text-brand-yellow font-bold tracking-widest uppercase mb-6 block"
+                  className="text-brand-yellow font-bold tracking-widest uppercase mb-4 block text-sm md:text-base"
                 >
                   Soluciones Visuales Premium
                 </motion.span>
-                <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-[-0.06em] mb-8 leading-[0.85]">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-black tracking-[-0.06em] mb-6 leading-[0.85]">
                   <motion.span
                     initial={{ opacity: 0, x: -50 }}
                     animate={isPreloaderDone ? { opacity: 1, x: 0 } : {}}
@@ -72,245 +152,157 @@ export default function Home() {
                   initial={{ opacity: 0 }}
                   animate={isPreloaderDone ? { opacity: 1 } : {}}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="text-lg md:text-2xl text-gray-700 mb-12 font-medium max-w-xl leading-relaxed"
+                  className="text-base md:text-lg text-gray-700 mb-8 font-medium max-w-lg leading-relaxed"
                 >
                   Desde stickers de colección hasta branding corporativo completo. Alta resolución, vinilos importados y cortes de precisión.
                 </motion.p>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isPreloaderDone ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.65, duration: 0.6 }}
-                  className="flex flex-col sm:flex-row gap-4"
-                >
-                  <ScaleOnHover>
-                    <a
-                      href="#calculator"
-                      className="inline-flex items-center justify-center bg-brand-yellow text-brand-black hover:bg-white font-black text-base md:text-lg px-6 py-3 md:px-10 md:py-5 rounded-full transition-all uppercase tracking-wide shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40"
-                    >
-                      Cotizar Proyecto <ArrowRight className="ml-2 w-5 h-5" />
-                    </a>
-                  </ScaleOnHover>
-                  <ScaleOnHover>
-                    <Link
-                      href="/packs"
-                      className="inline-flex items-center justify-center bg-transparent border-2 border-brand-black text-brand-black hover:bg-brand-black hover:text-white font-black text-base md:text-lg px-6 py-3 md:px-10 md:py-5 rounded-full transition-all uppercase tracking-wide"
-                    >
-                      Ver Packs
-                    </Link>
-                  </ScaleOnHover>
-                </motion.div>
+                {/* Buttons removed as requested */}
               </div>
             </div>
 
-            {/* Right side - Floating Stickers Animation */}
+            {/* Right side - Navigation Cards */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isPreloaderDone ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="flex-1 hidden lg:block"
+              className="flex-1 w-full mt-4 lg:mt-0 flex items-center"
             >
-              <FloatingStickers />
+              <HomeMenu />
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
-        >
+        {/* Scroll indicator - Only visible at top */}
+        {!isScrolled && (
           <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-6 h-10 border-2 border-brand-black/30 rounded-full flex justify-center pt-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block cursor-pointer z-20"
+            onClick={() => scrollToSection(1)}
           >
-            <motion.div className="w-1.5 h-1.5 bg-brand-yellow rounded-full" />
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="w-6 h-10 border-2 border-brand-black/30 rounded-full flex justify-center pt-2"
+            >
+              <motion.div className="w-1.5 h-1.5 bg-brand-yellow rounded-full" />
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </section>
-
-      {/* PRICE CALCULATOR - MOVED TO SECOND SECTION */}
-      <section data-section id="calculator" data-theme="dark" className="min-h-screen flex items-center justify-center relative bg-brand-black">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
-        <div className="relative w-full">
-          <div id="cubreplacas" className="absolute -top-32" />
-          <PriceCalculator />
-        </div>
+        )}
       </section>
 
       {/* STATS COUNTER SECTION */}
-      <div data-section className="min-h-screen flex items-center justify-center bg-brand-yellow">
+      <section id="stats" className="snap-start bg-brand-black py-16 md:py-24 border-b border-white/5 relative z-20">
         <StatsCounter />
-      </div>
+      </section>
 
       {/* SERVICES GRID - Black Background */}
-      <section data-section id="services" data-theme="dark" className="min-h-screen flex flex-col justify-center py-32 bg-brand-black relative z-10">
-        <div className="container mx-auto px-4">
+      <section id="services" data-theme="dark" className="snap-start min-h-screen flex flex-col justify-center pt-32 pb-24 bg-brand-black relative z-10 overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn delay={0.2}>
-            <div className="text-center mb-20">
-              <span className="text-brand-black font-bold tracking-widest uppercase text-sm bg-brand-yellow px-4 py-2 rounded-full">Lo que hacemos</span>
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight mt-6">NUESTROS SERVICIOS</h2>
-              <p className="text-xl text-gray-400 max-w-2xl mx-auto">Cubrimos todas las etapas de tu proyecto visual. Desde la idea hasta la impresión final.</p>
+            <div className="text-center mb-16">
+              <span className="text-brand-black font-bold tracking-widest uppercase text-xs md:text-sm bg-brand-yellow px-4 py-2 rounded-full mb-6 inline-block shadow-[0_0_20px_rgba(255,214,0,0.3)]">
+                Lo que hacemos
+              </span>
+              <h2 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-none">
+                SOLUCIONES <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-600">VISUALES</span>
+              </h2>
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                Cubrimos todas las etapas de tu proyecto. Desde la conceptualización hasta la impresión final con materiales de clase mundial.
+              </p>
             </div>
           </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {PIGMENTO_DATA.services.map((service, idx) => (
               <FadeIn key={service.id} delay={idx * 0.1} className="h-full">
-                <div className="h-full bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 hover:border-brand-yellow/50 hover:shadow-2xl transition-all duration-500 group flex flex-col">
-                  <div className="bg-brand-yellow/10 w-20 h-20 rounded-2xl flex items-center justify-center text-brand-yellow mb-8 group-hover:bg-brand-yellow group-hover:text-black group-hover:scale-110 transition-all duration-300">
-                    {getIcon(service.id)}
+                <Link
+                  href={service.id === 'design' ? '/diseno' : service.id === 'cubreplacas' ? '/cotizador' : '/cotizador'}
+                  className="block h-full group"
+                >
+                  <div className="h-full bg-white/5 backdrop-blur-md p-8 rounded-[2rem] border border-white/10 hover:border-brand-yellow/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(255,214,0,0.1)] relative overflow-hidden">
+
+                    {/* Hover Gradient Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="bg-brand-black w-20 h-20 rounded-2xl flex items-center justify-center text-brand-yellow mb-8 shadow-inner border border-white/5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                        {getIcon(service.id)}
+                      </div>
+
+                      <h3 className="text-2xl font-black text-white mb-4 uppercase italic tracking-tight">{service.title}</h3>
+                      <p className="text-gray-400 font-medium mb-8 flex-1 leading-relaxed text-sm">{service.description}</p>
+
+                      <div className="pt-6 border-t border-white/10 mt-auto flex items-end justify-between">
+                        <div>
+                          <span className="text-[10px] text-gray-500 uppercase font-black tracking-widest block mb-1">Desde</span>
+                          <span className="text-lg font-black text-brand-yellow">{service.priceStart}</span>
+                        </div>
+                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-brand-yellow group-hover:text-black transition-all">
+                          <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-4">{service.title}</h3>
-                  <p className="text-gray-400 font-medium mb-8 flex-1 leading-relaxed">{service.description}</p>
-                  <div className="pt-6 border-t border-white/10 mt-auto">
-                    <span className="text-xs text-gray-500 uppercase font-bold block mb-1 tracking-wider">Desde</span>
-                    <span className="text-xl font-black text-brand-yellow">{service.priceStart}</span>
-                  </div>
-                </div>
+                </Link>
               </FadeIn>
             ))}
           </div>
         </div>
       </section>
-
-      {/* GALLERY SECTION REMOVED FROM HERE (MOVED UP) */}
 
       {/* FEATURED PACKS SECTION */}
-      <section data-section className="min-h-screen flex flex-col justify-center py-24 bg-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-brand-black to-transparent opacity-5"></div>
-        <div className="container mx-auto px-4">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <span className="text-brand-yellow font-bold tracking-widest uppercase text-sm bg-brand-black px-4 py-2 rounded-full">Best Sellers</span>
-              <h2 className="text-4xl md:text-6xl font-black text-brand-black mt-6 tracking-tighter">PACKS DE COLECCIÓN</h2>
-              <p className="text-xl text-gray-500 max-w-2xl mx-auto mt-4">La forma más inteligente de empezar tu colección. Más stickers, mejor precio.</p>
-            </div>
-          </FadeIn>
+      <ProductShowcase />
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {PIGMENTO_DATA.pricing.megaPacks.map((pack, idx) => (
-              <FadeIn key={pack.name} delay={idx * 0.1}>
-                <div className="group relative bg-white rounded-[2rem] border-2 border-brand-black p-8 hover:-translate-y-2 transition-all duration-300 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(255,214,0,1)]">
-                  <div className="absolute top-0 right-0 bg-brand-yellow text-black font-black text-xs px-3 py-1 rounded-bl-xl border-l-2 border-b-2 border-brand-black">
-                    POPULAR
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-4xl font-black text-brand-black mb-2 uppercase italic">{pack.name}</h3>
-                    <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-brand-black to-gray-600 mb-4">
-                      {pack.qty}
-                      <span className="text-lg text-gray-400 block font-bold tracking-widest -mt-2">STICKERS</span>
-                    </div>
-                    <div className="w-full h-px bg-gray-100 my-6"></div>
-                    <div className="text-3xl font-black text-brand-black mb-6">
-                      ${pack.price.toLocaleString()}
-                    </div>
-                    <Link href="/packs" className="block w-full py-4 bg-brand-black text-white font-bold rounded-xl hover:bg-brand-yellow hover:text-black transition-colors uppercase tracking-wide">
-                      COMPRAR PACK
-                    </Link>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
+      {/* CTA SECTION - Closing the landing page */}
+      <CallToAction />
+
+      {/* FOOTER SECTION */}
+      <section id="footer" data-theme="dark" className="snap-end h-auto bg-brand-black relative z-10">
+        <Footer />
       </section>
 
-
-
-      {/* DESIGN TEASER - Yellow Background */}
-      <section data-section id="design" className="min-h-screen flex flex-col justify-center py-24 bg-brand-yellow">
-        <div className="container mx-auto px-4">
-          <FadeIn>
-            <div className="bg-brand-black rounded-[3rem] p-10 md:p-20 flex flex-col md:flex-row items-center gap-16 relative overflow-hidden">
-              {/* Fondo decorativo */}
-              <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand-yellow opacity-20 rounded-full blur-3xl"></div>
-
-              <div className="flex-1 z-10">
-                <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-none">¿NECESITAS <br />DISEÑO?</h2>
-                <p className="text-white/80 text-xl font-medium mb-10 max-w-lg">
-                  Desde digitalizar tu logo hasta crear la identidad completa de tu marca. No imprimas mediocridad.
-                </p>
-                <ul className="space-y-4 mb-10">
-                  <li className="flex items-center gap-4 font-bold text-white text-lg">
-                    <div className="bg-brand-yellow text-brand-black p-2 rounded-full"><Check size={16} /></div> Vectorización de Logos
-                  </li>
-                  <li className="flex items-center gap-4 font-bold text-white text-lg">
-                    <div className="bg-brand-yellow text-brand-black p-2 rounded-full"><Check size={16} /></div> Identidad Visual & Branding
-                  </li>
-                  <li className="flex items-center gap-4 font-bold text-white text-lg">
-                    <div className="bg-brand-yellow text-brand-black p-2 rounded-full"><Check size={16} /></div> Merchandising Corporativo
-                  </li>
-                </ul>
-                <ScaleOnHover>
-                  <Button className="bg-brand-yellow text-black hover:bg-white h-16 px-10 text-xl font-bold rounded-2xl shadow-xl">
-                    Ver Planes de Diseño
-                  </Button>
-                </ScaleOnHover>
-              </div>
-
-              <div className="flex-1 flex justify-center z-10">
-                <motion.div
-                  whileHover={{ rotate: 0, scale: 1.05 }}
-                  className="bg-white p-8 rounded-3xl shadow-2xl rotate-6 transition-all duration-500 max-w-sm w-full border-4 border-brand-yellow"
-                >
-                  <div className="aspect-square bg-gray-50 rounded-2xl mb-6 flex items-center justify-center border-2 border-dashed border-gray-200">
-                    <Palette className="w-24 h-24 text-gray-300" />
-                  </div>
-                  <div className="h-6 bg-gray-100 rounded-full w-3/4 mb-4"></div>
-                  <div className="h-6 bg-gray-100 rounded-full w-1/2"></div>
-                </motion.div>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS PREVIEW - White Background */}
-      <section data-section className="min-h-screen flex flex-col justify-center py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <span className="text-white font-bold tracking-widest uppercase text-sm bg-brand-black px-4 py-2 rounded-full">Testimonios</span>
-              <h2 className="text-4xl md:text-5xl font-black text-brand-black mt-4">LO QUE DICEN NUESTROS CLIENTES</h2>
-            </div>
-          </FadeIn>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: "Carlos M.", role: "Motociclista", text: "Los stickers para mi moto quedaron brutales. Calidad profesional y el diseño personalizado superó mis expectativas." },
-              { name: "María L.", role: "Streamer", text: "Pedí 500 stickers para regalar a mis subs y todos quedaron impresionados. Volveré a pedir sin duda." },
-              { name: "Andrés P.", role: "Dueño de Tienda", text: "El branding de mi negocio quedó increíble. Desde los stickers hasta las tarjetas, todo premium." },
-            ].map((testimonial, idx) => (
-              <FadeIn key={idx} delay={idx * 0.15}>
-                <div className="bg-gray-50 rounded-3xl p-8 border border-gray-200 hover:border-brand-yellow/50 hover:shadow-xl transition-all">
-                  <div className="flex items-center gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <motion.svg
-                        key={i}
-                        initial={{ opacity: 0, scale: 0 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 * i }}
-                        className="w-5 h-5 text-brand-yellow fill-current"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </motion.svg>
-                    ))}
-                  </div>
-                  <p className="text-gray-700 mb-6 leading-relaxed">"{testimonial.text}"</p>
-                  <div>
-                    <p className="font-bold text-brand-black">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-    </main>
+      {/* Global Scroll Up Navigation - Fixed & Top Right - Visible on Scroll */}
+      <AnimatePresence>
+        {isScrolled && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed top-24 right-4 md:right-8 z-50 flex flex-col gap-3"
+          >
+            {!isAtTop && (
+              <button
+                onClick={() => scrollToSection(Math.max(0, currentSectionIndex - 1))}
+                className="w-12 h-12 bg-black/80 backdrop-blur text-brand-yellow rounded-full flex items-center justify-center border border-white/10 shadow-lg hover:bg-brand-yellow hover:text-black transition-all"
+                aria-label="Previous Section"
+              >
+                <ArrowUp className="w-6 h-6" />
+              </button>
+            )}
+            {!isAtBottom && (
+              <button
+                onClick={() => {
+                  if (currentSectionIndex < SECTION_IDS.length - 1) {
+                    scrollToSection(currentSectionIndex + 1);
+                  } else {
+                    mainRef.current?.scrollTo({ top: mainRef.current.scrollHeight, behavior: 'smooth' });
+                  }
+                }}
+                className="w-12 h-12 bg-black/80 backdrop-blur text-brand-yellow rounded-full flex items-center justify-center border border-white/10 shadow-lg hover:bg-brand-yellow hover:text-black transition-all"
+                aria-label="Next Section"
+              >
+                <ArrowDown className="w-6 h-6" />
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main >
   );
 }

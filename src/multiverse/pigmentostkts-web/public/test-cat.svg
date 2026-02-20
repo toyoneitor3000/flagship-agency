@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- White Background -->
+  <rect width="512" height="512" fill="white"/>
+  
+  <!-- Cat Head -->
+  <circle cx="256" cy="280" r="150" fill="#fdb" stroke="#ea9" stroke-width="10"/>
+  
+  <!-- Ears -->
+  <path d="M130 180 L130 80 L230 150 Z" fill="#fdb" stroke="#ea9" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M382 180 L382 80 L282 150 Z" fill="#fdb" stroke="#ea9" stroke-width="10" stroke-linejoin="round"/>
+  
+  <!-- Eyes -->
+  <circle cx="200" cy="250" r="20" fill="#333"/>
+  <circle cx="312" cy="250" r="20" fill="#333"/>
+  
+  <!-- Nose -->
+  <path d="M246 300 L266 300 L256 320 Z" fill="#pink"/>
+  
+  <!-- Mouth -->
+  <path d="M256 320 Q226 350 206 320" fill="none" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+  <path d="M256 320 Q286 350 306 320" fill="none" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Whiskers -->
+  <line x1="150" y1="300" x2="80" y2="290" stroke="#333" stroke-width="3"/>
+  <line x1="150" y1="320" x2="80" y2="330" stroke="#333" stroke-width="3"/>
+  <line x1="362" y1="300" x2="432" y2="290" stroke="#333" stroke-width="3"/>
+  <line x1="362" y1="320" x2="432" y2="330" stroke="#333" stroke-width="3"/>
+  
+  <!-- Sunglasses -->
+  <path d="M140 230 Q200 230 200 260 Q200 290 140 290 Q110 290 110 260 Q110 230 140 230 Z" fill="black"/>
+  <path d="M372 230 Q312 230 312 260 Q312 290 372 290 Q402 290 402 260 Q402 230 372 230 Z" fill="black"/>
+  <line x1="200" y1="245" x2="312" y2="245" stroke="black" stroke-width="8"/>
+</svg>

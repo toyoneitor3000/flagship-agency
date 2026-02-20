@@ -35,7 +35,7 @@ export default function Gallery() {
     };
 
     return (
-        <section className="py-24 bg-white relative" id="colecciones">
+        <section className="py-16 bg-white relative" id="colecciones">
             <div className="absolute inset-0 bg-[radial-gradient(#00000010_1px,transparent_1px)] [background-size:30px_30px] opacity-10 pointer-events-none"></div>
 
             <div className="container mx-auto px-4 relative z-10">
@@ -43,29 +43,29 @@ export default function Gallery() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-12"
+                    className="text-center mb-8"
                 >
-                    <div className="flex items-center justify-center gap-4 mb-6">
-                        <span className="text-brand-black font-black tracking-[0.2em] uppercase text-xs bg-brand-yellow px-5 py-2 rounded-full shadow-lg">Catálogo Real</span>
-                        <span className="bg-brand-black text-brand-yellow font-black text-[10px] px-3 py-1 rounded-md uppercase animate-pulse">Inspiración</span>
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                        <span className="text-brand-black font-black tracking-[0.2em] uppercase text-[10px] bg-brand-yellow px-4 py-1.5 rounded-full shadow-lg">Catálogo Real</span>
+                        <span className="bg-brand-black text-brand-yellow font-black text-[9px] px-2.5 py-0.5 rounded-md uppercase animate-pulse">Inspiración</span>
                     </div>
-                    <h2 className="text-5xl md:text-7xl font-black text-brand-black mt-2 mb-6 uppercase italic tracking-tighter leading-none text-center">STICKERS DE COLECCIÓN</h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto font-bold leading-tight">
+                    <h2 className="text-4xl md:text-6xl font-black text-brand-black mt-2 mb-4 uppercase italic tracking-tighter leading-none text-center">STICKERS DE COLECCIÓN</h2>
+                    <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto font-bold leading-tight">
                         Estos son solo algunos <span className="text-brand-black underline decoration-brand-yellow decoration-4">ejemplos de diseños</span> que pueden venir en tus packs. <br />
                         Cada paquete es una selección sorpresa de calidad suprema.
                     </p>
                 </motion.div>
 
                 {/* Category Filter */}
-                <div className="flex flex-wrap justify-center gap-3 mb-16">
+                <div className="flex flex-wrap justify-center gap-2 mb-10">
                     {categories.map((cat) => (
                         <button
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
                             className={cn(
-                                "px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all",
+                                "px-5 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all",
                                 activeCategory === cat.id
-                                    ? "bg-brand-black text-white shadow-[6px_6px_0px_0px_rgba(255,225,0,1)] -translate-x-1 -translate-y-1"
+                                    ? "bg-brand-black text-white shadow-[4px_4px_0px_0px_rgba(255,225,0,1)] -translate-x-0.5 -translate-y-0.5"
                                     : "bg-white text-gray-500 hover:bg-gray-100 border-2 border-gray-100"
                             )}
                         >
@@ -77,7 +77,7 @@ export default function Gallery() {
                 {/* Gallery Grid */}
                 <motion.div
                     layout
-                    className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-10"
+                    className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"
                 >
                     <AnimatePresence mode="popLayout">
                         {filteredItems.map((item, idx) => {

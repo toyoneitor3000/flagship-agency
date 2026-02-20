@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import { Footer } from "@/components/Footer";
+import ConditionalFooter from "@/components/ConditionalFooter";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -35,7 +35,7 @@ export default function RootLayout({
           {children}
           <FloatingWhatsApp />
         </Providers>
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
   );
