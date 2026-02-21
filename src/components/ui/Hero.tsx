@@ -1,9 +1,26 @@
-ºº<div className="w-full h-full bg-[#0f0033]" />
-          )}
+'use client';
 
-          {/* Horizontal Gradient: 85% -> 20% Opacity */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/30" />
-        </div>
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { MagicText } from '@/components/magic/MagicText';
+
+export const Hero = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"]
+  });
+
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  return (
+    <section ref={ref} className="relative w-full h-screen min-h-[800px] flex items-center overflow-hidden bg-[#050011]">
+
+      {/* Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[#0f0033]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/30" />
       </div>
 
       {/* Content - Left Aligned, Vertically Centered */}
