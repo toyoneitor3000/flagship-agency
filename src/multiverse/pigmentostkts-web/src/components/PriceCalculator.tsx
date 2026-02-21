@@ -205,9 +205,7 @@ export default function PriceCalculator() {
     useEffect(() => {
         const handleHashChange = () => {
             if (window.location.hash === '#cubreplacas') {
-                setHasDesign(true);
                 setProjectType('cubreplacas');
-                setCurrentStep(1);
                 const calculatorSection = document.getElementById('cotizador');
                 if (calculatorSection) {
                     calculatorSection.scrollIntoView({ behavior: 'smooth' });
