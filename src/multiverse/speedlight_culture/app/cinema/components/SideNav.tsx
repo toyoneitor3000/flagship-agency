@@ -25,6 +25,11 @@ export function SideNav() {
     const pathname = usePathname();
     const { data: session } = useSession();
     const [following, setFollowing] = useState<any[]>([]);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     useEffect(() => {
         if (session?.user) {
@@ -82,7 +87,7 @@ export function SideNav() {
                 <NavLink href="/notifications" icon={<Bell className="w-[26px] h-[26px]" />} label="Actividad" active={activeRoute('/notifications')} />
                 <NavLink href="/upload" icon={<PlusSquare className="w-[26px] h-[26px]" />} label="Cargar" active={activeRoute('/upload')} />
 
-                {session?.user ? (
+                {isMounted && session?.user ? (
                     <NavLink
                         href={profileHref}
                         icon={<User className="w-[26px] h-[26px]" />}
@@ -98,7 +103,7 @@ export function SideNav() {
             </nav>
 
             {/* Cuentas que sigues */}
-            {session?.user && (
+            {isMounted && session?.user && (
                 <div className="px-5 mb-2">
                     <h3 className="text-white/60 font-bold text-[13px] mb-4">Cuentas que sigues</h3>
                     <div className="flex flex-col gap-1">
