@@ -22,7 +22,7 @@ const menuItems = [
         label: "Cubreplacas",
         description: "Protección y estilo para tu moto",
         icon: Shield,
-        href: "/cotizador",
+        href: "/cotizador#cubreplacas",
         imageSrc: "/project-types/cubreplacas.png",
         gradient: "from-gray-900/90 to-black/90",
         delay: 0.1
