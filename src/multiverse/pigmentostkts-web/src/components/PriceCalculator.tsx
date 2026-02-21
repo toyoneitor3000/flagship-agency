@@ -13,9 +13,9 @@ interface MaterialPricing {
     sc_laminate: number;
     cc_laminate: number;
     hybrid_laminate?: number;
-    sc_laminate_60?: number;
-    cc_laminate_60?: number;
-    hybrid_laminate_60?: number;
+    sc_laminate_alt?: number;
+    cc_laminate_alt?: number;
+    hybrid_laminate_alt?: number;
 }
 
 interface Material {
@@ -36,21 +36,25 @@ const MATERIALS_CONFIG: Material[] = [
         id: 'vinilo-blanco',
         name: 'Vinilo Blanco',
         description: 'El estándar para stickers. Base blanca pura.',
-        sheetSize: { width: 99, height: 99 },
-        pricing: { sc_laminate: 129900, cc_laminate: 134900, hybrid_laminate: 145000 },
+        sheetSize: { width: 100, height: 100 },
+        alternativeSheetSize: { width: 50, height: 100 },
+        pricing: { sc_laminate: 129900, cc_laminate: 134900, hybrid_laminate: 145000, sc_laminate_alt: 75000, cc_laminate_alt: 80000, hybrid_laminate_alt: 85000 },
         imageSrc: '/materials/blanco-brillante.png',
         finishOptions: true,
-        requiresLaminate: true
+        requiresLaminate: true,
+        hasWidthOptions: true
     },
     {
         id: 'vinilo-transparente',
         name: 'Vinilo Transparente',
         description: 'Fondo invisible. Ideal para vidrio o superficies claras.',
-        sheetSize: { width: 99, height: 99 },
-        pricing: { sc_laminate: 129900, cc_laminate: 134900, hybrid_laminate: 145000 },
+        sheetSize: { width: 100, height: 100 },
+        alternativeSheetSize: { width: 50, height: 100 },
+        pricing: { sc_laminate: 129900, cc_laminate: 134900, hybrid_laminate: 145000, sc_laminate_alt: 75000, cc_laminate_alt: 80000, hybrid_laminate_alt: 85000 },
         imageSrc: '/materials/transparente-brillante.png',
         finishOptions: true,
-        requiresLaminate: true
+        requiresLaminate: true,
+        hasWidthOptions: true
     },
     {
         id: 'tornasol',
@@ -58,7 +62,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Efecto iridiscente que cambia de color según la luz.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/tornasol.png',
         finishOptions: true,
         requiresLaminate: true,
@@ -70,7 +74,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Acabado espejo dorado brillante. Lujo y distinción.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/metalizado-dorado.png',
         finishOptions: true,
         requiresLaminate: true,
@@ -82,7 +86,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Acabado espejo plateado cromado.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/metalizado-cromo.png',
         finishOptions: true,
         requiresLaminate: true,
@@ -94,7 +98,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Acabado cepillado con textura metálica.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 280000, cc_laminate: 290000, hybrid_laminate: 300000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/metalizado-brush.png',
         finishOptions: true,
         requiresLaminate: true,
@@ -106,7 +110,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Base blanca con destellos holográficos. Solo con laminado.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/blanco-holografico.png',
         finishOptions: false,
         requiresLaminate: false,
@@ -118,7 +122,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Textura con partículas brillantes. Solo con laminado.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/escarchado.png',
         finishOptions: false,
         requiresLaminate: false,
@@ -130,7 +134,7 @@ const MATERIALS_CONFIG: Material[] = [
         description: 'Textura tipo lienzo artístico. Solo con laminado.',
         sheetSize: { width: 120, height: 100 },
         alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
+        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_alt: 149900, cc_laminate_alt: 149900, hybrid_laminate_alt: 149900 },
         imageSrc: '/materials/canvas.png',
         finishOptions: false,
         requiresLaminate: false,
@@ -176,7 +180,7 @@ export default function PriceCalculator() {
 
     // Sticker States
     const [material, setMaterial] = useState(MATERIALS_CONFIG[0]);
-    const [materialWidth, setMaterialWidth] = useState<120 | 60>(60);
+    const [materialWidth, setMaterialWidth] = useState<number>(50);
     const [laminate, setLaminate] = useState<'brillante' | 'mate' | null>('brillante');
     const [cutType, setCutType] = useState(CUT_TYPES[0]);
     const [widthCm, setWidthCm] = useState(5);
@@ -254,6 +258,13 @@ export default function PriceCalculator() {
         if (heightCm < minSize) setHeightCm(minSize);
     }, [cutType]);
 
+    // Update default width when material changes
+    useEffect(() => {
+        if (material.hasWidthOptions && material.alternativeSheetSize) {
+            setMaterialWidth(material.alternativeSheetSize.width);
+        }
+    }, [material]);
+
     // Price Calculation
     useEffect(() => {
         if (projectType === 'cubreplacas') {
@@ -272,7 +283,7 @@ export default function PriceCalculator() {
             return;
         }
 
-        const activeSheetSize = (material.hasWidthOptions && materialWidth === 60 && material.alternativeSheetSize)
+        const activeSheetSize = (material.hasWidthOptions && materialWidth === material.alternativeSheetSize?.width && material.alternativeSheetSize)
             ? material.alternativeSheetSize
             : material.sheetSize;
 
@@ -291,15 +302,15 @@ export default function PriceCalculator() {
         setTotalStickers(bestCount * sheetQuantity);
 
         let pricePerSheet = 0;
-        const is60cm = material.hasWidthOptions && materialWidth === 60;
+        const isAltSize = material.hasWidthOptions && materialWidth === material.alternativeSheetSize?.width;
         const p = material.pricing;
 
         if (cutType.id === 'hybrid') {
-            pricePerSheet = is60cm ? (p.hybrid_laminate_60 || 149900) : (p.hybrid_laminate || p.cc_laminate);
+            pricePerSheet = isAltSize ? (p.hybrid_laminate_alt || 149900) : (p.hybrid_laminate || p.cc_laminate);
         } else if (cutType.id === 'sc') {
-            pricePerSheet = is60cm ? (p.sc_laminate_60 || 149900) : p.sc_laminate;
+            pricePerSheet = isAltSize ? (p.sc_laminate_alt || 149900) : p.sc_laminate;
         } else {
-            pricePerSheet = is60cm ? (p.cc_laminate_60 || 149900) : p.cc_laminate;
+            pricePerSheet = isAltSize ? (p.cc_laminate_alt || 149900) : p.cc_laminate;
         }
 
         const calculatedPrice = pricePerSheet * sheetQuantity;
@@ -752,16 +763,16 @@ export default function PriceCalculator() {
                                                             </div>
                                                             <div className="flex p-0.5 bg-black/40 rounded-lg border border-white/5">
                                                                 <button
-                                                                    onClick={() => setMaterialWidth(60)}
-                                                                    className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 60 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                                    onClick={() => setMaterialWidth(material.alternativeSheetSize?.width || 60)}
+                                                                    className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === (material.alternativeSheetSize?.width || 60) ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
                                                                 >
-                                                                    60CM
+                                                                    {material.alternativeSheetSize?.width || 60}CM
                                                                 </button>
                                                                 <button
-                                                                    onClick={() => setMaterialWidth(120)}
-                                                                    className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 120 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                                    onClick={() => setMaterialWidth(material.sheetSize.width)}
+                                                                    className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === material.sheetSize.width ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
                                                                 >
-                                                                    120CM
+                                                                    {material.sheetSize.width}CM
                                                                 </button>
                                                             </div>
                                                         </div>
