@@ -1041,7 +1041,7 @@ export default function PriceCalculator() {
                                             <div className="flex justify-between">
                                                 <span>Material:</span>
                                                 <span className={currentStep >= 2 ? "text-white font-bold" : "text-gray-500 italic"}>
-                                                    {currentStep >= 2 ? material.name : 'Pendiente'}
+                                                    {currentStep >= 2 ? `${material.name} (${materialWidth}x${material.sheetSize.height}cm)` : 'Pendiente'}
                                                 </span>
                                             </div>
                                             <div className="flex justify-between">
@@ -1089,12 +1089,12 @@ export default function PriceCalculator() {
                                     <Button onClick={() => {
                                         addItem({
                                             id: Date.now(),
-                                            name: projectType === 'cubreplacas' ? 'Cubreplacas Custom' : `${material.name} (${cutType.name})`,
+                                            name: projectType === 'cubreplacas' ? 'Cubreplacas Custom' : `${material.name} (${materialWidth}x${material.sheetSize.height}cm)`,
                                             price: discountedPrice,
                                             displayPrice: discountedPrice.toLocaleString(),
                                             image: projectType === 'cubreplacas' ? '/brand/logo.png' : material.imageSrc,
                                             category: projectType === 'cubreplacas' ? 'Cubreplacas' : 'Stickers',
-                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase} / ${cubreplacasFinish}` : `${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
+                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase} / ${cubreplacasFinish}` : `${cutType.name} | ${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
                                             features: projectType === 'cubreplacas' ? [`Base: ${cubreplacasBase}`, `Acabado: ${cubreplacasFinish}`] : [`Material: ${material.name}`, `Corte: ${cutType.name}`],
                                             fileUrl: fileUrl || undefined
                                         });
