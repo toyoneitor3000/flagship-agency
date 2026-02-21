@@ -1,0 +1,831 @@
+"use client";
+
+import { useState, useEffect, useTransition } from 'react';
+import { createPortal } from 'react-dom';
+import Image from 'next/image';
+import {
+    Heart, MessageCircle, Share2, MoreHorizontal, Zap,
+    Bookmark, Send,
+    Pencil, Archive, Trash2, X, ArrowDownCircle, Download, Maximize, Music, Search, Wand2, Link as LinkIcon
+} from "lucide-react";
+import { extractMusicFromUrl, searchMusiciTunes } from '@/app/actions/music';
+import { downloadWithWatermark } from '@/app/utils/downloadWithWatermark';
+import { useUi } from '@/app/context/UiContext';
+import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from '@/app/lib/auth-client';
+import { toggleLike, archiveVideo, deleteVideo, updateVideoMetadata } from '@/app/actions/cinema';
+import { CommentsSection } from "@/app/components/CommentsSection";
+import { GiftingSystem } from "@/app/components/GiftingSystem";
+import ConfirmModal from '@/app/components/ui/ConfirmModal';
+import { toast } from 'sonner';
+
+// Helper
+const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-US', { notation: "compact", maximumFractionDigits: 1 }).format(num);
+}
+
+export function SocialInterface({ post, isMuted, toggleMute, onOpenFull, duration, toggleUiVisibility }: any) {
+    const { data: session } = useSession();
+    const isOwner = session?.user?.id === post.creatorId;
+    const [liked, setLiked] = useState(post.liked_by_user || false);
+    const [saved, setSaved] = useState(false);
+    const [likeCount, setLikeCount] = useState(post.likes || 0);
+    const [commentCount, setCommentCount] = useState(post.comments || 0);
+
+    const [following, setFollowing] = useState(post.isFollowing || false);
+    const [isPending, startTransition] = useTransition();
+
+    // NEW: Comments & Gifting State
+    const [showComments, setShowComments] = useState(false);
+    const [showGifting, setShowGifting] = useState(false);
+    const [showUnfollowModal, setShowUnfollowModal] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+        const check = () => setIsDesktop(window.innerWidth >= 768);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
+
+    // NEW: Text Expansion State
+    const [expanded, setExpanded] = useState(false);
+    const isLongDescription = post.description && post.description.length > 100;
+
+    // NEW: Sync Real Comment Count on Mount
+    useEffect(() => {
+        const fetchRealCount = async () => {
+            const { createClient } = await import('@/app/utils/supabase/client');
+            const supabase = createClient();
+            const { count, error } = await supabase
+                .from('comments')
+                .select('*', { count: 'exact', head: true })
+                .eq('target_id', post.id);
+
+            if (!error && count !== null) {
+                setCommentCount(count);
+            }
+        };
+        fetchRealCount();
+    }, [post.id]);
+
+    // EXISTING LIKES SYNC
+    useEffect(() => {
+        setLiked(post.liked_by_user);
+        setLikeCount(post.likes);
+        setFollowing(post.isFollowing);
+    }, [post.liked_by_user, post.likes, post.isFollowing]);
+
+    const handleFollowClick = (e: any) => {
+        e.stopPropagation();
+        if (!post.creatorId) return;
+
+        if (following) {
+            setShowUnfollowModal(true);
+        } else {
+            executeFollowToggle();
+        }
+    };
+
+    const executeFollowToggle = () => {
+        const newState = !following;
+        setFollowing(newState); // Optimistic
+
+        startTransition(async () => {
+            try {
+                const { toggleFollow } = await import('@/app/actions/social');
+                await toggleFollow(post.creatorId);
+            } catch (err) {
+                console.error("Follow failed", err);
+                setFollowing(!newState); // Revert
+            }
+        });
+    };
+
+    const handleLike = async (e: any) => {
+        e.stopPropagation();
+
+        // Optimistic
+        const failState = { liked, likeCount };
+        const newLiked = !liked;
+        setLiked(newLiked);
+        setLikeCount((prev: number) => newLiked ? prev + 1 : prev - 1);
+
+        try {
+            const res = await toggleLike(post.id);
+            if (res?.error) {
+                // Revert
+                setLiked(failState.liked);
+                setLikeCount(failState.likeCount);
+            }
+        } catch (err) {
+            setLiked(failState.liked);
+            setLikeCount(failState.likeCount);
+        }
+    };
+
+    const handleSave = (e: any) => {
+        e.stopPropagation();
+        setSaved(!saved);
+    };
+
+    const handleShare = async (e: any) => {
+        e.stopPropagation();
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: post.title,
+                    text: `Mira este video increíble en Speedlight: ${post.title}`,
+                    url: window.location.href
+                });
+            } catch (err) { console.log('Share error:', err); }
+        } else {
+            alert('Enlace copiado al portapapeles');
+        }
+    };
+
+    return (
+        <div className="w-full h-full pointer-events-none z-20 pl-2 md:pl-2 pr-2 md:pr-1 flex flex-col justify-between">
+
+            {/* TOP BAR: Transparent */}
+            <div className="w-full pt-4 flex justify-end items-start">
+                {/* Mute button moved to bottom right */}
+            </div>
+
+            {/* BOTTOM AREA: Actions & Info */}
+            <div className={`w-full flex items-end justify-between pb-2`}>
+
+                {/* LEFT: INFO */}
+                <div className="flex-1 mr-12 pointer-events-auto text-shadow-sm">
+                    <div className="flex items-center mb-1">
+                        <div className="w-8 h-8 rounded-xl bg-neutral-800 border-2 border-black/70 overflow-hidden relative mr-2 shrink-0">
+                            {post.avatar ? <Image src={post.avatar} alt="u" fill className="object-cover" /> : null}
+                        </div>
+                        <span className="font-bold text-sm text-white drop-shadow-md truncate max-w-[120px] mr-3">
+                            {post.creator || 'SpeedlightUser'}
+                        </span>
+
+                        <div className="flex items-center gap-2">
+                            {!isOwner && !following && (
+                                <button
+                                    onClick={handleFollowClick}
+                                    disabled={isPending}
+                                    className="px-3 py-1 rounded text-[10px] font-bold uppercase border transition-all bg-transparent text-white border-white/40 hover:bg-white/10 hover:border-white"
+                                >
+                                    Seguir
+                                </button>
+                            )}
+
+
+                        </div>
+                    </div>
+                    <h2 className="text-white font-bold text-base leading-tight mb-2 drop-shadow-lg line-clamp-2">{post.title}</h2>
+
+                    <div className="mb-1 relative">
+                        <p
+                            className="text-white/80 text-xs drop-shadow-md transition-all duration-300"
+                            onClick={() => { if (isLongDescription) setExpanded(!expanded); }}
+                        >
+                            {expanded || !isLongDescription ? (
+                                <>
+                                    {post.description}
+                                    {expanded && (
+                                        <span
+                                            onClick={(e) => { e.stopPropagation(); setExpanded(false); }}
+                                            className="text-white/50 font-bold text-xs ml-2 hover:text-white cursor-pointer"
+                                        >
+                                            Ver menos
+                                        </span>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    {post.description?.slice(0, 130)}...
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setExpanded(true); }}
+                                        className="font-bold text-white text-xs hover:text-[#FF9800] ml-1"
+                                    >
+                                        Ver más
+                                    </button>
+                                </>
+                            )}
+                        </p>
+                    </div>
+
+                    {/* Tags / Music ticker */}
+                    <div className="flex items-center gap-2 text-[10px] text-white/70">
+                        <div className="flex items-center gap-1 bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm max-w-[200px]">
+                            <span className="animate-pulse flex-shrink-0">♫</span>
+                            <div className="overflow-hidden min-w-0">
+                                <span className={`whitespace-nowrap ${post.music_metadata?.name ? 'animate-marquee' : ''} inline-block`}>
+                                    {post.music_metadata?.name
+                                        ? `${post.music_metadata.name} ${post.music_metadata.artist ? `- ${post.music_metadata.artist}` : ''}`
+                                        : `Sonido Original - ${post.creator || 'Speedlight'}`
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* RIGHT: ACTIONS SIDEBAR */}
+                <div className="flex flex-col items-center gap-2 pointer-events-auto pr-1">
+
+
+
+
+                    {/* LIKE */}
+                    <button onClick={handleLike} className="flex flex-col items-center gap-1 group">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 ${liked ? 'bg-red-500/20 text-red-500 border border-red-500/50' : 'bg-black/20 backdrop-blur-md text-white hover:bg-black/40'}`}>
+                            <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
+                        </div>
+                        <span className="text-[10px] font-bold text-white drop-shadow-md">{formatNumber(likeCount)}</span>
+                    </button>
+
+                    {/* COMMENT */}
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setShowComments(true); }}
+                        className="flex flex-col items-center gap-1 group"
+                    >
+                        <div className="w-9 h-9 rounded-xl bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/40 transition-all">
+                            <MessageCircle className="w-5 h-5" />
+                        </div>
+                        <span className="text-[10px] font-bold text-white drop-shadow-md">{formatNumber(commentCount)}</span>
+                    </button>
+
+                    {/* GIFT */}
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setShowGifting(true); }}
+                        className="flex flex-col items-center gap-1 group"
+                    >
+                        <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[#FF9800] bg-black/20 backdrop-blur-md hover:bg-[#FF9800]/20 transition-all">
+                            <Zap className="w-5 h-5 fill-current" />
+                        </div>
+                    </button>
+
+                    {/* MAXIMIZE / FULLSCREEN */}
+                    <button
+                        onClick={(e) => { e.stopPropagation(); toggleUiVisibility(); }}
+                        className="flex flex-col items-center gap-1 group"
+                    >
+                        <div className="w-9 h-9 rounded-xl bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/40 transition-all">
+                            <Maximize className="w-5 h-5" />
+                        </div>
+                    </button>
+
+
+
+
+
+                    {/* MORE ACTIONS (MENU) */}
+                    <VideoActionsMenu
+                        post={post}
+                        saved={saved}
+                        onSave={handleSave}
+                        onShare={handleShare}
+                    />
+
+                </div>
+            </div>
+
+            {/* COMMENTS PANEL (Portal rendered to body to avoid transform constraints) */}
+            {mounted && createPortal(
+                <AnimatePresence>
+                    {showComments && (
+                        <>
+                            {/* Backdrop — transparent on desktop (video stays visible), dark on mobile */}
+                            <motion.div
+                                key="comments-backdrop"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className={`fixed inset-0 z-[200] pointer-events-auto ${isDesktop ? 'bg-transparent' : 'bg-black/50 backdrop-blur-sm'}`}
+                                onClick={() => setShowComments(false)}
+                            />
+                            {/* Panel */}
+                            <motion.div
+                                key="comments-panel"
+                                initial={isDesktop ? { x: 400 } : { y: '100%' }}
+                                animate={isDesktop ? { x: 0 } : { y: 0 }}
+                                exit={isDesktop ? { x: 400 } : { y: '100%' }}
+                                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                                className={`fixed z-[201] pointer-events-auto flex flex-col overflow-hidden
+                                    ${isDesktop
+                                        ? 'right-0 top-[65px] h-[calc(100vh-65px)] w-[420px] border-l border-white/8 bg-[#0a0a0a] shadow-[-6px_0_30px_rgba(0,0,0,0.6)]'
+                                        : 'bottom-0 left-0 right-0 h-[70vh] rounded-t-[32px] border-t border-white/10 bg-[#050505]/90 backdrop-blur-2xl shadow-[0_-10px_50px_rgba(0,0,0,0.8)]'
+                                    }`}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+
+                                {/* Header */}
+                                <div className="w-full flex items-center justify-between px-5 pt-5 pb-3 shrink-0 relative z-10 border-b border-white/5">
+                                    <span className="text-white font-bold text-base">Comentarios</span>
+                                    <button onClick={() => setShowComments(false)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all">
+                                        <X className="w-4 h-4 text-white" />
+                                    </button>
+                                </div>
+
+                                {/* Mobile handle */}
+                                {!isDesktop && (
+                                    <div className="w-full flex justify-center py-2 shrink-0 cursor-pointer" onClick={() => setShowComments(false)}>
+                                        <div className="w-12 h-1.5 bg-white/20 rounded-full" />
+                                    </div>
+                                )}
+
+                                <div className="flex-1 overflow-y-auto px-4 pb-12 relative z-10">
+                                    <CommentsSection
+                                        targetId={post.id}
+                                        targetType={"cinema" as any}
+                                        onCommentAdded={() => setCommentCount((prev: number) => prev + 1)}
+                                    />
+                                </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
+
+            {/* GIFTING PANEL (Portal rendered to body to avoid transform constraints) */}
+            {mounted && createPortal(
+                <AnimatePresence>
+                    {showGifting && (
+                        <>
+                            <motion.div
+                                key="gifting-backdrop"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className={`fixed inset-0 z-[200] pointer-events-auto ${isDesktop ? 'bg-transparent' : 'bg-black/50 backdrop-blur-sm'}`}
+                                onClick={() => setShowGifting(false)}
+                            />
+                            <motion.div
+                                key="gifting-panel"
+                                initial={isDesktop ? { x: 400 } : { y: '100%' }}
+                                animate={isDesktop ? { x: 0 } : { y: 0 }}
+                                exit={isDesktop ? { x: 400 } : { y: '100%' }}
+                                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                                className={`fixed z-[201] pointer-events-auto flex flex-col overflow-hidden
+                                    ${isDesktop
+                                        ? 'right-0 top-[65px] h-[calc(100vh-65px)] w-[420px] border-l border-[#FF9800]/15 bg-[#0a0a0a] shadow-[-6px_0_30px_rgba(255,152,0,0.06)]'
+                                        : 'bottom-0 left-0 right-0 h-[70vh] rounded-t-[32px] border-t border-[#FF9800]/20 bg-[#050505]/90 backdrop-blur-3xl shadow-[0_-10px_50px_rgba(255,152,0,0.1)]'
+                                    }`}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#FF9800]/5 to-transparent pointer-events-none" />
+
+                                <div className="w-full flex items-center justify-between px-5 pt-5 pb-3 shrink-0 relative z-10 border-b border-[#FF9800]/10">
+                                    <span className="text-[#FF9800] font-bold text-base">🎁 Regalos</span>
+                                    <button onClick={() => setShowGifting(false)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all">
+                                        <X className="w-4 h-4 text-white" />
+                                    </button>
+                                </div>
+
+                                {!isDesktop && (
+                                    <div className="w-full flex justify-center py-2 shrink-0 cursor-pointer" onClick={() => setShowGifting(false)}>
+                                        <div className="w-12 h-1.5 bg-white/20 rounded-full" />
+                                    </div>
+                                )}
+
+                                <div className="flex-1 overflow-y-auto px-4 pb-12 relative z-10">
+                                    <div className="mt-2">
+                                        <GiftingSystem projectTitle={post.title} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>,
+                document.body
+            )}
+
+            {/* CONFIRM UNFOLLOW MODAL */}
+            <ConfirmModal
+                isOpen={showUnfollowModal}
+                onClose={() => setShowUnfollowModal(false)}
+                onConfirm={() => {
+                    executeFollowToggle();
+                    setShowUnfollowModal(false);
+                }}
+                title={`¿Dejar de seguir a ${post.creator}?`}
+                message="Dejarás de ver su contenido en tu feed de seguidos."
+                confirmText="Dejar de seguir"
+                variant="info"
+            />
+
+        </div >
+    );
+}
+
+function VideoActionsMenu({ post, saved, onSave, onShare }: { post: any, saved: boolean, onSave: (e: any) => void, onShare: (e: any) => void }) {
+    const { data: session } = useSession();
+    const { autoScrollEnabled, toggleAutoScroll } = useUi();
+    const [isOpen, setIsOpen] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [confirmArchive, setConfirmArchive] = useState(false);
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const isOwner = session?.user?.id === post.creatorId || session?.user?.email === 'speedlightculture@gmail.com';
+
+    const handleArchive = async () => {
+        try {
+            await archiveVideo(post.id);
+            toast.success('Video archivado correctamente');
+            setTimeout(() => window.location.reload(), 1500);
+        } catch (err) {
+            toast.error('Error al archivar');
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await deleteVideo(post.id);
+            toast.success('Video eliminado');
+            setTimeout(() => window.location.reload(), 1500);
+        } catch (err) {
+            toast.error('Error al eliminar');
+        }
+    };
+
+    const handleDownload = async (e: any) => {
+        e.stopPropagation();
+        setIsOpen(false);
+        // Use either videoUrl or fallback
+        if (post.videoUrl) {
+            await downloadWithWatermark(post.videoUrl);
+        } else {
+            toast.error("URL de video no encontrada");
+        }
+    };
+
+    return (
+        <div className="relative">
+            <button
+                onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
+                className="flex flex-col items-center gap-1 group"
+            >
+                <div className="w-9 h-9 rounded-xl bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/40 transition-all">
+                    <MoreHorizontal className="w-5 h-5" />
+                </div>
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <>
+                        <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setIsOpen(false); }} />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+                            animate={{ opacity: 1, scale: 1, x: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, x: 20 }}
+                            className="absolute bottom-full right-0 mb-2 w-56 bg-[#111] border border-white/10 rounded-xl overflow-hidden shadow-xl z-50 py-1"
+                        >
+                            <div className="px-4 py-3 flex items-center justify-between border-b border-white/5">
+                                <span className="text-sm font-bold text-white flex items-center gap-2">
+                                    <ArrowDownCircle className="w-4 h-4 text-[#FF9800]" /> Auto-Scroll
+                                </span>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); toggleAutoScroll(!autoScrollEnabled); }}
+                                    className={`w-10 h-5 rounded-full p-1 transition-colors relative ${autoScrollEnabled ? 'bg-[#FF9800]' : 'bg-white/10'}`}
+                                >
+                                    <div className={`w-3 h-3 bg-white rounded-full shadow-md transition-transform ${autoScrollEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+                                </button>
+                            </div>
+                            <button
+                                onClick={onSave}
+                                className="w-full px-4 py-3 text-left text-sm font-bold text-white hover:bg-white/5 flex items-center gap-3 transition-colors"
+                            >
+                                <Bookmark className={`w-4 h-4 ${saved ? 'fill-[#FF9800] text-[#FF9800]' : 'text-white'}`} />
+                                {saved ? 'Guardado' : 'Guardar'}
+                            </button>
+                            <button
+                                onClick={onShare}
+                                className="w-full px-4 py-3 text-left text-sm font-bold text-white hover:bg-white/5 flex items-center gap-3 transition-colors"
+                            >
+                                <Share2 className="w-4 h-4 text-white" /> Compartir
+                            </button>
+                            <button
+                                onClick={handleDownload}
+                                className="w-full px-4 py-3 text-left text-sm font-bold text-white hover:bg-white/5 flex items-center gap-3 transition-colors"
+                            >
+                                <Download className="w-4 h-4 text-white" /> Descargar
+                            </button>
+
+                            {isOwner && (
+                                <>
+                                    <div className="h-px bg-white/10 my-1" />
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setShowEditModal(true); setIsOpen(false); }}
+                                        className="w-full px-4 py-3 text-left text-sm font-bold text-white hover:bg-white/5 flex items-center gap-3 transition-colors"
+                                    >
+                                        <Pencil className="w-4 h-4 text-blue-400" /> Editar Info
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setConfirmArchive(true); setIsOpen(false); }}
+                                        className="w-full px-4 py-3 text-left text-sm font-bold text-white hover:bg-white/5 flex items-center gap-3 transition-colors"
+                                    >
+                                        <Archive className="w-4 h-4 text-yellow-400" /> Archivar
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setConfirmDelete(true); setIsOpen(false); }}
+                                        className="w-full px-4 py-3 text-left text-sm font-bold text-red-500 hover:bg-red-500/10 flex items-center gap-3 transition-colors border-t border-white/5"
+                                    >
+                                        <Trash2 className="w-4 h-4" /> Eliminar
+                                    </button>
+                                </>
+                            )}
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+
+            {/* CONFIRMATION MODALS */}
+            <ConfirmModal
+                isOpen={confirmArchive}
+                onClose={() => setConfirmArchive(false)}
+                onConfirm={handleArchive}
+                title="Archivar Video"
+                message="¿Seguro que quieres archivar este video? Se ocultará del feed principal."
+                confirmText="Archivar"
+                variant="info"
+            />
+
+            <ConfirmModal
+                isOpen={confirmDelete}
+                onClose={() => setConfirmDelete(false)}
+                onConfirm={handleDelete}
+                title="Eliminar Video"
+                message="¿ESTÁS SEGURO? Esta acción enviará el video a la papelera. Se podrá recuperar desde ajustes."
+                confirmText="Mover a papelera"
+                variant="danger"
+            />
+
+            {/* EDIT MODAL */}
+            <AnimatePresence>
+                {showEditModal && (
+                    <EditMetadataModal
+                        post={post}
+                        onClose={() => setShowEditModal(false)}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+function EditMetadataModal({ post, onClose }: { post: any, onClose: () => void }) {
+    const [title, setTitle] = useState(post.title);
+    const [description, setDescription] = useState(post.description);
+
+    // Music State
+    const [musicName, setMusicName] = useState(post.music_metadata?.name || '');
+    const [musicArtist, setMusicArtist] = useState(post.music_metadata?.artist || '');
+
+    // Tools State
+    const [showTools, setShowTools] = useState(false);
+    const [sourceUrl, setSourceUrl] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isScanning, setIsScanning] = useState(false);
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSave = async () => {
+        if (!title.trim()) return;
+        setIsSaving(true);
+        try {
+            await updateVideoMetadata(post.id, {
+                title,
+                description,
+                music_metadata: {
+                    name: musicName,
+                    artist: musicArtist
+                }
+            });
+            window.location.reload();
+        } catch (err) {
+            alert('Error al guardar cambios');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleExtract = async () => {
+        if (!sourceUrl) return;
+        setIsScanning(true);
+        try {
+            const res = await extractMusicFromUrl(sourceUrl);
+            if (res.success && res.data) {
+                setMusicName(res.data.name);
+                setMusicArtist(res.data.artist);
+                toast.success("¡Música detectada!");
+                setShowTools(false);
+            } else {
+                toast.error(res.error || "No se pudo detectar");
+            }
+        } catch (e) {
+            toast.error("Error de conexión");
+        } finally {
+            setIsScanning(false);
+        }
+    }
+
+    const handleSearch = async () => {
+        if (!searchQuery) return;
+        setIsScanning(true);
+        const res = await searchMusiciTunes(searchQuery);
+        if (res.success && res.results) {
+            setSearchResults(res.results);
+        } else {
+            toast.error("Sin resultados");
+        }
+        setIsScanning(false);
+    }
+
+    return (
+        <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md" onClick={onClose}>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button onClick={onClose} className="absolute top-4 right-4 text-white/40 hover:text-white">
+                    <X className="w-6 h-6" />
+                </button>
+
+                <h3 className="text-xl font-black font-oswald uppercase text-white mb-6">Editar Publicación</h3>
+
+                <div className="space-y-4">
+                    {/* Basic Info */}
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-[#FF9800] uppercase tracking-widest pl-1">Título</label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FF9800] transition-colors"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-[#FF9800] uppercase tracking-widest pl-1">Descripción</label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            rows={3}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FF9800] transition-colors resize-none text-sm"
+                        />
+                    </div>
+
+                    <div className="h-px bg-white/10 my-2" />
+
+                    {/* Music Section */}
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-bold text-[#FF9800] uppercase tracking-widest pl-1">Información de Audio</label>
+                            <button
+                                onClick={() => setShowTools(!showTools)}
+                                className="text-[10px] font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1 bg-blue-500/10 px-2 py-1 rounded"
+                            >
+                                <Wand2 className="w-3 h-3" /> {showTools ? 'Ocultar Herramientas' : 'Detectar / Buscar'}
+                            </button>
+                        </div>
+
+                        {/* Tools Panel */}
+                        <AnimatePresence>
+                            {showTools && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="bg-blue-900/10 border border-blue-500/30 rounded-xl p-4 overflow-hidden"
+                                >
+                                    <div className="space-y-4">
+                                        {/* Option A: Link */}
+                                        <div>
+                                            <p className="text-[10px] text-white/60 mb-2 font-bold uppercase">Opción A: Pegar Link Original (TikTok)</p>
+                                            <div className="flex gap-2">
+                                                <div className="relative flex-1">
+                                                    <LinkIcon className="absolute left-3 top-3 w-4 h-4 text-white/40" />
+                                                    <input
+                                                        placeholder="https://www.tiktok.com/@user/video/..."
+                                                        className="w-full bg-black/50 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-white"
+                                                        value={sourceUrl}
+                                                        onChange={(e) => setSourceUrl(e.target.value)}
+                                                    />
+                                                </div>
+                                                <button
+                                                    onClick={handleExtract}
+                                                    disabled={isScanning || !sourceUrl}
+                                                    className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-2 rounded-lg disabled:opacity-50"
+                                                >
+                                                    {isScanning ? '...' : 'Extraer'}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-px bg-white/10 flex-1" />
+                                            <span className="text-[10px] text-white/30 font-bold">O</span>
+                                            <div className="h-px bg-white/10 flex-1" />
+                                        </div>
+
+                                        {/* Option B: Search */}
+                                        <div>
+                                            <p className="text-[10px] text-white/60 mb-2 font-bold uppercase">Opción B: Buscar en iTunes</p>
+                                            <div className="flex gap-2 mb-2">
+                                                <div className="relative flex-1">
+                                                    <Search className="absolute left-3 top-3 w-4 h-4 text-white/40" />
+                                                    <input
+                                                        placeholder="Ej: Bad Bunny - Monaco"
+                                                        className="w-full bg-black/50 border border-white/10 rounded-lg pl-9 pr-3 py-2 text-xs text-white"
+                                                        value={searchQuery}
+                                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                                    />
+                                                </div>
+                                                <button
+                                                    onClick={handleSearch}
+                                                    disabled={isScanning || !searchQuery}
+                                                    className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-2 rounded-lg"
+                                                >
+                                                    Buscar
+                                                </button>
+                                            </div>
+
+                                            {/* Results */}
+                                            {searchResults.length > 0 && (
+                                                <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
+                                                    {searchResults.map((result, i) => (
+                                                        <div
+                                                            key={i}
+                                                            onClick={() => {
+                                                                setMusicName(result.name);
+                                                                setMusicArtist(result.artist);
+                                                                setShowTools(false);
+                                                            }}
+                                                            className="flex items-center gap-2 p-2 rounded hover:bg-white/10 cursor-pointer transition-colors"
+                                                        >
+                                                            <div className="w-8 h-8 bg-white/10 rounded overflow-hidden flex-shrink-0">
+                                                                <img src={result.image} className="w-full h-full object-cover" />
+                                                            </div>
+                                                            <div className="min-w-0">
+                                                                <p className="text-xs font-bold text-white truncate">{result.name}</p>
+                                                                <p className="text-[10px] text-white/60 truncate">{result.artist}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="text-[10px] text-white/50 mb-1 block">Canción</label>
+                                <input
+                                    type="text"
+                                    value={musicName}
+                                    placeholder="Nombre de la canción"
+                                    onChange={(e) => setMusicName(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#FF9800]"
+                                />
+                            </div>
+                            <div>
+                                <label className="text-[10px] text-white/50 mb-1 block">Artista</label>
+                                <input
+                                    type="text"
+                                    value={musicArtist}
+                                    placeholder="Nombre del artista"
+                                    onChange={(e) => setMusicArtist(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-[#FF9800]"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-8 flex gap-3">
+                    <button
+                        onClick={onClose}
+                        className="flex-1 py-3 rounded-xl border border-white/10 text-white font-bold text-xs uppercase tracking-widest hover:bg-white/5 transition-colors"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="flex-1 py-3 rounded-xl bg-[#FF9800] text-black font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50"
+                    >
+                        {isSaving ? 'Guardando...' : 'Guardar'}
+                    </button>
+                </div>
+            </motion.div>
+        </div>
+    );
+}

@@ -135,18 +135,6 @@ const MATERIALS_CONFIG: Material[] = [
         finishOptions: false,
         requiresLaminate: false,
         hasWidthOptions: true
-    },
-    {
-        id: 'ojo-gato',
-        name: 'Ojo de Gato',
-        description: 'Efecto reflectante especial. Solo con laminado.',
-        sheetSize: { width: 120, height: 100 },
-        alternativeSheetSize: { width: 60, height: 100 },
-        pricing: { sc_laminate: 165000, cc_laminate: 170000, hybrid_laminate: 180000, sc_laminate_60: 149900, cc_laminate_60: 149900, hybrid_laminate_60: 149900 },
-        imageSrc: '/materials/ojo-gato.png',
-        finishOptions: false,
-        requiresLaminate: false,
-        hasWidthOptions: true
     }
 ];
 
@@ -188,7 +176,7 @@ export default function PriceCalculator() {
 
     // Sticker States
     const [material, setMaterial] = useState(MATERIALS_CONFIG[0]);
-    const [materialWidth, setMaterialWidth] = useState<120 | 60>(120);
+    const [materialWidth, setMaterialWidth] = useState<120 | 60>(60);
     const [laminate, setLaminate] = useState<'brillante' | 'mate' | null>('brillante');
     const [cutType, setCutType] = useState(CUT_TYPES[0]);
     const [widthCm, setWidthCm] = useState(5);
@@ -749,61 +737,102 @@ export default function PriceCalculator() {
                                                 </button>
                                             </div>
                                         ) : (
-                                            <div className="space-y-3">
-                                                {material.hasWidthOptions && (
-                                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 bg-white/5 rounded-xl border border-brand-yellow/20 animate-in fade-in slide-in-from-top-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-7 h-7 rounded-lg bg-brand-yellow/10 flex items-center justify-center text-brand-yellow">
-                                                                <Palette size={16} />
+                                            <div className="flex flex-col md:flex-row gap-6">
+                                                <div className="flex-1 space-y-4">
+                                                    {material.hasWidthOptions && (
+                                                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 p-2 bg-white/5 rounded-xl border border-brand-yellow/20 animate-in fade-in slide-in-from-top-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-7 h-7 rounded-lg bg-brand-yellow/10 flex items-center justify-center text-brand-yellow">
+                                                                    <Palette size={16} />
+                                                                </div>
+                                                                <div className="text-left leading-none">
+                                                                    <span className="text-white font-bold block text-xs italic">ANCHO DISPONIBLE</span>
+                                                                    <span className="text-gray-500 text-[9px]">Elige la medida del material</span>
+                                                                </div>
                                                             </div>
-                                                            <div className="text-left leading-none">
-                                                                <span className="text-white font-bold block text-xs italic">ANCHO DISPONIBLE</span>
-                                                                <span className="text-gray-500 text-[9px]">Elige la medida del material</span>
+                                                            <div className="flex p-0.5 bg-black/40 rounded-lg border border-white/5">
+                                                                <button
+                                                                    onClick={() => setMaterialWidth(60)}
+                                                                    className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 60 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                                >
+                                                                    60CM
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => setMaterialWidth(120)}
+                                                                    className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 120 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                                >
+                                                                    120CM
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                        <div className="flex p-0.5 bg-black/40 rounded-lg border border-white/5">
+                                                    )}
+
+                                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                                        {MATERIALS_CONFIG.map(m => (
                                                             <button
-                                                                onClick={() => setMaterialWidth(60)}
-                                                                className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 60 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                                key={m.id}
+                                                                onClick={() => setMaterial(m)}
+                                                                className={`relative overflow-hidden rounded-[1.25rem] border transition-all duration-300 group w-full aspect-[4/3] sm:aspect-[3/2] flex flex-col items-center justify-end p-2 sm:p-3 pb-3 sm:pb-4 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
                                                             >
-                                                                60CM
+                                                                <img
+                                                                    src={m.imageSrc}
+                                                                    alt={m.name}
+                                                                    className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"
+                                                                />
+                                                                <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/30 to-brand-black/80`} />
+                                                                <div className="relative z-10 w-full px-2">
+                                                                    <div className={`w-7 h-7 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
+                                                                        <CheckCircle2 size={14} />
+                                                                    </div>
+                                                                    <span className="text-white font-black text-sm sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{m.name}</span>
+                                                                </div>
                                                             </button>
-                                                            <button
-                                                                onClick={() => setMaterialWidth(120)}
-                                                                className={`px-3 py-1 rounded-md text-[9px] font-black tracking-widest transition-all ${materialWidth === 120 ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
-                                                            >
-                                                                120CM
-                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                {/* Large Preview Panel */}
+                                                <div className="hidden md:flex w-72 flex-col gap-3 sticky top-0">
+                                                    <div
+                                                        className="group relative w-full aspect-square rounded-[2rem] overflow-hidden border border-white/20 shadow-2xl cursor-crosshair"
+                                                        onMouseMove={(e) => {
+                                                            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+                                                            const x = ((e.clientX - left) / width) * 100;
+                                                            const y = ((e.clientY - top) / height) * 100;
+                                                            const img = e.currentTarget.querySelector('img');
+                                                            if (img) img.style.transformOrigin = `${x}% ${y}%`;
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            const img = e.currentTarget.querySelector('img');
+                                                            if (img) img.style.transformOrigin = 'center';
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={material.imageSrc}
+                                                            alt={material.name}
+                                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[2]"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none transition-opacity duration-300 group-hover:opacity-50" />
+                                                        <div className="absolute bottom-0 left-0 right-0 p-5 pointer-events-none transition-transform duration-300 group-hover:translate-y-2 group-hover:opacity-0">
+                                                            <h4 className="text-white font-black text-xl italic uppercase tracking-tighter leading-tight drop-shadow-md mb-2">{material.name}</h4>
+                                                            <p className="text-white/80 text-xs font-medium leading-snug drop-shadow-md">{material.description}</p>
+                                                        </div>
+                                                        {/* Optional hint on hover */}
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                                                         </div>
                                                     </div>
-                                                )}
 
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                                    {MATERIALS_CONFIG.map(m => (
-                                                        <button
-                                                            key={m.id}
-                                                            onClick={() => setMaterial(m)}
-                                                            className={`relative overflow-hidden rounded-[1.25rem] border transition-all duration-300 group w-full aspect-[4/3] sm:aspect-[3/2] flex flex-col items-center justify-end p-2 sm:p-3 pb-3 sm:pb-4 text-center ${material.id === m.id ? 'border-brand-yellow ring-2 ring-brand-yellow/20' : 'border-white/10 hover:border-white/30'}`}
-                                                        >
-                                                            {/* Background Image */}
-                                                            <img
-                                                                src={m.imageSrc}
-                                                                alt={m.name}
-                                                                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500"
-                                                            />
-                                                            {/* Gradient Overlay */}
-                                                            <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-brand-black/30 to-brand-black/80`} />
-
-                                                            {/* Content */}
-                                                            <div className="relative z-10 w-full px-2">
-                                                                <div className={`w-7 h-7 mx-auto mb-2 rounded-full flex items-center justify-center bg-brand-yellow/20 text-brand-yellow border border-brand-yellow/30 group-hover:bg-brand-yellow group-hover:text-black transition-colors duration-300`}>
-                                                                    <CheckCircle2 size={14} />
-                                                                </div>
-                                                                <span className="text-white font-black text-sm sm:text-[13px] tracking-tighter italic uppercase block leading-tight">{m.name}</span>
-                                                                <p className="text-white/60 text-[11px] sm:text-xs leading-snug font-medium tracking-wide mt-1.5">{m.description}</p>
-                                                            </div>
-                                                        </button>
-                                                    ))}
+                                                    {material.hasWidthOptions ? (
+                                                        <div className="bg-brand-yellow/10 border border-brand-yellow/30 p-3 rounded-xl flex items-start gap-2 text-brand-yellow animate-in fade-in slide-in-from-bottom-2">
+                                                            <Info size={16} className="shrink-0 mt-0.5" />
+                                                            <p className="text-[10px] leading-tight font-medium">Este material está disponible en dos anchos. Te recomendamos 120cm para mayor eficiencia, o 60cm si tu diseño encaja mejor en medidas pequeñas.</p>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl flex items-start gap-2 text-gray-300 animate-in fade-in slide-in-from-bottom-2">
+                                                            <Info size={16} className="shrink-0 mt-0.5" />
+                                                            <p className="text-[10px] leading-tight font-medium">Este material tiene un ancho fijo estándar. El sistema calculará la mejor forma de organizar tus stickers en la hoja para aprovechar al máximo el espacio.</p>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         )}
@@ -1034,10 +1063,10 @@ export default function PriceCalculator() {
                                                     <span className="text-white font-bold">~{totalStickers}</span>
                                                 </div>
                                             )}
-                                            {currentStep >= 3 && (
-                                                <div className="flex justify-between pt-4 border-t border-white/10">
-                                                    <span>Total:</span>
-                                                    <span className="text-brand-yellow font-bold text-lg">${totalPrice.toLocaleString()}</span>
+                                            {currentStep >= 2 && (
+                                                <div className="flex justify-between pt-4 border-t border-white/10 mt-2">
+                                                    <span className="text-xs uppercase font-bold tracking-widest text-gray-500">Total aprox:</span>
+                                                    <span className="text-brand-yellow font-black text-xl">${totalPrice.toLocaleString()}</span>
                                                 </div>
                                             )}
                                         </>
