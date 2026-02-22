@@ -58,6 +58,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...sticker, quantity }];
     });
+    // Abrir el carrito automáticamente al agregar un producto
+    setIsCartOpen(true);
   };
 
   const removeItem = (id: number) => {

@@ -4,6 +4,8 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { X, Trash2, Plus, Minus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
 
 export default function CartSidebar() {
   const { isCartOpen, toggleCart, items, removeItem, totalPrice, updateQuantity } = useCart();
@@ -65,7 +67,13 @@ export default function CartSidebar() {
             items.map((item) => (
               <div key={item.id} className="flex gap-6 group relative">
                 <div className="w-24 h-24 bg-white/5 rounded-3xl p-1 relative flex-shrink-0 overflow-hidden border border-white/5 group-hover:border-brand-yellow/30 transition-all">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="object-contain p-2 group-hover:scale-110 transition-transform duration-500"
+                  />
+
                 </div>
                 <div className="flex-1 flex flex-col justify-between py-1">
                   <div>

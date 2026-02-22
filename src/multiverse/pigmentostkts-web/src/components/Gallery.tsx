@@ -103,11 +103,14 @@ export default function Gallery() {
                                         getBorderColor(item.category)
                                     )}
                                 >
-                                    <img
+                                    <Image
                                         src={item.image}
                                         alt={item.name}
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        fill
+                                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
+
 
                                     {/* Hover overlay with vibrant design */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-brand-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-6">
@@ -156,11 +159,13 @@ export default function Gallery() {
                                 className="relative w-full max-w-4xl max-h-[90vh] flex flex-col items-center"
                             >
                                 <div className="relative w-full aspect-square md:aspect-video rounded-3xl overflow-hidden bg-brand-black/50 border border-white/10">
-                                    <img
+                                    <Image
                                         src={selectedItem.image}
                                         alt={selectedItem.name}
-                                        className="w-full h-full object-contain"
+                                        fill
+                                        className="object-contain"
                                     />
+
                                 </div>
                                 <div className="mt-6 text-center text-white">
                                     <h3 className="text-3xl font-black uppercase italic tracking-tighter text-brand-yellow">{selectedItem.name}</h3>

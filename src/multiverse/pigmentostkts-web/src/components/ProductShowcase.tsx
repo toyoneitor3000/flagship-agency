@@ -9,7 +9,7 @@ import ParallaxGrid from "@/components/ui/ParallaxGrid";
 
 export default function ProductShowcase() {
     return (
-        <section id="packs" className="snap-start h-screen flex flex-col justify-center bg-brand-yellow relative overflow-hidden pt-32">
+        <section id="packs" data-theme="light" className="snap-start h-screen flex flex-col justify-center bg-brand-yellow relative overflow-hidden pt-32">
             {/* Background Decorative Elements */}
             <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
                 <ParallaxGrid />

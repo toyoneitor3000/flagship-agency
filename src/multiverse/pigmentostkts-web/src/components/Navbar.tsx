@@ -51,42 +51,9 @@ const Navbar = () => {
     }
   };
 
-  // Logic for Text Color:
-  // 1. Landing Page ('/') -> Dynamic based on section theme (context).
-  // 2. Checkout ('/checkout') -> Always Black (white background usually).
-  // 3. All other pages -> Always White (dark background).
   const isLanding = pathname === "/";
-  const isCheckout = pathname === "/checkout";
-
-  let finalTheme: "light" | "dark" = "dark";
-
-  if (isLanding) {
-    if (theme === "light") finalTheme = "light"; // Section is light -> Text Black
-    else finalTheme = "dark"; // Section is dark -> Text White
-  } else if (isCheckout) {
-    finalTheme = "light"; // Checkout -> Text Black
-  } else {
-    finalTheme = "dark"; // Default other pages -> Text White
-  }
-
-  // If scrolled, we force a dark semi-transparent background on landing/others,
-  // preventing text from being invisible if sections are white underneath.
-  // BUT user request says: "the ONLY time it changes to black is landing (depending on section) and checkout".
-  // This implies we should be careful with `isScrolled`.
-  // If `isScrolled` is true, we usually set a background. 
-  // If background is black/dark, text MUST be white.
-  // If we are on landing page in a 'light' section (white bg), text is black. 
-  // If we scroll down into a dark section, text becomes white.
-  // If we scroll back up, text becomes black.
-  // What if we scroll in a white section? The header background usually becomes dark glass.
-  // If header becomes dark glass, text MUST be white to be visible.
-  // So: If `isScrolled` -> Text White (because bg is dark glass).
-  // EXCEPTION: Checkout might stay white/light background even when scrolled?
-  // Let's assume standard behavior: Scrolled = Dark Header = White Text.
-  // The User's "Only time..." rule might refer to the transparent/initial state.
-  // However, I will prioritize legibility. If background is dark, text is white.
-
-  const isTextBlack = !isScrolled && finalTheme === "light";
+  // Simplfied theme logic: use the detected theme from context
+  const isTextBlack = theme === "light";
 
   const textColorClass = isTextBlack ? "text-brand-black" : "text-white";
   const hoverColorClass = "hover:text-brand-yellow";
@@ -95,20 +62,22 @@ const Navbar = () => {
     <nav
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        // Consistent glassmorphism: Neutral blur, distinct boundary
-        "backdrop-blur-md bg-white/5 border-b border-white/5 py-0", // Reduced padding to 0
+        // Enhanced glassmorphism: Adaptive background based on theme
+        isScrolled
+          ? (isTextBlack ? "bg-white/80 backdrop-blur-lg border-b border-black/5" : "bg-black/80 backdrop-blur-lg border-b border-white/5")
+          : "bg-transparent border-b border-transparent py-0",
         isScrolled ? "shadow-sm" : ""
       )}
     >
       <div className="container mx-auto px-4">
         <div className="flex flex-col">
           {/* Main Bar */}
-          <div className="flex justify-between items-center h-[50px] md:h-[70px]"> {/* Reduced height from 90 to 70 */}
+          <div className="flex justify-between items-center h-[60px] md:h-[85px]">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center md:flex-1 md:justify-start">
               <Link href="/" className={cn(
                 "relative transition-all duration-300 hover:scale-105 active:scale-95",
-                isScrolled ? "w-28 md:w-36 h-[35px] md:h-[45px]" : "w-32 md:w-48 h-[40px] md:h-[60px]"
+                isScrolled ? "w-32 md:w-40 h-[40px] md:h-[50px]" : "w-40 md:w-56 h-[50px] md:h-[70px]"
               )}>
                 <Image
                   src="/brand/logo.png"
@@ -118,6 +87,8 @@ const Navbar = () => {
                     "object-contain object-left transition-all duration-300"
                   )}
                   priority
+                  quality={100}
+                  sizes="(max-width: 768px) 150px, 250px"
                 />
               </Link>
             </div>

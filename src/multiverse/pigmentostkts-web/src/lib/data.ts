@@ -76,8 +76,6 @@ export const stickers: Sticker[] = [
   { id: 54, name: "Colección Sticker 9", price: 3500, displayPrice: "$3.500", image: "/fotos stickers coleccion/Colecciones img/109724523_327212195115556_2442367407618015314_n.jpg", category: "Colecciones", description: "Diseño de colección", features: ["Premium"] },
   { id: 55, name: "Colección Sticker 10", price: 3500, displayPrice: "$3.500", image: "/fotos stickers coleccion/Colecciones img/109820685_351069822957160_6480856910773356024_n.jpg", category: "Colecciones", description: "Diseño de colección", features: ["Premium"] },
   { id: 57, name: "Colección Sticker 12", price: 3500, displayPrice: "$3.500", image: "/fotos stickers coleccion/Colecciones img/IMG_6401.jpg", category: "Colecciones", description: "Diseño de colección", features: ["Premium"] },
-  { id: 58, name: "Colección Sticker 13", price: 3500, displayPrice: "$3.500", image: "/fotos stickers coleccion/Colecciones img/PDF-exportado-grupo-1.jpg", category: "Colecciones", description: "Planilla de colección", features: ["Lote"] },
-  { id: 59, name: "Colección Sticker 14", price: 3500, displayPrice: "$3.500", image: "/fotos stickers coleccion/Colecciones img/PDF-exportado-grupo-4.jpg", category: "Colecciones", description: "Planilla de colección", features: ["Lote"] },
 
   // TORNASOL
   { id: 60, name: "Tornasol Sticker 1", price: 4500, displayPrice: "$4.500", image: "/fotos stickers coleccion/Colecciones img/coleccion tornasol/IMG_4482.JPG", category: "Tornasol", description: "Efecto tornasol", features: ["Holográfico"] },

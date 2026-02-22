@@ -13,12 +13,12 @@ import HomeMenu from "@/components/HomeMenu";
 import StatsCounter from "@/components/StatsCounter";
 
 import ParallaxGrid from "@/components/ui/ParallaxGrid";
-import ProductShowcase from "@/components/ProductShowcase";
+const ProductShowcase = React.lazy(() => import("@/components/ProductShowcase"));
+const CallToAction = React.lazy(() => import("@/components/CallToAction"));
 
 import { useNavTheme } from "@/context/NavThemeContext";
 
 import { Footer } from "@/components/Footer";
-import CallToAction from "@/components/CallToAction";
 
 const SECTION_IDS = ['hero', 'stats', 'services', 'packs', 'footer'];
 
@@ -52,20 +52,12 @@ export default function Home() {
         const section = document.getElementById(id);
         if (section && section.offsetTop <= scrollPosition) {
           setCurrentSectionIndex(index);
-
-          // Theme logic
-          if (id === 'hero' || id === 'packs') {
-            setTheme('light');
-          } else { // stats, services, footer
-            setTheme('dark');
-          }
         }
       });
 
       // Force last section if at bottom (fixes issue with short footers)
       if (atBottom) { // Use the new atBottom variable
         setCurrentSectionIndex(SECTION_IDS.length - 1);
-        setTheme('dark');
       }
     };
 
@@ -193,7 +185,7 @@ export default function Home() {
       </section>
 
       {/* STATS COUNTER SECTION */}
-      <section id="stats" className="snap-start bg-brand-black py-16 md:py-24 border-b border-white/5 relative z-20">
+      <section id="stats" data-theme="dark" className="snap-start bg-brand-black py-16 md:py-24 border-b border-white/5 relative z-20">
         <StatsCounter />
       </section>
 
