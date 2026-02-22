@@ -16,7 +16,7 @@ const navLinks = [
   { name: "Colecciones", href: "/packs#colecciones" },
   { name: "Personalizados", href: "/#calculator" },
   { name: "Packs", href: "/packs" },
-  { name: "Cubreplacas", href: "/#cubreplacas" },
+  { name: "Cubreplacas", href: "/cubreplacas" },
   { name: "Diseño", href: "/#design" },
 ];
 

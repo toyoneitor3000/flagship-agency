@@ -604,10 +604,11 @@ export function VideoPlayer({ post, isFeedMode, isActive, isMuted, toggleMute, o
                 <div
                     className={`absolute bottom-[61px] left-0 right-0 z-[150] px-4 pb-2 transition-opacity duration-300 ${isUiVisible ? 'opacity-100' : 'opacity-0'}`}
                 >
-                    <div className="flex flex-col gap-1.5 pointer-events-auto">
-                        <div className="flex items-center justify-between px-1">
-                            <span className="text-[10px] font-bold text-white/50 font-roboto-mono tracking-tighter">{formatTime(currentTime)}</span>
-                            <span className="text-[10px] font-bold text-white/50 font-roboto-mono tracking-tighter">{formatTime(duration)}</span>
+                    <div className="flex flex-col gap-0.5 pointer-events-auto">
+                        <div className="flex justify-end px-1">
+                            <span className="text-[10px] font-medium text-white/70 font-roboto-mono tracking-wider drop-shadow-md">
+                                {formatTime(Math.max(0, duration - currentTime))}
+                            </span>
                         </div>
                         <div className="relative h-1.5 group/seek flex items-center">
                             {/* The Draggable Input */}
@@ -626,15 +627,15 @@ export function VideoPlayer({ post, isFeedMode, isActive, isMuted, toggleMute, o
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                             />
                             {/* Visual Track */}
-                            <div className="absolute inset-y-0.5 left-0 right-0 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
+                            <div className="absolute inset-0 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm shadow-inner">
                                 <div
-                                    className="h-full bg-[#FF9800] rounded-full shadow-[0_0_15px_rgba(255,152,0,0.5)] transition-all duration-75"
+                                    className="h-full bg-[#FF9800] rounded-full shadow-[0_0_15px_rgba(255,152,0,0.8)] transition-[width] duration-300 ease-linear"
                                     style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
                                 />
                             </div>
                             {/* Thumb (Glowy Dot) */}
                             <div
-                                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_#FF9800] border-2 border-[#FF9800] scale-0 group-hover/seek:scale-100 transition-transform z-10"
+                                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_#FF9800] border-2 border-[#FF9800] scale-0 group-hover/seek:scale-100 transition-transform duration-200 z-10"
                                 style={{ left: `calc(${(currentTime / (duration || 1)) * 100}% - 6px)` }}
                             />
                         </div>

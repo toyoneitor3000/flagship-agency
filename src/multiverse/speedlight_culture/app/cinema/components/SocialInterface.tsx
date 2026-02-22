@@ -154,7 +154,7 @@ export function SocialInterface({ post, isMuted, toggleMute, onOpenFull, duratio
             </div>
 
             {/* BOTTOM AREA: Actions & Info */}
-            <div className={`w-full flex items-end justify-between pb-2`}>
+            <div className={`w-full flex items-end justify-between pb-0 md:pb-1 -mb-7 lg:-mb-7`}>
 
                 {/* LEFT: INFO */}
                 <div className="flex-1 mr-12 pointer-events-auto text-shadow-sm">
@@ -230,7 +230,7 @@ export function SocialInterface({ post, isMuted, toggleMute, onOpenFull, duratio
                 </div>
 
                 {/* RIGHT: ACTIONS SIDEBAR */}
-                <div className="flex flex-col items-center gap-2 pointer-events-auto pr-1">
+                <div className="flex flex-col items-center gap-2 pointer-events-auto pr-1 pb-4">
 
 
 

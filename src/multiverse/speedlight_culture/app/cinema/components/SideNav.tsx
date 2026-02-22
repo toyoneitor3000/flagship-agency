@@ -16,13 +16,14 @@ import {
     Search,
     List
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "@/app/lib/auth-client";
 import { useEffect, useState } from "react";
 import { getFollowingUsers } from "@/app/actions/social";
 
-export function SideNav() {
+export function SideNav({ viewMode: propViewMode, setViewMode: propSetViewMode }: { viewMode?: 'cinema' | 'social', setViewMode?: (mode: 'cinema' | 'social') => void }) {
     const pathname = usePathname();
+    const router = useRouter();
     const { data: session } = useSession();
     const [following, setFollowing] = useState<any[]>([]);
     const [isMounted, setIsMounted] = useState(false);
@@ -50,14 +51,39 @@ export function SideNav() {
         }
     }, [session?.user?.id]);
 
-    return (
-        <aside className="w-[280px] h-full bg-black border-r border-white/5 flex flex-col pt-4 overflow-y-auto hidden md:flex font-sans">
+    // For pages like Explore/Following where SideNav is used without props, 
+    // we default to Social mode but allow switching back to main Cinema
+    const [localViewMode, setLocalViewMode] = useState<'cinema' | 'social'>(pathname === '/cinema' ? 'social' : 'social');
+    const viewMode = propViewMode || localViewMode;
 
-            {/* Logo */}
+    const handleToggle = (mode: 'cinema' | 'social') => {
+        if (propSetViewMode) {
+            propSetViewMode(mode);
+        } else {
+            setLocalViewMode(mode);
+            router.push(`/cinema?mode=${mode}`);
+        }
+    };
+
+    return (
+        <aside className="w-[280px] h-full bg-black border-r border-white/5 flex flex-col pt-[85px] overflow-y-auto hidden md:flex font-sans">
+
+            {/* View Mode Toggle */}
             <div className="px-5 mb-6">
-                <Link href="/">
-                    <Image src="/logonavbar.png" alt="Speedlight" width={140} height={40} className="object-contain" />
-                </Link>
+                <div className="flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-2xl w-full">
+                    <button
+                        onClick={() => handleToggle('social')}
+                        className={`flex-1 py-2 rounded-full text-[11px] font-bold uppercase transition-all ${viewMode === 'social' ? 'bg-white text-black tracking-widest' : 'text-white/40 hover:text-white'}`}
+                    >
+                        Social
+                    </button>
+                    <button
+                        onClick={() => handleToggle('cinema')}
+                        className={`flex-1 py-2 rounded-full text-[11px] font-bold uppercase transition-all ${viewMode === 'cinema' ? 'bg-[#FF9800] text-black tracking-widest' : 'text-white/40 hover:text-white'}`}
+                    >
+                        Films
+                    </button>
+                </div>
             </div>
 
             {/* Search Bar */}

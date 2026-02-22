@@ -163,20 +163,33 @@ const CUT_TYPES = [
     }
 ];
 
-export default function PriceCalculator() {
+interface PriceCalculatorProps {
+    initialProjectType?: 'printed' | 'cut' | 'cubreplacas' | null;
+    initialStep?: number;
+    initialHasDesign?: boolean | null;
+}
+
+export default function PriceCalculator({
+    initialProjectType = null,
+    initialStep = 0,
+    initialHasDesign = null
+}: PriceCalculatorProps = {}) {
     const { addItem, toggleCart } = useCart();
 
     // States
-    const [currentStep, setCurrentStep] = useState(0);
-    const [hasDesign, setHasDesign] = useState<boolean | null>(null);
-    const [projectType, setProjectType] = useState<'printed' | 'cut' | 'cubreplacas' | null>(null);
+    const [currentStep, setCurrentStep] = useState(initialStep);
+    const [hasDesign, setHasDesign] = useState<boolean | null>(initialHasDesign);
+    const [projectType, setProjectType] = useState<'printed' | 'cut' | 'cubreplacas' | null>(initialProjectType);
     const [designDescription, setDesignDescription] = useState("");
     const [designTier, setDesignTier] = useState<'sticker' | 'vector' | 'logo_basic' | 'logo_pro'>('sticker');
 
     // Cubreplacas States
+    const [cubreplacasVehicle, setCubreplacasVehicle] = useState<'carro' | 'moto'>('moto');
     const [cubreplacasBase, setCubreplacasBase] = useState<'negro' | 'ppf' | 'fibra' | 'especial' | 'impreso'>('negro');
     const [cubreplacasFinish, setCubreplacasFinish] = useState<'brillante' | 'mate'>('mate');
     const [cubreplacasColor, setCubreplacasColor] = useState('#ff0000');
+    const [includeHelmetSticker, setIncludeHelmetSticker] = useState(false);
+    const [cubreplacasQuantity, setCubreplacasQuantity] = useState(1);
 
     // Sticker States
     const [material, setMaterial] = useState(MATERIALS_CONFIG[0]);
@@ -266,17 +279,26 @@ export default function PriceCalculator() {
     // Price Calculation
     useEffect(() => {
         if (projectType === 'cubreplacas') {
-            let price = 55000;
-            if (cubreplacasBase === 'fibra') price += 20000;
-            if (cubreplacasBase === 'ppf') price += 40000;
-            if (cubreplacasBase === 'fibra' && cubreplacasFinish === 'mate') {
-                price += 10000;
-            }
-            setTotalPrice(price);
-            setDiscountedPrice(price);
-            setVolumeDiscountedPrice(price);
-            setVolumeDiscountPct(0);
-            setTotalStickers(1);
+            let unitPrice = 55000;
+            if (cubreplacasQuantity >= 12) unitPrice = 15000;
+            else if (cubreplacasQuantity >= 10) unitPrice = 25000;
+            else if (cubreplacasQuantity >= 6) unitPrice = 35000;
+            else if (cubreplacasQuantity >= 3) unitPrice = 45000;
+
+            let extraSurcharges = 0;
+            if (cubreplacasBase === 'ppf') extraSurcharges += 40000;
+            if (cubreplacasBase === 'fibra') extraSurcharges += 20000;
+            if (includeHelmetSticker) extraSurcharges += 10000;
+
+            const finalUnitPrice = unitPrice + extraSurcharges;
+            const calculatedTotal = finalUnitPrice * cubreplacasQuantity;
+
+            setTotalPrice(55000 * cubreplacasQuantity); // Base reference for "normal" price
+            setDiscountedPrice(calculatedTotal);
+            setVolumeDiscountedPrice(calculatedTotal);
+            setVolumeDiscountPct((55000 * cubreplacasQuantity - calculatedTotal) / (55000 * cubreplacasQuantity));
+
+            setTotalStickers(cubreplacasQuantity);
             setStickersPerSheet(0);
             return;
         }
@@ -324,7 +346,7 @@ export default function PriceCalculator() {
         const vPrice = Math.round(calculatedPrice * (1 - vDiscount));
         setVolumeDiscountedPrice(vPrice);
         setDiscountedPrice(vPrice);
-    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, projectType, cubreplacasBase, cubreplacasFinish]);
+    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, projectType, cubreplacasBase, cubreplacasFinish, includeHelmetSticker, cubreplacasQuantity]);
 
     // Initial Screen (Step 0)
     if (currentStep === 0) {
@@ -342,7 +364,7 @@ export default function PriceCalculator() {
 
                     <div className="bg-[#1a1a1a]/90 backdrop-blur-xl rounded-[2rem] border border-white/5 p-4 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative flex flex-col justify-center overflow-auto max-h-full shrink-1">
                         <div className="space-y-4 flex-grow flex flex-col justify-center">
-                            {!hasDesign && hasDesign !== false && (
+                            {hasDesign === null && (
                                 <div className="text-center space-y-4 sm:space-y-8">
                                     <h3 className="text-white font-bold text-lg sm:text-3xl">¿Tienes el diseño listo?</h3>
                                     <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-w-2xl mx-auto w-full">
@@ -642,15 +664,17 @@ export default function PriceCalculator() {
         );
     }
 
-    const progress = (currentStep / 3) * 100;
+    const maxSteps = projectType === 'cubreplacas' ? 2 : 3;
+    const displayStep = projectType === 'cubreplacas' && currentStep === 3 ? 2 : currentStep;
+    const progress = (displayStep / maxSteps) * 100;
 
     return (
-        <section id="cotizador" className="w-full h-full relative flex flex-col bg-transparent overflow-hidden">
-            <div className="max-w-7xl w-full mx-auto px-2 sm:px-4 lg:px-8 relative z-10 flex flex-col h-full pt-4 md:pt-6 pb-2">
+        <section id="cotizador" className="w-full min-h-screen relative flex flex-col bg-transparent">
+            <div className="max-w-7xl w-full mx-auto px-2 sm:px-4 lg:px-8 relative z-10 flex flex-col min-h-full pt-2 md:pt-4 pb-2">
                 {/* Progress Bar */}
-                <div className="w-full max-w-4xl mx-auto mb-4 shrink-0">
-                    <div className="flex justify-between items-center mb-1">
-                        <span className="text-[10px] font-black text-brand-yellow uppercase tracking-widest italic">Paso {currentStep} de 3</span>
+                <div className="w-full max-w-4xl mx-auto mb-2 shrink-0">
+                    <div className="flex justify-between items-center mb-0.5">
+                        <span className="text-[10px] font-black text-brand-yellow uppercase tracking-widest italic">Paso {displayStep} de {maxSteps}</span>
                         <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{Math.round(progress)}%</span>
                     </div>
                     <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden border border-white/5">
@@ -662,42 +686,162 @@ export default function PriceCalculator() {
                     </div>
                 </div>
 
-                <div className="text-center mb-4 shrink-0">
-                    <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter mb-1 leading-none">
-                        {projectType === 'cubreplacas' ? <>Cotiza tus <span className="text-red-500 italic">Cubreplacas</span></> : <>Cotiza tus <span className="text-brand-yellow italic">Stickers</span></>}
+                <div className="text-center mb-2 shrink-0">
+                    <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter mb-0.5 leading-none">
+                        {projectType === 'cubreplacas' ? <>Cotiza tus <span className="text-brand-yellow italic">Cubreplacas</span></> : <>Cotiza tus <span className="text-brand-yellow italic">Stickers</span></>}
                     </h2>
                     <p className="text-gray-400 text-[10px] md:text-xs font-medium max-w-2xl mx-auto uppercase tracking-wider hidden sm:block">
                         Personaliza tu pedido paso a paso para obtener un presupuesto exacto.
                     </p>
                 </div>
 
-                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl mx-auto' : 'lg:grid-cols-4'} gap-4 md:gap-6 items-start flex-grow min-h-0`}>
+                <div className={`grid grid-cols-1 ${currentStep === 3 ? 'lg:grid-cols-2 max-w-2xl' : 'lg:grid-cols-4 max-w-7xl'} mx-auto gap-4 items-start flex-grow min-h-0 pb-6 w-full`}>
                     {/* Main Content Area */}
-                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-1 h-full flex flex-col`}>
-                        <div className="bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-y-auto h-auto max-h-full scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                    <div className={`${(!projectType || (projectType !== 'cubreplacas' && currentStep < 2)) ? 'lg:col-span-4' : (currentStep === 3 ? '' : 'lg:col-span-3')} order-1 h-auto flex flex-col`}>
+                        <div className="bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-5 rounded-[2rem] border border-white/10 shadow-2xl relative h-auto">
                             <AnimatePresence mode="wait">
                                 {currentStep === 1 && (
                                     <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
-                                        <h3 className="text-white font-bold text-lg mb-4">{projectType === 'cubreplacas' ? 'Fondo del Cubreplacas' : 'Tipo de Corte'}</h3>
+                                        <h3 className="text-white font-black text-lg md:text-xl mb-2 tracking-tight uppercase italic">{projectType === 'cubreplacas' ? 'Fondo del Cubreplacas' : 'Tipo de Corte'}</h3>
 
                                         {projectType === 'cubreplacas' ? (
-                                            <div className="grid grid-cols-2 gap-4">
-                                                {[
-                                                    { id: 'negro', name: 'Negro (Vinilo)', desc: 'Base sólida', color: '#1a1a1a', extra: 0 },
-                                                    { id: 'ppf', name: 'PPF (Protección)', desc: 'Alto brillo', color: '#000000', extra: 40000 },
-                                                    { id: 'fibra', name: 'Fibra de Carbono', desc: 'Textura 3D', color: '#2a2a2a', extra: 20000 },
-                                                    { id: 'impreso', name: 'Impreso Full Color', desc: 'Diseños complejos', color: '#ffffff', extra: 0 },
-                                                    { id: 'especial', name: 'Color Especial', desc: 'Personalizado', color: cubreplacasColor, extra: 0 },
-                                                ].map((bg) => (
-                                                    <button key={bg.id} onClick={() => setCubreplacasBase(bg.id as any)} className={`p-4 rounded-xl border text-left ${cubreplacasBase === bg.id ? 'border-red-500 bg-red-500/10' : 'border-white/10 bg-white/5'}`}>
-                                                        <div className="w-6 h-6 rounded mb-2" style={{ backgroundColor: bg.id === 'fibra' ? '#111' : bg.color }} />
-                                                        <span className="text-white font-bold block">{bg.name}</span>
-                                                        {bg.extra > 0 && <span className="text-xs text-red-500">+${bg.extra.toLocaleString()}</span>}
-                                                    </button>
-                                                ))}
-                                                {cubreplacasBase === 'especial' && (
-                                                    <input type="color" value={cubreplacasColor} onChange={(e) => setCubreplacasColor(e.target.value)} className="w-full h-10 rounded" />
-                                                )}
+                                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+                                                {/* Column 1: Preview */}
+                                                <div className="lg:sticky lg:top-0">
+                                                    <div
+                                                        className="w-full aspect-square relative rounded-2xl overflow-hidden border border-brand-yellow/20 shadow-2xl cursor-crosshair group"
+                                                        onMouseMove={(e) => {
+                                                            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+                                                            const x = ((e.clientX - left) / width) * 100;
+                                                            const y = ((e.clientY - top) / height) * 100;
+                                                            const img = e.currentTarget.querySelector('img');
+                                                            if (img) img.style.transformOrigin = `${x}% ${y}%`;
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            const img = e.currentTarget.querySelector('img');
+                                                            if (img) img.style.transformOrigin = 'center';
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/project-types/cubreplacas.png"
+                                                            alt="Cubreplacas Premium"
+                                                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-[2.5]"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent pointer-events-none group-hover:opacity-40 transition-opacity duration-300" />
+
+                                                        {/* Overlaid Info */}
+                                                        <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-col gap-2 transition-opacity duration-300 group-hover:opacity-20 pointer-events-none text-left">
+                                                            <div>
+                                                                <p className="text-brand-yellow text-[9px] font-black uppercase tracking-widest mb-0.5 drop-shadow-md">Edición Boutique</p>
+                                                                <h3 className="text-white text-lg font-black leading-none drop-shadow-lg italic uppercase">Protección y Estilo</h3>
+                                                            </div>
+                                                            <div className="bg-black/60 backdrop-blur-md border border-white/10 p-3 rounded-xl shadow-lg">
+                                                                <p className="text-white text-[10px] font-bold mb-1.5 flex items-center gap-2"><Info size={12} className="text-brand-yellow" /> Tu Kit Incluye:</p>
+                                                                <div className="space-y-1">
+                                                                    <p className="text-gray-200 text-[9px] leading-tight flex items-start"><Check className="w-3 h-3 text-brand-yellow mr-1.5 shrink-0" /> Par de cubreplacas (Delantera y Trasera)</p>
+                                                                    <p className="text-gray-200 text-[9px] leading-tight flex items-start"><Check className="w-3 h-3 text-brand-yellow mr-1.5 shrink-0" /> Set de microganchitos de instalación</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Column 2: Vehicle & Quantity */}
+                                                <div className="space-y-4">
+                                                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl space-y-4">
+                                                        <h4 className="text-white font-black text-[10px] uppercase tracking-tighter mb-2 opacity-50 italic">Vehículo</h4>
+                                                        <div className="flex bg-black/40 p-1.5 rounded-lg border border-white/10 w-full">
+                                                            <button
+                                                                onClick={() => setCubreplacasVehicle('moto')}
+                                                                className={`flex-1 py-1.5 text-[10px] font-black tracking-widest rounded-md transition-all ${cubreplacasVehicle === 'moto' ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                            >
+                                                                MOTO
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setCubreplacasVehicle('carro')}
+                                                                className={`flex-1 py-1.5 text-[10px] font-black tracking-widest rounded-md transition-all ${cubreplacasVehicle === 'carro' ? 'bg-brand-yellow text-black shadow-lg shadow-brand-yellow/20' : 'text-gray-500 hover:text-white'}`}
+                                                            >
+                                                                CARRO
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 pt-3 border-t border-white/10">
+                                                            <span className="opacity-60 uppercase text-[9px]">Std Size:</span>
+                                                            <span className="text-brand-yellow/80">{cubreplacasVehicle === 'moto' ? '23.5 x 10.5 cm' : '33 x 16 cm'}</span>
+                                                        </div>
+
+                                                        {cubreplacasVehicle === 'moto' && (
+                                                            <div className="bg-brand-yellow/5 border border-brand-yellow/20 p-2.5 rounded-xl flex items-center gap-3 mt-1 hover:bg-brand-yellow/10 transition-colors cursor-pointer" onClick={() => setIncludeHelmetSticker(!includeHelmetSticker)}>
+                                                                <div className="relative flex items-center h-5">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id="helmet-sticker-mini"
+                                                                        checked={includeHelmetSticker}
+                                                                        onChange={(e) => setIncludeHelmetSticker(e.target.checked)}
+                                                                        className="w-4 h-4 rounded text-brand-yellow focus:ring-brand-yellow bg-black/50 cursor-pointer border-white/20"
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-1">
+                                                                    <label htmlFor="helmet-sticker-mini" className="text-white font-black text-[11px] cursor-pointer block leading-none mb-0.5">
+                                                                        STEICKER CASCO <span className="text-brand-yellow/80 ml-1">+$10k</span>
+                                                                    </label>
+                                                                    <p className="text-gray-500 text-[8px] leading-tight uppercase font-bold opacity-60">Norma Arial / Reflectivo</p>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl space-y-4">
+                                                        <h4 className="text-white font-black text-[10px] uppercase tracking-tighter opacity-50 italic">Cantidad</h4>
+                                                        <div className="flex items-center justify-between gap-3 bg-black/40 p-1.5 rounded-lg border border-white/10 w-full">
+                                                            <button onClick={() => setCubreplacasQuantity(Math.max(1, cubreplacasQuantity - 1))} className="text-white bg-white/5 hover:bg-brand-yellow hover:text-black w-9 h-9 rounded-lg flex items-center justify-center font-black transition-all text-lg border border-white/5">-</button>
+                                                            <div className="flex flex-col items-center">
+                                                                <span className="text-white font-black text-xl leading-none">{cubreplacasQuantity}</span>
+                                                                <span className="text-gray-500 text-[8px] font-black uppercase mt-0.5 tracking-widest opacity-60">Kits</span>
+                                                            </div>
+                                                            <button onClick={() => setCubreplacasQuantity(cubreplacasQuantity + 1)} className="text-white bg-white/5 hover:bg-brand-yellow hover:text-black w-9 h-9 rounded-lg flex items-center justify-center font-black transition-all text-lg border border-white/5">+</button>
+                                                        </div>
+                                                        <div className="bg-brand-yellow/5 border border-brand-yellow/15 p-2 rounded-lg">
+                                                            <p className="text-brand-yellow text-[9px] text-center font-black uppercase tracking-tight">
+                                                                {cubreplacasQuantity >= 12 ? '🔥 ¡PRECIO MAYORISTA: $15k / u!' :
+                                                                    cubreplacasQuantity >= 10 ? '✨ ¡$25k / u!' :
+                                                                        cubreplacasQuantity >= 6 ? '🚀 ¡$35k / u!' :
+                                                                            cubreplacasQuantity >= 3 ? '⚡ ¡$45k / u!' :
+                                                                                'Lleva 3+ para descuento'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Column 3: Base Selection */}
+                                                <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
+                                                    <h4 className="text-white font-black text-[10px] uppercase tracking-tighter mb-4 opacity-50 italic">Acabado Base</h4>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {[
+                                                            { id: 'negro', name: 'NEGRO MATE', color: '#1a1a1a', extra: 0 },
+                                                            { id: 'ppf', name: 'PPF GLOSS', color: '#000000', extra: 40000 },
+                                                            { id: 'fibra', name: 'FIBRA 3D', color: '#2a2a2a', extra: 20000 },
+                                                            { id: 'impreso', name: 'FULL COLOR', color: '#ffffff', extra: 0 },
+                                                            { id: 'especial', name: 'ESPECIAL', color: cubreplacasColor, extra: 0 },
+                                                        ].map((bg) => (
+                                                            <button
+                                                                key={bg.id}
+                                                                onClick={() => setCubreplacasBase(bg.id as any)}
+                                                                className={`p-3 rounded-xl border-2 flex flex-col items-center text-center transition-all duration-300 group/base ${cubreplacasBase === bg.id ? 'border-brand-yellow bg-brand-yellow/10 shadow-[0_0_15px_rgba(230,194,0,0.05)]' : 'border-white/5 bg-black/20 hover:border-white/10'}`}
+                                                            >
+                                                                <div className="w-9 h-9 rounded-full mb-2 border-2 border-white/10 shadow-lg transition-transform group-hover/base:scale-105" style={{ backgroundColor: bg.id === 'fibra' ? '#111' : bg.color }} />
+                                                                <span className="text-white font-black block text-[8px] tracking-tight leading-none mb-1 uppercase">{bg.name}</span>
+                                                                {bg.extra > 0 && <span className="text-[8px] font-black text-brand-yellow bg-black/30 px-1.5 py-0.5 rounded border border-brand-yellow/15 mt-1">+$ {(bg.extra / 1000)}k</span>}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                    {cubreplacasBase === 'especial' && (
+                                                        <div className="mt-3 bg-black/40 border border-white/5 p-2 rounded-lg space-y-2 animate-in fade-in slide-in-from-top-1">
+                                                            <input type="color" value={cubreplacasColor} onChange={(e) => setCubreplacasColor(e.target.value)} className="w-full h-6 rounded cursor-pointer bg-transparent border-0 p-0" />
+                                                            <input type="text" value={cubreplacasColor} onChange={(e) => setCubreplacasColor(e.target.value)} className="w-full bg-transparent text-white font-mono text-[10px] uppercase text-center outline-none" />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         ) : (
                                             <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -736,14 +880,8 @@ export default function PriceCalculator() {
                                         <h3 className="text-white font-bold text-lg mb-4">{projectType === 'cubreplacas' ? 'Acabado' : 'Material'}</h3>
 
                                         {projectType === 'cubreplacas' ? (
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <button onClick={() => setCubreplacasFinish('mate')} disabled={cubreplacasBase === 'ppf'} className={`p-6 rounded-xl border ${cubreplacasFinish === 'mate' ? 'border-red-500 bg-red-500/10' : 'border-white/10'} ${cubreplacasBase === 'ppf' ? 'opacity-50' : ''}`}>
-                                                    <span className="text-white font-bold">MATE</span>
-                                                    {cubreplacasBase === 'fibra' && <span className="block text-xs text-red-400">+$10,000</span>}
-                                                </button>
-                                                <button onClick={() => setCubreplacasFinish('brillante')} className={`p-6 rounded-xl border ${cubreplacasFinish === 'brillante' ? 'border-red-500 bg-red-500/10' : 'border-white/10'}`}>
-                                                    <span className="text-white font-bold">BRILLANTE</span>
-                                                </button>
+                                            <div className="flex items-center justify-center p-8 bg-white/5 rounded-2xl border border-white/10">
+                                                <p className="text-gray-400 text-sm italic">Procesando configuración...</p>
                                             </div>
                                         ) : (
                                             <div className="flex flex-col md:flex-row gap-6">
@@ -853,20 +991,20 @@ export default function PriceCalculator() {
                                         <h3 className="text-white font-bold text-base mb-2">{projectType === 'cubreplacas' ? 'Carga de Logo' : 'Detalles'}</h3>
 
                                         {projectType === 'cubreplacas' ? (
-                                            <div className="space-y-4">
+                                            <div className="space-y-3">
                                                 {fileUrl ? (
-                                                    <div className="bg-green-500/10 border border-green-500 p-4 rounded-xl flex justify-between items-center">
-                                                        <span className="text-white text-sm">{fileName}</span>
-                                                        <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-xs">Cambiar</button>
+                                                    <div className="bg-green-500/10 border border-green-500 p-3 rounded-lg flex justify-between items-center">
+                                                        <span className="text-white text-xs truncate mr-2">{fileName}</span>
+                                                        <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-[10px] font-bold tracking-wider shrink-0 uppercase">Cambiar</button>
                                                     </div>
                                                 ) : (
                                                     <div className="space-y-2">
                                                         {isUploading ? (
-                                                            <div className="space-y-2">
-                                                                <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                                                            <div className="space-y-1.5">
+                                                                <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
                                                                     <div className="bg-brand-yellow h-full rounded-full transition-all duration-300" style={{ width: `${uploadProgress}%` }}></div>
                                                                 </div>
-                                                                <p className="text-gray-400 text-xs text-center">{uploadProgress}% subido</p>
+                                                                <p className="text-gray-400 text-[10px] text-center">{uploadProgress}% subido</p>
                                                             </div>
                                                         ) : (
                                                             <>
@@ -886,14 +1024,14 @@ export default function PriceCalculator() {
                                                                         }
                                                                     };
                                                                     input.click();
-                                                                }} className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200">
+                                                                }} className="w-full py-3 bg-white text-black font-bold text-sm rounded-lg hover:bg-gray-200 transition-colors">
                                                                     SUBIR LOGO
                                                                 </button>
                                                                 <button onClick={() => {
                                                                     setHasDesign(false);
                                                                     setProjectType(null);
                                                                     setCurrentStep(0);
-                                                                }} className="text-gray-500 text-xs underline block mx-auto">No tengo logo</button>
+                                                                }} className="text-gray-500 text-[10px] hover:text-white transition-colors underline block mx-auto">No tengo logo, necesito diseño</button>
                                                             </>
                                                         )}
                                                     </div>
@@ -989,11 +1127,29 @@ export default function PriceCalculator() {
                             {/* Navigation */}
                             {currentStep > 0 && (
                                 <div className="flex justify-between mt-4 pt-3 border-t border-white/10">
-                                    <button onClick={() => setCurrentStep(Math.max(0, currentStep - 1))} className="text-gray-400 hover:text-white flex items-center gap-1.5 text-xs sm:text-sm">
+                                    <button
+                                        onClick={() => {
+                                            if (projectType === 'cubreplacas' && currentStep === 3) {
+                                                setCurrentStep(1);
+                                            } else {
+                                                setCurrentStep(Math.max(0, currentStep - 1));
+                                            }
+                                        }}
+                                        className="text-gray-400 hover:text-white flex items-center gap-1.5 text-xs sm:text-sm"
+                                    >
                                         <ArrowRight className="rotate-180" size={14} /> Atrás
                                     </button>
                                     {currentStep < 3 && (
-                                        <button onClick={() => setCurrentStep(currentStep + 1)} className="bg-white text-black px-4 py-1.5 rounded-lg font-bold hover:bg-gray-200 flex items-center gap-1.5 text-xs sm:text-sm">
+                                        <button
+                                            onClick={() => {
+                                                if (projectType === 'cubreplacas' && currentStep === 1) {
+                                                    setCurrentStep(3);
+                                                } else {
+                                                    setCurrentStep(currentStep + 1);
+                                                }
+                                            }}
+                                            className="bg-white text-black px-4 py-1.5 rounded-lg font-bold hover:bg-gray-200 flex items-center gap-1.5 text-xs sm:text-sm"
+                                        >
                                             Siguiente <ArrowRight size={14} />
                                         </button>
                                     )}
@@ -1025,13 +1181,27 @@ export default function PriceCalculator() {
                                                 <span>Base:</span>
                                                 <span className="text-white font-bold">{cubreplacasBase}</span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span>Acabado:</span>
-                                                <span className="text-white font-bold">{cubreplacasFinish}</span>
-                                            </div>
+                                            {includeHelmetSticker && (
+                                                <div className="flex justify-between text-brand-yellow mt-1">
+                                                    <span>Sticker Casco:</span>
+                                                    <span className="font-bold">Sí</span>
+                                                </div>
+                                            )}
+                                            {cubreplacasQuantity > 1 && (
+                                                <div className="flex justify-between text-white mt-1">
+                                                    <span>Cantidad:</span>
+                                                    <span className="font-bold">{cubreplacasQuantity} kits</span>
+                                                </div>
+                                            )}
+                                            {volumeDiscountPct > 0 && (
+                                                <div className="flex justify-between text-green-400 mt-1">
+                                                    <span>Descuento por volumen:</span>
+                                                    <span className="font-bold">-{Math.round(volumeDiscountPct * 100)}%</span>
+                                                </div>
+                                            )}
                                             <div className="flex justify-between pt-4 border-t border-white/10">
                                                 <span>Total:</span>
-                                                <span className="text-brand-yellow font-bold text-lg">${totalPrice.toLocaleString()}</span>
+                                                <span className="text-brand-yellow font-bold text-lg">${discountedPrice.toLocaleString()}</span>
                                             </div>
                                         </>
                                     ) : (
@@ -1075,7 +1245,7 @@ export default function PriceCalculator() {
                                             {currentStep >= 2 && (
                                                 <div className="flex justify-between pt-4 border-t border-white/10 mt-2">
                                                     <span className="text-xs uppercase font-bold tracking-widest text-gray-500">Total aprox:</span>
-                                                    <span className="text-brand-yellow font-black text-xl">${totalPrice.toLocaleString()}</span>
+                                                    <span className="text-brand-yellow font-black text-xl">${discountedPrice.toLocaleString()}</span>
                                                 </div>
                                             )}
                                         </>
@@ -1085,15 +1255,28 @@ export default function PriceCalculator() {
                                 {/* Add to Cart Button */}
                                 {currentStep >= 3 && (
                                     <Button onClick={() => {
+                                        let featuresPayload = projectType === 'cubreplacas'
+                                            ? [`Base: ${cubreplacasBase}`]
+                                            : [`Material: ${material.name}`, `Corte: ${cutType.name}`];
+
+                                        if (projectType === 'cubreplacas') {
+                                            if (includeHelmetSticker) {
+                                                featuresPayload.push('Incluye Sticker Reflectivo Casco');
+                                            }
+                                            if (cubreplacasQuantity > 1) {
+                                                featuresPayload.push(`Cantidad: ${cubreplacasQuantity} kits (Precio total con descuento)`);
+                                            }
+                                        }
+
                                         addItem({
                                             id: Date.now(),
-                                            name: projectType === 'cubreplacas' ? 'Cubreplacas Custom' : `${material.name} (${materialWidth}x${material.sheetSize.height}cm)`,
+                                            name: projectType === 'cubreplacas' ? (cubreplacasQuantity > 1 ? `Cubreplacas Custom (x${cubreplacasQuantity})` : 'Cubreplacas Custom') : `${material.name} (${materialWidth}x${material.sheetSize.height}cm)`,
                                             price: discountedPrice,
                                             displayPrice: discountedPrice.toLocaleString(),
                                             image: projectType === 'cubreplacas' ? '/brand/logo.png' : material.imageSrc,
                                             category: projectType === 'cubreplacas' ? 'Cubreplacas' : 'Stickers',
-                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase} / ${cubreplacasFinish}` : `${cutType.name} | ${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
-                                            features: projectType === 'cubreplacas' ? [`Base: ${cubreplacasBase}`, `Acabado: ${cubreplacasFinish}`] : [`Material: ${material.name}`, `Corte: ${cutType.name}`],
+                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase}` : `${cutType.name} | ${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
+                                            features: featuresPayload,
                                             fileUrl: fileUrl || undefined
                                         });
                                         if (toggleCart) toggleCart();
@@ -1106,6 +1289,6 @@ export default function PriceCalculator() {
                     )}
                 </div>
             </div>
-        </section>
+        </section >
     );
 }
