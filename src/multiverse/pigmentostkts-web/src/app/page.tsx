@@ -20,7 +20,7 @@ import { useNavTheme } from "@/context/NavThemeContext";
 
 import { Footer } from "@/components/Footer";
 
-const SECTION_IDS = ['hero', 'stats', 'services', 'packs', 'footer'];
+const SECTION_IDS = ['hero', 'stats', 'services', 'packs', 'cta', 'footer'];
 
 export default function Home() {
   const { isPreloaderDone } = usePreloader();

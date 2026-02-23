@@ -13,7 +13,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 const navLinks = [
   { name: "Packs de Colección", href: "/packs" },
-  { name: "Personalizados", href: "/#calculator" },
+  { name: "Personalizados", href: "/cotizador" },
   { name: "Cubreplacas", href: "/cubreplacas" },
   { name: "Diseño", href: "/diseno" },
   { name: "Aprende", href: "/aprende" },

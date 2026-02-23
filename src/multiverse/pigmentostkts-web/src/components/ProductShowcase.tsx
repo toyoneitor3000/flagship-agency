@@ -9,14 +9,14 @@ import ParallaxGrid from "@/components/ui/ParallaxGrid";
 
 export default function ProductShowcase() {
     return (
-        <section id="packs" data-theme="light" className="snap-start h-screen flex flex-col justify-center bg-brand-yellow relative overflow-hidden pt-32">
+        <section id="packs" data-theme="light" className="snap-start h-[100dvh] md:h-screen flex flex-col justify-center bg-brand-yellow relative overflow-hidden pt-24 md:pt-32">
             {/* Background Decorative Elements */}
             <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
                 <ParallaxGrid />
             </div>
             <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-black/5 to-transparent opacity-5 z-0"></div>
 
-            <div className="container mx-auto px-4 relative z-10 h-full max-h-[900px] flex flex-col justify-center">
+            <div className="container mx-auto px-4 relative z-10 h-full md:max-h-[900px] flex flex-col justify-center">
 
                 {/* Header Section */}
                 <FadeIn>
@@ -37,10 +37,10 @@ export default function ProductShowcase() {
                 </FadeIn>
 
                 {/* Content Grid - 3 Columns */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto w-full h-[500px]">
+                <div className="flex flex-row md:grid md:grid-cols-3 gap-6 md:gap-4 max-w-7xl mx-auto w-full md:h-[500px] overflow-x-auto md:overflow-visible snap-x snap-mandatory pt-4 md:pt-0 pb-8 md:pb-0 -mx-4 px-4 md:mx-auto md:px-0 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
                     {/* 1. CUBREPLACAS (Left) */}
-                    <FadeIn delay={0.1} className="h-full">
+                    <FadeIn delay={0.1} className="h-full min-w-[85vw] md:min-w-0 snap-center">
                         <div className="bg-white backdrop-blur-xl border-4 border-brand-black h-full rounded-[1.5rem] p-6 overflow-hidden relative group transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-brand-black/10 hover:shadow-2xl flex flex-col">
                             <div className="absolute top-4 right-4">
                                 <span className="bg-brand-black text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm">
@@ -81,7 +81,7 @@ export default function ProductShowcase() {
                     </FadeIn>
 
                     {/* 2. PERSONALIZADOS (Middle - New) */}
-                    <FadeIn delay={0.2} className="h-full">
+                    <FadeIn delay={0.2} className="h-full min-w-[85vw] md:min-w-0 snap-center">
                         <div className="bg-brand-black/90 backdrop-blur-xl border border-white/10 h-full rounded-[1.5rem] p-6 overflow-hidden relative group transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-brand-black/20 flex flex-col">
                             {/* Background Image/Effect */}
                             <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/20 to-transparent opacity-20"></div>
@@ -125,7 +125,7 @@ export default function ProductShowcase() {
                     </FadeIn>
 
                     {/* 3. MEGA PACKS (Right) */}
-                    <FadeIn delay={0.3} className="h-full">
+                    <FadeIn delay={0.3} className="h-full min-w-[85vw] md:min-w-0 snap-center">
                         <div className="bg-white/10 backdrop-blur-md border border-brand-black/10 h-full rounded-[1.5rem] p-6 overflow-hidden relative group transition-all duration-300 hover:scale-[1.02] shadow-xl hover:bg-white/20 flex flex-col">
                             <div className="absolute top-4 right-4">
                                 <span className="bg-black/5 text-black text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm">
