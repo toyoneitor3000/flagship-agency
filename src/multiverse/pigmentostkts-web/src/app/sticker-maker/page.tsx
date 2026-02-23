@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 
 const StickerMaker = dynamic(() => import('@/components/StickerMaker'), {
     ssr: false,
@@ -28,7 +27,7 @@ export default function StickerMakerPage() {
                 </div>
             </div>
 
-            <Footer />
+
         </main>
     );
 }

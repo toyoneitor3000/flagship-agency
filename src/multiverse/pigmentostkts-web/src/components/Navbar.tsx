@@ -17,7 +17,7 @@ const navLinks = [
   { name: "Personalizados", href: "/#calculator" },
   { name: "Packs", href: "/packs" },
   { name: "Cubreplacas", href: "/cubreplacas" },
-  { name: "Diseño", href: "/#design" },
+  { name: "Diseño", href: "/diseno" },
 ];
 
 const Navbar = () => {
@@ -53,7 +53,8 @@ const Navbar = () => {
 
   const isLanding = pathname === "/";
   // Simplfied theme logic: use the detected theme from context
-  const isTextBlack = theme === "light";
+  // When scrolled, we force the text to be white because the background will be translucent black
+  const isTextBlack = isScrolled ? false : theme === "light";
 
   const textColorClass = isTextBlack ? "text-brand-black" : "text-white";
   const hoverColorClass = "hover:text-brand-yellow";
@@ -62,9 +63,9 @@ const Navbar = () => {
     <nav
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        // Enhanced glassmorphism: Adaptive background based on theme
+        // Enhanced glassmorphism: Translucent black background when scrolled
         isScrolled
-          ? (isTextBlack ? "bg-white/80 backdrop-blur-lg border-b border-black/5" : "bg-black/80 backdrop-blur-lg border-b border-white/5")
+          ? "bg-black/60 backdrop-blur-lg border-b border-white/10"
           : "bg-transparent border-b border-transparent py-0",
         isScrolled ? "shadow-sm" : ""
       )}
