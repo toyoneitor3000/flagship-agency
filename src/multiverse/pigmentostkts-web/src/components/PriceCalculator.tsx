@@ -199,21 +199,21 @@ export default function PriceCalculator({
     // Initial Screen (Step 0)
     if (currentStep === 0) {
         return (
-            <section id="cotizador" className="w-full h-full relative flex flex-col justify-center items-center bg-transparent overflow-hidden px-4">
+            <section id="cotizador" className="w-full h-full relative flex flex-col justify-center items-center bg-transparent overflow-hidden px-4 sm:px-6">
                 {/* Background moved to parent page */}
 
-                <div className="w-full max-w-5xl relative z-10 flex flex-col h-full justify-center max-h-[90dvh]">
-                    <div className="text-center mb-4 md:mb-8 shrink-0">
-                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-2">
+                <div className="w-full max-w-5xl mx-auto relative z-10 flex flex-col h-full justify-center items-center max-h-[90dvh]">
+                    <div className="text-center mb-4 md:mb-8 shrink-0 w-full">
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-2 w-full text-center">
                             Empecemos tu Cotización
                         </h2>
                         <div className="h-1 w-16 bg-brand-yellow mx-auto rounded-full shadow-[0_0_10px_rgba(230,194,0,0.5)]" />
                     </div>
 
-                    <div className="bg-[#1a1a1a]/90 backdrop-blur-xl rounded-[2rem] border border-white/5 p-4 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative flex flex-col justify-center overflow-auto max-h-full shrink-1">
-                        <div className="space-y-4 flex-grow flex flex-col justify-center">
+                    <div className="w-full bg-[#1a1a1a]/90 backdrop-blur-xl rounded-[2rem] border border-white/5 p-4 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative flex flex-col justify-center items-center overflow-auto max-h-full shrink-1 mx-auto">
+                        <div className="space-y-4 flex-grow flex flex-col justify-center w-full">
                             {hasDesign === null && (
-                                <div className="text-center space-y-4 sm:space-y-8">
+                                <div className="text-center space-y-4 sm:space-y-8 w-full">
                                     <h3 className="text-white font-bold text-lg sm:text-3xl">¿Tienes el diseño listo?</h3>
                                     <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-w-2xl mx-auto w-full">
                                         <button onClick={() => setHasDesign(true)} className="p-4 sm:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-brand-yellow/10 hover:border-brand-yellow transition-all group aspect-square flex flex-col items-center justify-center w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.75rem)]">
