@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calculator, ArrowRight, Check, AlertCircle, Plus, Minus, Shield, CheckCircle2, Palette, Scissors, Sparkles, Briefcase, Zap, Info } from "lucide-react";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
@@ -61,6 +61,25 @@ export default function PriceCalculator({
     const [volumeDiscountPct, setVolumeDiscountPct] = useState(0);
     const [volumeDiscountedPrice, setVolumeDiscountedPrice] = useState(0);
     const [discountedPrice, setDiscountedPrice] = useState(0);
+
+    const isFirstRender = useRef(true);
+
+    // Scroll to top of calculator when step changes
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        const calculatorSection = document.getElementById('cotizador');
+        if (calculatorSection) {
+            setTimeout(() => {
+                calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        } else {
+            // Fallback
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [currentStep]);
 
     // Hash & Step Scroll Logic
     useEffect(() => {
@@ -196,13 +215,12 @@ export default function PriceCalculator({
         setDiscountedPrice(vPrice);
     }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, projectType, cubreplacasBase, cubreplacasFinish, includeHelmetSticker, cubreplacasQuantity]);
 
-    // Initial Screen (Step 0)
     if (currentStep === 0) {
         return (
-            <section id="cotizador" className="w-full h-full relative flex flex-col justify-center items-center bg-transparent overflow-hidden px-4 sm:px-6">
+            <section id="cotizador" className="w-full h-full flex-grow min-h-0 relative flex flex-col justify-center items-center bg-transparent overflow-hidden px-4 sm:px-6 py-4 sm:py-8">
                 {/* Background moved to parent page */}
 
-                <div className="w-full max-w-5xl mx-auto relative z-10 flex flex-col h-full justify-center items-center max-h-[90dvh]">
+                <div className="w-full max-w-5xl mx-auto relative z-10 flex flex-col flex-grow justify-center items-center max-h-[90dvh]">
                     <div className="text-center mb-4 md:mb-8 shrink-0 w-full">
                         <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-2 w-full text-center">
                             Empecemos tu Cotización
@@ -517,7 +535,7 @@ export default function PriceCalculator({
     const progress = (displayStep / maxSteps) * 100;
 
     return (
-        <section id="cotizador" className="w-full min-h-screen relative flex flex-col bg-transparent">
+        <section id="cotizador" className="w-full h-full flex-grow min-h-0 relative flex flex-col bg-transparent">
             <div className="max-w-7xl w-full mx-auto px-2 sm:px-4 lg:px-8 relative z-10 flex flex-col min-h-full pt-2 md:pt-4 pb-2">
                 {/* Progress Bar */}
                 <div className="w-full max-w-4xl mx-auto mb-2 shrink-0">
