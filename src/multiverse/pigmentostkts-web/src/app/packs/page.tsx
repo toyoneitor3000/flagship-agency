@@ -37,7 +37,7 @@ export default function PacksPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white scroll-smooth uppercase font-black">
+    <main data-theme="light" className="min-h-screen bg-white scroll-smooth uppercase font-black">
       {/* HEADER & RANDOM PACKS */}
       <section id="packs" data-theme="light" className="bg-white relative flex flex-col items-center overflow-hidden pt-[110px] pb-8 min-h-screen">
         <div className="absolute inset-0 bg-[radial-gradient(#00000015_1px,transparent_1px)] [background-size:20px_20px] opacity-20 pointer-events-none"></div>

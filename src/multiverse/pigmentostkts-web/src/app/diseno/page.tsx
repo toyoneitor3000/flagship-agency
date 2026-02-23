@@ -35,7 +35,7 @@ const DESIGN_CONFIG = {
         colorClass: 'text-brand-yellow',
         borderColor: 'border-brand-yellow',
         ringColor: 'ring-brand-yellow/20',
-        href: "https://wa.me/573160535247?text=Hola!%20Me%20interesa%20el%20servicio%20de%20Vectorización."
+        href: "/vectorizacion"
     },
     logo_basic: {
         id: 'logo_basic',
@@ -49,7 +49,7 @@ const DESIGN_CONFIG = {
         colorClass: 'text-blue-500',
         borderColor: 'border-blue-500',
         ringColor: 'ring-blue-500/20',
-        href: "https://wa.me/573160535247?text=Hola!%20Me%20interesa%20el%20servicio%20de%20Logotipo%20Esencial."
+        href: "/logo-basico"
     },
     logo_pro: {
         id: 'logo_pro',
@@ -63,7 +63,7 @@ const DESIGN_CONFIG = {
         colorClass: 'text-purple-600',
         borderColor: 'border-purple-600',
         ringColor: 'ring-purple-600/20',
-        href: "https://wa.me/573160535247?text=Hola!%20Me%20interesa%20el%20servicio%20de%20Branding%20Completo."
+        href: "/logo-empresarial"
     }
 } as const;
 

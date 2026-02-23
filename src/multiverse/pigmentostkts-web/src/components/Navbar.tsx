@@ -9,31 +9,44 @@ import { Menu, X } from "lucide-react";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { cn } from "@/lib/utils";
 import CartButton from "@/components/CartButton";
-import { useNavTheme } from "@/context/NavThemeContext";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 const navLinks = [
-  { name: "Colecciones", href: "/packs#colecciones" },
+  { name: "Packs de Colección", href: "/packs" },
   { name: "Personalizados", href: "/#calculator" },
-  { name: "Packs", href: "/packs" },
   { name: "Cubreplacas", href: "/cubreplacas" },
   { name: "Diseño", href: "/diseno" },
+  { name: "Aprende", href: "/aprende" },
+  { name: "Nosotros", href: "/nosotros" },
 ];
 
 const Navbar = () => {
-  const { theme } = useNavTheme();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      let scrollPosition = window.scrollY;
+
+      // The landing page uses a custom scroll container (<main>) for snap-scrolling
+      if (pathname === '/') {
+        const mainEl = document.querySelector('main');
+        if (mainEl) {
+          scrollPosition = mainEl.scrollTop;
+        }
+      }
+
+      setIsScrolled(scrollPosition > 50);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+
+    // Check initial scroll position
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll, { capture: true });
+  }, [pathname]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.includes("#")) {
@@ -52,33 +65,32 @@ const Navbar = () => {
   };
 
   const isLanding = pathname === "/";
-  // Simplfied theme logic: use the detected theme from context
-  // When scrolled, we force the text to be white because the background will be translucent black
-  const isTextBlack = isScrolled ? false : theme === "light";
+  // Simplfied theme logic: use dark background and white text initially and always
+  const isTextBlack = false;
 
-  const textColorClass = isTextBlack ? "text-brand-black" : "text-white";
+  const textColorClass = "text-white";
   const hoverColorClass = "hover:text-brand-yellow";
 
   return (
     <nav
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        // Enhanced glassmorphism: Translucent black background when scrolled
-        isScrolled
-          ? "bg-black/60 backdrop-blur-lg border-b border-white/10"
-          : "bg-transparent border-b border-transparent py-0",
-        isScrolled ? "shadow-sm" : ""
+        // Navbar siempre oscuro y visible
+        "bg-[#0A0A0A] border-b border-white/10 shadow-sm py-0"
       )}
     >
       <div className="container mx-auto px-4">
         <div className="flex flex-col">
           {/* Main Bar */}
-          <div className="flex justify-between items-center h-[60px] md:h-[85px]">
+          <div className={cn(
+            "flex justify-between items-center transition-all duration-300",
+            isScrolled ? "h-[50px] md:h-[60px]" : "h-[60px] md:h-[75px]"
+          )}>
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center md:flex-1 md:justify-start">
               <Link href="/" className={cn(
                 "relative transition-all duration-300 hover:scale-105 active:scale-95",
-                isScrolled ? "w-32 md:w-40 h-[40px] md:h-[50px]" : "w-40 md:w-56 h-[50px] md:h-[70px]"
+                isScrolled ? "w-40 md:w-[220px] h-[40px] md:h-[50px]" : "w-48 md:w-[280px] h-[50px] md:h-[65px]"
               )}>
                 <Image
                   src="/brand/logo.png"
@@ -89,7 +101,7 @@ const Navbar = () => {
                   )}
                   priority
                   quality={100}
-                  sizes="(max-width: 768px) 150px, 250px"
+                  sizes="(max-width: 768px) 150px, 300px"
                 />
               </Link>
             </div>
@@ -114,7 +126,7 @@ const Navbar = () => {
 
             {/* Action Button & Cart */}
             <div className="hidden md:flex items-center md:flex-1 md:justify-end gap-4">
-              <CartButton isScrolled={!isTextBlack} />
+              <CartButton isScrolled={true} />
               <Link
                 href={PIGMENTO_DATA.contact.whatsappUrl}
                 target="_blank"
@@ -127,7 +139,7 @@ const Navbar = () => {
 
             {/* Mobile menu button & Cart */}
             <div className="md:hidden flex items-center gap-2">
-              <CartButton isScrolled={!isTextBlack} />
+              <CartButton isScrolled={true} />
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
@@ -143,7 +155,7 @@ const Navbar = () => {
           {/* Breadcrumbs - Only visible if not landing page and not scrolled (optional usually, but let's keep it visible) */}
           {!isLanding && (
             <div className="hidden md:block py-2 border-t border-white/5">
-              <Breadcrumbs theme={isTextBlack ? 'light' : 'dark'} />
+              <Breadcrumbs theme="dark" />
             </div>
           )}
         </div>
@@ -194,7 +206,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </nav >
   );
 };
 
