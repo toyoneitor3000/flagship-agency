@@ -103,10 +103,10 @@ export default function Home() {
   };
 
   return (
-    <main ref={mainRef} className="h-screen overflow-y-scroll snap-y snap-proximity scroll-smooth relative overflow-x-hidden">
+    <main ref={mainRef} className="h-screen overflow-y-scroll scroll-smooth relative overflow-x-hidden">
 
       {/* HERO SECTION - White Background */}
-      <section id="hero" data-theme="light" className="snap-start relative bg-white text-brand-black min-h-screen flex items-center pt-24 pb-16 md:py-0 overflow-hidden">
+      <section id="hero" data-theme="light" className="relative bg-white text-brand-black min-h-screen flex items-center pt-24 pb-16 md:py-0 overflow-hidden">
         {/* Parallax Grid Background */}
         <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
           <ParallaxGrid />
@@ -124,11 +124,11 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isPreloaderDone ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.1, duration: 0.6 }}
-                  className="text-brand-yellow font-bold tracking-widest uppercase mb-4 block text-sm md:text-base"
+                  className="text-brand-yellow font-bold tracking-widest uppercase mb-4 block text-base md:text-lg"
                 >
                   Soluciones Visuales Premium
                 </motion.span>
-                <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-black tracking-[-0.06em] mb-6 leading-[0.85]">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black tracking-[-0.06em] mb-6 leading-[0.85]">
                   <motion.span
                     initial={{ opacity: 0, x: -50 }}
                     animate={isPreloaderDone ? { opacity: 1, x: 0 } : {}}
@@ -150,7 +150,7 @@ export default function Home() {
                   initial={{ opacity: 0 }}
                   animate={isPreloaderDone ? { opacity: 1 } : {}}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="text-base md:text-lg text-gray-700 mb-8 font-medium max-w-lg leading-relaxed"
+                  className="text-lg md:text-xl text-gray-700 mb-8 font-medium max-w-lg leading-relaxed"
                 >
                   Desde stickers de colección hasta branding corporativo completo. Alta resolución, vinilos importados y cortes de precisión.
                 </motion.p>
@@ -191,12 +191,12 @@ export default function Home() {
       </section>
 
       {/* STATS COUNTER SECTION */}
-      <section id="stats" data-theme="dark" className="snap-start bg-brand-black py-16 md:py-24 border-b border-white/5 relative z-20">
+      <section id="stats" data-theme="dark" className="bg-brand-black py-16 md:py-24 border-b border-white/5 relative z-20">
         <StatsCounter />
       </section>
 
       {/* SERVICES GRID - Black Background */}
-      <section id="services" data-theme="dark" className="snap-start min-h-screen flex flex-col justify-center pt-32 pb-24 bg-brand-black relative z-10 overflow-hidden">
+      <section id="services" data-theme="dark" className="min-h-screen flex flex-col justify-center pt-32 pb-24 bg-brand-black relative z-10 overflow-hidden">
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-yellow/5 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px] pointer-events-none"></div>
@@ -261,7 +261,7 @@ export default function Home() {
       <CallToAction />
 
       {/* FOOTER SECTION */}
-      <section id="footer" data-theme="dark" className="snap-end h-auto bg-brand-black relative z-10">
+      <section id="footer" data-theme="dark" className="h-auto bg-brand-black relative z-10">
         <Footer />
       </section>
 

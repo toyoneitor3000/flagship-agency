@@ -7,17 +7,14 @@ import Link from "next/link";
 import { Download, ArrowLeft, ExternalLink, ShieldCheck, FileText, FileCode, Layers, Info } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
-import { use } from "react";
-// ... other imports
-
 interface PageProps {
-    params: Promise<{
+    params: {
         filename: string;
-    }>;
+    };
 }
 
 export default function ViewDesignPage({ params }: PageProps) {
-    const { filename } = use(params);
+    const filename = params.filename;
     const searchParams = useSearchParams();
     const externalUrl = searchParams.get("url");
 
@@ -26,14 +23,23 @@ export default function ViewDesignPage({ params }: PageProps) {
     const fileUrl = externalUrl || (isUTKey ? `https://utfs.io/f/${filename}` : `/uploads/${filename}`);
 
     // Obtenemos la extensión de forma más segura (solo lo que está después del último punto en el nombre del archivo)
+    const decodedFilename = decodeURIComponent(filename);
     const urlParts = fileUrl.split('/');
     const lastPart = urlParts[urlParts.length - 1];
-    const extension = lastPart.includes('.') ? lastPart.split('.').pop()?.split('?')[0].toLowerCase() : 'unknown';
+
+    // Tratamos de obtener la extensión de diferentes fuentes
+    let extension = 'unknown';
+    if (decodedFilename.includes('.')) {
+        extension = decodedFilename.split('.').pop()?.split('?')[0].toLowerCase() || 'unknown';
+    } else if (lastPart.includes('.')) {
+        extension = lastPart.split('.').pop()?.split('?')[0].toLowerCase() || 'unknown';
+    }
 
     // Determine content type
     const isPdf = extension === 'pdf';
-    const isImage = ['png', 'jpg', 'jpeg', 'webp', 'svg', 'unknown'].includes(extension || '');
-    const isAdobe = ['ai', 'psd'].includes(extension || '');
+    const isImage = ['png', 'jpg', 'jpeg', 'webp', 'svg'].includes(extension);
+    const isAi = extension === 'ai';
+    const isAdobe = ['ai', 'psd', 'eps'].includes(extension);
 
     return (
         <div className="min-h-screen bg-brand-gray flex flex-col">
@@ -47,16 +53,16 @@ export default function ViewDesignPage({ params }: PageProps) {
                             <div className="flex items-center gap-2 mb-2">
                                 <Link
                                     href="/dashboard"
-                                    className="flex items-center gap-1 text-xs font-bold text-gray-400 hover:text-brand-black transition-colors uppercase tracking-widest"
+                                    className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-brand-black transition-colors uppercase tracking-widest"
                                 >
-                                    <ArrowLeft size={14} /> Volver
+                                    <ArrowLeft size={16} /> Volver
                                 </Link>
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-black text-brand-black tracking-tighter uppercase">
+                            <h1 className="text-2xl md:text-3xl font-black text-brand-black tracking-tighter uppercase">
                                 Visualizador de Diseño
                             </h1>
-                            <p className="text-gray-500 text-sm mt-1 max-w-xl">
-                                {isAdobe ? 'Archivo de alta fidelidad detectado. Este formato requiere herramientas profesionales para su edición.' : 'Previsualización segura de tu archivo. Verifica que todo esté correcto antes de que pase a producción.'}
+                            <p className="text-gray-500 text-base mt-2 max-w-xl">
+                                {isAdobe && !isAi ? 'Archivo PSD detectado. Este formato requiere herramientas profesionales para su edición.' : 'Previsualización segura de tu archivo. Verifica que todo esté correcto antes de que pase a producción.'}
                             </p>
                         </div>
 
@@ -64,9 +70,9 @@ export default function ViewDesignPage({ params }: PageProps) {
                             <a
                                 href={fileUrl}
                                 download={filename}
-                                className="flex items-center gap-2 bg-brand-yellow text-brand-black px-6 py-3 rounded-xl font-black uppercase text-sm tracking-tight hover:bg-brand-black hover:text-white transition-all shadow-lg shadow-brand-yellow/20"
+                                className="flex items-center gap-2 bg-brand-yellow text-brand-black px-6 py-3 rounded-xl font-black uppercase text-base tracking-tight hover:bg-brand-black hover:text-white transition-all shadow-lg shadow-brand-yellow/20"
                             >
-                                <Download size={18} /> Descargar Archivo
+                                <Download size={20} /> Descargar Archivo
                             </a>
                         </div>
                     </div>
@@ -76,10 +82,10 @@ export default function ViewDesignPage({ params }: PageProps) {
                         {/* Toolbar */}
                         <div className="bg-gray-50/50 backdrop-blur-md px-8 py-4 border-b border-gray-100 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-black uppercase tracking-wider">
-                                    <ShieldCheck size={12} /> Archivo Verificado
+                                <div className="flex items-center gap-2 px-4 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-black uppercase tracking-wider">
+                                    <ShieldCheck size={14} /> Archivo Verificado
                                 </div>
-                                <span className="text-[10px] text-gray-400 font-mono hidden sm:inline-block">
+                                <span className="text-xs text-gray-400 font-mono hidden sm:inline-block">
                                     {filename}
                                 </span>
                             </div>
@@ -102,10 +108,28 @@ export default function ViewDesignPage({ params }: PageProps) {
                         <div className="relative min-h-[400px] md:min-h-[650px] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] bg-gray-50 flex items-center justify-center p-4 md:p-8">
                             <div className="w-full h-full flex items-center justify-center">
                                 {isPdf ? (
+                                    <div className="text-center p-12 bg-white rounded-3xl shadow-xl border border-gray-100 max-w-lg w-full">
+                                        <div className={`w-24 h-24 rounded-3xl mx-auto mb-6 flex items-center justify-center bg-red-100 text-red-600`}>
+                                            <FileText size={48} />
+                                        </div>
+                                        <h3 className="text-xl font-black text-brand-black uppercase tracking-tight mb-2">
+                                            Documento PDF
+                                        </h3>
+                                        <p className="text-gray-500 text-base leading-relaxed mb-8">
+                                            Por seguridad y formato, los documentos PDF se protegen contra previsualización incrustada. <br /><strong>Tu archivo está seguro en nuestro servidor.</strong>
+                                        </p>
+                                        <div className="bg-gray-50 rounded-2xl p-4 flex items-start gap-3 text-left border border-gray-100">
+                                            <Info className="text-brand-black shrink-0 mt-0.5" size={20} />
+                                            <p className="text-sm text-gray-500 font-medium">
+                                                Usa el botón <strong>"Descargar Archivo"</strong> en la parte superior para visualizarlo en tu dispositivo.
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : isAi ? (
                                     <iframe
-                                        src={`${fileUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+                                        src={`https://docs.google.com/gview?url=${fileUrl}&embedded=true`}
                                         className="w-full h-[650px] rounded-lg shadow-2xl border-none"
-                                        title="Previsualización PDF"
+                                        title="Previsualización AI (GDocs Viewer)"
                                     />
                                 ) : isImage ? (
                                     <img
@@ -115,19 +139,19 @@ export default function ViewDesignPage({ params }: PageProps) {
                                     />
                                 ) : (
                                     <div className="text-center p-12 bg-white rounded-3xl shadow-xl border border-gray-100 max-w-lg w-full">
-                                        <div className={`w-24 h-24 rounded-3xl mx-auto mb-6 flex items-center justify-center ${extension === 'ai' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
-                                            {extension === 'ai' ? <FileCode size={48} /> : <Layers size={48} />}
+                                        <div className={`w-24 h-24 rounded-3xl mx-auto mb-6 flex items-center justify-center bg-blue-100 text-blue-600`}>
+                                            <Layers size={48} />
                                         </div>
-                                        <h3 className="text-2xl font-black text-brand-black uppercase tracking-tight mb-2">
-                                            Archivo de Diseño
+                                        <h3 className="text-xl font-black text-brand-black uppercase tracking-tight mb-2">
+                                            Archivo de Diseño {extension?.toUpperCase() || ''}
                                         </h3>
-                                        <p className="text-gray-500 text-sm leading-relaxed mb-8">
-                                            Este es un formato de diseño profesional que no puede previsualizarse directamente en el navegador. <br /><strong>El archivo ha sido recibido correctamente.</strong>
+                                        <p className="text-gray-500 text-base leading-relaxed mb-8">
+                                            Este es un formato de diseño profesional que no puede previsualizarse de forma interactiva en el navegador. <br /><strong>El archivo ha sido recibido correctamente en el servidor.</strong>
                                         </p>
                                         <div className="bg-gray-50 rounded-2xl p-4 flex items-start gap-3 text-left border border-gray-100">
-                                            <Info className="text-brand-black shrink-0 mt-0.5" size={18} />
-                                            <p className="text-[11px] text-gray-500 font-medium">
-                                                Para ver este diseño, usa el botón <strong>"Descargar Archivo"</strong> arriba y ábrelo con {extension === 'ai' ? 'Adobe Illustrator' : 'Adobe Photoshop'}.
+                                            <Info className="text-brand-black shrink-0 mt-0.5" size={20} />
+                                            <p className="text-sm text-gray-500 font-medium">
+                                                Para ver y manipular este diseño, usa el botón <strong>"Descargar Archivo"</strong> de arriba y ábrelo con la herramienta correspondiente.
                                             </p>
                                         </div>
                                     </div>
@@ -138,25 +162,25 @@ export default function ViewDesignPage({ params }: PageProps) {
                         {/* Footer Details */}
                         <div className="p-8 md:p-10 bg-white grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-50">
                             <div className="space-y-1">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tipo de Archivo</p>
-                                <p className="text-sm font-bold text-brand-black">{extension === 'unknown' ? 'Documento' : extension?.toUpperCase()}</p>
+                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Tipo de Archivo</p>
+                                <p className="text-base font-bold text-brand-black">{extension === 'unknown' ? 'Documento' : extension?.toUpperCase()}</p>
                             </div>
                             <div className="space-y-1">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Estado de Carga</p>
+                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Estado de Carga</p>
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                    <p className="text-sm font-bold text-brand-black">Sincronizado con Servidor</p>
+                                    <p className="text-base font-bold text-brand-black">Sincronizado con Servidor</p>
                                 </div>
                             </div>
                             <div className="space-y-1">
-                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Recomendación</p>
-                                <p className="text-sm font-bold text-brand-black">{isAdobe ? 'Formato Vectorial/Layered' : 'CMYK 300 DPI'}</p>
+                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Recomendación</p>
+                                <p className="text-base font-bold text-brand-black">{isAdobe ? 'Formato Vectorial/Layered' : 'CMYK 300 DPI'}</p>
                             </div>
                         </div>
                     </div>
 
                     <div className="mt-8 text-center">
-                        <p className="text-gray-400 text-xs italic">
+                        <p className="text-gray-400 text-sm italic">
                             ¿Algo no se ve bien? Escríbenos por WhatsApp para ajustar tu diseño antes de imprimir.
                         </p>
                     </div>

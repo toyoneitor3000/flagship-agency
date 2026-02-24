@@ -3,32 +3,57 @@
 import { Button } from "@/components/ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { LoginModal } from "./LoginModal";
 
-// Wrapper simple para SessionProvider si no está en layout
-// Pero para simplificar en cliente, asumiremos que SessionProvider envuelve la app o usamos props
-// En NextAuth v5, se puede obtener session en server y pasarla, o usar SessionProvider.
-// Vamos a crear un componente que maneje el login/logout actions.
+export function UserMenu() {
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
-export function UserMenu({ user }: { user?: any }) {
-  if (!user) {
+  useEffect(() => {
+    // Automatically open modal if redirected with ?login=true
+    if (searchParams.get("login") === "true") {
+      setIsLoginModalOpen(true);
+
+      // Clean up the URL to remove the query parameter without refreshing
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("login");
+      const newUrl = pathname + (params.toString() ? '?' + params.toString() : '');
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [searchParams, pathname, router]);
+
+  if (status === "loading") {
     return (
-      <Button 
-        variant="ghost" 
-        onClick={() => signIn()} 
-        className="text-sm font-medium hover:text-indigo-600"
-      >
-        Iniciar Sesión
-      </Button>
+      <div className="w-8 h-8 rounded-full bg-brand-black border border-white/10 animate-pulse" />
+    );
+  }
+
+  if (status === "unauthenticated" || !user) {
+    return (
+      <>
+        <button
+          onClick={() => setIsLoginModalOpen(true)}
+          className="text-[12px] font-semibold tracking-tight uppercase text-white hover:text-brand-yellow transition-colors duration-200 bg-transparent border-none appearance-none outline-none"
+        >
+          Iniciar Sesión
+        </button>
+        <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      </>
     );
   }
 

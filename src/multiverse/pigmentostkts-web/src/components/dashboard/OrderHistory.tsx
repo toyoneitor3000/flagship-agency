@@ -37,14 +37,14 @@ export function OrderHistory({ orders, isAdmin = false }: OrderProps) {
   }
 
   return (
-    <div className="divide-y divide-gray-100">
+    <div className="space-y-4 p-4 sm:p-6 bg-brand-gray/30">
       {orders.map((order, index) => (
         <motion.div
           key={order.id}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="p-6 hover:bg-gray-50 transition-colors"
+          className="p-6 bg-white border border-gray-100/80 rounded-3xl hover:border-brand-yellow/30 hover:shadow-lg hover:shadow-brand-yellow/5 transition-all w-full"
         >
           <div className="flex flex-col sm:flex-row justify-between mb-4">
             <div>

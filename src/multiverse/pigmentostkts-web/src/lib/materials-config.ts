@@ -20,6 +20,7 @@ export interface Material {
     finishOptions: boolean;
     requiresLaminate: boolean;
     hasWidthOptions?: boolean;
+    isCutVinyl?: boolean;
 }
 
 export const MATERIALS_CONFIG: Material[] = [
@@ -130,6 +131,17 @@ export const MATERIALS_CONFIG: Material[] = [
         finishOptions: false,
         requiresLaminate: false,
         hasWidthOptions: true
+    },
+    {
+        id: 'vinilo-corte',
+        name: 'Vinilo de Corte',
+        description: 'Colores sólidos sin impresión. Ideal para letras, logos vectoriales y siluetas.',
+        sheetSize: { width: 60, height: 100 },
+        pricing: { sc_laminate: 69900, cc_laminate: 85000 },
+        imageSrc: '/project-types/cut-vinyl.png',
+        finishOptions: false,
+        requiresLaminate: false,
+        isCutVinyl: true
     }
 ];
 

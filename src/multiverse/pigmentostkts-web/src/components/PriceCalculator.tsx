@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calculator, ArrowRight, Check, AlertCircle, Plus, Minus, Shield, CheckCircle2, Palette, Scissors, Sparkles, Briefcase, Zap, Info } from "lucide-react";
+import { Eye, FileCode, FileText, Image as ImageIcon, Copy, Calculator, Info, UploadCloud, CheckCircle2, Star, Check, Scissors, AlertCircle, Palette, Hexagon, Maximize, ArrowRight, Upload, Sparkles, Layers, Box, PenTool, Type, Move, Target, Truck, ShieldCheck, Zap, MoreHorizontal, Plus, ArrowLeft, Briefcase } from 'lucide-react';
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -48,11 +48,16 @@ export default function PriceCalculator({
     const [heightCm, setHeightCm] = useState(5);
     const [sheetQuantity, setSheetQuantity] = useState(1);
 
+    // Cut Vinyl States
+    const [cutVinylType, setCutVinylType] = useState<'crudo' | 'listo'>('crudo');
+    const [cutVinylLayers, setCutVinylLayers] = useState(1);
+
     // Upload & Feedback
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [fileUrl, setFileUrl] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
+    const [uploadError, setUploadError] = useState<string | null>(null);
 
     // Calculated Results
     const [stickersPerSheet, setStickersPerSheet] = useState(0);
@@ -201,7 +206,21 @@ export default function PriceCalculator({
         }
 
         const calculatedPrice = pricePerSheet * sheetQuantity;
-        setTotalPrice(calculatedPrice);
+        let finalCalculatedPrice = calculatedPrice;
+
+        // Add Cut Vinyl surcharges
+        if (projectType === 'cut') {
+            if (cutVinylType === 'listo') {
+                // Si es Vinilo de Corte "Listo para Instalar", calculamos un recargo estimado 
+                // por descartonado y transfer. Usaremos un multiplicador base.
+                finalCalculatedPrice = calculatedPrice * 1.5; // +50% markup for labor and transfer tape
+            }
+
+            // Multiply base material and cuts by the number of color layers
+            finalCalculatedPrice = finalCalculatedPrice * cutVinylLayers;
+        }
+
+        setTotalPrice(finalCalculatedPrice);
 
         let vDiscount = 0;
         if (sheetQuantity >= 50) vDiscount = 0.30;
@@ -210,10 +229,10 @@ export default function PriceCalculator({
         else if (sheetQuantity >= 5) vDiscount = 0.05;
 
         setVolumeDiscountPct(vDiscount);
-        const vPrice = Math.round(calculatedPrice * (1 - vDiscount));
+        const vPrice = Math.round(finalCalculatedPrice * (1 - vDiscount));
         setVolumeDiscountedPrice(vPrice);
         setDiscountedPrice(vPrice);
-    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, projectType, cubreplacasBase, cubreplacasFinish, includeHelmetSticker, cubreplacasQuantity]);
+    }, [widthCm, heightCm, sheetQuantity, material, materialWidth, cutType, laminate, projectType, cubreplacasBase, cubreplacasFinish, includeHelmetSticker, cubreplacasQuantity, cutVinylType, cutVinylLayers]);
 
     if (currentStep === 0) {
         return (
@@ -477,7 +496,7 @@ export default function PriceCalculator({
                                                 img: '/project-types/cut-vinyl.png',
                                                 color: 'from-purple-600/30 to-purple-900/70',
                                                 border: 'hover:border-purple-500',
-                                                step: null
+                                                step: 1
                                             },
                                             {
                                                 id: 'cubreplacas' as const,
@@ -492,12 +511,12 @@ export default function PriceCalculator({
                                             <button
                                                 key={option.id}
                                                 onClick={() => {
+                                                    setProjectType(option.id);
                                                     if (option.id === 'cut') {
-                                                        setProjectType('cut');
-                                                    } else {
-                                                        setProjectType(option.id);
-                                                        setCurrentStep(option.step!);
+                                                        const cutMaterial = MATERIALS_CONFIG.find(m => m.id === 'vinilo-corte') || MATERIALS_CONFIG[0];
+                                                        setMaterial(cutMaterial);
                                                     }
+                                                    setCurrentStep(option.step!);
                                                 }}
                                                 className={`relative overflow-hidden rounded-[1.5rem] border border-white/10 ${option.border} transition-all duration-300 group w-[calc(50%-0.5rem)] sm:w-full aspect-square flex flex-col items-center justify-center p-3 sm:p-4`}
                                             >
@@ -514,12 +533,7 @@ export default function PriceCalculator({
                                             </button>
                                         ))}
                                     </div>
-                                    {projectType === 'cut' && (
-                                        <div className="text-purple-200 bg-purple-500/10 p-4 rounded-lg">
-                                            Opción en construcción. Contáctanos por WhatsApp.
-                                            <button onClick={() => setProjectType(null)} className="block mt-2 text-xs underline">Volver</button>
-                                        </div>
-                                    )}
+
                                     <button onClick={() => setHasDesign(null)} className="text-gray-500 hover:text-white text-sm mt-4">Volver</button>
                                 </div>
                             )}
@@ -568,7 +582,9 @@ export default function PriceCalculator({
                             <AnimatePresence mode="wait">
                                 {currentStep === 1 && (
                                     <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
-                                        <h3 className="text-white font-black text-lg md:text-xl mb-2 tracking-tight uppercase italic">{projectType === 'cubreplacas' ? 'Fondo del Cubreplacas' : 'Tipo de Corte'}</h3>
+                                        <h3 className="text-white font-black text-lg md:text-xl mb-2 tracking-tight uppercase italic">
+                                            {projectType === 'cubreplacas' ? 'Fondo del Cubreplacas' : projectType === 'cut' ? 'Opciones de Entrega' : 'Tipo de Corte'}
+                                        </h3>
 
                                         {projectType === 'cubreplacas' ? (
                                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
@@ -709,6 +725,96 @@ export default function PriceCalculator({
                                                     )}
                                                 </div>
                                             </div>
+                                        ) : projectType === 'cut' ? (
+                                            <div className="space-y-4 max-w-2xl mx-auto w-full">
+                                                {/* Upload de diseño for Cut Vinyl (Moved from Step 3) */}
+                                                <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex flex-col items-center text-center">
+                                                    <div className="w-16 h-16 rounded-full bg-brand-yellow/20 text-brand-yellow flex items-center justify-center mb-4">
+                                                        <UploadCloud size={32} />
+                                                    </div>
+                                                    <h4 className="text-white font-black text-lg italic uppercase mb-2">Sube tu Vector</h4>
+                                                    <p className="text-gray-400 text-xs mb-6 max-w-sm">Para vinilo de corte requerimos archivos vectoriales (.ai, .eps, .pdf, .svg). Si no lo tienes vectorizado, contáctanos primero.</p>
+
+                                                    {fileUrl ? (
+                                                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl flex items-center gap-4 w-full max-w-sm mx-auto">
+                                                            <div className="w-20 h-20 shrink-0 bg-black/40 rounded-xl overflow-hidden flex items-center justify-center relative border border-white/5">
+                                                                {fileName?.toLowerCase().endsWith('.pdf') ? (
+                                                                    <div className="flex flex-col items-center justify-center text-red-500/80">
+                                                                        <FileText size={24} className="mb-1" />
+                                                                        <span className="text-[10px] font-bold uppercase">PDF</span>
+                                                                    </div>
+                                                                ) : fileName?.toLowerCase().endsWith('.ai') || fileName?.toLowerCase().endsWith('.eps') || fileName?.toLowerCase().endsWith('.cdr') ? (
+                                                                    <div className="flex flex-col items-center justify-center text-brand-yellow/50">
+                                                                        <FileCode size={24} className="mb-1" />
+                                                                        <span className="text-[10px] font-bold uppercase">{fileName?.split('.').pop()}</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <img src={fileUrl} alt="Vista Previa" className="w-full h-full object-contain p-2" />
+                                                                )}
+                                                            </div>
+                                                            <div className="flex flex-col justify-center gap-2 min-w-0 flex-1">
+                                                                <span className="text-white text-xs font-bold truncate block w-full">{fileName}</span>
+                                                                <div className="flex gap-2">
+                                                                    <a href={`/view-design/${encodeURIComponent(fileName || 'archivo')}?url=${encodeURIComponent(fileUrl)}`} target="_blank" rel="noopener noreferrer" className="text-brand-yellow text-[10px] font-bold uppercase tracking-wider hover:underline w-fit bg-brand-yellow/10 px-3 py-1 rounded-full flex items-center gap-1">
+                                                                        <Eye size={12} /> Ver
+                                                                    </a>
+                                                                    <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-[10px] font-bold uppercase tracking-wider hover:underline w-fit bg-red-500/10 px-3 py-1 rounded-full">
+                                                                        Cambiar
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-full max-w-xs">
+                                                            {isUploading ? (
+                                                                <div className="space-y-2 w-full">
+                                                                    <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                                                                        <div className="bg-brand-yellow h-full rounded-full transition-all duration-300 relative overflow-hidden" style={{ width: `${uploadProgress}%` }}>
+                                                                            <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <p className="text-brand-yellow font-bold text-xs uppercase tracking-widest">{uploadProgress}% subiendo...</p>
+                                                                </div>
+                                                            ) : (
+                                                                <>
+                                                                    <button onClick={() => {
+                                                                        const input = document.createElement('input');
+                                                                        input.type = 'file';
+                                                                        input.accept = ".ai,.eps,.pdf,.svg";
+                                                                        input.onchange = async (e) => {
+                                                                            const file = (e.target as HTMLInputElement).files?.[0];
+                                                                            if (file) {
+                                                                                setIsUploading(true);
+                                                                                setUploadProgress(0);
+                                                                                setUploadError(null);
+                                                                                try {
+                                                                                    const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
+                                                                                    setFileUrl(res[0].url);
+                                                                                    setFileName(file.name);
+                                                                                } catch (error) {
+                                                                                    setUploadError("El tamaño excede el límite (64MB) o el formato no es válido.");
+                                                                                } finally {
+                                                                                    setIsUploading(false);
+                                                                                    setUploadProgress(0);
+                                                                                }
+                                                                            }
+                                                                        };
+                                                                        input.click();
+                                                                    }} className="w-full py-3 bg-brand-yellow text-black font-black uppercase tracking-widest rounded-xl hover:bg-yellow-400 hover:scale-105 transition-all text-sm flex items-center justify-center gap-2">
+                                                                        <Upload size={18} /> Explorar Archivos
+                                                                    </button>
+                                                                    <button onClick={() => {
+                                                                        setHasDesign(false);
+                                                                        setProjectType(null);
+                                                                        setCurrentStep(0);
+                                                                    }} className="text-gray-500 text-[10px] hover:text-white transition-colors underline block mx-auto mt-4">No tengo archivo vectorial</button>
+                                                                    {uploadError && <p className="text-red-400 text-[10px] mt-3 text-center font-bold tracking-wide">{uploadError}</p>}
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         ) : (
                                             <div className="flex flex-wrap justify-center gap-3 sm:grid sm:grid-cols-3 sm:gap-4">
                                                 {CUT_TYPES.map(c => (
@@ -743,11 +849,102 @@ export default function PriceCalculator({
 
                                 {currentStep === 2 && (
                                     <motion.div key="step2" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
-                                        <h3 className="text-white font-bold text-lg mb-4">{projectType === 'cubreplacas' ? 'Acabado' : 'Material'}</h3>
+                                        <h3 className="text-white font-bold text-lg mb-4">{projectType === 'cubreplacas' ? 'Acabado' : projectType === 'cut' ? 'Material Base' : 'Material'}</h3>
 
                                         {projectType === 'cubreplacas' ? (
                                             <div className="flex items-center justify-center p-8 bg-white/5 rounded-2xl border border-white/10">
                                                 <p className="text-gray-400 text-sm italic">Procesando configuración...</p>
+                                            </div>
+                                        ) : projectType === 'cut' ? (
+                                            <div className="flex flex-col lg:flex-row gap-6 mx-auto w-full max-w-4xl">
+                                                {/* Left side: Preview of layers */}
+                                                <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-6 md:p-10 flex items-center justify-center relative overflow-hidden min-h-[300px]">
+                                                    {/* Decorational background */}
+                                                    <div className="absolute inset-0 bg-gradient-to-br from-brand-yellow/5 to-purple-500/5 opacity-50" />
+
+                                                    {fileUrl ? (
+                                                        <div className="absolute inset-0 p-4 md:p-6 flex flex-col items-center justify-center bg-black/20 backdrop-blur-sm z-10">
+                                                            <div className="w-full h-full flex items-center justify-center relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-white/5">
+                                                                {fileName?.toLowerCase().endsWith('.pdf') ? (
+                                                                    <iframe src={`${fileUrl}#toolbar=0&navpanes=0&scrollbar=0`} className="w-full h-full border-none pointer-events-auto bg-white" />
+                                                                ) : fileName?.toLowerCase().endsWith('.ai') || fileName?.toLowerCase().endsWith('.eps') ? (
+                                                                    <iframe src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`} className="w-full h-full border-none pointer-events-auto bg-white" />
+                                                                ) : (
+                                                                    <img src={fileUrl} alt="Vista Previa" className="w-full h-full object-contain p-2" />
+                                                                )}
+                                                            </div>
+                                                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md text-white text-[10px] px-4 py-2 rounded-full font-bold uppercase tracking-widest pointer-events-none flex items-center gap-2 border border-white/10">
+                                                                <Eye size={14} className="text-brand-yellow" /> Tu Diseño
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="relative w-48 h-48 sm:w-64 sm:h-64 flex items-center justify-center pointer-events-none">
+                                                            {Array.from({ length: cutVinylLayers }).map((_, i) => {
+                                                                const colors = [
+                                                                    'bg-white',
+                                                                    'bg-brand-yellow',
+                                                                    'bg-red-500',
+                                                                    'bg-blue-500',
+                                                                    'bg-purple-500'
+                                                                ];
+
+                                                                // Calculate offsets to stack them like layered stickers
+                                                                const offsetX = i * 14 - (cutVinylLayers - 1) * 7;
+                                                                const offsetY = i * -10 + (cutVinylLayers - 1) * 5;
+                                                                const scale = 1 - (cutVinylLayers - 1 - i) * 0.05;
+                                                                const rotate = i * 6 - (cutVinylLayers - 1) * 3;
+
+                                                                return (
+                                                                    <motion.div
+                                                                        key={i}
+                                                                        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                                                                        animate={{ opacity: 1, scale, x: offsetX, y: offsetY, rotate }}
+                                                                        transition={{ type: "spring", stiffness: 300, damping: 20, delay: i * 0.1 }}
+                                                                        className={`absolute w-28 h-28 sm:w-36 sm:h-36 rounded-[2rem] ${colors[i % colors.length]} shadow-2xl flex items-center justify-center border-4 border-black/20`}
+                                                                        style={{ zIndex: i }}
+                                                                    >
+                                                                        {i === cutVinylLayers - 1 && (
+                                                                            <Palette size={48} className="text-black/30" />
+                                                                        )}
+                                                                    </motion.div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Right side: Layer selection controls */}
+                                                <div className="w-full lg:w-80 flex flex-col gap-4">
+                                                    <div className="bg-white/5 border border-brand-yellow/30 p-5 rounded-2xl flex flex-col h-full">
+                                                        <h4 className="text-white font-black text-xl italic tracking-tighter uppercase mb-2">Variedad de Colores</h4>
+                                                        <p className="text-gray-300 text-[11px] mb-4 leading-relaxed">
+                                                            Manejamos vinilos premium para exteriores en una gran cantidad de tonos como <strong className="text-white">metálicos, tornasol, escarchados, fotoluminiscentes, reflectivos, mate, brillantes, PPF negro, e incluso vinilo conformable de wrapping vehicular.</strong>
+                                                        </p>
+
+                                                        <div className="mt-auto">
+                                                            <label className="text-brand-yellow text-xs uppercase tracking-widest block mb-2 font-black">Capas de Color:</label>
+                                                            <div className="flex bg-black/50 border border-white/10 rounded-xl overflow-hidden p-1">
+                                                                {[1, 2, 3, 4, 5].map(num => (
+                                                                    <button
+                                                                        key={num}
+                                                                        onClick={() => setCutVinylLayers(num)}
+                                                                        className={`flex-1 py-2 text-sm font-black transition-colors rounded-lg ${cutVinylLayers === num ? 'bg-brand-yellow text-black' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                                                                    >
+                                                                        {num}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                            <p className="text-[10px] text-gray-500 mt-2 text-center">
+                                                                {cutVinylLayers === 1 ? 'Color plano sencillo.' : `Ensamblado de ${cutVinylLayers} colores distintos.`}
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="bg-black/40 p-3 rounded-lg text-[10px] text-gray-400 border border-white/5 mt-4 flex items-start gap-2">
+                                                            <Info size={14} className="shrink-0 text-brand-yellow mt-0.5" />
+                                                            <p>Confirmaremos los colores y acabados exactos por WhatsApp una vez aprobado el diseño.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         ) : (
                                             <div className="flex flex-col md:flex-row gap-6">
@@ -853,15 +1050,39 @@ export default function PriceCalculator({
                                 )}
 
                                 {currentStep === 3 && (
-                                    <motion.div key="step3" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-3">
-                                        <h3 className="text-white font-bold text-base mb-2">{projectType === 'cubreplacas' ? 'Carga de Logo' : 'Detalles'}</h3>
+                                    <motion.div key="step3" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
+                                        <h3 className="text-white font-bold text-base mb-2">{projectType === 'cubreplacas' ? 'Carga de Logo' : projectType === 'cut' ? 'Medidas y Envío' : 'Detalles'}</h3>
 
                                         {projectType === 'cubreplacas' ? (
                                             <div className="space-y-3">
                                                 {fileUrl ? (
-                                                    <div className="bg-green-500/10 border border-green-500 p-3 rounded-lg flex justify-between items-center">
-                                                        <span className="text-white text-xs truncate mr-2">{fileName}</span>
-                                                        <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-[10px] font-bold tracking-wider shrink-0 uppercase">Cambiar</button>
+                                                    <div className="bg-white/5 border border-white/10 p-3 rounded-xl flex items-center gap-4">
+                                                        <div className="w-20 h-20 shrink-0 bg-black/40 rounded-xl overflow-hidden flex items-center justify-center relative border border-white/5">
+                                                            {fileName?.toLowerCase().endsWith('.pdf') ? (
+                                                                <div className="flex flex-col items-center justify-center text-red-500/80">
+                                                                    <FileText size={24} className="mb-1" />
+                                                                    <span className="text-[10px] font-bold uppercase">PDF</span>
+                                                                </div>
+                                                            ) : fileName?.toLowerCase().endsWith('.ai') || fileName?.toLowerCase().endsWith('.eps') || fileName?.toLowerCase().endsWith('.cdr') ? (
+                                                                <div className="flex flex-col items-center justify-center text-brand-yellow/50">
+                                                                    <FileCode size={24} className="mb-1" />
+                                                                    <span className="text-[10px] font-bold uppercase">{fileName?.split('.').pop()}</span>
+                                                                </div>
+                                                            ) : (
+                                                                <img src={fileUrl} alt="Vista Previa" className="w-full h-full object-contain p-2" />
+                                                            )}
+                                                        </div>
+                                                        <div className="flex flex-col justify-center gap-2 min-w-0 flex-1">
+                                                            <span className="text-white text-xs font-bold truncate block w-full">{fileName}</span>
+                                                            <div className="flex gap-2">
+                                                                <a href={`/view-design/${encodeURIComponent(fileName || 'archivo')}?url=${encodeURIComponent(fileUrl)}`} target="_blank" rel="noopener noreferrer" className="text-brand-yellow text-[10px] font-bold uppercase tracking-wider hover:underline w-fit bg-brand-yellow/10 px-3 py-1 rounded-full flex items-center gap-1">
+                                                                    <Eye size={12} /> Ver
+                                                                </a>
+                                                                <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-[10px] font-bold uppercase tracking-wider hover:underline w-fit bg-red-500/10 px-3 py-1 rounded-full">
+                                                                    Cambiar
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 ) : (
                                                     <div className="space-y-2">
@@ -877,16 +1098,23 @@ export default function PriceCalculator({
                                                                 <button onClick={() => {
                                                                     const input = document.createElement('input');
                                                                     input.type = 'file';
+                                                                    input.accept = ".ai,.eps,.pdf,.svg";
                                                                     input.onchange = async (e) => {
                                                                         const file = (e.target as HTMLInputElement).files?.[0];
                                                                         if (file) {
                                                                             setIsUploading(true);
                                                                             setUploadProgress(0);
-                                                                            const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
-                                                                            setFileUrl(res[0].url);
-                                                                            setFileName(file.name);
-                                                                            setIsUploading(false);
-                                                                            setUploadProgress(0);
+                                                                            setUploadError(null);
+                                                                            try {
+                                                                                const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
+                                                                                setFileUrl(res[0].url);
+                                                                                setFileName(file.name);
+                                                                            } catch (error) {
+                                                                                setUploadError("El archivo excede el límite de 64MB o ocurrió un error.");
+                                                                            } finally {
+                                                                                setIsUploading(false);
+                                                                                setUploadProgress(0);
+                                                                            }
                                                                         }
                                                                     };
                                                                     input.click();
@@ -897,11 +1125,76 @@ export default function PriceCalculator({
                                                                     setHasDesign(false);
                                                                     setProjectType(null);
                                                                     setCurrentStep(0);
-                                                                }} className="text-gray-500 text-[10px] hover:text-white transition-colors underline block mx-auto">No tengo logo, necesito diseño</button>
+                                                                }} className="text-gray-500 text-[10px] hover:text-white transition-colors underline block mx-auto mt-2">No tengo logo, necesito diseño</button>
+                                                                {uploadError && <p className="text-red-400 text-[10px] mt-3 text-center font-bold">{uploadError}</p>}
                                                             </>
                                                         )}
                                                     </div>
                                                 )}
+                                            </div>
+                                        ) : projectType === 'cut' ? (
+                                            <div className="space-y-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {/* Entrega Options from Step 1 */}
+                                                    <div className="bg-white/5 p-4 rounded-xl border border-white/10 flex flex-col h-full gap-3">
+                                                        <label className="text-white text-[10px] block font-bold uppercase tracking-widest text-brand-yellow">Opciones de Entrega</label>
+
+                                                        <button
+                                                            onClick={() => setCutVinylType('crudo')}
+                                                            className={`relative overflow-hidden rounded-xl border transition-all duration-300 group flex items-start gap-3 p-3 text-left w-full ${cutVinylType === 'crudo' ? 'border-brand-yellow bg-brand-yellow/5' : 'border-white/10 hover:border-white/30 bg-black/50'}`}
+                                                        >
+                                                            <div className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center ${cutVinylType === 'crudo' ? 'bg-brand-yellow text-black' : 'bg-white/10 text-white'}`}>
+                                                                <Scissors size={14} />
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <span className="text-white font-black text-xs block leading-tight">Material Crudo</span>
+                                                                <span className="text-brand-yellow font-bold text-[11px] uppercase block mt-0.5 leading-tight">Entregado de plotter.<br />Tú pelas y aplicas.</span>
+                                                            </div>
+                                                            {cutVinylType === 'crudo' && <CheckCircle2 size={16} className="text-brand-yellow shrink-0 mt-1" />}
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => setCutVinylType('listo')}
+                                                            className={`relative overflow-hidden rounded-xl border transition-all duration-300 group flex items-start gap-3 p-3 text-left w-full ${cutVinylType === 'listo' ? 'border-brand-yellow bg-brand-yellow/5' : 'border-white/10 hover:border-white/30 bg-black/50'}`}
+                                                        >
+                                                            <div className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center ${cutVinylType === 'listo' ? 'bg-brand-yellow text-black' : 'bg-white/10 text-white'}`}>
+                                                                <Sparkles size={14} />
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <span className="text-white font-black text-xs block leading-tight">Listo para Instalar</span>
+                                                                <span className="text-brand-yellow font-bold text-[11px] uppercase block mt-0.5 leading-tight">Pelado manual y tape<br />transfer aplicado.</span>
+                                                            </div>
+                                                            {cutVinylType === 'listo' && <CheckCircle2 size={16} className="text-brand-yellow shrink-0 mt-1" />}
+                                                        </button>
+                                                        <div className="mt-auto"></div>
+                                                    </div>
+
+                                                    <div className="space-y-4">
+                                                        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+                                                            <label className="text-white text-[10px] block mb-2 font-bold uppercase tracking-widest text-brand-yellow">Medidas Totales (cm) <span className="text-gray-500 font-normal normal-case tracking-normal">— mín. 3x3</span></label>
+                                                            <div className="flex gap-3">
+                                                                <div className="relative w-full">
+                                                                    <span className="text-[10px] text-gray-500 absolute top-1.5 left-2 uppercase">Ancho</span>
+                                                                    <input type="number" min={3} value={widthCm} onChange={e => setWidthCm(Math.max(3, Number(e.target.value)))} className="bg-black/50 border border-white/20 text-white p-2 pt-6 pb-2 text-sm rounded-lg w-full font-bold text-center transition-all focus:border-brand-yellow focus:ring-1 focus:ring-brand-yellow outline-none" />
+                                                                </div>
+                                                                <span className="text-white self-center text-sm font-black mx-1 opacity-50">x</span>
+                                                                <div className="relative w-full">
+                                                                    <span className="text-[10px] text-gray-500 absolute top-1.5 left-2 uppercase">Alto</span>
+                                                                    <input type="number" min={3} value={heightCm} onChange={e => setHeightCm(Math.max(3, Number(e.target.value)))} className="bg-black/50 border border-white/20 text-white p-2 pt-6 pb-2 text-sm rounded-lg w-full font-bold text-center transition-all focus:border-brand-yellow focus:ring-1 focus:ring-brand-yellow outline-none" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+                                                            <label className="text-white text-[10px] block mb-1 font-bold uppercase tracking-widest text-brand-yellow">Cantidad (Hojas de 60x100cm)</label>
+                                                            <p className="text-gray-400 text-[10px] mb-3 leading-tight opacity-80">Nosotros nos encargamos de la distribución óptima de tus stickers en el material.</p>
+                                                            <div className="flex items-center gap-3 bg-black/50 rounded-lg border border-white/20 p-1 w-full justify-between">
+                                                                <button onClick={() => setSheetQuantity(Math.max(1, sheetQuantity - 1))} className="text-white bg-white/10 hover:bg-white/20 hover:text-brand-yellow w-12 h-10 rounded-md text-xl flex items-center justify-center transition-colors">-</button>
+                                                                <span className="text-white font-black text-xl w-16 text-center">{sheetQuantity}</span>
+                                                                <button onClick={() => setSheetQuantity(sheetQuantity + 1)} className="text-white bg-white/10 hover:bg-white/20 hover:text-brand-yellow w-12 h-10 rounded-md text-xl flex items-center justify-center transition-colors">+</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         ) : (
                                             <div className="space-y-2">
@@ -909,9 +1202,33 @@ export default function PriceCalculator({
                                                 <div className="bg-white/5 p-3 rounded-xl border border-white/10">
                                                     <label className="text-white text-[10px] block mb-1">Diseño</label>
                                                     {fileUrl ? (
-                                                        <div className="bg-green-500/10 border border-green-500 p-3 rounded-lg flex justify-between items-center">
-                                                            <span className="text-white text-xs truncate">{fileName}</span>
-                                                            <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-xs ml-2 shrink-0">Cambiar</button>
+                                                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl flex items-center gap-4">
+                                                            <div className="w-20 h-20 shrink-0 bg-black/40 rounded-xl overflow-hidden flex items-center justify-center relative border border-white/5">
+                                                                {fileName?.toLowerCase().endsWith('.pdf') ? (
+                                                                    <div className="flex flex-col items-center justify-center text-red-500/80">
+                                                                        <FileText size={24} className="mb-1" />
+                                                                        <span className="text-[10px] font-bold uppercase">PDF</span>
+                                                                    </div>
+                                                                ) : fileName?.toLowerCase().endsWith('.ai') || fileName?.toLowerCase().endsWith('.eps') || fileName?.toLowerCase().endsWith('.cdr') ? (
+                                                                    <div className="flex flex-col items-center justify-center text-brand-yellow/50">
+                                                                        <FileCode size={24} className="mb-1" />
+                                                                        <span className="text-[10px] font-bold uppercase">{fileName?.split('.').pop()}</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <img src={fileUrl} alt="Vista Previa" className="w-full h-full object-contain p-2" />
+                                                                )}
+                                                            </div>
+                                                            <div className="flex flex-col justify-center gap-2 min-w-0 flex-1">
+                                                                <span className="text-white text-xs font-bold truncate block w-full">{fileName}</span>
+                                                                <div className="flex gap-2">
+                                                                    <a href={`/view-design/${encodeURIComponent(fileName || 'archivo')}?url=${encodeURIComponent(fileUrl)}`} target="_blank" rel="noopener noreferrer" className="text-brand-yellow text-[10px] font-bold uppercase tracking-wider hover:underline w-fit bg-brand-yellow/10 px-3 py-1 rounded-full flex items-center gap-1">
+                                                                        <Eye size={12} /> Ver
+                                                                    </a>
+                                                                    <button onClick={() => { setFileUrl(null); setFileName(null); }} className="text-red-500 text-[10px] font-bold uppercase tracking-wider hover:underline w-fit bg-red-500/10 px-3 py-1 rounded-full">
+                                                                        Cambiar
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     ) : (
                                                         <div className="space-y-1">
@@ -932,11 +1249,17 @@ export default function PriceCalculator({
                                                                             if (file) {
                                                                                 setIsUploading(true);
                                                                                 setUploadProgress(0);
-                                                                                const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
-                                                                                setFileUrl(res[0].url);
-                                                                                setFileName(file.name);
-                                                                                setIsUploading(false);
-                                                                                setUploadProgress(0);
+                                                                                setUploadError(null);
+                                                                                try {
+                                                                                    const res = await uploadFiles("stickerUploader", { files: [file], onUploadProgress: ({ progress }) => setUploadProgress(progress) });
+                                                                                    setFileUrl(res[0].url);
+                                                                                    setFileName(file.name);
+                                                                                } catch (error) {
+                                                                                    setUploadError("El archivo excede el límite de 64MB o ocurrió un error.");
+                                                                                } finally {
+                                                                                    setIsUploading(false);
+                                                                                    setUploadProgress(0);
+                                                                                }
                                                                             }
                                                                         };
                                                                         input.click();
@@ -947,7 +1270,8 @@ export default function PriceCalculator({
                                                                         setHasDesign(false);
                                                                         setProjectType(null);
                                                                         setCurrentStep(0);
-                                                                    }} className="text-gray-500 text-[10px] underline block mx-auto">No tengo diseño</button>
+                                                                    }} className="text-gray-500 text-[10px] underline block mx-auto mt-2">No tengo diseño</button>
+                                                                    {uploadError && <p className="text-red-400 text-[10px] mt-3 text-center font-bold">{uploadError}</p>}
                                                                 </>
                                                             )}
                                                         </div>
@@ -975,7 +1299,8 @@ export default function PriceCalculator({
                                                     </div>
                                                 </div>
                                                 <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                                                    <label className="text-white text-[10px] block mb-1">Cantidad (Hojas)</label>
+                                                    <label className="text-white text-[10px] block mb-1 font-bold text-brand-yellow">Cantidad (Hojas)</label>
+                                                    <p className="text-gray-400 text-[9px] mb-2 leading-tight opacity-80">Nosotros nos encargamos de la distribución óptima en el material.</p>
                                                     <div className="flex items-center gap-3">
                                                         <button onClick={() => setSheetQuantity(Math.max(1, sheetQuantity - 1))} className="text-white bg-white/10 p-1.5 rounded text-xs">-</button>
                                                         <span className="text-white font-bold text-lg">{sheetQuantity}</span>
@@ -1035,16 +1360,16 @@ export default function PriceCalculator({
                                     <h3 className="text-white font-bold text-sm">Resumen</h3>
                                 </div>
 
-                                <div className="space-y-2 text-[11px] text-gray-400">
-                                    <div className="flex justify-between">
+                                <div className="space-y-2 text-xs text-gray-400">
+                                    <div className="flex justify-between items-center">
                                         <span>Proyecto:</span>
                                         <span className="text-white font-bold uppercase">{projectType}</span>
                                     </div>
 
                                     {projectType === 'cubreplacas' ? (
                                         <>
-                                            <div className="flex justify-between">
-                                                <span>Base:</span>
+                                            <div className="flex justify-between items-start text-right gap-2">
+                                                <span className="shrink-0 text-left">Base:</span>
                                                 <span className="text-white font-bold">{cubreplacasBase}</span>
                                             </div>
                                             {includeHelmetSticker && (
@@ -1072,39 +1397,39 @@ export default function PriceCalculator({
                                         </>
                                     ) : (
                                         <>
-                                            <div className="flex justify-between">
-                                                <span>Material:</span>
+                                            <div className="flex justify-between items-start text-right gap-2">
+                                                <span className="shrink-0 text-left">Material:</span>
                                                 <span className={currentStep >= 2 ? "text-white font-bold" : "text-gray-500 italic"}>
-                                                    {currentStep >= 2 ? `${material.name} (${materialWidth}x${material.sheetSize.height}cm)` : 'Pendiente'}
+                                                    {currentStep >= 2 ? (projectType === 'cut' ? `Colores: ${cutVinylLayers} ${cutVinylLayers > 1 ? 'Capas' : 'Capa'}` : `${material.name} (${materialWidth}x${material.sheetSize.height}cm)`) : 'Pendiente'}
                                                 </span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span>Corte:</span>
+                                            <div className="flex justify-between items-start text-right gap-2">
+                                                <span className="shrink-0 text-left">Corte:</span>
                                                 <span className={currentStep >= 1 ? "text-white font-bold" : "text-gray-500 italic"}>
-                                                    {currentStep >= 1 ? cutType.name : 'Pendiente'}
+                                                    {currentStep >= 1 ? (projectType === 'cut' ? (cutVinylType === 'crudo' ? 'Crudo (Solo Corte)' : 'Servicio Completo Listo') : cutType.name) : 'Pendiente'}
                                                 </span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span>Acabado:</span>
+                                            <div className="flex justify-between items-start text-right gap-2">
+                                                <span className="shrink-0 text-left">Acabado:</span>
                                                 <span className={currentStep >= 3 ? "text-white font-bold" : "text-gray-500 italic"}>
-                                                    {currentStep >= 3 ? (material.requiresLaminate ? (laminate === 'brillante' ? 'Brillante' : 'Mate') : 'Incluido') : 'Pendiente'}
+                                                    {currentStep >= 3 ? (projectType === 'cut' ? 'Descartonado y Transfer' : (material.requiresLaminate ? (laminate === 'brillante' ? 'Brillante' : 'Mate') : 'Incluido')) : 'Pendiente'}
                                                 </span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span>Medidas:</span>
+                                            <div className="flex justify-between items-start text-right gap-2">
+                                                <span className="shrink-0 text-left">Medidas:</span>
                                                 <span className={currentStep >= 3 ? "text-white font-bold" : "text-gray-500 italic"}>
                                                     {currentStep >= 3 ? `${widthCm} x ${heightCm} cm` : 'Pendiente'}
                                                 </span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span>Cantidad:</span>
+                                            <div className="flex justify-between items-start text-right gap-2">
+                                                <span className="shrink-0 text-left">Cantidad:</span>
                                                 <span className={currentStep >= 3 ? "text-white font-bold" : "text-gray-500 italic"}>
-                                                    {currentStep >= 3 ? `${sheetQuantity} hojas` : 'Pendiente'}
+                                                    {currentStep >= 3 ? `${sheetQuantity} hojas/pliegos` : 'Pendiente'}
                                                 </span>
                                             </div>
                                             {currentStep >= 3 && (
-                                                <div className="flex justify-between">
-                                                    <span>Stickers (aprox.):</span>
+                                                <div className="flex justify-between items-start text-right gap-2">
+                                                    <span className="shrink-0 text-left">Stickers (aprox.):</span>
                                                     <span className="text-white font-bold">~{totalStickers}</span>
                                                 </div>
                                             )}
@@ -1123,7 +1448,9 @@ export default function PriceCalculator({
                                     <Button onClick={() => {
                                         let featuresPayload = projectType === 'cubreplacas'
                                             ? [`Base: ${cubreplacasBase}`]
-                                            : [`Material: ${material.name}`, `Corte: ${cutType.name}`];
+                                            : projectType === 'cut'
+                                                ? [`Material: Variedad Colores (${cutVinylLayers} capa${cutVinylLayers > 1 ? 's' : ''})`, `Corte: ${cutVinylType === 'crudo' ? 'Material Crudo (Sin pelar/transfer)' : 'Listo para Instalar (Pelado+Transfer)'}`]
+                                                : [`Material: ${material.name}`, `Corte: ${cutType.name}`];
 
                                         if (projectType === 'cubreplacas') {
                                             if (includeHelmetSticker) {
@@ -1136,12 +1463,12 @@ export default function PriceCalculator({
 
                                         addItem({
                                             id: Date.now(),
-                                            name: projectType === 'cubreplacas' ? (cubreplacasQuantity > 1 ? `Cubreplacas Custom (x${cubreplacasQuantity})` : 'Cubreplacas Custom') : `${material.name} (${materialWidth}x${material.sheetSize.height}cm)`,
+                                            name: projectType === 'cubreplacas' ? (cubreplacasQuantity > 1 ? `Cubreplacas Custom (x${cubreplacasQuantity})` : 'Cubreplacas Custom') : projectType === 'cut' ? `Vinilo de Corte (${cutVinylType})` : `${material.name} (${materialWidth}x${material.sheetSize.height}cm)`,
                                             price: discountedPrice,
                                             displayPrice: discountedPrice.toLocaleString(),
-                                            image: projectType === 'cubreplacas' ? '/brand/logo.png' : material.imageSrc,
-                                            category: projectType === 'cubreplacas' ? 'Cubreplacas' : 'Stickers',
-                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase}` : `${cutType.name} | ${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
+                                            image: projectType === 'cubreplacas' ? '/brand/logo.png' : projectType === 'cut' ? '/project-types/cut-vinyl.png' : material.imageSrc,
+                                            category: projectType === 'cubreplacas' ? 'Cubreplacas' : projectType === 'cut' ? 'Vinilo de Corte' : 'Stickers',
+                                            description: projectType === 'cubreplacas' ? `${cubreplacasBase}` : projectType === 'cut' ? `${cutVinylLayers} capa${cutVinylLayers > 1 ? 's' : ''} | ${widthCm}x${heightCm}cm | ${sheetQuantity} hojas` : `${cutType.name} | ${widthCm}x${heightCm}cm | ${sheetQuantity} hojas`,
                                             features: featuresPayload,
                                             fileUrl: fileUrl || undefined
                                         });
@@ -1155,6 +1482,6 @@ export default function PriceCalculator({
                     )}
                 </div>
             </div>
-        </section >
+        </section>
     );
 }

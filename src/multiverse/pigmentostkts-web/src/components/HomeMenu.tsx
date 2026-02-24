@@ -14,7 +14,6 @@ const menuItems = [
         icon: Ghost,
         href: "/cotizador",
         imageSrc: "/project-types/printed-stickers.png",
-        gradient: "from-purple-900/90 to-indigo-900/90",
         delay: 0
     },
     {
@@ -24,7 +23,6 @@ const menuItems = [
         icon: Shield,
         href: "/cubreplacas",
         imageSrc: "/project-types/cubreplacas.png",
-        gradient: "from-gray-900/90 to-black/90",
         delay: 0.1
     },
     {
@@ -34,7 +32,6 @@ const menuItems = [
         icon: Star,
         href: "/packs",
         imageSrc: "/fotos stickers coleccion/Sushi Pack/3.png",
-        gradient: "from-orange-700/80 to-red-900/80",
         delay: 0.2
     },
     {
@@ -44,7 +41,6 @@ const menuItems = [
         icon: Palette,
         href: "/diseno",
         imageSrc: "/images/design/logo_pro_alt.png",
-        gradient: "from-pink-900/80 to-rose-950/80",
         delay: 0.3
     }
 ];
@@ -58,8 +54,8 @@ function TiltCard({ item }: { item: typeof menuItems[0] }) {
     const mouseXSpring = useSpring(x);
     const mouseYSpring = useSpring(y);
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]); // Reduced rotation for wider cards
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-8deg", "8deg"]);
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-6deg", "6deg"]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         if (!ref.current) return;
@@ -99,7 +95,7 @@ function TiltCard({ item }: { item: typeof menuItems[0] }) {
                 href={item.href}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                className="block relative h-60 md:h-72 lg:h-80 w-full rounded-[1rem] overflow-hidden group shadow-lg hover:shadow-2xl hover:shadow-brand-yellow/20 transition-all duration-300 transform-gpu bg-gray-900 border border-white/5"
+                className="block relative h-48 md:h-56 lg:h-64 w-full rounded-[1.5rem] overflow-hidden group shadow-lg hover:shadow-2xl hover:shadow-brand-yellow/30 transition-shadow duration-500 transform-gpu bg-brand-black border border-white/10"
             >
                 <motion.div
                     style={{
@@ -115,44 +111,44 @@ function TiltCard({ item }: { item: typeof menuItems[0] }) {
                             src={item.imageSrc}
                             alt={item.label}
                             fill
-                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 50vw"
                             priority
                         />
                     </div>
 
-                    {/* Cinematic Cinematic Gradient Overlay (Bottom-Heavy for text) */}
-                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-70" />
-
-                    {/* Color Tint Overlay - More subtle now */}
-                    <div className={`absolute inset-0 z-10 bg-gradient-to-br ${item.gradient} mix-blend-overlay opacity-40 group-hover:opacity-60 transition-opacity duration-500`} />
+                    {/* Subtle Vignette Overlay for Text Readability - Minimal interference */}
+                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/10 to-black/20 opacity-80 transition-opacity duration-300 group-hover:opacity-60" />
 
                     {/* Shine Effect */}
                     <div className="absolute inset-0 z-20 bg-gradient-to-tr from-white/0 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none mix-blend-soft-light" />
 
-                    {/* Content Container - Glassmorphism Style Layout */}
-                    <div className="relative z-30 h-full p-6 md:p-8 flex flex-col justify-end transform-gpu translate-z-20">
-                        {/* Top Icon */}
-                        <div className="absolute top-5 left-5">
-                            <div className="bg-black/40 backdrop-blur-md p-2.5 rounded-xl border border-white/20 shadow-lg group-hover:bg-brand-yellow group-hover:text-black transition-all duration-300">
-                                <item.icon className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-black transition-colors" />
-                            </div>
+                    {/* Icon Badge - Top Right */}
+                    <div className="absolute top-3 right-3 z-30 transform-gpu translate-z-30">
+                        <div className="bg-white/10 backdrop-blur-md p-2 rounded-full border border-white/20 shadow-xl group-hover:bg-brand-yellow group-hover:border-brand-yellow transition-all duration-300">
+                            <item.icon className="w-4 h-4 md:w-5 md:h-5 text-white group-hover:text-black transition-colors duration-300" strokeWidth={1.5} />
                         </div>
+                    </div>
 
-                        <div className="transform transition-transform duration-500 translate-y-8 group-hover:translate-y-0">
-                            <h3 className="font-black text-4xl md:text-5xl lg:text-6xl uppercase tracking-[-0.07em] leading-[0.9] mb-3 drop-shadow-xl text-white">
-                                {item.label}
-                            </h3>
+                    {/* Glassmorphic Content Panel - Bottom Inset */}
+                    <div className="absolute bottom-2 left-2 right-2 z-30 transform-gpu translate-z-20 transition-transform duration-500 group-hover:-translate-y-1">
+                        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col justify-end shadow-2xl relative overflow-hidden">
+                            {/* Inner Hover Glow */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                            {/* Description reveals/slides up on hover with Frosted Glass Panel */}
-                            <div className="overflow-hidden h-0 group-hover:h-auto opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out delay-75">
-                                <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-3 shadow-lg">
-                                    <p className="text-xs md:text-sm font-medium text-white leading-tight mb-2 drop-shadow-sm">
+                            <div className="flex justify-between items-end relative z-10 w-full">
+                                <div className="flex-1 pr-3">
+                                    <h3 className="font-black text-xl md:text-2xl lg:text-3xl uppercase tracking-tighter leading-none mb-1 text-white group-hover:text-brand-yellow transition-colors duration-300">
+                                        {item.label}
+                                    </h3>
+                                    <p className="text-[10px] md:text-xs font-medium text-gray-300 leading-snug drop-shadow-sm">
                                         {item.description}
                                     </p>
-                                    <div className="flex items-center text-[10px] md:text-xs font-bold text-brand-yellow uppercase tracking-widest gap-2">
-                                        Explorar <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-                                    </div>
+                                </div>
+
+                                {/* Call to action arrow - Fixed at bottom right */}
+                                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-white group-hover:bg-brand-yellow group-hover:text-black transition-all duration-300 shadow-inner group-hover:scale-110">
+                                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:-rotate-45" />
                                 </div>
                             </div>
                         </div>
@@ -170,7 +166,8 @@ export default function HomeMenu() {
             <div className="absolute -inset-20 bg-brand-yellow/20 blur-[100px] rounded-full opacity-40 animate-pulse pointer-events-none -z-10" />
             <div className="absolute -inset-20 bg-purple-600/20 blur-[120px] rounded-full opacity-30 animate-pulse delay-1000 pointer-events-none -z-10 translate-x-20 translate-y-20" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full relative z-10">
+            {/* Changed to 2x2 Grid explicitly, slightly larger gaps */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 w-full relative z-10">
                 {menuItems.map((item) => (
                     <TiltCard key={item.id} item={item} />
                 ))}

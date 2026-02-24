@@ -3,13 +3,15 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { cn } from "@/lib/utils";
 import CartButton from "@/components/CartButton";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { useCart } from "@/context/CartContext";
+import { UserMenu } from "@/components/auth/UserMenu";
 
 const navLinks = [
   { name: "Packs de Colección", href: "/packs" },
@@ -22,8 +24,21 @@ const navLinks = [
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { items } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showEmptyAlert, setShowEmptyAlert] = useState(false);
+
+  const handleCotizarClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (items.length > 0) {
+      router.push('/checkout');
+      setIsOpen(false);
+    } else {
+      setShowEmptyAlert(true);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -124,21 +139,21 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Action Button & Cart */}
-            <div className="hidden md:flex items-center md:flex-1 md:justify-end gap-4">
+            {/* Action Button & Cart & Auth */}
+            <div className="hidden md:flex items-center md:flex-1 md:justify-end gap-3">
+              <UserMenu />
               <CartButton isScrolled={true} />
-              <Link
-                href={PIGMENTO_DATA.contact.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-brand-yellow text-brand-black px-6 py-2 rounded-full font-bold text-[12px] uppercase tracking-tighter transition-all duration-300 hover:bg-white hover:shadow-2xl hover:shadow-brand-yellow/20 active:scale-95"
+              <button
+                onClick={handleCotizarClick}
+                className="bg-brand-yellow text-brand-black px-6 py-2 rounded-full font-bold text-[12px] uppercase tracking-tighter transition-all duration-300 hover:bg-white hover:shadow-2xl hover:shadow-brand-yellow/20 active:scale-95 ml-2"
               >
                 Cotizar
-              </Link>
+              </button>
             </div>
 
-            {/* Mobile menu button & Cart */}
+            {/* Mobile menu button & Cart & Auth */}
             <div className="md:hidden flex items-center gap-2">
+              <UserMenu />
               <CartButton isScrolled={true} />
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -193,16 +208,70 @@ const Navbar = () => {
               )}
 
               <div className="pt-4">
-                <Link
-                  href={PIGMENTO_DATA.contact.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleCotizarClick}
                   className="block w-full text-center bg-brand-yellow text-brand-black px-6 py-4 rounded-xl font-black text-lg uppercase"
                 >
                   Cotizar Proyecto
-                </Link>
+                </button>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Empty Cart Modal */}
+      <AnimatePresence>
+        {showEmptyAlert && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={() => setShowEmptyAlert(false)}
+          >
+            <motion.div
+              className="bg-[#111] border border-white/10 rounded-2xl p-6 md:p-8 max-w-sm w-full shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowEmptyAlert(false)}
+                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+                aria-label="Cerrar"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-brand-yellow/10 rounded-full flex items-center justify-center mx-auto mb-2 text-brand-yellow">
+                  <ShoppingBag size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-brand-yellow uppercase tracking-tight">
+                  Carrito Vacío
+                </h3>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  Agrega stickers al carrito para poder cotizar y procesar tu pedido.
+                </p>
+                <div className="pt-4 flex flex-col gap-3">
+                  <button
+                    onClick={() => {
+                      setShowEmptyAlert(false);
+                      setIsOpen(false);
+                      router.push('/');
+                    }}
+                    className="w-full bg-brand-yellow text-brand-black font-bold py-3 rounded-xl uppercase text-sm hover:bg-white transition-colors"
+                  >
+                    Ver Productos
+                  </button>
+                  <button
+                    onClick={() => setShowEmptyAlert(false)}
+                    className="w-full bg-white/5 text-white font-bold py-3 rounded-xl uppercase text-sm hover:bg-white/10 transition-colors"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

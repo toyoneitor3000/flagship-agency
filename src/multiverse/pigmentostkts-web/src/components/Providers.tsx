@@ -7,11 +7,12 @@ import { NavThemeProvider } from "@/context/NavThemeContext";
 import Navbar from "@/components/Navbar";
 import CartSidebar from "@/components/CartSidebar";
 import Preloader from "@/components/Preloader";
+import type { Session } from "next-auth";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, session }: { children: React.ReactNode, session?: Session | null }) {
   return (
     <PreloaderProvider>
-      <SessionProvider>
+      <SessionProvider session={session}>
         <CartProvider>
           <NavThemeProvider>
             <Preloader />
