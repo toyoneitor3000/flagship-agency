@@ -8,7 +8,7 @@ import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 
 export default function CallToAction() {
     return (
-        <section id="cta" data-theme="dark" className="snap-start bg-brand-black py-24 relative overflow-hidden text-center border-t border-brand-yellow/10">
+        <section id="cta" data-theme="dark" className="snap-start bg-brand-black min-h-screen flex flex-col justify-center py-24 relative overflow-hidden text-center border-t border-brand-yellow/10">
             {/* Background Effects */}
             <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-yellow/5 rounded-full blur-[120px] pointer-events-none"></div>

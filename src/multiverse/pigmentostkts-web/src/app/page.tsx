@@ -44,16 +44,21 @@ export default function Home() {
       const atBottom = mainRef.current.scrollHeight - scrollTop - mainRef.current.clientHeight < 10; // Check if at bottom of the scrollable element
       setIsAtBottom(atBottom);
 
-      // Determine current section and update theme
-      // Use a smaller offset (5% of viewport) to ensure we switch sections only when they are close to the top.
-      const scrollPosition = scrollTop + window.innerHeight * 0.05;
-
+      // Determine current section
+      let newSectionIndex = currentSectionIndex;
+      // We check which section is closest to the top of the viewport
       SECTION_IDS.forEach((id, index) => {
         const section = document.getElementById(id);
-        if (section && section.offsetTop <= scrollPosition) {
-          setCurrentSectionIndex(index);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          // If the section's top is near or above the top of the viewport, and bottom is below it
+          if (rect.top <= window.innerHeight * 0.5 && rect.bottom >= 0) {
+            newSectionIndex = index;
+          }
         }
       });
+
+      setCurrentSectionIndex(newSectionIndex);
 
       // Force last section if at bottom (fixes issue with short footers)
       if (atBottom) { // Use the new atBottom variable
@@ -79,8 +84,9 @@ export default function Home() {
     if (index >= 0 && index < SECTION_IDS.length && mainRef.current) {
       const section = document.getElementById(SECTION_IDS[index]);
       if (section) {
+        const topPos = mainRef.current.scrollTop + section.getBoundingClientRect().top;
         mainRef.current.scrollTo({
-          top: section.offsetTop,
+          top: topPos,
           behavior: 'smooth'
         });
       }
