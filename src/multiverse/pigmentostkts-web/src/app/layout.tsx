@@ -8,7 +8,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { auth } from "@/auth";
 
 const GA_MEASUREMENT_ID = "G-HREDYTNMLH";
-const META_PIXEL_ID = "1430708191859507";
+const META_PIXEL_ID = "486554994533422";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({
