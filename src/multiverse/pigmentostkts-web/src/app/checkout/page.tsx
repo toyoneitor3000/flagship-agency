@@ -123,11 +123,7 @@ export default function CheckoutPage() {
     email: ""
   });
 
-  useEffect(() => {
-    if (items.length === 0) {
-      router.push("/packs");
-    }
-  }, [items, router]);
+  // Removed aggressive redirect to /packs to prevent premature redirects when CartContext initializes
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
