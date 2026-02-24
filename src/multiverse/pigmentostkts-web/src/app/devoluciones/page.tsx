@@ -4,8 +4,8 @@ import { FadeIn } from "@/components/ui/motion";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 
 export const metadata = {
-    title: "Política de Devoluciones | Pigmento Stickers",
-    description: "Nuestra garantía y política de devoluciones o reimpresiones.",
+    title: "Garantía y Devoluciones de Stickers Personalizados",
+    description: "Política de devoluciones y garantía de reimpresión de Pigmento Stickers. Si hay un defecto de producción, reimprimimos gratis.",
 };
 
 export default function DevolucionesPage() {

@@ -21,11 +21,11 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pigmentostickers.co
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Pigmento Stickers | Stickers Premium, Vinilos y Diseño",
-    template: "%s | Pigmento Stickers"
+    default: "Stickers Personalizados en Bogotá | Calcomanías y Cubreplacas Colombia | Pigmento Stickers",
+    template: "%s | Pigmento Stickers Bogotá"
   },
-  description: "Stickers personalizados, vinilo de corte automotriz, diseño gráfico y branding. Calidad premium, materiales holográficos, laminados UV y cortes kiss cut / die cut.",
-  keywords: ["stickers", "vinilo automotriz", "calcomanías personalizadas", "diseño gráfico", "branding", "corte completo", "semi corte", "holográfico", "Colombia", "impresión HD", "cubreplacas"],
+  description: "Impresión de stickers personalizados, calcomanías y cubreplacas en Bogotá. Envíos a toda Colombia. Vinilo de alta calidad, corte troquelado, laminado UV. Cotiza en línea.",
+  keywords: ["stickers personalizados bogota", "calcomanias bogota", "calcomanias personalizadas colombia", "impresion de stickers", "cubreplacas personalizados", "fabrica de stickers colombia", "stickers publicitarios", "calcomanias para carros", "vinilo automotriz", "stickers por mayor", "imprenta stickers bogota", "stickers autoadhesivos", "diseño gráfico", "branding"],
   authors: [{ name: "Pigmento Estudio" }],
   creator: "Pigmento Estudio",
   publisher: "Pigmento Estudio",
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Pigmento Stickers | El límite es tu imaginación",
-    description: "Impresión de stickers personalizados de alta gama, vinilos texturizados y servicios de diseño. Haz que tu marca destaque.",
+    title: "Stickers Personalizados en Bogotá | Calcomanías Colombia | Pigmento Stickers",
+    description: "Impresión de stickers, calcomanías y cubreplacas personalizados en Bogotá. Envíos a toda Colombia. Cotiza en línea.",
     url: baseUrl,
     siteName: "Pigmento Stickers",
     images: [
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pigmento Stickers | Stickers Premium",
-    description: "Imprime tus ideas con la mejor calidad en vinilos y laminados.",
+    title: "Stickers Personalizados Bogotá | Pigmento Stickers",
+    description: "Impresión de stickers, calcomanías y cubreplacas en Bogotá. Envíos a toda Colombia. Cotiza en línea.",
     images: ["/og-image.jpg"],
   },
   icons: {

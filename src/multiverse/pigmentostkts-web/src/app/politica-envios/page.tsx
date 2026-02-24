@@ -4,8 +4,8 @@ import { FadeIn } from "@/components/ui/motion";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 
 export const metadata = {
-    title: "Política de Envíos | Pigmento Stickers",
-    description: "Conoce nuestros tiempos, costos y cobertura de envíos para tus stickers y productos.",
+    title: "Envíos de Stickers a Toda Colombia | Bogotá y Nacional",
+    description: "Envíos de stickers y calcomanías a toda Colombia. Cundinamarca en 1 día hábil, nacional en 2-5 días. Transportadoras certificadas.",
 };
 
 export default function PoliticaEnviosPage() {

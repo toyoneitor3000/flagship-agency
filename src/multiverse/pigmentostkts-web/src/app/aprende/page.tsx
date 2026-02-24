@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { getAllPostsMeta } from '@/lib/mdx';
 
 export const metadata: Metadata = {
-    title: 'Aprende | Wiki de Stickers',
-    description: 'Descubre todo sobre la impresión de stickers, materiales, cortes, laminados y técnicas de diseño.',
+    title: 'Guía de Stickers y Calcomanías: Materiales, Cortes y Diseño',
+    description: 'Aprende todo sobre impresión de stickers y calcomanías: materiales como vinilo, holográfico y transparente. Cortes die cut, kiss cut y laminado UV.',
 };
 
 const DUMMY_CATEGORIES = [

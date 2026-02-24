@@ -4,8 +4,8 @@ import Link from "next/link";
 import { FadeIn } from "@/components/ui/motion";
 
 export const metadata = {
-    title: "Preguntas Frecuentes | Pigmento Stickers",
-    description: "Respuestas a tus dudas sobre stickers, envíos, materiales y más.",
+    title: "Preguntas Frecuentes sobre Stickers y Calcomanías",
+    description: "Resolvemos tus dudas sobre impresión de stickers, calcomanías, materiales, envíos a toda Colombia y tiempos de producción. Cotiza en línea.",
 };
 
 export default function FAQPage() {
