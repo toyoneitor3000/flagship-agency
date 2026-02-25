@@ -9,6 +9,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorization: {
         url: "https://accounts.google.com/o/oauth2/v2/auth",
         params: {
+          prompt: "select_account",
           scope: "openid email profile",
           response_type: "code",
         },
