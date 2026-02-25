@@ -178,17 +178,21 @@ export default function PacksPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
             {PIGMENTO_DATA.pricing.collectionPacks?.map((pack) => (
               <div key={pack.name} className="group relative bg-white/5 rounded-[1.5rem] border-2 border-white/10 overflow-hidden hover:border-brand-yellow transition-all duration-300 flex flex-col h-full hover:shadow-[0_10px_30px_rgba(255,183,0,0.15)] hover:-translate-y-1">
-                <div className="relative aspect-square overflow-hidden bg-gray-900">
-                  <img src={pack.image} alt={pack.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-black/95 via-brand-black/20 to-transparent"></div>
-                  <div className="absolute bottom-3 left-3">
-                    <span className="bg-brand-yellow text-brand-black text-[9px] md:text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
-                      {pack.qty} Stickers
-                    </span>
+                <Link href={`/producto/${pack.slug}`} className="block">
+                  <div className="relative aspect-square overflow-hidden bg-gray-900">
+                    <img src={pack.image} alt={pack.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-black/95 via-brand-black/20 to-transparent"></div>
+                    <div className="absolute bottom-3 left-3">
+                      <span className="bg-brand-yellow text-brand-black text-[9px] md:text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                        {pack.qty} Stickers
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </Link>
                 <div className="p-5 md:p-6 flex flex-col flex-1">
-                  <h3 className="text-lg md:text-xl font-black uppercase text-white mb-1.5 tracking-tighter leading-tight group-hover:text-brand-yellow transition-colors">{pack.name}</h3>
+                  <Link href={`/producto/${pack.slug}`}>
+                    <h3 className="text-lg md:text-xl font-black uppercase text-white mb-1.5 tracking-tighter leading-tight group-hover:text-brand-yellow transition-colors">{pack.name}</h3>
+                  </Link>
                   <p className="text-[10px] md:text-xs font-bold text-gray-400 mb-4 flex-1 leading-relaxed">{pack.description}</p>
 
                   <div className="mt-auto pt-4 border-t border-white/10 space-y-3">
@@ -199,7 +203,7 @@ export default function PacksPage() {
                       </div>
                     </div>
                     <Button
-                      onClick={() => handleAddToCart(pack, true)}
+                      onClick={(e) => { e.stopPropagation(); handleAddToCart(pack, true); }}
                       className="w-full bg-white hover:bg-brand-yellow text-brand-black font-black uppercase text-[9px] md:text-[10px] tracking-widest h-10 md:h-11 rounded-xl transition-all shadow-lg group-hover:scale-[1.02]"
                     >
                       AGREGAR AL CARRITO

@@ -125,3 +125,16 @@ model OrderItem {
   metadata String? // JSON string con configuración (material, corte, medidas)
   fileUrl  String? // Link al archivo de diseño
 }
+
+model Review {
+  id          String   @id @default(cuid())
+  productSlug String   // slug del producto (e.g. "gameboy-pack")
+  rating      Int      // 1-5
+  comment     String
+  authorName  String
+  authorEmail String?
+  approved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([productSlug])
+}
