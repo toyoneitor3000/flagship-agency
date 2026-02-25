@@ -21,6 +21,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@uploadthing/react": "^7.3.3",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.0.8",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.344.0",
