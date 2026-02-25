@@ -1,15 +1,14 @@
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 import { ProductPageClient } from "./ProductPageClient";
 import type { Metadata } from "next";
 
+export const dynamic = 'force-dynamic';
+
 function getProduct(slug: string) {
     return PIGMENTO_DATA.pricing.collectionPacks.find(p => p.slug === slug);
-}
-
-export async function generateStaticParams() {
-    return PIGMENTO_DATA.pricing.collectionPacks.map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -42,8 +41,26 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         ? Math.round((reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) * 10) / 10
         : 0;
 
-    // Otros productos para "También te puede gustar"
     const otherProducts = PIGMENTO_DATA.pricing.collectionPacks.filter(p => p.slug !== slug);
+
+    // Check auth & customer status
+    let userName: string | null = null;
+    let userEmail: string | null = null;
+    let isCustomer = false;
+
+    try {
+        const session = await auth();
+        if (session?.user) {
+            userName = session.user.name || null;
+            userEmail = session.user.email || null;
+            if (userEmail) {
+                const orderCount = await prisma.order.count({
+                    where: { user: { email: userEmail } },
+                });
+                isCustomer = orderCount > 0;
+            }
+        }
+    } catch { }
 
     return (
         <ProductPageClient
@@ -51,6 +68,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             reviews={reviews}
             avgRating={avgRating}
             otherProducts={otherProducts}
+            userName={userName}
+            userEmail={userEmail}
+            isCustomer={isCustomer}
         />
     );
 }
