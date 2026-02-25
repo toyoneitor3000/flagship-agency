@@ -102,12 +102,12 @@ export default async function RootLayout({
           fbq('track', 'PageView');
         `}
       </Script>
-      <noscript>
-        <img height="1" width="1" style={{ display: 'none' }}
-          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-        />
-      </noscript>
       <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
+        <noscript>
+          <img height="1" width="1" style={{ display: 'none' }}
+            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+          />
+        </noscript>
         <Providers session={session}>
           {children}
           <FloatingWhatsApp />

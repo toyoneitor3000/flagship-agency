@@ -3,8 +3,16 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { DashboardClient } from "./DashboardClient";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
-  const session = await auth();
+  let session;
+  try {
+    session = await auth();
+  } catch (e) {
+    console.error("[Dashboard] auth() failed:", e);
+    redirect("/?login=true");
+  }
 
   if (!session?.user?.email) {
     redirect("/?login=true");

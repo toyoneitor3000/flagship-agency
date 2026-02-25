@@ -95,8 +95,22 @@ model Order {
   shippingCity    String?
   shippingZip     String?
 
+  // Datos de contacto
+  contactPhone    String?
+  contactEmail    String?
+
+  // Logística
+  deliveryMethod  String?  // 'nacional', 'picap', 'oficina'
+  trackingNumber  String?
+  trackingUrl     String?
+
+  // Admin
+  adminNotes      String?
+  progressPhotos  String?  // JSON array of photo URLs
+
   items OrderItem[]
 }
+
 
 model OrderItem {
   id        String   @id @default(cuid())

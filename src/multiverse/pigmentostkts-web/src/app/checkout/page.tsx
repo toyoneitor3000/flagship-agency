@@ -6,16 +6,23 @@ import { Input } from "@/components/ui/input";
 import { PIGMENTO_DATA } from "@/lib/pigmento-content";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, MessageCircle, ShieldCheck, CreditCard, MapPin, Truck, Tag, Plus, Minus, X } from "lucide-react";
+import { ArrowLeft, MessageCircle, ShieldCheck, CreditCard, MapPin, Truck, Tag, Plus, Minus, X, AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CheckoutPage() {
-  const { items, totalPrice, updateQuantity, removeItem } = useCart();
+  const { items, totalPrice, updateQuantity, removeItem, clearCart } = useCart();
   const router = useRouter();
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [deliveryMethod, setDeliveryMethod] = useState<'nacional' | 'picap' | 'oficina'>('nacional');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
+
+  const showToast = (message: string, type: 'error' | 'success' = 'error') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 4000);
+  };
 
   // Detect if a 1m+ or 60cm linear meter qualifies for free shipping
   const is1mPlus = (features: string[]) =>
@@ -109,7 +116,7 @@ export default function CheckoutPage() {
       setDiscount(0.2);
     } else {
       setDiscount(0);
-      alert("Cupón no válido");
+      showToast("Cupón no válido");
     }
   };
 
@@ -129,13 +136,11 @@ export default function CheckoutPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleWhatsAppOrder = () => {
-    if (!formData.name || !formData.address) {
-      alert("Por favor completa tu nombre y dirección");
-      return;
-    }
-
+  const buildWhatsAppMessage = (orderId?: string) => {
     let message = `Hola Pigmento! 🎨 Quiero realizar el siguiente pedido:%0A%0A`;
+    if (orderId) {
+      message += `*Pedido #:* ${orderId}%0A`;
+    }
     message += `*Cliente:* ${formData.name}%0A`;
     message += `*Tel:* ${formData.phone}%0A`;
     message += `*Dirección:* ${formData.address}, ${formData.city}%0A%0A`;
@@ -174,8 +179,66 @@ export default function CheckoutPage() {
     message += `%0A*TOTAL A PAGAR: $${(discountedTotal + totalShipping).toLocaleString()}*`;
     message += `%0A%0AFormas de pago aceptadas: Nequi, Bancolombia, Daviplata, Bre-B, Efecty.`;
 
-    window.open(`https://wa.me/573160535247?text=${message}`, '_blank');
+    return message;
   };
+
+  const handleWhatsAppOrder = async () => {
+    if (!formData.name || !formData.address) {
+      showToast("Por favor completa tu nombre y dirección");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // 1. Guardar la orden en la base de datos
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            category: item.category,
+            description: item.description,
+            features: item.features,
+            fileUrl: item.fileUrl,
+          })),
+          totalAmount: discountedTotal + totalShipping,
+          shippingName: formData.name,
+          shippingAddress: formData.address,
+          shippingCity: formData.city,
+          contactPhone: formData.phone || null,
+          contactEmail: formData.email || null,
+          deliveryMethod,
+          coupon: coupon || null,
+          discount,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('API error:', data);
+        showToast(data.details || data.error || 'Error guardando el pedido');
+        return;
+      }
+
+      // 2. Limpiar el carrito
+      clearCart();
+
+      // 3. Redirigir a confirmación (WhatsApp se envía desde ahí)
+      router.push(`/pedido-confirmado/${data.orderId}`);
+    } catch (error) {
+      console.error('Error creando orden:', error);
+      showToast('Error de conexión al servidor');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   if (items.length === 0) return null;
 
@@ -199,6 +262,40 @@ export default function CheckoutPage() {
       />
 
       <div className="container mx-auto px-6 relative z-10 max-w-7xl">
+
+        {/* Toast Notification */}
+        <AnimatePresence>
+          {toast && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="fixed top-24 left-1/2 -translate-x-1/2 z-[60] w-[90vw] max-w-md"
+            >
+              <div
+                className={`flex items-center gap-3 px-5 py-4 rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.4)] border ${toast.type === 'error'
+                  ? 'bg-red-950/90 border-red-500/30 text-red-200'
+                  : 'bg-green-950/90 border-green-500/30 text-green-200'
+                  }`}
+                style={{ backdropFilter: 'blur(20px)' }}
+              >
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${toast.type === 'error' ? 'bg-red-500/20' : 'bg-green-500/20'
+                  }`}>
+                  <AlertTriangle className={`w-4 h-4 ${toast.type === 'error' ? 'text-red-400' : 'text-green-400'
+                    }`} />
+                </div>
+                <p className="text-sm font-bold flex-1">{toast.message}</p>
+                <button
+                  onClick={() => setToast(null)}
+                  className="text-white/40 hover:text-white transition-colors shrink-0"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Back button */}
         <Link
@@ -594,14 +691,15 @@ export default function CheckoutPage() {
               {/* CTA */}
               <div className="px-6 pb-6 pt-4">
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                   onClick={handleWhatsAppOrder}
-                  className="w-full h-14 bg-[#25D366] hover:bg-[#20bd5b] text-white rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(37,211,102,0.3)] transition-all relative overflow-hidden group"
+                  disabled={isSubmitting}
+                  className={`w-full h-14 ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'bg-[#25D366] hover:bg-[#20bd5b]'} text-white rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(37,211,102,0.3)] transition-all relative overflow-hidden group`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  <MessageCircle className="w-5 h-5" />
-                  CONFIRMAR PEDIDO
+                  {!isSubmitting && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />}
+                  <MessageCircle className={`w-5 h-5 ${isSubmitting ? 'animate-spin' : ''}`} />
+                  {isSubmitting ? 'PROCESANDO...' : 'CONFIRMAR PEDIDO'}
                 </motion.button>
 
                 <div className="flex items-center justify-center gap-1.5 mt-3">

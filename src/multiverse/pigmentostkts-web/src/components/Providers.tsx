@@ -12,7 +12,7 @@ import type { Session } from "next-auth";
 export function Providers({ children, session }: { children: React.ReactNode, session?: Session | null }) {
   return (
     <PreloaderProvider>
-      <SessionProvider session={session}>
+      <SessionProvider session={session} refetchOnWindowFocus={true} refetchInterval={5 * 60}>
         <CartProvider>
           <NavThemeProvider>
             <Preloader />

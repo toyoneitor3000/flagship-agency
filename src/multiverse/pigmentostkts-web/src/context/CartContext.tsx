@@ -66,7 +66,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const clearCart = () => setItems([]);
+  const clearCart = () => {
+    setItems([]);
+    localStorage.removeItem('pigmento-cart');
+  };
   const toggleCart = () => setIsCartOpen(!isCartOpen);
 
   const updateQuantity = (id: number, quantity: number) => {

@@ -18,7 +18,7 @@ export default async function AdminFilesPage() {
     }
 
     return (
-        <div className="min-h-screen bg-brand-gray pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-brand-gray pt-32 md:pt-40 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div>

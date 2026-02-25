@@ -11,9 +11,12 @@ export function GoogleSignInButton() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
 
-    // Construct current URL to return to
+    // Construct current URL to return to after login
     const currentQuery = searchParams.toString();
-    const defaultCallback = pathname === '/' ? '/dashboard' : `${pathname}${currentQuery ? `?${currentQuery}` : ''}`;
+    // Always return to the current page so session state updates in-place
+    const cleanQuery = new URLSearchParams(currentQuery);
+    cleanQuery.delete("login"); // Remove the modal trigger param
+    const defaultCallback = `${pathname}${cleanQuery.toString() ? `?${cleanQuery.toString()}` : ''}` || '/';
     const callbackUrl = searchParams.get("callbackUrl") || defaultCallback;
 
     const handleSignIn = async () => {
