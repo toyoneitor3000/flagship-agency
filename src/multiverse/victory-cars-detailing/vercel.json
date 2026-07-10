@@ -1,8 +1,0 @@
-{
-  "crons": [
-    {
-      "path": "/api/meta/cron/optimize",
-      "schedule": "0 */12 * * *"
-    }
-  ]
-}
