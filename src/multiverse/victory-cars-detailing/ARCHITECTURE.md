@@ -48,3 +48,14 @@ Las fuentes se cargan a través de `next/font` para evitar CLS (Cumulative Layou
 
 ### Estrategia de Imágenes
 Se utiliza el componente `Image` de Next.js para optimización automática, carga diferida (lazy loading) y prevención de reflujos de diseño.
+
+## 5. Asignación de Puertos (Restricciones del Entorno)
+
+Para asegurar la correcta convivencia de este proyecto con otros servicios clave del workspace de la compañía, se ha establecido la siguiente reserva de puertos:
+
+- **Puerto 3000:** RESERVADO EXCLUSIVAMENTE para `speedlight`.
+- **Puerto 3001:** RESERVADO EXCLUSIVAMENTE para `chatdev`.
+- **Puerto 3002:** Asignado para el servidor de desarrollo de `victory-cars-detailing`.
+
+> [!CAUTION]
+> **NUNCA** configurar el servidor de desarrollo de este proyecto para correr en el puerto 3000 o 3001, ya que colisionará con los demás servicios de la agencia. El archivo `package.json` ya está configurado con `next dev -p 3002`.

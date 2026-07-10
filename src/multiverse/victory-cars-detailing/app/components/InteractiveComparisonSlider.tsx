@@ -70,15 +70,15 @@ export const ComparisonSlider = ({
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-12 select-none">
+    <div className="w-full max-w-4xl mx-auto my-16 select-none">
       {label && (
-        <h3 className="text-2xl text-center mb-6 text-brand-cyan font-orbitron tracking-wide text-glow">
+        <h3 className="text-xl md:text-2xl text-center mb-8 text-apple-text font-semibold tracking-tight">
           {label}
         </h3>
       )}
 
       <div
-        className="relative w-full h-[800px] rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] group"
+        className="relative w-full h-[600px] md:h-[800px] rounded-[2rem] overflow-hidden shadow-md group border border-apple-border"
         ref={containerRef}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
@@ -93,11 +93,11 @@ export const ComparisonSlider = ({
             src={afterImage} 
             alt="After" 
             fill 
+            unoptimized={true}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             className="object-cover" 
           />
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md text-brand-cyan px-3 py-1 rounded text-sm font-bold tracking-widest font-orbitron">
+          <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md border border-apple-border text-apple-text px-4 py-2 rounded-full text-xs font-semibold tracking-widest shadow-sm">
             DESPUÉS
           </div>
         </div>
@@ -113,27 +113,27 @@ export const ComparisonSlider = ({
             src={beforeImage} 
             alt="Before" 
             fill 
+            unoptimized={true}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             className="object-cover" 
           />
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white px-3 py-1 rounded text-sm font-bold tracking-widest font-orbitron">
+          <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md border border-apple-border text-apple-text px-4 py-2 rounded-full text-xs font-semibold tracking-widest shadow-sm">
             ANTES
           </div>
         </div>
 
         {/* Slider handle */}
         <div
-          className="absolute top-0 bottom-0 w-2 bg-gradient-to-b from-brand-cyan via-brand-mid-blue to-brand-cyan z-20 flex items-center justify-center cursor-ew-resize"
+          className="absolute top-0 bottom-0 w-px bg-white z-20 flex items-center justify-center cursor-ew-resize shadow-[0_0_10px_rgba(0,0,0,0.2)]"
           style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
-          <div className="bg-gradient-to-br from-brand-cyan to-brand-mid-blue p-3 rounded-full text-brand-dark-blue shadow-2xl hover:scale-110 transition-all duration-200 cursor-grab active:cursor-grabbing">
+          <div className="bg-white backdrop-blur-xl border border-apple-border p-3 rounded-full text-apple-text shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-grab active:cursor-grabbing">
             <div className="flex items-center space-x-1">
-              <ChevronLeft size={16} className="text-white" />
-              <div className="w-1 h-6 bg-white/80 rounded-full" />
-              <ChevronRight size={16} className="text-white" />
+              <ChevronLeft size={18} className="text-apple-subtext" />
+              <div className="w-0.5 h-6 bg-apple-border rounded-full" />
+              <ChevronRight size={18} className="text-apple-subtext" />
             </div>
           </div>
         </div>

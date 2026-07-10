@@ -10,24 +10,24 @@ const FeaturedServicesBar = () => {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12 text-white">
+    <section className="py-24 bg-apple-bg">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-center mb-16 text-apple-text">
           Nuestros Servicios Destacados
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
             <div
               key={index}
-              className="bg-white/10 backdrop-blur-lg rounded-xl p-6 hover:bg-white/20 transition-all duration-300 border border-white/20 hover:scale-105"
+              className="bg-white rounded-2xl p-8 hover:-translate-y-1 hover:shadow-md shadow-sm transition-all duration-300 border border-apple-border"
             >
-              <div className="text-blue-400 mb-4 flex justify-center">
+              <div className="text-apple-blue mb-5 flex justify-center">
                 {service.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white text-center">
+              <h3 className="text-xl font-medium mb-3 text-apple-text text-center tracking-tight">
                 {service.title}
               </h3>
-              <p className="text-gray-300 text-center text-sm">
+              <p className="text-apple-subtext text-center text-sm leading-relaxed">
                 {service.description}
               </p>
             </div>

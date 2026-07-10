@@ -1,5 +1,4 @@
 import HeroSection from './components/HeroSection';
-import WelcomeModal from './components/WelcomeModal';
 import FeaturedServicesBar from './components/FeaturedServicesBar';
 import AboutUsSection from './components/AboutUsSection';
 import ServicesSection from './components/ServicesSection';
@@ -12,7 +11,6 @@ import Footer from './components/Footer';
 export default function Home() {
   return (
     <main>
-      <WelcomeModal />
       <HeroSection />
       <FeaturedServicesBar />
       <AboutUsSection />

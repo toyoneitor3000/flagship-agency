@@ -1,148 +1,70 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 const Preloader = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let progressInterval: NodeJS.Timeout;
-    let hasReachedHundred = false;
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => (prev >= 100 ? 100 : prev + 5));
+    }, 50);
 
-    // Simular progreso de carga
-    progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          hasReachedHundred = true;
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return prev + 5;
-      });
-    }, 100);
-
-    // Esperar a que todas las imágenes se carguen Y que el progreso llegue a 100
-    const handleLoad = () => {
-      // Esperar a que el progreso llegue a 100 antes de ocultar
-      const checkProgress = setInterval(() => {
-        if (hasReachedHundred) {
-          clearInterval(checkProgress);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 800);
-        }
-      }, 100);
-    };
-
-    // Verificar si el documento ya está completamente cargado
-    if (document.readyState === 'complete') {
-      handleLoad();
-    } else {
-      window.addEventListener('load', handleLoad);
-    }
-
-    return () => {
-      window.removeEventListener('load', handleLoad);
-      clearInterval(progressInterval);
-    };
+    return () => clearInterval(progressInterval);
   }, []);
+
+  useEffect(() => {
+    if (progress >= 100) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [progress]);
 
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-b from-brand-petroleum via-brand-black to-brand-dark-blue">
-      {/* Efectos de fondo */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-cyan/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-light-blue/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black">
       {/* Contenido del preloader */}
-      <div className="relative z-10 flex flex-col items-center gap-8">
+      <div className="relative z-10 flex flex-col items-center gap-10">
         {/* Logo con animación */}
-        <div className="relative w-64 h-16 md:w-96 md:h-28 animate-fade-in">
-          <Image
+        <div className="relative w-72 h-20 md:w-80 md:h-24 animate-[fadeIn_0.8s_ease-out]">
+          <img
             src="/logo.png"
             alt="Victory Cars Detailing"
-            fill
-            sizes="(max-width: 768px) 320px, 384px"
-            style={{ objectFit: "contain" }}
-            className="drop-shadow-[0_0_30px_rgba(76,201,240,0.5)]"
-            priority
+            className="w-full h-full object-contain"
           />
         </div>
 
         {/* Barra de progreso */}
-        <div className="w-64 md:w-80">
-          <div className="h-1 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-            <div
-              className="h-full bg-gradient-to-r from-brand-cyan via-brand-light-blue to-brand-cyan rounded-full transition-all duration-300 ease-out shadow-[0_0_15px_rgba(6,182,212,0.6)]"
+        <div className="w-56 md:w-64">
+          <div className="h-0.5 bg-white/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-white rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
-          <p className="text-center text-brand-cyan text-sm font-orbitron mt-3 tracking-wider">
+          <p className="text-center text-white/50 text-xs font-semibold mt-4 tracking-widest">
             {progress}%
           </p>
         </div>
 
         {/* Texto animado */}
-        <div className="text-center space-y-2 animate-fade-in-delay">
-          <p className="text-white/60 text-xs md:text-sm font-orbitron tracking-widest uppercase">
+        <div className="text-center space-y-2 animate-[fadeIn_1.2s_ease-out_both]">
+          <p className="text-white/40 text-[10px] md:text-xs font-semibold tracking-widest uppercase">
             Cargando experiencia premium
           </p>
-          <div className="flex gap-1 justify-center">
-            <span className="w-2 h-2 bg-brand-cyan rounded-full animate-bounce"></span>
-            <span className="w-2 h-2 bg-brand-cyan rounded-full animate-bounce delay-100"></span>
-            <span className="w-2 h-2 bg-brand-cyan rounded-full animate-bounce delay-200"></span>
-          </div>
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes fade-in-delay {
-          0%, 30% {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
-        }
-
-        .animate-fade-in-delay {
-          animation: fade-in-delay 1.2s ease-out;
-        }
-
-        .delay-100 {
-          animation-delay: 0.1s;
-        }
-
-        .delay-200 {
-          animation-delay: 0.2s;
-        }
-
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-      `}</style>
+      `}} />
     </div>
   );
 };

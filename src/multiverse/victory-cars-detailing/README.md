@@ -15,7 +15,7 @@ Sitio web oficial de Victory Cars S.A.S., centro de detallado automotriz premium
     ```
 
 3.  **Ver en el navegador:**
-    Abre `http://localhost:3000`
+    Abre `http://localhost:3002`
 
 ## 🎨 Sistema de Diseño
 

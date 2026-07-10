@@ -4,36 +4,39 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 2, 6, 23;
-  --background-end-rgb: 15, 23, 42;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 0px; /* Sin padding para que cargue desde el inicio */
+    scroll-padding-top: 0px; 
   }
   body {
-    @apply bg-brand-dark-blue text-brand-slate font-sans overflow-x-hidden;
+    @apply bg-apple-bg text-apple-text font-sans overflow-x-hidden;
+    /* Apple typography enhancement */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4 {
-    @apply font-orbitron text-white tracking-wide uppercase;
+    @apply font-sans text-apple-text font-semibold tracking-tight;
   }
   
-  /* Estilos para glassmorfismo */
+  /* Estilos para glassmorfismo - Apple Light */
   .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+    @apply bg-white/70 backdrop-blur-2xl border border-apple-border shadow-sm;
   }
   
   .glass-dark {
-    @apply bg-black/20 backdrop-blur-lg border border-white/5 shadow-2xl;
+    @apply bg-white/90 backdrop-blur-3xl border border-apple-border shadow-md;
   }
   
   /* Efectos de scroll reveal */
   .reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s ease;
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .reveal.active {
@@ -44,59 +47,59 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-brand-cyan text-brand-dark-blue font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-white hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] transform hover:-translate-y-1;
+    @apply bg-apple-blue text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 hover:bg-blue-600 hover:scale-105 active:scale-95 shadow-md;
   }
   
   .btn-secondary {
-    @apply bg-transparent border border-brand-slate/30 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-white/5 hover:border-brand-cyan hover:text-brand-cyan transition-all duration-300 backdrop-blur-sm;
+    @apply bg-white border border-apple-border text-apple-text font-medium py-3 px-8 rounded-full transition-all duration-300 hover:bg-apple-bg hover:shadow-sm active:scale-95;
   }
   
   .card-gradient {
-    @apply bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-lg border border-white/10 shadow-xl rounded-xl;
+    @apply bg-white border border-apple-border rounded-2xl shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md;
   }
   
   .card-glass {
-    @apply bg-gradient-to-br from-brand-petroleum/20 to-brand-black/20 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl;
+    @apply bg-white/80 backdrop-blur-2xl border border-apple-border rounded-2xl shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md;
   }
 
   .text-glow {
-    text-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+    text-shadow: 0 0 10px rgba(0, 113, 227, 0.2);
   }
   
   .text-glow-blue {
-    text-shadow: 0 0 8px rgba(76, 201, 240, 0.4);
+    text-shadow: 0 0 10px rgba(0, 113, 227, 0.4);
   }
   
   .container-glow {
-    box-shadow: 0 0 20px rgba(76, 201, 240, 0.15);
+    box-shadow: 0 0 40px rgba(0, 113, 227, 0.05);
   }
   
-  /* Degradados para secciones */
+  /* Degradados para secciones - refinados */
   .section-gradient-1 {
-    @apply bg-gradient-to-b from-brand-petroleum via-brand-black to-brand-dark-blue;
+    @apply bg-apple-bg;
   }
   
   .section-gradient-2 {
-    @apply bg-gradient-to-b from-brand-black via-brand-light-blue to-brand-dark-blue;
+    @apply bg-white;
   }
   
   .section-gradient-3 {
-    @apply bg-gradient-to-b from-brand-light-blue via-brand-black to-brand-dark-blue;
+    @apply bg-apple-bg;
   }
   
   /* Efecto de borde luminoso */
   .border-glow {
-    box-shadow: 0 0 10px rgba(76, 201, 240, 0.2);
-    border: 1px solid rgba(76, 201, 240, 0.15);
+    border: 1px solid rgba(0, 113, 227, 0.1);
   }
 }
 
 /* Fondo sutil de grilla tecnológica */
 .bg-subtle-grid {
-  background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
-                    linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
-  background-mask: radial-gradient(circle at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
 /* Animaciones personalizadas */
