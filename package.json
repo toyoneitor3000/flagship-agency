@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack -p 3002",
+    "dev": "next dev --webpack -p 3005",
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
-    "start": "next start -p 3002",
+    "start": "next start -p 3005",
     "lint": "eslint",
     "deploy": "vercel build --prod --yes && vercel deploy --prebuilt --prod --yes",
     "deployment": "vercel build --prod && vercel deploy --prebuilt --prod",
