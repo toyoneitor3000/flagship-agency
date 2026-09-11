@@ -30,6 +30,57 @@ export default async function NewsPage() {
                 </header>
 
                 <div className="space-y-24">
+                    {/* ARTÍCULO EDITORIAL PRINCIPAL (FEATURED ESSAY) */}
+                    <article className="relative group mb-20">
+                        <div className="absolute -top-6 left-6 z-20 flex items-center gap-2">
+                            <span className="px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[10px] font-mono font-bold text-amber-400 uppercase tracking-[0.25em] shadow-xl">
+                                Reportaje Especial • Ensayo de Portada
+                            </span>
+                        </div>
+
+                        <div className="relative z-10 p-8 sm:p-14 rounded-[2.5rem] bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-amber-500/20 shadow-2xl shadow-amber-500/5 hover:border-amber-500/40 transition-all duration-500 backdrop-blur-xl">
+                            <div className="flex flex-wrap items-center justify-between gap-4 mb-6 text-xs font-mono text-zinc-500">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-zinc-300 font-bold">Por Camilo Toloza</span>
+                                    <span>•</span>
+                                    <span>Septiembre 2026</span>
+                                    <span>•</span>
+                                    <span className="text-amber-400">8 min de lectura</span>
+                                </div>
+                                <span className="text-[10px] uppercase tracking-widest text-zinc-600 bg-white/5 px-3 py-1 rounded-full">
+                                    The Purrpurr Dispatch
+                                </span>
+                            </div>
+
+                            <h2 className="font-serif text-3xl sm:text-5xl font-black text-white mb-6 leading-tight tracking-tight group-hover:text-amber-200 transition-colors">
+                                El Mito de los 30 Segundos y el Verdadero &ldquo;Nivel IA&rdquo;
+                            </h2>
+
+                            <p className="font-serif italic text-zinc-400 text-lg sm:text-xl leading-relaxed mb-8 max-w-3xl">
+                                Por qué las empresas que pretenden dominar su mercado no se construyen con un prompt descartable de 30 segundos, sino con un sistema operativo digital con arquitectura transaccional e ingeniería propia.
+                            </p>
+
+                            <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-white/5">
+                                <div className="flex items-center gap-4 text-xs text-zinc-400 font-sans">
+                                    <span className="flex items-center gap-1 text-emerald-400">
+                                        <Zap className="w-3.5 h-3.5" /> Next.js & Cloud
+                                    </span>
+                                    <span>•</span>
+                                    <span>Wompi & DIAN</span>
+                                    <span>•</span>
+                                    <span>Economía de Plataformas</span>
+                                </div>
+
+                                <Link 
+                                    href="/news/mas-alla-del-nivel-ia" 
+                                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-zinc-950 font-bold text-xs uppercase tracking-wider hover:bg-amber-300 transition-all hover:scale-105 shadow-lg cursor-pointer"
+                                >
+                                    <span>Leer Ensayo Completo</span>
+                                    <ChevronRight className="w-4 h-4" />
+                                </Link>
+                            </div>
+                        </div>
+                    </article>
                     {changelogs.length === 0 ? (
                         <div className="text-center py-32 border border-white/5 rounded-[3rem] bg-zinc-900/40 backdrop-blur-xl border-dashed">
                             <Info className="w-16 h-16 text-zinc-800 mx-auto mb-6" />
