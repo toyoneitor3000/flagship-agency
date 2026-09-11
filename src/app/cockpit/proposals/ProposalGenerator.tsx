@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Download, Settings, Rocket, Check, ArrowRight, FileText, ShoppingBag, Car, Globe, ShieldCheck } from 'lucide-react';
+import { BASE_PLANS, calculatePlanPricing, formatMoneyCOP } from '@/config/pricing';
 
 interface ProposalData {
   clientName: string;
@@ -19,52 +20,78 @@ interface ProposalData {
   taxNote: string;
 }
 
-const PRESETS: Record<string, ProposalData> = {
-  ecommerce: {
-    clientName: 'Cliente / Marca Comercial',
-    projectName: 'Sistema Web Multipágina con E-Commerce & Pasarela de Pagos',
-    date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
-    scope: 'Desarrollo de ecosistema digital multipágina de alto rendimiento con tienda online (E-Commerce) integrada. Autoadministrable, optimizado para conversión, catálogo dinámico con variantes, pasarela de pagos automatizada y arquitectura SEO de última generación.',
-    phase1Title: 'Fase 1: Construcción & Despliegue E-Commerce',
-    phase1Price: '$2,200,000 COP',
-    phase1Features: 'Arquitectura Multipágina (Inicio, Catálogo, Nosotros, Blog, Contacto, Políticas)\nCatálogo E-Commerce Dinámico (Filtros, Categorías, Variantes y Stock)\nCarrito de Compras y Checkout Optimizado sin Fricción\nIntegración Pasarela de Pagos (Wompi, MercadoPago, Bold - PSE, Nequi, Tarjetas)\nPanel de Administración CMS (Subir/Editar productos, precios y pedidos)\nNotificaciones automáticas por WhatsApp y Correo Electrónico',
-    phase2Title: 'Fase 2: Infraestructura Cloud & Soporte',
-    phase2Price: '$1,800,000 COP / Año',
-    phase2Features: 'Renovación Anual de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nCertificado SSL de Seguridad y Protección de Pagos\nBackups Diarios Automatizados y Monitoreo 24/7\nSoporte Técnico y Actualizaciones de Seguridad',
-    timeline: '3 a 4 Semanas de Desarrollo.\nSemana 1: Kickoff, Arquitectura de Información y Aprobación UI/UX.\nSemana 2: Desarrollo Multipágina y Motor de Catálogo/Tienda.\nSemana 3: Integración de Pasarela de Pagos y Pruebas Transaccionales (Beta).\nSemana 4: Despliegue en Dominio Oficial, Entrega de Accesos y Capacitación.',
-    paymentTerms: 'Cuota 1 (40% - $880,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $660,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $660,000 COP): Despliegue en producción final y entrega de accesos.\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
-    taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural (o Cuenta de Cobro formal con RUT y Seguridad Social), 100% válida y deducible tributariamente.'
-  },
-  speedlight: {
-    clientName: 'Speedlight / Cliente Automotriz',
-    projectName: 'Portal de Venta de Vehículos (Marketplace)',
-    date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
-    scope: 'Desarrollo de plataforma web optimizada para la publicación, búsqueda y visualización de vehículos en venta. Autoadministrable, rápida y diseñada para maximizar la conversión.',
-    phase1Title: 'Fase 1: Construcción & Setup',
-    phase1Price: '$2,200,000 COP',
-    phase1Features: 'Página Principal (Buscador, Destacados)\nCatálogo Dinámico (Filtros, Paginación)\nFicha de Vehículo (Galería, Specs, WhatsApp)\nPanel de Administración (Subir/Editar autos)\nConfiguración Cloud Base',
-    phase2Title: 'Fase 2: Operación & Mantenimiento',
-    phase2Price: '$1,800,000 COP / Año',
-    phase2Features: 'Renovación de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nTransferencia de imágenes sin límite\nCertificado SSL de Seguridad\nBackups Diarios y Monitoreo 24/7',
-    timeline: '3 a 4 Semanas.\nReunión 1: Kickoff y Diseño.\nReunión 2: Aprobación Visual.\nReunión 3: Revisión Funcional (Beta).\nReunión 4: Entrega y Capacitación.',
-    paymentTerms: '50% Anticipo al inicio del proyecto ($1,100,000 COP).\n50% Contra-entrega antes de lanzar el dominio oficial ($1,100,000 COP).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
-    taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se genera soporte legal para deducción de costos.'
-  },
-  corporate: {
+const storePlan = BASE_PLANS.find(p => p.id === 'store') || BASE_PLANS[2];
+const proPlan = BASE_PLANS.find(p => p.id === 'pro') || BASE_PLANS[1];
+
+const buildPreset = (presetKey: string, isSpeedlight: boolean): ProposalData => {
+  const isEcommerce = presetKey === 'ecommerce';
+  const isSpeedlightPreset = presetKey === 'speedlight';
+  const plan = isEcommerce || isSpeedlightPreset ? storePlan : proPlan;
+  const pricing = calculatePlanPricing(plan, isSpeedlight);
+
+  if (isEcommerce) {
+    return {
+      clientName: 'Cliente / Marca Comercial',
+      projectName: 'Sistema Web Multipágina con E-Commerce & Pasarela de Pagos',
+      date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
+      scope: plan.scopePreset,
+      phase1Title: 'Fase 1: Construcción & Despliegue E-Commerce',
+      phase1Price: pricing.formattedSetup,
+      phase1Features: plan.features.join('\n'),
+      phase2Title: 'Fase 2: Infraestructura Cloud & Soporte',
+      phase2Price: pricing.formattedAnnual,
+      phase2Features: 'Renovación Anual de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nCertificado SSL de Seguridad y Protección de Pagos\nBackups Diarios Automatizados y Monitoreo 24/7\nSoporte Técnico y Actualizaciones de Seguridad',
+      timeline: '3 a 4 Semanas de Desarrollo.\nSemana 1: Kickoff, Arquitectura de Información y Aprobación UI/UX.\nSemana 2: Desarrollo Multipágina y Motor de Catálogo/Tienda.\nSemana 3: Integración de Pasarela de Pagos y Pruebas Transaccionales (Beta).\nSemana 4: Despliegue en Dominio Oficial, Entrega de Accesos y Capacitación.',
+      paymentTerms: pricing.paymentTermsText,
+      taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural (o Cuenta de Cobro formal con RUT y Seguridad Social), 100% válida y deducible tributariamente.'
+    };
+  }
+
+  if (isSpeedlightPreset) {
+    const c1 = Math.round(pricing.discountedSetup * 0.5);
+    const c2 = pricing.discountedSetup - c1;
+    const speedlightTerms = [
+      `Cuota 1 (50% - ${formatMoneyCOP(c1)} COP): Anticipo al inicio del proyecto.`,
+      `Cuota 2 (50% - ${formatMoneyCOP(c2)} COP): Contra-entrega previa al lanzamiento en producción.`
+    ];
+    if (isSpeedlight) {
+      speedlightTerms.push(`Beneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).`);
+    }
+    speedlightTerms.push(`Métodos: Transferencia Bancolombia, Nequi o PSE.`);
+
+    return {
+      clientName: 'Speedlight / Cliente Automotriz',
+      projectName: 'Portal de Venta de Vehículos (Marketplace)',
+      date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
+      scope: 'Desarrollo de plataforma web optimizada para la publicación, búsqueda y visualización de vehículos en venta. Autoadministrable, rápida y diseñada para maximizar la conversión.',
+      phase1Title: 'Fase 1: Construcción & Setup',
+      phase1Price: pricing.formattedSetup,
+      phase1Features: 'Página Principal (Buscador, Destacados)\nCatálogo Dinámico (Filtros, Paginación)\nFicha de Vehículo (Galería, Specs, WhatsApp)\nPanel de Administración (Subir/Editar autos)\nConfiguración Cloud Base',
+      phase2Title: 'Fase 2: Operación & Mantenimiento',
+      phase2Price: pricing.formattedAnnual,
+      phase2Features: 'Renovación de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nTransferencia de imágenes sin límite\nCertificado SSL de Seguridad\nBackups Diarios y Monitoreo 24/7',
+      timeline: '3 a 4 Semanas.\nReunión 1: Kickoff y Diseño.\nReunión 2: Aprobación Visual.\nReunión 3: Revisión Funcional (Beta).\nReunión 4: Entrega y Capacitación.',
+      paymentTerms: speedlightTerms.join('\n'),
+      taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se genera soporte legal para deducción de costos.'
+    };
+  }
+
+  // corporate
+  return {
     clientName: 'Cliente Corporativo',
     projectName: 'Sitio Web Multi-Página Corporativo & Blog',
     date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
-    scope: 'Desarrollo de sitio web corporativo institucional con blog, gestor de contenidos dinámicos (CMS), captura de clientes potenciales y optimización SEO integral.',
+    scope: plan.scopePreset,
     phase1Title: 'Fase 1: Construcción & Despliegue',
-    phase1Price: '$850,000 COP',
-    phase1Features: 'Sitio Multi-Página (Inicio, Servicios, Nosotros, Blog, Contacto)\nCMS Autoadministrable para Blog y Noticias\nFormularios CRM & Integración directa a WhatsApp\nOptimización SEO Técnica y Velocidad Mobile\nDiseño UI/UX Personalizado e Identidad de Marca',
+    phase1Price: pricing.formattedSetup,
+    phase1Features: plan.features.join('\n'),
     phase2Title: 'Fase 2: Infraestructura & Operación',
-    phase2Price: '$950,000 COP / Año',
+    phase2Price: pricing.formattedAnnual,
     phase2Features: 'Dominio .com por 1 año\nServidor Cloud Fast Edge de alta velocidad\nCertificado SSL de Seguridad\nBackups Diarios Automáticos\nMonitoreo y Soporte Preventivo 24/7',
     timeline: '2 a 3 Semanas de Desarrollo.\nHito 1: Estructura, contenido y aprobación de diseño.\nHito 2: Desarrollo y carga de contenidos en CMS.\nHito 3: Lanzamiento en dominio oficial y entrega de accesos.',
-    paymentTerms: 'Cuota 1 (50% - $425,000 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $425,000 COP): Contra-entrega previa al lanzamiento en producción.\nMétodos: Bancolombia, Nequi, Daviplata o PSE.',
+    paymentTerms: pricing.paymentTermsText,
     taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural.'
-  }
+  };
 };
 
 export const ProposalGenerator = () => {
@@ -73,63 +100,22 @@ export const ProposalGenerator = () => {
   const [selectedPreset, setSelectedPreset] = useState<string>('ecommerce');
   const [applySpeedlightDiscount, setApplySpeedlightDiscount] = useState(false);
 
-  const [data, setData] = useState<ProposalData>(PRESETS.ecommerce);
-
-  const getDiscountedValues = (presetKey: string, enableDiscount: boolean) => {
-    if (!enableDiscount) {
-      return {
-        price: PRESETS[presetKey]?.phase1Price || '$2,200,000 COP',
-        phase2Price: PRESETS[presetKey]?.phase2Price || '$1,800,000 COP / Año',
-        paymentTerms: PRESETS[presetKey]?.paymentTerms || '',
-      };
-    }
-
-    if (presetKey === 'ecommerce') {
-      return {
-        price: '$1,540,000 COP',
-        phase2Price: '$1,260,000 COP / Año',
-        paymentTerms: 'Cuota 1 (40% - $616,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $462,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $462,000 COP): Despliegue en producción final y entrega de accesos.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
-      };
-    } else if (presetKey === 'speedlight') {
-      return {
-        price: '$1,540,000 COP',
-        phase2Price: '$1,260,000 COP / Año',
-        paymentTerms: 'Cuota 1 (50% - $770,000 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $770,000 COP): Contra-entrega previa al lanzamiento en producción.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
-      };
-    } else {
-      return {
-        price: '$595,000 COP',
-        phase2Price: '$665,000 COP / Año',
-        paymentTerms: 'Cuota 1 (50% - $297,500 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $297,500 COP): Contra-entrega de versión final.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
-      };
-    }
-  };
+  const [data, setData] = useState<ProposalData>(() => buildPreset('ecommerce', false));
 
   const handleSelectPreset = (presetKey: string) => {
     setSelectedPreset(presetKey);
-    const base = PRESETS[presetKey];
-    if (applySpeedlightDiscount) {
-      const discounted = getDiscountedValues(presetKey, true);
-      setData({
-        ...base,
-        phase1Price: discounted.price,
-        phase2Price: discounted.phase2Price,
-        paymentTerms: discounted.paymentTerms,
-      });
-    } else {
-      setData(base);
-    }
+    setData(buildPreset(presetKey, applySpeedlightDiscount));
   };
 
   const handleToggleSpeedlight = () => {
     const nextState = !applySpeedlightDiscount;
     setApplySpeedlightDiscount(nextState);
-    const discounted = getDiscountedValues(selectedPreset, nextState);
+    const updated = buildPreset(selectedPreset, nextState);
     setData(prev => ({
       ...prev,
-      phase1Price: discounted.price,
-      phase2Price: discounted.phase2Price,
-      paymentTerms: discounted.paymentTerms,
+      phase1Price: updated.phase1Price,
+      phase2Price: updated.phase2Price,
+      paymentTerms: updated.paymentTerms,
     }));
   };
 
@@ -396,44 +382,44 @@ export const ProposalGenerator = () => {
                  <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#4f46e5' }}>Pago Único (En 3 Cuotas)</span>
                  <h3 className="text-lg font-bold mb-1" style={{ color: '#18181b' }}>{data.phase1Title}</h3>
                  
-                 {applySpeedlightDiscount && (
-                   <div className="flex items-center gap-2 mb-1">
-                     <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
-                       ⚡ SPEEDLIGHT -30%
-                     </span>
-                      <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
-                        {selectedPreset === 'ecommerce' ? '$2,200,000 COP' : selectedPreset === 'speedlight' ? '$2,200,000 COP' : '$850,000 COP'}
+                  {applySpeedlightDiscount && (
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
+                        ⚡ SPEEDLIGHT -30%
                       </span>
-                   </div>
-                 )}
+                       <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
+                         {buildPreset(selectedPreset, false).phase1Price}
+                       </span>
+                    </div>
+                  )}
 
-                 <div className="text-2xl font-black font-mono mb-4 tracking-tight" style={{ color: '#18181b' }}>{data.phase1Price}</div>
-                 
-                 <ul className="space-y-2.5">
-                   {data.phase1Features.split('\n').filter(Boolean).map((feat, i) => (
-                     <li key={i} className="flex items-start gap-2 text-xs" style={{ color: '#3f3f46' }}>
-                       <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: '#4f46e5' }} />
-                       <span className="leading-snug">{feat}</span>
-                     </li>
-                   ))}
-                 </ul>
-              </div>
+                  <div className="text-2xl font-black font-mono mb-4 tracking-tight" style={{ color: '#18181b' }}>{data.phase1Price}</div>
+                  
+                  <ul className="space-y-2.5">
+                    {data.phase1Features.split('\n').filter(Boolean).map((feat, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs" style={{ color: '#3f3f46' }}>
+                        <Check className="w-3.5 h-3.5 shrink-0 mt-0.5" style={{ color: '#4f46e5' }} />
+                        <span className="leading-snug">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+               </div>
               
               {/* FASE 2 */}
               <div className="rounded-2xl p-5 relative overflow-hidden" style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac' }}>
                  <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#16a34a' }}>Renovación Anual</span>
                  <h3 className="text-lg font-bold mb-1" style={{ color: '#18181b' }}>{data.phase2Title}</h3>
                  
-                 {applySpeedlightDiscount && (
-                   <div className="flex items-center gap-2 mb-1">
-                     <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
-                       ⚡ SPEEDLIGHT -30%
-                     </span>
-                     <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
-                       {selectedPreset === 'ecommerce' ? '$1,800,000 COP / Año' : selectedPreset === 'speedlight' ? '$1,800,000 COP / Año' : '$950,000 COP / Año'}
-                     </span>
-                   </div>
-                 )}
+                  {applySpeedlightDiscount && (
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
+                        ⚡ SPEEDLIGHT -30%
+                      </span>
+                      <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
+                        {buildPreset(selectedPreset, false).phase2Price}
+                      </span>
+                    </div>
+                  )}
 
                  <div className="text-2xl font-black font-mono mb-4 tracking-tight" style={{ color: '#16a34a' }}>{data.phase2Price}</div>
                  

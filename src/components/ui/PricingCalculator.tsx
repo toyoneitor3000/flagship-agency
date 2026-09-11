@@ -3,15 +3,25 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Info, Calculator, Sparkles, Clock, Smartphone, Database, ShoppingBag, Box } from 'lucide-react';
+import { BASE_PLANS as CENTRAL_PLANS, SPEEDLIGHT_DISCOUNT_RATE, formatMoneyCOP } from '@/config/pricing';
 
-// PRECIOS BASE (SETUP)
-const BASE_PLANS = [
-    { id: 'landing', name: 'Landing Page', setup: 350000, annual: 250000, icon: Sparkles, desc: 'Una sola página de alto impacto.' },
-    { id: 'web', name: 'Sitio Web Pro', setup: 850000, annual: 950000, icon: Box, desc: 'Multi-página con CMS (Panel Admin incluido).' },
-    { id: 'store', name: 'E-Commerce', setup: 2200000, annual: 1800000, icon: ShoppingBag, desc: 'Tienda Completa (Gestión Total).' },
-    { id: 'system', name: 'Web App / Sistema', setup: 4500000, annual: 2500000, icon: Database, desc: 'Software a medida con usuarios y datos.' },
-    { id: 'venture', name: 'Venture (Startup)', setup: 12000000, annual: 0, icon: RocketIcon, desc: 'Producto digital desde cero (MVP).' }
-];
+// MAPEO DESDE FUENTE ÚNICA CENTRAL DE TARIFAS
+const ICONS: Record<string, any> = {
+    semilla: Sparkles,
+    pro: Box,
+    store: ShoppingBag,
+    system: Database,
+    venture: RocketIcon,
+};
+
+const BASE_PLANS = CENTRAL_PLANS.map(p => ({
+    id: p.slug === 'semilla' ? 'landing' : p.slug === 'pro' ? 'web' : p.slug,
+    name: p.slug === 'semilla' ? 'Landing Page' : p.slug === 'pro' ? 'Sitio Web Pro' : p.name.split(' (')[0],
+    setup: p.setupPriceCOP,
+    annual: p.annualInfraCOP,
+    icon: ICONS[p.id] || Box,
+    desc: p.description
+}));
 
 // ADD-ONS (SETUP EXTRA)
 const ADDONS = [
@@ -89,9 +99,7 @@ export const PricingCalculator = () => {
     const annualTotal = selectedBase.annual; // Hosting Base
     const monthlyTotal = selectedSupport.monthly; // Retainer
 
-    const formatMoney = (amount: number) => {
-        return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(amount);
-    };
+    const formatMoney = (amount: number) => formatMoneyCOP(amount);
 
     return (
         <div className="w-full max-w-5xl mx-auto bg-zinc-950 border border-indigo-500/20 rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/10 backdrop-blur-sm relative">
@@ -280,11 +288,11 @@ export const PricingCalculator = () => {
                                             <span className="text-lg text-zinc-500 line-through font-mono decoration-red-500/50">{formatMoney(setupTotal)}</span>
                                         )}
                                         <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-indigo-200 tracking-tight whitespace-nowrap">
-                                            {formatMoney(isSpeedlite ? setupTotal * 0.7 : setupTotal)}
+                                            {formatMoney(isSpeedlite ? setupTotal * (1 - SPEEDLIGHT_DISCOUNT_RATE) : setupTotal)}
                                         </div>
                                     </div>
                                     <div className="text-zinc-500 text-[10px] items-center mt-1">
-                                        Pago Único {isSpeedlite && <span className="text-[#00FF9C] ml-1 font-bold">• Ahorras {formatMoney(setupTotal * 0.3)}</span>}
+                                        Pago Único {isSpeedlite && <span className="text-[#00FF9C] ml-1 font-bold">• Ahorras {formatMoney(setupTotal * SPEEDLIGHT_DISCOUNT_RATE)}</span>}
                                     </div>
                                 </div>
                             </div>
@@ -305,7 +313,7 @@ export const PricingCalculator = () => {
                                         <span className={`text-sm font-bold font-mono ${selectedSupport.monthly > 0 ? 'text-[#00FF9C]' : 'text-zinc-500'}`}>
                                             {selectedSupport.monthly === 0
                                                 ? 'On-Demand'
-                                                : formatMoney(isSpeedlite ? selectedSupport.monthly * 0.7 : selectedSupport.monthly) + '/mes'
+                                                : formatMoney(isSpeedlite ? selectedSupport.monthly * (1 - SPEEDLIGHT_DISCOUNT_RATE) : selectedSupport.monthly) + '/mes'
                                             }
                                         </span>
                                     </div>
@@ -322,7 +330,7 @@ export const PricingCalculator = () => {
                                             <div className="text-[10px] text-zinc-600 line-through font-mono">{formatMoney(annualTotal)}</div>
                                         )}
                                         <span className="text-sm font-bold text-zinc-300 font-mono">
-                                            {formatMoney(isSpeedlite ? annualTotal * 0.7 : annualTotal)}/año
+                                            {formatMoney(isSpeedlite ? annualTotal * (1 - SPEEDLIGHT_DISCOUNT_RATE) : annualTotal)}/año
                                         </span>
                                     </div>
                                 </div>
