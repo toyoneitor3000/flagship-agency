@@ -112,7 +112,7 @@ export default async function SettingsPage() {
                                 </div>
                                 <form action={async () => {
                                     "use server"
-                                    await import("@/auth").then(mod => mod.signOut())
+                                    await import("@/auth").then(mod => mod.signOut({ redirectTo: "/" }))
                                 }}>
                                     <button type="submit" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-lg text-sm font-medium transition-colors">
                                         Cerrar Sesión

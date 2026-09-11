@@ -279,7 +279,7 @@ export const PricingCalculator = () => {
                                         {isSpeedlite && (
                                             <span className="text-lg text-zinc-500 line-through font-mono decoration-red-500/50">{formatMoney(setupTotal)}</span>
                                         )}
-                                        <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-indigo-200 tracking-tighter">
+                                        <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-indigo-200 tracking-tight whitespace-nowrap">
                                             {formatMoney(isSpeedlite ? setupTotal * 0.7 : setupTotal)}
                                         </div>
                                     </div>

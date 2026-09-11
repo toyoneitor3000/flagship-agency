@@ -1,11 +1,11 @@
-
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'camilotoloza1136@gmail.com,purrpurrdev@gmail.com,purpuregamechanger@gmail.com')
+    .split(',')
+    .map(email => email.trim().toLowerCase());
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-    // adapter: PrismaAdapter(prisma), // Disabled for Production stability (SQLite not supported on Vercel)
     providers: [
         Google({
             clientId: process.env.AUTH_GOOGLE_ID,
@@ -23,15 +23,37 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     secret: process.env.AUTH_SECRET,
     trustHost: true,
     callbacks: {
+        async signIn({ user }) {
+            if (user?.email) {
+                try {
+                    const { prisma } = await import("@/lib/prisma");
+                    const role = ADMIN_EMAILS.includes(user.email.toLowerCase()) ? 'admin' : 'user';
+                    await prisma.user.upsert({
+                        where: { email: user.email },
+                        update: {
+                            name: user.name,
+                            image: user.image,
+                            role,
+                        },
+                        create: {
+                            email: user.email,
+                            name: user.name,
+                            image: user.image,
+                            role,
+                        },
+                    });
+                } catch {
+                    // Silently continue
+                }
+            }
+            return true;
+        },
         async jwt({ token, user }: any) {
-            // Initial sign in
             if (user) {
                 token.id = user.id;
                 token.email = user.email;
 
-                // Hardcoded Admin Check (Temporary since DB is disabled)
-                const adminEmails = ['camilotoloza1136@gmail.com', 'purrpurrdev@gmail.com', 'purpuregamechanger@gmail.com'];
-                if (user.email && adminEmails.includes(user.email)) {
+                if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
                     token.role = 'admin';
                 } else {
                     token.role = 'user';
@@ -49,8 +71,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
     },
 })
-
-
-
-
-

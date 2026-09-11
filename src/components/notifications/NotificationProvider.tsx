@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 
 interface DemoLead {
     id: string;
@@ -39,12 +39,13 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
     const [newLeads, setNewLeads] = useState<DemoLead[]>([]);
     const [totalPending, setTotalPending] = useState(0);
     const [lastChecked, setLastChecked] = useState<Date | null>(null);
-    const [seenIds, setSeenIds] = useState<Set<string>>(new Set());
     const [isAdmin, setIsAdmin] = useState(false);
+
+    const lastCheckedRef = useRef<Date | null>(null);
+    const seenIdsRef = useRef<Set<string>>(new Set());
 
     // Check if user is admin
     useEffect(() => {
-        // List of admin emails
         const adminEmails = ['camilotoloza1136@gmail.com', 'purrpurrdev@gmail.com', 'purpuregamechanger@gmail.com'];
         setIsAdmin(adminEmail ? adminEmails.includes(adminEmail) : false);
     }, [adminEmail]);
@@ -52,8 +53,9 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
     // Play notification sound
     const playNotificationSound = useCallback(() => {
         try {
-            // Create a simple beep using Web Audio API
-            const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+            const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+            if (!AudioContextClass) return;
+            const audioContext = new AudioContextClass();
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
 
@@ -67,7 +69,6 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
             oscillator.start();
             oscillator.stop(audioContext.currentTime + 0.2);
 
-            // Second beep
             setTimeout(() => {
                 const osc2 = audioContext.createOscillator();
                 const gain2 = audioContext.createGain();
@@ -79,8 +80,8 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
                 osc2.start();
                 osc2.stop(audioContext.currentTime + 0.15);
             }, 200);
-        } catch (e) {
-            console.log('Could not play notification sound:', e);
+        } catch {
+            // Audio context not allowed or failed
         }
     }, []);
 
@@ -91,17 +92,16 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
         try {
             const res = await fetch('/api/demo/leads?status=pending');
 
-            // Defensive check: ensure response is JSON
+            // Defensive check: if unauthenticated or error, exit gracefully without triggering Next.js dev overlay
             if (!res.ok) {
-                const text = await res.text();
-                console.error(`[NotificationProvider] API Error (${res.status} ${res.statusText}): Expected JSON but got ${res.headers.get('content-type')}. URL: ${res.url}. Preview: ${text.substring(0, 100)}`);
+                if (res.status === 401 || res.status === 403) {
+                    setIsAdmin(false);
+                }
                 return;
             }
 
             const contentType = res.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                const text = await res.text();
-                console.error(`[NotificationProvider] Format Error: Expected JSON but got ${contentType || 'unknown'}. URL: ${res.url}. Status: ${res.status}. Preview: ${text.substring(0, 100)}`);
                 return;
             }
 
@@ -110,19 +110,16 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
             if (data.success) {
                 setTotalPending(data.metrics?.pending || 0);
 
-                // Find truly new leads (not seen before)
                 const pendingLeads = data.demos || [];
                 const newUnseenLeads = pendingLeads.filter(
-                    (lead: DemoLead) => !seenIds.has(lead.id)
+                    (lead: DemoLead) => !seenIdsRef.current.has(lead.id)
                 );
 
-                // If there are new leads we haven't notified about
-                if (newUnseenLeads.length > 0 && lastChecked !== null) {
-                    // Check if any are actually new (created after last check)
+                if (newUnseenLeads.length > 0 && lastCheckedRef.current !== null) {
                     const recentLeads = newUnseenLeads.filter((lead: DemoLead) => {
                         const leadTime = new Date(lead.createdAt).getTime();
-                        const checkTime = lastChecked.getTime();
-                        return leadTime > checkTime - 60000; // Within last minute
+                        const checkTime = lastCheckedRef.current!.getTime();
+                        return leadTime > checkTime - 60000;
                     });
 
                     if (recentLeads.length > 0) {
@@ -131,34 +128,32 @@ export function NotificationProvider({ children, adminEmail }: NotificationProvi
                     }
                 }
 
-                setLastChecked(new Date());
+                const now = new Date();
+                lastCheckedRef.current = now;
+                setLastChecked(now);
             }
-        } catch (error) {
-            console.error('Error fetching leads for notifications:', error);
+        } catch {
+            // Silently ignore network failures or page transitions
         }
-    }, [isAdmin, seenIds, lastChecked, playNotificationSound]);
+    }, [isAdmin, playNotificationSound]);
 
-    // Poll for new leads
+    // Poll for new leads every 20 seconds
     useEffect(() => {
         if (!isAdmin) return;
 
-        // Initial fetch
         fetchLeads();
-
-        // Poll every 10 seconds
-        const interval = setInterval(fetchLeads, 10000);
+        const interval = setInterval(fetchLeads, 20000);
 
         return () => clearInterval(interval);
     }, [isAdmin, fetchLeads]);
 
     const markAsSeen = useCallback((id: string) => {
-        setSeenIds(prev => new Set([...prev, id]));
+        seenIdsRef.current.add(id);
         setNewLeads(prev => prev.filter(lead => lead.id !== id));
     }, []);
 
     const clearAll = useCallback(() => {
-        const allIds = newLeads.map(lead => lead.id);
-        setSeenIds(prev => new Set([...prev, ...allIds]));
+        newLeads.forEach(lead => seenIdsRef.current.add(lead.id));
         setNewLeads([]);
     }, [newLeads]);
 

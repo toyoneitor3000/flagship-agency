@@ -27,12 +27,13 @@ export function NotificationList({ className, iconColorClass }: { className?: st
     const fetchNotifications = async () => {
         try {
             const res = await fetch('/api/notifications');
+            if (!res.ok) return;
             const data = await res.json();
             if (data.success) {
-                setNotifications(data.notifications);
+                setNotifications(data.notifications || []);
             }
-        } catch (e) {
-            console.error('Error fetching notifications:', e);
+        } catch {
+            // Silently ignore network aborts during logout or page changes
         } finally {
             setLoading(false);
         }

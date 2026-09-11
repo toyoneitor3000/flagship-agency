@@ -1,10 +1,9 @@
-
 'use client';
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from 'next/link';
-import { LogOut, User, Settings, LayoutDashboard, Briefcase, ChevronDown, ArrowRightLeft } from "lucide-react";
+import { LogOut, User, Settings, LayoutDashboard, ChevronDown, ArrowRightLeft, Sparkles } from "lucide-react";
 import { useState, useRef, useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import { useRouter } from 'next/navigation';
@@ -13,11 +12,21 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const handleLogout = async () => {
+        try {
+            setIsLoggingOut(true);
+            setIsOpen(false);
+            await signOut({ redirectTo: "/", callbackUrl: "/", redirect: true });
+        } catch {
+            window.location.href = "/";
+        }
+    };
 
     const handleSwitchAccount = async () => {
         setIsOpen(false);
-        // Trigger sign in with prompt: "select_account" which forces google to show the account picker
         await signIn("google", {
             prompt: "select_account",
             callbackUrl: "/dashboard"
@@ -32,13 +41,11 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
             }
         };
 
-        if (isOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
+        document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isOpen]);
+    }, []);
 
     if (status === "loading") {
         return <div className="w-8 h-8 rounded-full bg-zinc-800 animate-pulse" />;
@@ -68,10 +75,9 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
                             </div>
                         )}
                     </div>
-                    {/* Only show name on desktop if not iconOnly mode */}
                     {!iconOnly && (
                         <span className="text-xs font-semibold max-w-[100px] truncate hidden sm:block text-zinc-300">
-                            {session.user.name?.split(' ')[0]}
+                            {session.user.name?.split(' ')[0] || session.user.email?.split('@')[0]}
                         </span>
                     )}
                     <ChevronDown className={cn("w-3 h-3 text-zinc-500 transition-transform", isOpen && "rotate-180")} />
@@ -80,21 +86,38 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
                 {/* DROPDOWN MENU */}
                 {isOpen && (
                     <div
-                        className="absolute top-full right-0 mt-3 w-64 bg-[#050505]/80 border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-100"
+                        className="absolute top-full right-0 mt-3 w-64 bg-[#050505]/90 border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-100"
                         style={{
                             backdropFilter: 'blur(20px)',
                             WebkitBackdropFilter: 'blur(20px)'
                         }}
                     >
-
                         {/* Header */}
                         <div className="px-4 py-4 border-b border-white/5 bg-white/5">
-                            <p className="text-sm font-bold text-white truncate">{session.user.name}</p>
-                            <p className="text-xs text-zinc-500 truncate font-mono">{session.user.email}</p>
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm font-bold text-white truncate">{session.user.name || 'Usuario'}</p>
+                                {session.user.role === 'admin' && (
+                                    <span className="text-[10px] bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 px-2 py-0.5 rounded-full font-bold uppercase">
+                                        Admin
+                                    </span>
+                                )}
+                            </div>
+                            <p className="text-xs text-zinc-500 truncate font-mono mt-0.5">{session.user.email}</p>
                         </div>
 
                         {/* Navigation Links */}
                         <div className="p-2 space-y-1">
+                            {session.user.role === 'admin' && (
+                                <Link
+                                    href="/cockpit/proposals"
+                                    className="flex items-center gap-3 px-3 py-2 text-sm text-indigo-300 hover:text-white hover:bg-indigo-950/30 rounded-lg transition-colors font-medium"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <Sparkles className="w-4 h-4 text-indigo-400" />
+                                    <span>Generador Propuestas</span>
+                                </Link>
+                            )}
+
                             <Link
                                 href="/dashboard"
                                 className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
@@ -102,24 +125,6 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
                             >
                                 <LayoutDashboard className="w-4 h-4 text-purple-400" />
                                 <span>Dashboard</span>
-                            </Link>
-
-                            <Link
-                                href="/profile"
-                                className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <User className="w-4 h-4 text-blue-400" />
-                                <span>Mi Perfil</span>
-                            </Link>
-
-                            <Link
-                                href="/dashboard"
-                                className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/50 rounded-lg transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <Briefcase className="w-4 h-4 text-orange-400" />
-                                <span>Mis Proyectos</span>
                             </Link>
 
                             <Link
@@ -145,15 +150,15 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
                             </button>
                         </div>
 
-
                         {/* Footer / Logout */}
                         <div className="p-2">
                             <button
-                                onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
-                                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/20 rounded-lg transition-colors"
+                                onClick={handleLogout}
+                                disabled={isLoggingOut}
+                                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/20 rounded-lg transition-colors disabled:opacity-50"
                             >
                                 <LogOut className="w-4 h-4" />
-                                <span>Cerrar Sesión</span>
+                                <span>{isLoggingOut ? "Cerrando..." : "Cerrar Sesión"}</span>
                             </button>
                         </div>
                     </div>
@@ -177,7 +182,7 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
     return (
         <button
             onClick={() => signIn("google", { prompt: "select_account" })}
-            className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-bold font-mono text-zinc-300 hover:text-white hover:border-white/20 hover:bg-white/10 transition-all"
+            className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-bold font-mono text-zinc-300 hover:text-white hover:border-white/20 hover:bg-white/10 transition-all flex items-center gap-2"
         >
             [ INICIAR_SESIÓN ]
         </button>

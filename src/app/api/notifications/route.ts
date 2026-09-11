@@ -23,19 +23,28 @@ export async function GET() {
         // SYSTEM NOTIFICATION CHECK: Welcome Manual
         const hasWelcomeNotification = notifications.some(n => n.type === 'SYSTEM_WELCOME');
 
-        if (!hasWelcomeNotification) {
-            const welcomeNotification = await prisma.notification.create({
-                data: {
-                    userId: session.user.id,
-                    title: 'Bienvenido a Purrpurr',
-                    message: 'Comienza tu viaje explorando el Manual de Abordo. Aquí encontrarás todo lo que necesitas saber.',
-                    type: 'SYSTEM_WELCOME',
-                    link: '/manual',
-                    read: false,
+        if (!hasWelcomeNotification && session.user.id) {
+            try {
+                const userExists = await prisma.user.findUnique({
+                    where: { id: session.user.id }
+                });
+
+                if (userExists) {
+                    const welcomeNotification = await prisma.notification.create({
+                        data: {
+                            userId: session.user.id,
+                            title: 'Bienvenido a Purrpurr',
+                            message: 'Comienza tu viaje explorando el Manual de Abordo. Aquí encontrarás todo lo que necesitas saber.',
+                            type: 'SYSTEM_WELCOME',
+                            link: '/manual',
+                            read: false,
+                        }
+                    });
+                    notifications.unshift(welcomeNotification);
                 }
-            });
-            // Add to the list to return immediately
-            notifications.unshift(welcomeNotification);
+            } catch (err) {
+                console.warn("Could not create welcome notification:", err);
+            }
         }
 
         return NextResponse.json({ success: true, notifications });

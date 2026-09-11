@@ -22,17 +22,12 @@ export function LeadsNotificationBadge() {
             try {
                 const res = await fetch('/api/demo/leads');
 
-                // Defensive check: ensure response is JSON
                 if (!res.ok) {
-                    const text = await res.text();
-                    console.error(`[LeadsNotificationBadge] API Error (${res.status}): Expected JSON but got ${res.headers.get('content-type')}. URL: ${res.url}. Preview: ${text.substring(0, 100)}`);
                     return;
                 }
 
                 const contentType = res.headers.get('content-type');
                 if (!contentType || !contentType.includes('application/json')) {
-                    const text = await res.text();
-                    console.error(`[LeadsNotificationBadge] Format Error: Expected JSON but got ${contentType || 'unknown'}. URL: ${res.url}. Status: ${res.status}. Preview: ${text.substring(0, 100)}`);
                     return;
                 }
 
@@ -41,8 +36,8 @@ export function LeadsNotificationBadge() {
                     setNewLeads(data.newLeads || 0);
                     setTotalPending(data.metrics?.pending || 0);
                 }
-            } catch (error) {
-                console.error('Error fetching leads count:', error);
+            } catch {
+                // Ignore silent fetch errors
             }
         };
 
