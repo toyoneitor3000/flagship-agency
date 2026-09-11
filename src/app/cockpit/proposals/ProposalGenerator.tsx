@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Download, Settings, Rocket, Check, ArrowRight, FileText, ShoppingBag, Car, Globe, ShieldCheck } from 'lucide-react';
+import { Download, Rocket, Check, ArrowRight, ShoppingBag, Car, Globe, Database, Sparkles, ShieldCheck, UserCheck, RefreshCw } from 'lucide-react';
 import { BASE_PLANS, calculatePlanPricing, formatMoneyCOP } from '@/config/pricing';
 
 interface ProposalData {
@@ -20,34 +20,49 @@ interface ProposalData {
   taxNote: string;
 }
 
-const storePlan = BASE_PLANS.find(p => p.id === 'store') || BASE_PLANS[2];
-const proPlan = BASE_PLANS.find(p => p.id === 'pro') || BASE_PLANS[1];
+interface PresetOption {
+  id: string;
+  label: string;
+  badge: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  planId: string;
+  defaultClient: string;
+}
 
-const buildPreset = (presetKey: string, isSpeedlight: boolean): ProposalData => {
-  const isEcommerce = presetKey === 'ecommerce';
-  const isSpeedlightPreset = presetKey === 'speedlight';
-  const plan = isEcommerce || isSpeedlightPreset ? storePlan : proPlan;
+const PRESET_OPTIONS: PresetOption[] = [
+  { id: 'ecommerce', label: 'E-Commerce Store', badge: 'Tienda Completa', icon: ShoppingBag, planId: 'store', defaultClient: 'Cliente / Marca Comercial' },
+  { id: 'speedlight', label: 'Portal Vehículos', badge: 'Marketplace', icon: Car, planId: 'store', defaultClient: 'Speedlight / Cliente Automotriz' },
+  { id: 'corporate', label: 'Sitio Web Pro', badge: 'Multi-Página + CMS', icon: Globe, planId: 'pro', defaultClient: 'Cliente Corporativo' },
+  { id: 'system', label: 'Web App / SaaS', badge: 'Software Cloud', icon: Database, planId: 'system', defaultClient: 'Startup / Empresa Tech' },
+  { id: 'semilla', label: 'Landing Page', badge: 'Alta Conversión', icon: Sparkles, planId: 'semilla', defaultClient: 'Marca Personal / Emprendimiento' },
+];
+
+const buildPreset = (presetKey: string, isSpeedlight: boolean, customClient?: string): ProposalData => {
+  const presetConfig = PRESET_OPTIONS.find(p => p.id === presetKey) || PRESET_OPTIONS[0];
+  const plan = BASE_PLANS.find(p => p.id === presetConfig.planId) || BASE_PLANS[2];
   const pricing = calculatePlanPricing(plan, isSpeedlight);
+  const clientName = customClient && customClient.trim() !== '' ? customClient : presetConfig.defaultClient;
+  const date = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
 
-  if (isEcommerce) {
+  if (presetKey === 'ecommerce') {
     return {
-      clientName: 'Cliente / Marca Comercial',
+      clientName,
       projectName: 'Sistema Web Multipágina con E-Commerce & Pasarela de Pagos',
-      date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
+      date,
       scope: plan.scopePreset,
       phase1Title: 'Fase 1: Construcción & Despliegue E-Commerce',
       phase1Price: pricing.formattedSetup,
       phase1Features: plan.features.join('\n'),
-      phase2Title: 'Fase 2: Infraestructura Cloud & Soporte',
+      phase2Title: 'Fase 2: Operación Cloud, Soporte Técnico & Acompañamiento',
       phase2Price: pricing.formattedAnnual,
-      phase2Features: 'Renovación Anual de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nCertificado SSL de Seguridad y Protección de Pagos\nBackups Diarios Automatizados y Monitoreo 24/7\nSoporte Técnico y Actualizaciones de Seguridad',
+      phase2Features: 'Renovación Anual de Dominio .com y Gestión DNS\nServidor Cloud NVMe de Alta Disponibilidad & SSL\nCopias de Seguridad Diarias Automatizadas\nMantenimiento Preventivo y Parches de Seguridad\nSoporte Técnico Especializado y Monitoreo Uptime 24/7',
       timeline: '3 a 4 Semanas de Desarrollo.\nSemana 1: Kickoff, Arquitectura de Información y Aprobación UI/UX.\nSemana 2: Desarrollo Multipágina y Motor de Catálogo/Tienda.\nSemana 3: Integración de Pasarela de Pagos y Pruebas Transaccionales (Beta).\nSemana 4: Despliegue en Dominio Oficial, Entrega de Accesos y Capacitación.',
       paymentTerms: pricing.paymentTermsText,
       taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural (o Cuenta de Cobro formal con RUT y Seguridad Social), 100% válida y deducible tributariamente.'
     };
   }
 
-  if (isSpeedlightPreset) {
+  if (presetKey === 'speedlight') {
     const c1 = Math.round(pricing.discountedSetup * 0.5);
     const c2 = pricing.discountedSetup - c1;
     const speedlightTerms = [
@@ -60,32 +75,68 @@ const buildPreset = (presetKey: string, isSpeedlight: boolean): ProposalData => 
     speedlightTerms.push(`Métodos: Transferencia Bancolombia, Nequi o PSE.`);
 
     return {
-      clientName: 'Speedlight / Cliente Automotriz',
+      clientName,
       projectName: 'Portal de Venta de Vehículos (Marketplace)',
-      date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
+      date,
       scope: 'Desarrollo de plataforma web optimizada para la publicación, búsqueda y visualización de vehículos en venta. Autoadministrable, rápida y diseñada para maximizar la conversión.',
-      phase1Title: 'Fase 1: Construcción & Setup',
+      phase1Title: 'Fase 1: Construcción & Setup Portal Vehículos',
       phase1Price: pricing.formattedSetup,
       phase1Features: 'Página Principal (Buscador, Destacados)\nCatálogo Dinámico (Filtros, Paginación)\nFicha de Vehículo (Galería, Specs, WhatsApp)\nPanel de Administración (Subir/Editar autos)\nConfiguración Cloud Base',
-      phase2Title: 'Fase 2: Operación & Mantenimiento',
+      phase2Title: 'Fase 2: Operación Cloud, Soporte Técnico & Acompañamiento',
       phase2Price: pricing.formattedAnnual,
-      phase2Features: 'Renovación de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nTransferencia de imágenes sin límite\nCertificado SSL de Seguridad\nBackups Diarios y Monitoreo 24/7',
-      timeline: '3 a 4 Semanas.\nReunión 1: Kickoff y Diseño.\nReunión 2: Aprobación Visual.\nReunión 3: Revisión Funcional (Beta).\nReunión 4: Entrega y Capacitación.',
+      phase2Features: 'Renovación de Dominio .com y Gestión DNS\nServidor Cloud NVMe de Alta Velocidad\nTransferencia de imágenes sin límite & SSL\nBackups Diarios Automatizados y Monitoreo 24/7\nSoporte Preventivo Continuo',
+      timeline: '3 a 4 Semanas de Desarrollo.\nReunión 1: Kickoff y Diseño.\nReunión 2: Aprobación Visual.\nReunión 3: Revisión Funcional (Beta).\nReunión 4: Entrega y Capacitación.',
       paymentTerms: speedlightTerms.join('\n'),
       taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se genera soporte legal para deducción de costos.'
     };
   }
 
+  if (presetKey === 'system') {
+    return {
+      clientName,
+      projectName: 'Plataforma Web SaaS & Sistema a Medida',
+      date,
+      scope: plan.scopePreset,
+      phase1Title: 'Fase 1: Arquitectura, Backend & Web App',
+      phase1Price: pricing.formattedSetup,
+      phase1Features: plan.features.join('\n'),
+      phase2Title: 'Fase 2: Infraestructura Enterprise & Soporte Cloud',
+      phase2Price: pricing.formattedAnnual,
+      phase2Features: 'Infraestructura Cloud Dedicada con Balanceador de Carga\nBase de Datos Gestionada con Replicación y Backups Continuos\nCertificados SSL Wildcard y Protección DDoS\nMonitoreo de Rendimiento (APM) y Logs de Auditoría 24/7\nSoporte Técnico de Nivel Ingeniería y SLAs de Disponibilidad',
+      timeline: '6 a 8 Semanas de Desarrollo por Sprints.\nSprint 1: Modelado de Datos, Autenticación y Arquitectura Cloud.\nSprint 2: Desarrollo Core de la Lógica de Negocio y APIs.\nSprint 3: Frontend Web App, Dashboards y Roles de Usuario.\nSprint 4: QA, Pruebas de Seguridad, Staging y Despliegue en Producción.',
+      paymentTerms: pricing.paymentTermsText,
+      taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural.'
+    };
+  }
+
+  if (presetKey === 'semilla') {
+    return {
+      clientName,
+      projectName: 'Landing Page de Alta Conversión',
+      date,
+      scope: plan.scopePreset,
+      phase1Title: 'Fase 1: Diseño & Lanzamiento Landing Page',
+      phase1Price: pricing.formattedSetup,
+      phase1Features: plan.features.join('\n'),
+      phase2Title: 'Fase 2: Dominio, Hosting & Mantenimiento',
+      phase2Price: pricing.formattedAnnual,
+      phase2Features: 'Renovación de Dominio .com Incluida\nServidor Serverless Ultra Rápido (Edge Global)\nCertificado SSL de Seguridad Automático\nBackups Periódicos y Asistencia Técnica Básica',
+      timeline: '1 a 2 Semanas de Desarrollo.\nSemana 1: Estructura, Copywriting y Maquetación Visual.\nSemana 2: Integración de Formularios, WhatsApp y Lanzamiento.',
+      paymentTerms: pricing.paymentTermsText,
+      taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural.'
+    };
+  }
+
   // corporate
   return {
-    clientName: 'Cliente Corporativo',
+    clientName,
     projectName: 'Sitio Web Multi-Página Corporativo & Blog',
-    date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
+    date,
     scope: plan.scopePreset,
-    phase1Title: 'Fase 1: Construcción & Despliegue',
+    phase1Title: 'Fase 1: Construcción & Despliegue Sitio Web Pro',
     phase1Price: pricing.formattedSetup,
     phase1Features: plan.features.join('\n'),
-    phase2Title: 'Fase 2: Infraestructura & Operación',
+    phase2Title: 'Fase 2: Infraestructura Cloud & Soporte Técnico',
     phase2Price: pricing.formattedAnnual,
     phase2Features: 'Dominio .com por 1 año\nServidor Cloud Fast Edge de alta velocidad\nCertificado SSL de Seguridad\nBackups Diarios Automáticos\nMonitoreo y Soporte Preventivo 24/7',
     timeline: '2 a 3 Semanas de Desarrollo.\nHito 1: Estructura, contenido y aprobación de diseño.\nHito 2: Desarrollo y carga de contenidos en CMS.\nHito 3: Lanzamiento en dominio oficial y entrega de accesos.',
@@ -98,29 +149,29 @@ export const ProposalGenerator = () => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string>('ecommerce');
-  const [applySpeedlightDiscount, setApplySpeedlightDiscount] = useState(false);
+  const [applySpeedlightDiscount, setApplySpeedlightDiscount] = useState(true);
+  const [clientName, setClientName] = useState<string>('');
 
-  const [data, setData] = useState<ProposalData>(() => buildPreset('ecommerce', false));
+  const [data, setData] = useState<ProposalData>(() => buildPreset('ecommerce', true));
 
   const handleSelectPreset = (presetKey: string) => {
     setSelectedPreset(presetKey);
-    setData(buildPreset(presetKey, applySpeedlightDiscount));
+    setData(buildPreset(presetKey, applySpeedlightDiscount, clientName));
   };
 
   const handleToggleSpeedlight = () => {
     const nextState = !applySpeedlightDiscount;
     setApplySpeedlightDiscount(nextState);
-    const updated = buildPreset(selectedPreset, nextState);
-    setData(prev => ({
-      ...prev,
-      phase1Price: updated.phase1Price,
-      phase2Price: updated.phase2Price,
-      paymentTerms: updated.paymentTerms,
-    }));
+    setData(buildPreset(selectedPreset, nextState, clientName));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+  const handleClientNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    setClientName(newName);
+    setData(prev => ({
+      ...prev,
+      clientName: newName.trim() !== '' ? newName : (PRESET_OPTIONS.find(p => p.id === selectedPreset)?.defaultClient || 'Cliente')
+    }));
   };
 
   const handleDownloadPDF = async () => {
@@ -159,184 +210,181 @@ export const ProposalGenerator = () => {
     }
   };
 
+  const currentOption = PRESET_OPTIONS.find(p => p.id === selectedPreset) || PRESET_OPTIONS[0];
+  const currentPlan = BASE_PLANS.find(p => p.id === currentOption.planId) || BASE_PLANS[2];
+  const currentPricing = calculatePlanPricing(currentPlan, applySpeedlightDiscount);
+
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-zinc-950 text-white overflow-hidden">
-      {/* PANEL IZQUIERDO - FORMULARIO */}
-      <div className="w-full lg:w-1/3 p-6 bg-zinc-900 border-r border-zinc-800 overflow-y-auto">
-        <div className="flex items-center gap-2 mb-4">
-          <Settings className="text-indigo-500 w-5 h-5" />
-          <h2 className="text-xl font-bold font-display">Generador de Propuestas</h2>
-        </div>
-
-        {/* PRESET SELECTOR */}
-        <div className="mb-6 space-y-1.5">
-          <label className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Plantillas Rápidas</label>
-          <div className="grid grid-cols-3 gap-1.5">
-            <button
-              type="button"
-              onClick={() => handleSelectPreset('ecommerce')}
-              className={`p-2 rounded-lg text-xs font-medium flex flex-col items-center gap-1 border transition-all ${
-                selectedPreset === 'ecommerce'
-                  ? 'bg-indigo-600/30 border-indigo-500 text-white shadow-sm'
-                  : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
-              }`}
-            >
-              <ShoppingBag className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="truncate text-[11px]">E-Commerce</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSelectPreset('speedlight')}
-              className={`p-2 rounded-lg text-xs font-medium flex flex-col items-center gap-1 border transition-all ${
-                selectedPreset === 'speedlight'
-                  ? 'bg-indigo-600/30 border-indigo-500 text-white shadow-sm'
-                  : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
-              }`}
-            >
-              <Car className="w-3.5 h-3.5 text-[#00FF9C]" />
-              <span className="truncate text-[11px]">Vehículos</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSelectPreset('corporate')}
-              className={`p-2 rounded-lg text-xs font-medium flex flex-col items-center gap-1 border transition-all ${
-                selectedPreset === 'corporate'
-                  ? 'bg-indigo-600/30 border-indigo-500 text-white shadow-sm'
-                  : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
-              }`}
-            >
-              <Globe className="w-3.5 h-3.5 text-sky-400" />
-              <span className="truncate text-[11px]">Sitio Pro</span>
-            </button>
-          </div>
-        </div>
-
-        {/* SPEEDLIGHT DISCOUNT TOGGLE */}
-        <div className={`p-3 rounded-xl border transition-all flex items-center justify-between mb-6 ${
-          applySpeedlightDiscount 
-            ? 'bg-[#00FF9C]/10 border-[#00FF9C]/40 text-[#00FF9C]' 
-            : 'bg-zinc-950 border-zinc-800 text-zinc-400'
-        }`}>
-          <div className="flex items-center gap-2.5">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs font-mono transition-colors ${
-              applySpeedlightDiscount ? 'bg-[#00FF9C] text-zinc-950 shadow-md shadow-[#00FF9C]/20' : 'bg-zinc-800 text-zinc-400'
-            }`}>
-              -30%
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                Descuento Speedlight
-                {applySpeedlightDiscount && (
-                  <span className="text-[9px] bg-[#00FF9C]/20 text-[#00FF9C] px-1.5 py-0.5 rounded font-mono font-bold">
-                    ACTIVO
-                  </span>
-                )}
-              </div>
-              <p className="text-[10px] text-zinc-400">Cupón SPEEDLIGHT-30 (-30% en Fase 1)</p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleToggleSpeedlight}
-            className={`w-11 h-6 rounded-full transition-colors relative p-0.5 cursor-pointer ${
-              applySpeedlightDiscount ? 'bg-[#00FF9C]' : 'bg-zinc-700'
-            }`}
-          >
-            <div className={`w-5 h-5 rounded-full bg-zinc-950 transition-transform ${
-              applySpeedlightDiscount ? 'translate-x-5' : 'translate-x-0'
-            }`} />
-          </button>
-        </div>
-        
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Cliente</label>
-            <input name="clientName" value={data.clientName} onChange={handleChange} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none" />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Proyecto</label>
-            <input name="projectName" value={data.projectName} onChange={handleChange} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none" />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Fecha</label>
-            <input name="date" value={data.date} onChange={handleChange} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none" />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Alcance</label>
-            <textarea name="scope" value={data.scope} onChange={handleChange} rows={3} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none leading-relaxed" />
-          </div>
-
-          <div className="p-3 bg-zinc-950/50 rounded-lg border border-zinc-800 space-y-3">
-            <h3 className="text-sm font-bold text-indigo-400">FASE 1: CONSTRUCCIÓN</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <label className="text-xs text-zinc-500">Título</label>
-                <input name="phase1Title" value={data.phase1Title} onChange={handleChange} className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-1.5 text-xs focus:border-indigo-500 outline-none" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs text-zinc-500">Precio</label>
-                <input name="phase1Price" value={data.phase1Price} onChange={handleChange} className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-1.5 text-xs font-mono focus:border-indigo-500 outline-none" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs text-zinc-500">Características (una por línea)</label>
-              <textarea name="phase1Features" value={data.phase1Features} onChange={handleChange} rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-xs focus:border-indigo-500 outline-none leading-relaxed" />
-            </div>
-          </div>
-
-          <div className="p-3 bg-zinc-950/50 rounded-lg border border-zinc-800 space-y-3">
-            <h3 className="text-sm font-bold text-[#00FF9C]">FASE 2: OPERACIÓN</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <label className="text-xs text-zinc-500">Título</label>
-                <input name="phase2Title" value={data.phase2Title} onChange={handleChange} className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-1.5 text-xs focus:border-[#00FF9C] outline-none" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs text-zinc-500">Precio</label>
-                <input name="phase2Price" value={data.phase2Price} onChange={handleChange} className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-1.5 text-xs font-mono focus:border-[#00FF9C] outline-none" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs text-zinc-500">Características (una por línea)</label>
-              <textarea name="phase2Features" value={data.phase2Features} onChange={handleChange} rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-xs focus:border-[#00FF9C] outline-none leading-relaxed" />
-            </div>
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Cronograma y Entregas (una por línea)</label>
-            <textarea name="timeline" value={data.timeline} onChange={handleChange} rows={4} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none leading-relaxed" />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Formas de Pago / Cuotas (una por línea)</label>
-            <textarea name="paymentTerms" value={data.paymentTerms} onChange={handleChange} rows={4} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none leading-relaxed" />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs text-zinc-400 uppercase font-bold">Nota Tributaria y Facturación</label>
-            <textarea name="taxNote" value={data.taxNote} onChange={handleChange} rows={3} className="w-full bg-zinc-950 border border-zinc-800 rounded-md p-2 text-sm focus:border-indigo-500 outline-none leading-relaxed text-zinc-300" />
-          </div>
-        </div>
-      </div>
       
-      {/* PANEL DERECHO - PREVIEW & EXPORT */}
-      <div className="w-full lg:w-2/3 bg-zinc-950 flex flex-col items-center justify-start p-6 overflow-y-auto relative">
+      {/* PANEL DE CONTROL EJECUTIVO (SIN FORMULARIOS MANUALES) */}
+      <div className="w-full lg:w-[380px] shrink-0 p-6 bg-zinc-900/90 border-r border-zinc-800 flex flex-col justify-between overflow-y-auto">
+        <div className="space-y-6">
+          
+          {/* TITULAR DEL COCKPIT */}
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-2 h-2 rounded-full bg-[#00FF9C] animate-pulse" />
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#00FF9C]">Purrpurr Cockpit</span>
+            </div>
+            <h2 className="text-xl font-bold font-display text-white">Generador Ejecutivo</h2>
+            <p className="text-xs text-zinc-400 mt-0.5">Propuestas comerciales generadas desde el motor central de tarifas.</p>
+          </div>
+
+          {/* 1. SELECCIÓN DE CASO DE USO / PLANTILLA */}
+          <div className="space-y-2">
+            <label className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider flex items-center justify-between">
+              <span>Caso de Uso / Proyecto</span>
+              <span className="text-[9px] text-indigo-400 font-mono">5 Plantillas</span>
+            </label>
+            <div className="space-y-1.5">
+              {PRESET_OPTIONS.map(preset => {
+                const Icon = preset.icon;
+                const isSelected = selectedPreset === preset.id;
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => handleSelectPreset(preset.id)}
+                    className={`w-full p-2.5 rounded-xl text-left border transition-all flex items-center justify-between group ${
+                      isSelected
+                        ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-lg shadow-indigo-500/10'
+                        : 'bg-zinc-950/60 border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className={`p-2 rounded-lg ${isSelected ? 'bg-indigo-600 text-white' : 'bg-zinc-800 text-zinc-400 group-hover:text-zinc-200'}`}>
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold leading-tight">{preset.label}</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">{preset.badge}</div>
+                      </div>
+                    </div>
+                    {isSelected && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. SWITCH DESCUENTO COMUNIDAD SPEEDLIGHT (-30%) */}
+          <div className={`p-3.5 rounded-2xl border transition-all ${
+            applySpeedlightDiscount 
+              ? 'bg-[#00FF9C]/10 border-[#00FF9C]/40 text-[#00FF9C]' 
+              : 'bg-zinc-950 border-zinc-800 text-zinc-400'
+          }`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs font-mono transition-colors ${
+                  applySpeedlightDiscount ? 'bg-[#00FF9C] text-zinc-950 shadow-md shadow-[#00FF9C]/20' : 'bg-zinc-800 text-zinc-400'
+                }`}>
+                  -30%
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                    Alianza Speedlight
+                    {applySpeedlightDiscount && (
+                      <span className="text-[9px] bg-[#00FF9C]/20 text-[#00FF9C] px-1.5 py-0.5 rounded font-mono font-bold">
+                        ACTIVO
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-zinc-400 mt-0.5">30% OFF en Construcción y Operación</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleToggleSpeedlight}
+                className={`w-11 h-6 rounded-full transition-colors relative p-0.5 cursor-pointer ${
+                  applySpeedlightDiscount ? 'bg-[#00FF9C]' : 'bg-zinc-700'
+                }`}
+              >
+                <div className={`w-5 h-5 rounded-full bg-zinc-950 transition-transform ${
+                  applySpeedlightDiscount ? 'translate-x-5' : 'translate-x-0'
+                }`} />
+              </button>
+            </div>
+          </div>
+
+          {/* 3. CAMPO RÁPIDO: NOMBRE DEL CLIENTE */}
+          <div className="space-y-1.5">
+            <label className="text-[10px] text-zinc-400 uppercase font-bold tracking-wider flex items-center gap-1.5">
+              <UserCheck className="w-3 h-3 text-indigo-400" />
+              Nombre del Cliente / Empresa
+            </label>
+            <input 
+              type="text"
+              placeholder={currentOption.defaultClient}
+              value={clientName}
+              onChange={handleClientNameChange}
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs font-medium text-white placeholder-zinc-600 focus:border-indigo-500 outline-none transition-colors"
+            />
+            <p className="text-[10px] text-zinc-500">Dejar en blanco para usar el nombre sugerido del caso de uso.</p>
+          </div>
+
+          {/* 4. RESUMEN FINANCIERO DINÁMICO (DERIVADO DEL MOTOR CENTRAL) */}
+          <div className="bg-zinc-950/80 rounded-2xl p-4 border border-zinc-800/80 space-y-3">
+            <div className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">Resumen Financiero</div>
+            
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-zinc-400">Fase 1 (Setup):</span>
+              <span className="font-mono font-bold text-white">{currentPricing.formattedSetup}</span>
+            </div>
+
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-zinc-400">Fase 2 (Anual):</span>
+              <span className="font-mono font-bold text-[#00FF9C]">{currentPricing.formattedAnnual}</span>
+            </div>
+
+            {applySpeedlightDiscount && (
+              <div className="pt-2 border-t border-zinc-800/80 flex justify-between items-center text-xs">
+                <span className="text-zinc-400">Ahorro Aplicado:</span>
+                <span className="font-mono font-bold text-[#00FF9C]">
+                  {formatMoneyCOP(currentPricing.setupSavings + currentPricing.annualSavings)}
+                </span>
+              </div>
+            )}
+          </div>
+
+        </div>
+
+        {/* BOTÓN DESCARGAR PDF */}
+        <div className="pt-6 space-y-2">
+          <button 
+            onClick={handleDownloadPDF}
+            disabled={isGenerating}
+            className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] py-3.5 rounded-xl font-bold text-sm shadow-xl shadow-indigo-600/25 transition-all disabled:opacity-50 text-white cursor-pointer"
+          >
+            {isGenerating ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            {isGenerating ? 'Generando PDF...' : 'Descargar Propuesta PDF'}
+          </button>
+          <p className="text-[10px] text-zinc-500 text-center">Formato A4 Oficial • Renderizado Vectorial</p>
+        </div>
+
+      </div>
+
+      {/* PANEL DERECHO - VISTA DEL DOCUMENTO PDF EN TIEMPO REAL */}
+      <div className="flex-1 bg-zinc-950 flex flex-col items-center justify-start p-6 overflow-y-auto relative">
         <div className="w-full max-w-[800px] flex justify-between items-center mb-6 sticky top-0 bg-zinc-950/80 backdrop-blur-md z-50 p-4 rounded-xl border border-zinc-800 shadow-xl">
           <div>
-            <p className="text-white font-medium text-sm">Vista Previa de Propuesta</p>
-            <p className="text-zinc-400 text-xs">Formato A4 Vertical • Alta Calidad</p>
+            <p className="text-white font-medium text-sm">Vista Previa de Propuesta Oficial</p>
+            <p className="text-zinc-400 text-xs">Sincronizada con el Configurador y la Fuente de la Verdad</p>
           </div>
           <button 
             onClick={handleDownloadPDF}
             disabled={isGenerating}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-bold text-sm transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-bold text-xs transition-colors disabled:opacity-50 text-white cursor-pointer"
           >
-            {isGenerating ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Download className="w-4 h-4" />}
-            {isGenerating ? 'Generando PDF...' : 'Descargar PDF'}
+            {isGenerating ? <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+            {isGenerating ? 'Generando...' : 'Descargar PDF'}
           </button>
         </div>
         
@@ -379,7 +427,7 @@ export const ProposalGenerator = () => {
               {/* FASE 1 */}
               <div className="rounded-2xl p-5 relative overflow-hidden" style={{ backgroundColor: '#f8fafc', border: '1px solid #c7d2fe' }}>
                  <div className="absolute top-0 right-0 p-4 opacity-10"><Rocket className="w-20 h-20 rotate-45" style={{ color: '#6366f1' }} /></div>
-                 <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#4f46e5' }}>Pago Único (En 3 Cuotas)</span>
+                 <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#4f46e5' }}>Pago Único (En Cuotas)</span>
                  <h3 className="text-lg font-bold mb-1" style={{ color: '#18181b' }}>{data.phase1Title}</h3>
                  
                   {applySpeedlightDiscount && (
@@ -388,7 +436,7 @@ export const ProposalGenerator = () => {
                         ⚡ SPEEDLIGHT -30%
                       </span>
                        <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
-                         {buildPreset(selectedPreset, false).phase1Price}
+                         {buildPreset(selectedPreset, false, clientName).phase1Price}
                        </span>
                     </div>
                   )}
@@ -416,7 +464,7 @@ export const ProposalGenerator = () => {
                         ⚡ SPEEDLIGHT -30%
                       </span>
                       <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
-                        {buildPreset(selectedPreset, false).phase2Price}
+                        {buildPreset(selectedPreset, false, clientName).phase2Price}
                       </span>
                     </div>
                   )}
@@ -454,7 +502,7 @@ export const ProposalGenerator = () => {
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2" style={{ color: '#18181b' }}>
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#16a34a' }} />
-                  Plan de Pago (3 Cuotas)
+                  Plan de Pago en Cuotas
                 </h4>
                 <ul className="space-y-2.5">
                    {data.paymentTerms.split('\n').filter(Boolean).map((line, i) => (
