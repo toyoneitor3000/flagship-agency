@@ -47,7 +47,7 @@ const PRESETS: Record<string, ProposalData> = {
     phase2Price: '$1,800,000 COP / Año',
     phase2Features: 'Renovación de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nTransferencia de imágenes sin límite\nCertificado SSL de Seguridad\nBackups Diarios y Monitoreo 24/7',
     timeline: '3 a 4 Semanas.\nReunión 1: Kickoff y Diseño.\nReunión 2: Aprobación Visual.\nReunión 3: Revisión Funcional (Beta).\nReunión 4: Entrega y Capacitación.',
-    paymentTerms: '50% Anticipo al inicio del proyecto.\n50% Contra-entrega (antes de lanzar el dominio oficial).\nMétodos: Transferencia Bancolombia, Nequi, o Tarjeta de Crédito.',
+    paymentTerms: '50% Anticipo al inicio del proyecto ($1,100,000 COP).\n50% Contra-entrega antes de lanzar el dominio oficial ($1,100,000 COP).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
     taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se genera soporte legal para deducción de costos.'
   },
   corporate: {
@@ -62,7 +62,7 @@ const PRESETS: Record<string, ProposalData> = {
     phase2Price: '$950,000 COP / Año',
     phase2Features: 'Dominio .com por 1 año\nServidor Cloud Fast Edge de alta velocidad\nCertificado SSL de Seguridad\nBackups Diarios Automáticos\nMonitoreo y Soporte Preventivo 24/7',
     timeline: '2 a 3 Semanas de Desarrollo.\nHito 1: Estructura, contenido y aprobación de diseño.\nHito 2: Desarrollo y carga de contenidos en CMS.\nHito 3: Lanzamiento en dominio oficial y entrega de accesos.',
-    paymentTerms: '50% Anticipo al inicio del proyecto.\n50% Contra-entrega previa al lanzamiento en producción.\nMétodos: Bancolombia, Nequi, Daviplata o PSE.',
+    paymentTerms: 'Cuota 1 (50% - $425,000 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $425,000 COP): Contra-entrega previa al lanzamiento en producción.\nMétodos: Bancolombia, Nequi, Daviplata o PSE.',
     taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural.'
   }
 };
@@ -79,6 +79,7 @@ export const ProposalGenerator = () => {
     if (!enableDiscount) {
       return {
         price: PRESETS[presetKey]?.phase1Price || '$2,200,000 COP',
+        phase2Price: PRESETS[presetKey]?.phase2Price || '$1,800,000 COP / Año',
         paymentTerms: PRESETS[presetKey]?.paymentTerms || '',
       };
     }
@@ -86,16 +87,19 @@ export const ProposalGenerator = () => {
     if (presetKey === 'ecommerce') {
       return {
         price: '$1,540,000 COP',
+        phase2Price: '$1,260,000 COP / Año',
         paymentTerms: 'Cuota 1 (40% - $616,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $462,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $462,000 COP): Despliegue en producción final y entrega de accesos.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
       };
     } else if (presetKey === 'speedlight') {
       return {
         price: '$1,540,000 COP',
+        phase2Price: '$1,260,000 COP / Año',
         paymentTerms: 'Cuota 1 (50% - $770,000 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $770,000 COP): Contra-entrega previa al lanzamiento en producción.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
       };
     } else {
       return {
         price: '$595,000 COP',
+        phase2Price: '$665,000 COP / Año',
         paymentTerms: 'Cuota 1 (50% - $297,500 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $297,500 COP): Contra-entrega de versión final.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
       };
     }
@@ -109,6 +113,7 @@ export const ProposalGenerator = () => {
       setData({
         ...base,
         phase1Price: discounted.price,
+        phase2Price: discounted.phase2Price,
         paymentTerms: discounted.paymentTerms,
       });
     } else {
@@ -123,6 +128,7 @@ export const ProposalGenerator = () => {
     setData(prev => ({
       ...prev,
       phase1Price: discounted.price,
+      phase2Price: discounted.phase2Price,
       paymentTerms: discounted.paymentTerms,
     }));
   };
@@ -417,6 +423,18 @@ export const ProposalGenerator = () => {
               <div className="rounded-2xl p-5 relative overflow-hidden" style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac' }}>
                  <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#16a34a' }}>Renovación Anual</span>
                  <h3 className="text-lg font-bold mb-1" style={{ color: '#18181b' }}>{data.phase2Title}</h3>
+                 
+                 {applySpeedlightDiscount && (
+                   <div className="flex items-center gap-2 mb-1">
+                     <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
+                       ⚡ SPEEDLIGHT -30%
+                     </span>
+                     <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
+                       {selectedPreset === 'ecommerce' ? '$1,800,000 COP / Año' : selectedPreset === 'speedlight' ? '$1,800,000 COP / Año' : '$950,000 COP / Año'}
+                     </span>
+                   </div>
+                 )}
+
                  <div className="text-2xl font-black font-mono mb-4 tracking-tight" style={{ color: '#16a34a' }}>{data.phase2Price}</div>
                  
                  <ul className="space-y-2.5">
