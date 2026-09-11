@@ -26,13 +26,13 @@ const PRESETS: Record<string, ProposalData> = {
     date: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }),
     scope: 'Desarrollo de ecosistema digital multipágina de alto rendimiento con tienda online (E-Commerce) integrada. Autoadministrable, optimizado para conversión, catálogo dinámico con variantes, pasarela de pagos automatizada y arquitectura SEO de última generación.',
     phase1Title: 'Fase 1: Construcción & Despliegue E-Commerce',
-    phase1Price: '$2,400,000 COP',
+    phase1Price: '$2,200,000 COP',
     phase1Features: 'Arquitectura Multipágina (Inicio, Catálogo, Nosotros, Blog, Contacto, Políticas)\nCatálogo E-Commerce Dinámico (Filtros, Categorías, Variantes y Stock)\nCarrito de Compras y Checkout Optimizado sin Fricción\nIntegración Pasarela de Pagos (Wompi, MercadoPago, Bold - PSE, Nequi, Tarjetas)\nPanel de Administración CMS (Subir/Editar productos, precios y pedidos)\nNotificaciones automáticas por WhatsApp y Correo Electrónico',
     phase2Title: 'Fase 2: Infraestructura Cloud & Soporte',
     phase2Price: '$1,800,000 COP / Año',
     phase2Features: 'Renovación Anual de Dominio .com\nServidor Cloud NVMe de Alta Velocidad\nCertificado SSL de Seguridad y Protección de Pagos\nBackups Diarios Automatizados y Monitoreo 24/7\nSoporte Técnico y Actualizaciones de Seguridad',
     timeline: '3 a 4 Semanas de Desarrollo.\nSemana 1: Kickoff, Arquitectura de Información y Aprobación UI/UX.\nSemana 2: Desarrollo Multipágina y Motor de Catálogo/Tienda.\nSemana 3: Integración de Pasarela de Pagos y Pruebas Transaccionales (Beta).\nSemana 4: Despliegue en Dominio Oficial, Entrega de Accesos y Capacitación.',
-    paymentTerms: 'Cuota 1 (40% - $960,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $720,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $720,000 COP): Despliegue en producción final y entrega de accesos.\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
+    paymentTerms: 'Cuota 1 (40% - $880,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $660,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $660,000 COP): Despliegue en producción final y entrega de accesos.\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
     taxNote: 'Cotización sin IVA (No responsable de IVA - Art. 437 E.T.). Se expide Factura Legal Electrónica como Persona Natural (o Cuenta de Cobro formal con RUT y Seguridad Social), 100% válida y deducible tributariamente.'
   },
   speedlight: {
@@ -78,15 +78,15 @@ export const ProposalGenerator = () => {
   const getDiscountedValues = (presetKey: string, enableDiscount: boolean) => {
     if (!enableDiscount) {
       return {
-        price: PRESETS[presetKey]?.phase1Price || '$2,400,000 COP',
+        price: PRESETS[presetKey]?.phase1Price || '$2,200,000 COP',
         paymentTerms: PRESETS[presetKey]?.paymentTerms || '',
       };
     }
 
     if (presetKey === 'ecommerce') {
       return {
-        price: '$1,680,000 COP',
-        paymentTerms: 'Cuota 1 (40% - $672,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $504,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $504,000 COP): Despliegue en producción final y entrega de accesos.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
+        price: '$1,540,000 COP',
+        paymentTerms: 'Cuota 1 (40% - $616,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $462,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $462,000 COP): Despliegue en producción final y entrega de accesos.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
       };
     } else if (presetKey === 'speedlight') {
       return {
@@ -395,9 +395,9 @@ export const ProposalGenerator = () => {
                      <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
                        ⚡ SPEEDLIGHT -30%
                      </span>
-                     <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
-                       {selectedPreset === 'ecommerce' ? '$2,400,000 COP' : selectedPreset === 'speedlight' ? '$2,200,000 COP' : '$850,000 COP'}
-                     </span>
+                      <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
+                        {selectedPreset === 'ecommerce' ? '$2,200,000 COP' : selectedPreset === 'speedlight' ? '$2,200,000 COP' : '$850,000 COP'}
+                      </span>
                    </div>
                  )}
 
