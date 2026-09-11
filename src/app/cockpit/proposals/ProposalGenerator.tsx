@@ -71,12 +71,60 @@ export const ProposalGenerator = () => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string>('ecommerce');
+  const [applySpeedlightDiscount, setApplySpeedlightDiscount] = useState(false);
 
   const [data, setData] = useState<ProposalData>(PRESETS.ecommerce);
 
+  const getDiscountedValues = (presetKey: string, enableDiscount: boolean) => {
+    if (!enableDiscount) {
+      return {
+        price: PRESETS[presetKey]?.phase1Price || '$2,400,000 COP',
+        paymentTerms: PRESETS[presetKey]?.paymentTerms || '',
+      };
+    }
+
+    if (presetKey === 'ecommerce') {
+      return {
+        price: '$1,680,000 COP',
+        paymentTerms: 'Cuota 1 (40% - $672,000 COP): Anticipo al inicio del proyecto y diseño UI.\nCuota 2 (30% - $504,000 COP): Contra-entrega de versión Beta funcional y catálogo.\nCuota 3 (30% - $504,000 COP): Despliegue en producción final y entrega de accesos.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi, Daviplata o PSE.',
+      };
+    } else if (presetKey === 'speedlight') {
+      return {
+        price: '$1,540,000 COP',
+        paymentTerms: 'Cuota 1 (50% - $770,000 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $770,000 COP): Contra-entrega previa al lanzamiento en producción.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
+      };
+    } else {
+      return {
+        price: '$595,000 COP',
+        paymentTerms: 'Cuota 1 (50% - $297,500 COP): Anticipo al inicio del proyecto.\nCuota 2 (50% - $297,500 COP): Contra-entrega de versión final.\nBeneficio Especial: -30% Alianza Speedlight Culture aplicado (Cupón SPEEDLIGHT-30).\nMétodos: Transferencia Bancolombia, Nequi o PSE.',
+      };
+    }
+  };
+
   const handleSelectPreset = (presetKey: string) => {
     setSelectedPreset(presetKey);
-    setData(PRESETS[presetKey]);
+    const base = PRESETS[presetKey];
+    if (applySpeedlightDiscount) {
+      const discounted = getDiscountedValues(presetKey, true);
+      setData({
+        ...base,
+        phase1Price: discounted.price,
+        paymentTerms: discounted.paymentTerms,
+      });
+    } else {
+      setData(base);
+    }
+  };
+
+  const handleToggleSpeedlight = () => {
+    const nextState = !applySpeedlightDiscount;
+    setApplySpeedlightDiscount(nextState);
+    const discounted = getDiscountedValues(selectedPreset, nextState);
+    setData(prev => ({
+      ...prev,
+      phase1Price: discounted.price,
+      paymentTerms: discounted.paymentTerms,
+    }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -169,6 +217,44 @@ export const ProposalGenerator = () => {
               <span className="truncate text-[11px]">Sitio Pro</span>
             </button>
           </div>
+        </div>
+
+        {/* SPEEDLIGHT DISCOUNT TOGGLE */}
+        <div className={`p-3 rounded-xl border transition-all flex items-center justify-between mb-6 ${
+          applySpeedlightDiscount 
+            ? 'bg-[#00FF9C]/10 border-[#00FF9C]/40 text-[#00FF9C]' 
+            : 'bg-zinc-950 border-zinc-800 text-zinc-400'
+        }`}>
+          <div className="flex items-center gap-2.5">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs font-mono transition-colors ${
+              applySpeedlightDiscount ? 'bg-[#00FF9C] text-zinc-950 shadow-md shadow-[#00FF9C]/20' : 'bg-zinc-800 text-zinc-400'
+            }`}>
+              -30%
+            </div>
+            <div>
+              <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                Descuento Speedlight
+                {applySpeedlightDiscount && (
+                  <span className="text-[9px] bg-[#00FF9C]/20 text-[#00FF9C] px-1.5 py-0.5 rounded font-mono font-bold">
+                    ACTIVO
+                  </span>
+                )}
+              </div>
+              <p className="text-[10px] text-zinc-400">Cupón SPEEDLIGHT-30 (-30% en Fase 1)</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleToggleSpeedlight}
+            className={`w-11 h-6 rounded-full transition-colors relative p-0.5 cursor-pointer ${
+              applySpeedlightDiscount ? 'bg-[#00FF9C]' : 'bg-zinc-700'
+            }`}
+          >
+            <div className={`w-5 h-5 rounded-full bg-zinc-950 transition-transform ${
+              applySpeedlightDiscount ? 'translate-x-5' : 'translate-x-0'
+            }`} />
+          </button>
         </div>
         
         <div className="space-y-4">
@@ -303,6 +389,18 @@ export const ProposalGenerator = () => {
                  <div className="absolute top-0 right-0 p-4 opacity-10"><Rocket className="w-20 h-20 rotate-45" style={{ color: '#6366f1' }} /></div>
                  <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block" style={{ color: '#4f46e5' }}>Pago Único (En 3 Cuotas)</span>
                  <h3 className="text-lg font-bold mb-1" style={{ color: '#18181b' }}>{data.phase1Title}</h3>
+                 
+                 {applySpeedlightDiscount && (
+                   <div className="flex items-center gap-2 mb-1">
+                     <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md" style={{ backgroundColor: '#dcfce7', color: '#15803d', border: '1px solid #86efac' }}>
+                       ⚡ SPEEDLIGHT -30%
+                     </span>
+                     <span className="text-xs line-through font-mono font-medium" style={{ color: '#94a3b8' }}>
+                       {selectedPreset === 'ecommerce' ? '$2,400,000 COP' : selectedPreset === 'speedlight' ? '$2,200,000 COP' : '$850,000 COP'}
+                     </span>
+                   </div>
+                 )}
+
                  <div className="text-2xl font-black font-mono mb-4 tracking-tight" style={{ color: '#18181b' }}>{data.phase1Price}</div>
                  
                  <ul className="space-y-2.5">
