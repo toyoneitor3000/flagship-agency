@@ -8,7 +8,13 @@ import {
   ExternalLink, X, Building2, Sparkles, MessageCircle, Mail
 } from "lucide-react";
 
-export const ArticleNivelIA = () => {
+interface ArticleNivelIAProps {
+  liveAuthorImage?: string;
+}
+
+export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
+  liveAuthorImage = "/api/author/avatar",
+}) => {
   const [showAuthorModal, setShowAuthorModal] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -103,7 +109,7 @@ export const ArticleNivelIA = () => {
               >
                 <div className="relative">
                   <img 
-                    src="/images/editorial/camilo_toloza.jpg" 
+                    src={liveAuthorImage} 
                     alt="Camilo Toloza" 
                     className="w-10 h-10 rounded-full object-cover shadow-sm border border-zinc-300 ring-2 ring-emerald-500/30 group-hover:scale-105 transition-transform" 
                   />
@@ -356,7 +362,7 @@ export const ArticleNivelIA = () => {
           <div className="bg-white border border-zinc-200 p-6 sm:p-8 rounded-2xl flex flex-col sm:flex-row items-center gap-6 shadow-sm">
             <div className="relative shrink-0">
               <img 
-                src="/images/editorial/camilo_toloza.jpg" 
+                src={liveAuthorImage} 
                 alt="Camilo Toloza" 
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-zinc-200" 
               />
@@ -439,7 +445,7 @@ export const ArticleNivelIA = () => {
               <div className="flex items-start gap-5 mb-6">
                 <div className="relative shrink-0">
                   <img 
-                    src="/images/editorial/camilo_toloza.jpg" 
+                    src={liveAuthorImage} 
                     alt="Camilo Toloza" 
                     className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl object-cover shadow-md border-2 border-zinc-200" 
                   />

@@ -1,4 +1,7 @@
 import { ArticleNivelIA } from '@/components/editorial/ArticleNivelIA';
+import { prisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'El Mito de los 30 Segundos y el Verdadero "Nivel IA" | Camilo Toloza • Purrpurr',
@@ -12,6 +15,27 @@ export const metadata = {
   }
 };
 
-export default function ArticlePage() {
-  return <ArticleNivelIA />;
+export default async function ArticlePage() {
+  let authorImage: string = '/api/author/avatar';
+  try {
+    const author = await prisma.user.findFirst({
+      where: {
+        email: {
+          in: ['camilotoloza1136@gmail.com', 'purrpurrdev@gmail.com'],
+        },
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      select: { image: true },
+    });
+
+    if (author?.image) {
+      authorImage = author.image.replace(/=s\d+-c/, '=s800-c');
+    }
+  } catch (err) {
+    console.error('Error retrieving live author avatar:', err);
+  }
+
+  return <ArticleNivelIA liveAuthorImage={authorImage} />;
 }
