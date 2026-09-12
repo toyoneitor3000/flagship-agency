@@ -7,6 +7,8 @@ import {
   ArrowLeft, Share2, Check, ShieldCheck, Zap, 
   ExternalLink, X, Building2, Sparkles, MessageCircle, Mail
 } from "lucide-react";
+import { TechnicalWallGraphic } from "./TechnicalWallGraphic";
+import { DigitalOSGraphic } from "./DigitalOSGraphic";
 
 interface ArticleNivelIAProps {
   liveAuthorImage?: string;
@@ -136,14 +138,18 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
         {/* FIGURA 1: HERO EDITORIAL COVER (EL ICEBERG DIGITAL) */}
         <figure className="my-8">
           <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
-            <img 
-              src="/images/editorial/cover_ai_myth.svg" 
-              alt="Anatomía del Iceberg Digital: Superficie de 30 segundos vs. Monolito Transaccional Submarino"
-              className="w-full h-auto object-contain block"
-              width={1200}
-              height={675}
-              style={{ aspectRatio: "16 / 9" }}
-            />
+            <picture>
+              <source srcSet="/images/editorial/cover_ai_myth.webp?v=2" type="image/webp" />
+              <img 
+                src="/images/editorial/cover_ai_myth.jpg?v=2" 
+                alt="Anatomía del Iceberg Digital: Superficie de 30 segundos vs. Monolito Transaccional Subterráneo"
+                className="w-full h-auto object-cover block"
+                width={1376}
+                height={768}
+                style={{ aspectRatio: "16 / 9" }}
+                loading="eager"
+              />
+            </picture>
           </div>
           <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
             <strong>Fig. 1.0:</strong> La ilusión de la superficie generativa frente al 95% de arquitectura transaccional, criptográfica y legal requerida para operar en el comercio real.
@@ -238,14 +244,7 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
           {/* FIGURA 2: INFOGRAFÍA DEL MURO TÉCNICO Y LA AUDITORÍA DE PASARELA */}
           <figure className="my-10">
             <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
-              <img 
-                src="/images/editorial/technical_wall_infographic.svg" 
-                alt="Diagrama de flujo: Falla de generador IA vs. Protocolo de Ingeniería Purrpurr"
-                className="w-full h-auto object-contain block"
-                width={1200}
-                height={675}
-                style={{ aspectRatio: "16 / 9" }}
-              />
+              <TechnicalWallGraphic />
             </div>
             <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
               <strong>Fig. 2.0:</strong> La brecha transaccional: el punto exacto donde colapsa un generador automático al recibir un webhook financiero, contrastado con la arquitectura transaccional blindada de Purrpurr.
@@ -339,14 +338,7 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
           {/* FIGURA 3: TOPOLOGÍA DEL SISTEMA OPERATIVO DIGITAL */}
           <figure className="my-10">
             <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
-              <img 
-                src="/images/editorial/digital_operating_system.svg" 
-                alt="Topología del Sistema Operativo Digital Purrpurr: Núcleo Edge y Nodos Satélite"
-                className="w-full h-auto object-contain block"
-                width={1200}
-                height={675}
-                style={{ aspectRatio: "16 / 9" }}
-              />
+              <DigitalOSGraphic />
             </div>
             <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
               <strong>Fig. 3.0:</strong> La topología de un Sistema Operativo Digital: núcleo Next.js Edge conectado directamente a rieles bancarios, WhatsApp y contabilidad fiscal, sin intermediarios ni alquiler forzado.
