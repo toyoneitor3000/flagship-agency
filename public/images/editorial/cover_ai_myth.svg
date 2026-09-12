@@ -1,0 +1,280 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%" style="background:#FBFBFA; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Light Gradients -->
+    <linearGradient id="lightSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#F1F5F9"/>
+    </linearGradient>
+    <linearGradient id="lightAbyss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="30%" stop-color="#CBD5E1"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+    <linearGradient id="waterlineLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284C7" stop-opacity="0.2"/>
+      <stop offset="25%" stop-color="#0284C7" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#0D9488" stop-opacity="1"/>
+      <stop offset="75%" stop-color="#4F46E5" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#4F46E5" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="monolithBase" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <filter id="softGlowLight" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <pattern id="lightGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="0.8"/>
+    </pattern>
+    <pattern id="denseGridLight" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#334155" stroke-width="0.5" stroke-opacity="0.3"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="675" fill="#FAF9F5"/>
+  <rect x="0" y="0" width="1200" height="210" fill="url(#lightSky)"/>
+  <rect x="0" y="210" width="1200" height="465" fill="url(#lightAbyss)"/>
+  <rect width="1200" height="675" fill="url(#lightGrid)"/>
+
+  <!-- Top Metadata Bar (New York Times Editorial Style) -->
+  <g>
+    <text x="50" y="36" fill="#64748B" font-size="11" font-family="monospace" letter-spacing="2">THE PURRPURR DISPATCH • INVESTIGACIÓN EDITORIAL</text>
+    <text x="1150" y="36" fill="#0369A1" font-size="11" font-family="monospace" letter-spacing="2" text-anchor="end" font-weight="700">FIG. 1.0 — ANATOMÍA DEL ICEBERG DIGITAL</text>
+    <line x1="50" y1="46" x2="1150" y2="46" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="4,4"/>
+  </g>
+
+  <!-- ==================== SUPERFICIE (30-SECOND MOCKUP) ==================== -->
+  <g transform="translate(0, -5)">
+    <!-- Label Superficie -->
+    <rect x="420" y="66" width="360" height="26" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" filter="url(#cardShadow)"/>
+    <circle cx="436" cy="79" r="4" fill="#E11D48"/>
+    <text x="448" y="83" fill="#0F172A" font-size="11" font-family="monospace" font-weight="700" letter-spacing="1">
+      SUPERFICIE: MAQUETA GENERADA EN 30s
+    </text>
+
+    <!-- Floating Origami Paper Storefront Wireframe -->
+    <g transform="translate(450, 100)" filter="url(#cardShadow)">
+      <!-- Main Paper Body -->
+      <polygon points="150,0 270,30 270,95 150,65" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <polygon points="150,0 30,30 30,95 150,65" fill="#F0F9FF" stroke="#0284C7" stroke-width="1.2"/>
+      <polygon points="30,95 150,65 270,95 150,125" fill="#E0F2FE" stroke="#6366F1" stroke-width="1.2"/>
+      
+      <!-- Storefront Mock Elements -->
+      <rect x="60" y="42" width="50" height="15" rx="2" fill="#BAE6FD" stroke="#0284C7" stroke-width="0.7"/>
+      <line x1="65" y1="49" x2="95" y2="49" stroke="#0369A1" stroke-width="1.5"/>
+      <rect x="180" y="42" width="60" height="15" rx="3" fill="#4F46E5" stroke="#4338CA" stroke-width="0.7"/>
+      <text x="210" y="53" fill="#FFFFFF" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">BOTÓN COMPRAR</text>
+
+      <!-- Broken Disconnected Line -->
+      <path d="M 150 125 Q 150 150 125 162" fill="none" stroke="#E11D48" stroke-width="2" stroke-dasharray="3,3"/>
+      <circle cx="125" cy="162" r="3.5" fill="#E11D48"/>
+      <text x="135" y="165" fill="#BE123C" font-size="10" font-family="monospace" font-weight="700">Sin webhook real</text>
+    </g>
+
+    <!-- Superficie Context Stats Left -->
+    <g transform="translate(80, 105)">
+      <rect x="0" y="0" width="220" height="85" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" filter="url(#cardShadow)"/>
+      <g transform="translate(16, 20)">
+        <text x="0" y="0" fill="#64748B" font-size="9.5" font-family="monospace" letter-spacing="1">TIEMPO ESTIMADO:</text>
+        <text x="0" y="18" fill="#DC2626" font-size="17" font-weight="900">30 Segundos</text>
+        <text x="0" y="34" fill="#64748B" font-size="10">Prompt: &ldquo;Crea una tienda de moda&rdquo;</text>
+        <text x="0" y="49" fill="#0F172A" font-size="10.5" font-family="monospace">Cobertura Operativa: <tspan fill="#DC2626" font-weight="800">4.5%</tspan></text>
+      </g>
+    </g>
+
+    <!-- Superficie Context Stats Right -->
+    <g transform="translate(900, 105)">
+      <rect x="0" y="0" width="220" height="85" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" filter="url(#cardShadow)"/>
+      <g transform="translate(16, 20)">
+        <text x="0" y="0" fill="#64748B" font-size="9.5" font-family="monospace" letter-spacing="1">ESTADO TRANSACCIONAL:</text>
+        <text x="0" y="18" fill="#DC2626" font-size="16" font-weight="800">Simulación Visual</text>
+        <text x="0" y="34" fill="#64748B" font-size="10">No valida HMAC ni emite CUFE</text>
+        <text x="0" y="49" fill="#B45309" font-size="10.5" font-family="monospace">Riesgo de fraude: <tspan fill="#DC2626" font-weight="800">EXTREMO</tspan></text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== LÍNEA DE FLOTACIÓN (WATERLINE) ==================== -->
+  <g>
+    <!-- Wave Glow -->
+    <line x1="0" y1="210" x2="1200" y2="210" stroke="url(#waterlineLight)" stroke-width="4"/>
+    <line x1="0" y1="210" x2="1200" y2="210" stroke="#0369A1" stroke-width="1" stroke-opacity="0.8"/>
+    
+    <!-- Waterline Labels -->
+    <rect x="50" y="194" width="170" height="22" rx="4" fill="#FFFFFF" stroke="#0284C7" stroke-width="1" filter="url(#cardShadow)"/>
+    <text x="60" y="209" fill="#0369A1" font-size="9.5" font-family="monospace" font-weight="800" letter-spacing="1.5">
+      LÍNEA DE PERCEPCIÓN
+    </text>
+
+    <text x="1150" y="208" fill="#475569" font-size="9.5" font-family="monospace" letter-spacing="1" text-anchor="end" font-weight="600">
+      NIVEL CERO • INTERFAZ DE USUARIO
+    </text>
+  </g>
+
+  <!-- ==================== EJE DE PROFUNDIDAD (DEPTH AXIS) ==================== -->
+  <g transform="translate(50, 230)">
+    <line x1="0" y1="0" x2="0" y2="400" stroke="#94A3B8" stroke-width="1.5"/>
+    
+    <!-- Depth 1 -->
+    <circle cx="0" cy="40" r="4" fill="#0284C7"/>
+    <text x="14" y="44" fill="#0F172A" font-size="9.5" font-family="monospace" font-weight="700">-100m: EDGE ROUTING &amp; CDN</text>
+
+    <!-- Depth 2 -->
+    <circle cx="0" cy="140" r="4" fill="#059669"/>
+    <text x="14" y="144" fill="#0F172A" font-size="9.5" font-family="monospace" font-weight="700">-300m: CRIPTOGRAFÍA &amp; WEBHOOKS</text>
+
+    <!-- Depth 3 -->
+    <circle cx="0" cy="240" r="4" fill="#D97706"/>
+    <text x="14" y="244" fill="#0F172A" font-size="9.5" font-family="monospace" font-weight="700">-500m: DIAN &amp; AUDITORÍA FISCAL</text>
+
+    <!-- Depth 4 -->
+    <circle cx="0" cy="340" r="4" fill="#4F46E5"/>
+    <text x="14" y="344" fill="#0F172A" font-size="9.5" font-family="monospace" font-weight="700">-700m: KERNEL TRANSACCIONAL ACID</text>
+  </g>
+
+  <!-- ==================== EL MONOLITO SUMERGIDO (PURRPURR ARCHITECTURE) ==================== -->
+  <g transform="translate(240, 230)">
+    
+    <!-- Monolith Base Silhouette -->
+    <polygon points="80,10 640,10 680,415 40,415" fill="url(#monolithBase)" stroke="#0F172A" stroke-width="2"/>
+    <polygon points="80,10 640,10 680,415 40,415" fill="url(#denseGridLight)"/>
+    
+    <!-- Foundation Anchors -->
+    <line x1="60" y1="415" x2="20" y2="445" stroke="#475569" stroke-width="2" stroke-dasharray="4,3"/>
+    <line x1="660" y1="415" x2="700" y2="445" stroke="#475569" stroke-width="2" stroke-dasharray="4,3"/>
+    <line x1="360" y1="415" x2="360" y2="445" stroke="#10B981" stroke-width="2"/>
+
+    <!-- ================= BLOQUE 1: EDGE RUNTIME (CYAN) ================= -->
+    <g transform="translate(85, 25)">
+      <rect x="0" y="0" width="550" height="78" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.4" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="6" height="78" rx="3" fill="#0284C7"/>
+      
+      <text x="24" y="24" fill="#0F172A" font-size="13" font-weight="900">
+        NÚCLEO NEXT.JS CON SERVER-SIDE HYDRATION &amp; EDGE CDN
+      </text>
+      <text x="24" y="44" fill="#475569" font-size="11">
+        Despliegue multi-zona global. Latencia de primer byte (TTFB) &lt; 85ms en Colombia vía Edge Nodes.
+      </text>
+      
+      <rect x="24" y="53" width="95" height="16" rx="3" fill="#E0F2FE"/>
+      <text x="71" y="65" fill="#0369A1" font-size="8.5" font-family="monospace" font-weight="700" text-anchor="middle">LCP &lt; 0.8 SEG</text>
+
+      <rect x="128" y="53" width="135" height="16" rx="3" fill="#E0F2FE"/>
+      <text x="195" y="65" fill="#0369A1" font-size="8.5" font-family="monospace" font-weight="700" text-anchor="middle">ZERO VENDOR LOCK-IN</text>
+
+      <rect x="272" y="53" width="140" height="16" rx="3" fill="#E0F2FE"/>
+      <text x="342" y="65" fill="#0369A1" font-size="8.5" font-family="monospace" font-weight="700" text-anchor="middle">SEO SEMÁNTICO ACTIVO</text>
+    </g>
+
+    <!-- Connective Cable 1 -->
+    <line x1="360" y1="103" x2="360" y2="120" stroke="#10B981" stroke-width="2.5"/>
+    <circle cx="360" cy="112" r="3" fill="#10B981"/>
+
+    <!-- ================= BLOQUE 2: CRIPTOGRAFÍA & PAGOS (EMERALD) ================= -->
+    <g transform="translate(75, 120)">
+      <rect x="0" y="0" width="570" height="88" rx="8" fill="#FFFFFF" stroke="#059669" stroke-width="1.6" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="6" height="88" rx="3" fill="#059669"/>
+      
+      <g transform="translate(24, 23)">
+        <text x="0" y="0" fill="#0F172A" font-size="13" font-weight="900">
+          PASARELA BANCARIA LOCAL &amp; FIRMA CRIPTOGRÁFICA DE WEBHOOKS
+        </text>
+        <text x="0" y="19" fill="#475569" font-size="11">
+          Integración Wompi (Bancolombia) + Bold + Nequi con verificación estricta de hash HMAC-SHA256.
+        </text>
+        
+        <rect x="0" y="28" width="520" height="24" rx="4" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1"/>
+        <text x="12" y="44" fill="#065F46" font-size="9.5" font-family="monospace" font-weight="700">
+          CHECKSUM: SHA256(transaction_id + amount + secret) === webhook_signature ✓
+        </text>
+      </g>
+    </g>
+
+    <!-- Connective Cable 2 -->
+    <line x1="360" y1="208" x2="360" y2="225" stroke="#D97706" stroke-width="2.5"/>
+    <circle cx="360" cy="216" r="3" fill="#D97706"/>
+
+    <!-- ================= BLOQUE 3: LEGALIDAD FISCAL DIAN (AMBER) ================= -->
+    <g transform="translate(65, 225)">
+      <rect x="0" y="0" width="590" height="85" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1.6" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="6" height="85" rx="3" fill="#D97706"/>
+      
+      <g transform="translate(24, 23)">
+        <text x="0" y="0" fill="#0F172A" font-size="13" font-weight="900">
+          FACTURACIÓN ELECTRÓNICA DIAN (RES. 165) &amp; HABEAS DATA
+        </text>
+        <text x="0" y="19" fill="#475569" font-size="11">
+          Generación automática de XML firmado digitalmente con CUFE validado en el portal DIAN.
+        </text>
+        
+        <g transform="translate(0, 30)">
+          <rect x="0" y="0" width="135" height="18" rx="3" fill="#FFFBEB" stroke="#FDE68A" stroke-width="0.8"/>
+          <text x="67" y="12" fill="#92400E" font-size="8.5" font-family="monospace" font-weight="700" text-anchor="middle">XML UBL 2.1 OFICIAL</text>
+
+          <rect x="145" y="0" width="165" height="18" rx="3" fill="#FFFBEB" stroke="#FDE68A" stroke-width="0.8"/>
+          <text x="227" y="12" fill="#92400E" font-size="8.5" font-family="monospace" font-weight="700" text-anchor="middle">LEY 1581 CIFRADO TOTAL</text>
+
+          <rect x="320" y="0" width="185" height="18" rx="3" fill="#FFFBEB" stroke="#FDE68A" stroke-width="0.8"/>
+          <text x="412" y="12" fill="#92400E" font-size="8.5" font-family="monospace" font-weight="700" text-anchor="middle">CONCILIACIÓN EN TIEMPO REAL</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Connective Cable 3 -->
+    <line x1="360" y1="310" x2="360" y2="325" stroke="#4F46E5" stroke-width="2.5"/>
+    <circle cx="360" cy="317" r="3" fill="#4F46E5"/>
+
+    <!-- ================= BLOQUE 4: KERNEL ACID & WHATSAPP (INDIGO) ================= -->
+    <g transform="translate(55, 325)">
+      <rect x="0" y="0" width="610" height="80" rx="8" fill="#FFFFFF" stroke="#4F46E5" stroke-width="1.6" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="6" height="80" rx="3" fill="#4F46E5"/>
+      
+      <g transform="translate(24, 23)">
+        <text x="0" y="0" fill="#0F172A" font-size="13" font-weight="900">
+          BASE DE DATOS ACID CON ROW-LOCKING &amp; WHATSAPP ENGINE
+        </text>
+        <text x="0" y="19" fill="#475569" font-size="11">
+          Cero riesgo de sobreventa concurrente. Disparador de confirmación automática por WhatsApp.
+        </text>
+        <text x="0" y="38" fill="#3730A3" font-size="10" font-family="monospace" font-weight="700">
+          PRISMA ORM / LIBSQL • REPOSITORIO PRIVADO 100% PROPIEDAD DEL CLIENTE
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== SUMMARY CALLOUT (BOTTOM RIGHT) ==================== -->
+  <g transform="translate(965, 480)">
+    <rect x="0" y="0" width="190" height="150" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <circle cx="22" cy="24" r="5" fill="#059669"/>
+    <text x="34" y="28" fill="#0F172A" font-size="11" font-weight="900">VEREDICTO PURRPURR</text>
+    
+    <text x="18" y="54" fill="#64748B" font-size="9.5">
+      La IA generativa resuelve
+    </text>
+    <text x="18" y="70" fill="#DC2626" font-size="12" font-weight="900">
+      el 5% estético visual.
+    </text>
+
+    <text x="18" y="94" fill="#64748B" font-size="9.5">
+      El 95% restante es
+    </text>
+    <text x="18" y="110" fill="#059669" font-size="12" font-weight="900">
+      ingeniería transaccional.
+    </text>
+
+    <line x1="18" y1="126" x2="172" y2="126" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="95" y="140" fill="#94A3B8" font-size="8" font-family="monospace" text-anchor="middle">PURRPURR ARCHITECTURE LAB</text>
+  </g>
+
+  <!-- Water Wave lines -->
+  <path d="M 0 210 Q 150 206 300 210 T 600 210 T 900 210 T 1200 210" fill="none" stroke="#0284C7" stroke-width="1" stroke-opacity="0.5"/>
+  <path d="M 0 212 Q 200 215 400 212 T 800 212 T 1200 212" fill="none" stroke="#0D9488" stroke-width="0.8" stroke-opacity="0.4"/>
+</svg>
