@@ -140,6 +140,9 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
               src="/images/editorial/cover_ai_myth.svg" 
               alt="Anatomía del Iceberg Digital: Superficie de 30 segundos vs. Monolito Transaccional Submarino"
               className="w-full h-auto object-contain block"
+              width={1200}
+              height={675}
+              style={{ aspectRatio: "16 / 9" }}
             />
           </div>
           <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
@@ -239,6 +242,9 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
                 src="/images/editorial/technical_wall_infographic.svg" 
                 alt="Diagrama de flujo: Falla de generador IA vs. Protocolo de Ingeniería Purrpurr"
                 className="w-full h-auto object-contain block"
+                width={1200}
+                height={675}
+                style={{ aspectRatio: "16 / 9" }}
               />
             </div>
             <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
@@ -337,6 +343,9 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
                 src="/images/editorial/digital_operating_system.svg" 
                 alt="Topología del Sistema Operativo Digital Purrpurr: Núcleo Edge y Nodos Satélite"
                 className="w-full h-auto object-contain block"
+                width={1200}
+                height={675}
+                style={{ aspectRatio: "16 / 9" }}
               />
             </div>
             <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
