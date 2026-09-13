@@ -369,7 +369,7 @@ export const DigitalOSGraphic: React.FC = () => {
                 <text x="0" y="20" fill="#0F172A" fontSize="13" fontWeight="900">100% Propiedad en GitHub</text>
                 <text x="0" y="38" fill="#475569" fontSize="10.5">El cliente es dueño de todo el código. Cero alquiler de tienda mensual.</text>
                 <rect x="0" y="65" width="150" height="18" rx="3" fill="#CCFBF1" />
-                <text x="75" y="77" fill="#0F766E" font-size="8" font-family="monospace" font-weight="700" text-anchor="middle">ZERO VENDOR LOCK-IN</text>
+                <text x="75" y="77" fill="#0F766E" fontSize={8} fontFamily="monospace" fontWeight={700} textAnchor="middle">ZERO VENDOR LOCK-IN</text>
               </g>
             </g>
           </svg>
