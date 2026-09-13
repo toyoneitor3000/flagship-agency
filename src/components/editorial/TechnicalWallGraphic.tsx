@@ -343,7 +343,12 @@ export const TechnicalWallGraphic: React.FC = () => {
               <g transform="translate(890, 55)">
                 <rect x="0" y="0" width="180" height="125" rx="8" fill="#FFF1F2" stroke="#E11D48" strokeWidth="1.2" filter="url(#wallShadowLight)" />
                 <text x="14" y="24" fill="#BE123C" fontSize="12" fontWeight="900">4. Colapso Final</text>
-                <text x="14" y="44" fill="#881337" fontSize="10">Sin XML DIAN.<br/>Sin soporte contable.<br/>Pagos duplicados.<br/>Pedidos perdidos.</text>
+                <text x="14" y="44" fill="#881337" fontSize="10">
+                  <tspan x="14" dy="0">Sin XML DIAN.</tspan>
+                  <tspan x="14" dy="13">Sin soporte contable.</tspan>
+                  <tspan x="14" dy="13">Pagos duplicados.</tspan>
+                  <tspan x="14" dy="13">Pedidos perdidos.</tspan>
+                </text>
                 <rect x="14" y="92" width="152" height="20" rx="3" fill="#BE123C" />
                 <text x="20" y="106" fill="#FFFFFF" fontSize="8.5" fontFamily="monospace" fontWeight="800">PÉRDIDA MONETARIA</text>
               </g>
@@ -415,10 +420,10 @@ export const TechnicalWallGraphic: React.FC = () => {
                 <rect x="0" y="0" width="180" height="170" rx="8" fill="#ECFDF5" stroke="#10B981" strokeWidth="1.4" filter="url(#wallShadowLight)" />
                 <text x="14" y="24" fill="#065F46" fontSize="12" fontWeight="900">4. Automatización Total</text>
                 <text x="14" y="44" fill="#047857" fontSize="10">
-                  • Emisión XML DIAN Res. 165<br />
-                  • Notificación WhatsApp<br />
-                  • Guía de despacho en bodega<br />
-                  • Depósito directo a cuenta
+                  <tspan x="14" dy="0">• Emisión XML DIAN Res. 165</tspan>
+                  <tspan x="14" dy="13">• Notificación WhatsApp</tspan>
+                  <tspan x="14" dy="13">• Guía de despacho en bodega</tspan>
+                  <tspan x="14" dy="13">• Depósito directo a cuenta</tspan>
                 </text>
                 <rect x="14" y="118" width="152" height="28" rx="4" fill="#059669" />
                 <text x="22" y="136" fill="#FFFFFF" fontSize="8.5" fontFamily="monospace" fontWeight="800">100% AUTOMATIZADO</text>

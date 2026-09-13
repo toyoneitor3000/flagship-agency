@@ -80,7 +80,7 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
         </div>
       </div>
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         
         {/* MASTHEAD DE EDICIÓN ESPECIAL */}
         <header className="text-center mb-8 pb-8 border-b-2 border-zinc-900">
@@ -619,7 +619,7 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
           </div>
         </footer>
 
-      </main>
+      </div>
 
       {/* MODAL DE BIOGRAFÍA EMPRESARIAL & PROPÓSITO DE PURRPURR (FONDO CLARO) */}
       <AnimatePresence>
