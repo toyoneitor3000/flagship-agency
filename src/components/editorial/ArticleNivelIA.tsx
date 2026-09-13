@@ -195,6 +195,30 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
             Cualquiera puede pedirle a una IA que dibuje una cuadrícula de productos con un botón de compra. Pero la IA no posee cuenta bancaria, no firma contratos de agregación financiera y no entiende las particularidades del ecosistema transaccional local.
           </p>
 
+          {/* FIGURA 1.1: PORTADA HISTÓRICA / COMERCIO PLEGADO */}
+          <figure className="my-10">
+            <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <picture>
+                <source srcSet="/images/editorial/folding_future_commerce.webp?v=2" type="image/webp" />
+                <img 
+                  src="/images/editorial/folding_future_commerce.jpg?v=2" 
+                  alt="The New York Times Magazine: Folding the Future of Commerce - La tienda de papel origami suspendida sobre servidores"
+                  className="w-full h-auto object-cover block"
+                  width={1376}
+                  height={768}
+                  style={{ aspectRatio: "16 / 9" }}
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+            <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
+              <strong>Fig. 1.1:</strong> El espejismo del comercio de papel: cómo las interfaces de treinta segundos prometen tiendas completas que flotan como origamis visuales, desprovistas de anclaje a las infraestructuras de misión crítica del mundo real.
+              <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-1 uppercase tracking-wider">
+                Ilustración Editorial: The New York Times Magazine / The Purrpurr Archive
+              </span>
+            </figcaption>
+          </figure>
+
           {/* PULL QUOTE 1 */}
           <blockquote className="my-10 py-6 border-y-2 border-zinc-900 text-center font-serif italic text-xl sm:text-2xl text-zinc-950 leading-snug">
             &ldquo;Pedirle a una IA generativa que construya tu tienda sin supervisión de ingeniería es el equivalente a imprimir un plano arquitectónico en una servilleta y esperar que soporte un terremoto.&rdquo;
@@ -209,8 +233,9 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
             Cuando un negocio real pretende facturar a diario, se estrella inevitablemente contra cinco barreras técnicas que ninguna herramienta generativa autónoma resuelve:
           </p>
 
-          <div className="space-y-4 font-sans text-sm sm:text-base my-6">
-            <div className="p-5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
+          <div className="space-y-6 font-sans text-sm sm:text-base my-6">
+            {/* OBSTÁCULO 1 */}
+            <div className="p-5 rounded-xl bg-white border border-zinc-200 shadow-2xs space-y-3">
               <h3 className="font-bold text-zinc-950 text-base mb-1 flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-indigo-600" />
                 1. La Pasarela Local y la Firma Criptográfica
@@ -218,9 +243,34 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
               <p className="text-zinc-600 font-serif text-sm leading-relaxed">
                 Conectar pasarelas como Wompi (Bancolombia) o Bold no es pegar un enlace de pago. Requiere programar un webhook en el servidor capaz de validar firmas criptográficas (<code>checksum / event_signature</code>). Sin este protocolo escrito a nivel de ingeniería, un tercero malintencionado puede simular pagos aprobados por PSE y despachar pedidos fraudulentos sin que ingrese un solo peso a la cuenta.
               </p>
+
+              {/* FIGURA 2.1: ANATOMÍA DE UN WEBHOOK CRIPTOGRÁFICO */}
+              <figure className="pt-2">
+                <div className="rounded-xl overflow-hidden border border-zinc-200 shadow-xs bg-white hover:shadow-sm transition-shadow">
+                  <picture>
+                    <source srcSet="/images/editorial/webhook_cryptography.webp?v=2" type="image/webp" />
+                    <img 
+                      src="/images/editorial/webhook_cryptography.jpg?v=2" 
+                      alt="Anatomía forense de un webhook criptográfico HMAC-SHA256 entre Bancolombia y Next.js"
+                      className="w-full h-auto object-cover block"
+                      width={1376}
+                      height={768}
+                      style={{ aspectRatio: "16 / 9" }}
+                      loading="lazy"
+                    />
+                  </picture>
+                </div>
+                <figcaption className="mt-2 text-center text-xs font-serif italic text-zinc-600">
+                  <strong>Fig. 2.1:</strong> El apretón de manos criptográfico: cómo un webhook legítimo de Wompi Bancolombia valida el secreto privado con HMAC-SHA256 en Next.js, neutralizando la inyección de pagos falsos.
+                  <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-0.5 uppercase tracking-wider">
+                    Auditoría de Seguridad Financiera / The Purrpurr Dispatch
+                  </span>
+                </figcaption>
+              </figure>
             </div>
 
-            <div className="p-5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
+            {/* OBSTÁCULO 2 */}
+            <div className="p-5 rounded-xl bg-white border border-zinc-200 shadow-2xs space-y-3">
               <h3 className="font-bold text-zinc-950 text-base mb-1 flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-emerald-600" />
                 2. Legalidad Tributaria y Facturación DIAN
@@ -228,9 +278,34 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
               <p className="text-zinc-600 font-serif text-sm leading-relaxed">
                 En Colombia, toda venta formal está sujeta a la <strong>Resolución 165 de la DIAN</strong> y a la <strong>Ley 1581 de 2012</strong> (Habeas Data). Una tienda que no emita soportes electrónicos válidos o que almacene datos de tarjetahabientes sin políticas de cifrado se expone a sanciones administrativas severas.
               </p>
+
+              {/* FIGURA 2.2: CERTIFICACIÓN FISCAL DIAN */}
+              <figure className="pt-2">
+                <div className="rounded-xl overflow-hidden border border-zinc-200 shadow-xs bg-white hover:shadow-sm transition-shadow">
+                  <picture>
+                    <source srcSet="/images/editorial/dian_compliance_ubl.webp?v=2" type="image/webp" />
+                    <img 
+                      src="/images/editorial/dian_compliance_ubl.jpg?v=2" 
+                      alt="Arquitectura fiscal de facturación electrónica DIAN bajo estándar XML UBL 2.1 con CUFE"
+                      className="w-full h-auto object-cover block"
+                      width={1376}
+                      height={768}
+                      style={{ aspectRatio: "16 / 9" }}
+                      loading="lazy"
+                    />
+                  </picture>
+                </div>
+                <figcaption className="mt-2 text-center text-xs font-serif italic text-zinc-600">
+                  <strong>Fig. 2.2:</strong> La arquitectura fiscal de la DIAN: generación automática del estándar XML UBL 2.1 con código CUFE firmado y validación previa en servidores gubernamentales.
+                  <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-0.5 uppercase tracking-wider">
+                    Cumplimiento Tributario Colombiano / The Purrpurr Dispatch
+                  </span>
+                </figcaption>
+              </figure>
             </div>
 
-            <div className="p-5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
+            {/* OBSTÁCULO 3 */}
+            <div className="p-5 rounded-xl bg-white border border-zinc-200 shadow-2xs space-y-3">
               <h3 className="font-bold text-zinc-950 text-base mb-1 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-amber-600" />
                 3. Concurrencia de Inventario y Control de Stock
@@ -238,6 +313,30 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
               <p className="text-zinc-600 font-serif text-sm leading-relaxed">
                 Si dos clientes compran el último par de zapatos al mismo segundo, una maqueta generativa colapsa o sobrevende. Se requiere una base de datos relacional con bloqueo transaccional (ACID) y estados de orden automatizados.
               </p>
+
+              {/* FIGURA 2.3: CONCURRENCIA ACID */}
+              <figure className="pt-2">
+                <div className="rounded-xl overflow-hidden border border-zinc-200 shadow-xs bg-white hover:shadow-sm transition-shadow">
+                  <picture>
+                    <source srcSet="/images/editorial/acid_concurrency_lock.webp?v=2" type="image/webp" />
+                    <img 
+                      src="/images/editorial/acid_concurrency_lock.jpg?v=2" 
+                      alt="Concurrencia de milisegundos y bloqueo transaccional ACID en PostgreSQL"
+                      className="w-full h-auto object-cover block"
+                      width={1376}
+                      height={768}
+                      style={{ aspectRatio: "16 / 9" }}
+                      loading="lazy"
+                    />
+                  </picture>
+                </div>
+                <figcaption className="mt-2 text-center text-xs font-serif italic text-zinc-600">
+                  <strong>Fig. 2.3:</strong> La colisión de los 8 milisegundos: resolución atómica en PostgreSQL (`SELECT FOR UPDATE`) para impedir quiebres de inventario cuando dos clientes compran la última unidad simultáneamente.
+                  <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-0.5 uppercase tracking-wider">
+                    Integridad Transaccional / The Purrpurr Dispatch
+                  </span>
+                </figcaption>
+              </figure>
             </div>
           </div>
 
@@ -307,6 +406,30 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
             </table>
           </div>
 
+          {/* FIGURA 3.1: EL IMPUESTO INVISIBLE A 36 MESES */}
+          <figure className="my-10">
+            <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <picture>
+                <source srcSet="/images/editorial/saas_hidden_tax_chart.webp?v=2" type="image/webp" />
+                <img 
+                  src="/images/editorial/saas_hidden_tax_chart.jpg?v=2" 
+                  alt="Gráfico de fuga de capital acumulada a 36 meses: Shopify frente a Purrpurr Next.js"
+                  className="w-full h-auto object-cover block"
+                  width={1376}
+                  height={768}
+                  style={{ aspectRatio: "16 / 9" }}
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+            <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
+              <strong>Fig. 3.1:</strong> La fuga acumulada de capital a tres años: el impacto del 2% de comisión por transacción y apps mensuales en Shopify frente a la propiedad perpetua de código con Purrpurr.
+              <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-1 uppercase tracking-wider">
+                Auditoría Económica y Costo Total de Propiedad (TCO) / The Purrpurr Dispatch
+              </span>
+            </figcaption>
+          </figure>
+
           {/* SECCIÓN IV */}
           <h2 className="font-sans font-black text-2xl sm:text-3xl text-zinc-950 pt-8 tracking-tight border-t border-zinc-200">
             IV. La Tesis del &ldquo;Nivel IA&rdquo; en Purrpurr
@@ -320,11 +443,59 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
             El verdadero <em>&ldquo;Nivel IA&rdquo;</em> no consiste en entregarle la tarjeta de crédito a una plataforma de moda para que escupa una plantilla genérica. Consiste en utilizar la inteligencia artificial como un multiplicador interno de ingeniería:
           </p>
 
+          {/* FIGURA 4.1: EL VERDADERO NIVEL IA */}
+          <figure className="my-10">
+            <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <picture>
+                <source srcSet="/images/editorial/ai_orchestrator_blueprint.webp?v=2" type="image/webp" />
+                <img 
+                  src="/images/editorial/ai_orchestrator_blueprint.jpg?v=2" 
+                  alt="La matriz de eficiencia: Consultora Clásica vs. Generador Descartable vs. Enfoque Nivel IA de Purrpurr"
+                  className="w-full h-auto object-cover block"
+                  width={1376}
+                  height={768}
+                  style={{ aspectRatio: "16 / 9" }}
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+            <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
+              <strong>Fig. 4.1:</strong> La matriz de eficiencia: el rol de la inteligencia artificial no es crear software descartable, sino reducir a tres semanas lo que a una consultora tradicional le toma meses, manteniendo la máxima exigencia arquitectónica.
+              <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-1 uppercase tracking-wider">
+                Metodología de Ingeniería / The Purrpurr Dispatch
+              </span>
+            </figcaption>
+          </figure>
+
           <ul className="list-disc pl-6 space-y-2 font-serif">
             <li>Lo que a una consultora tradicional le toma ocho semanas y quince millones de pesos en picar código repetitivo, nosotros lo resolvemos en tres semanas.</li>
             <li>Esa ganancia de eficiencia no se traduce en código descartable, sino en <strong>reducir radicalmente el costo de acceso a una arquitectura de élite</strong>.</li>
             <li>El cliente no paga por las horas que una máquina tarda en maquetar un botón; paga por la <strong>arquitectura transaccional, la seguridad jurídica y el respaldo de un equipo humano</strong> que responde su llamada cuando el dinero está en juego.</li>
           </ul>
+
+          {/* FIGURA 4.2: TELEMETRÍA Y MISIÓN CRÍTICA */}
+          <figure className="my-10">
+            <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <picture>
+                <source srcSet="/images/editorial/telemetry_mission_control.webp?v=2" type="image/webp" />
+                <img 
+                  src="/images/editorial/telemetry_mission_control.jpg?v=2" 
+                  alt="Centro de telemetría en tiempo real: monitoreo transaccional y respaldo humano en fechas pico"
+                  className="w-full h-auto object-cover block"
+                  width={1376}
+                  height={768}
+                  style={{ aspectRatio: "16 / 9" }}
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+            <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
+              <strong>Fig. 4.2:</strong> Centro de operaciones en tiempo real: monitoreo de latencia al borde, tasa de aprobación de pasarela y soporte de ingeniería humano directo durante fechas comerciales pico en Colombia.
+              <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-1 uppercase tracking-wider">
+                Operaciones de Misión Crítica / The Purrpurr Dispatch
+              </span>
+            </figcaption>
+          </figure>
 
           {/* SECCIÓN V */}
           <h2 className="font-sans font-black text-2xl sm:text-3xl text-zinc-950 pt-8 tracking-tight border-t border-zinc-200">
@@ -335,13 +506,13 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
             Las empresas que liderarán sus categorías en los próximos años no tienen &ldquo;una página web&rdquo;. Tienen un <strong>sistema operativo digital</strong>. Una plataforma que sincroniza ventas, catálogo, inventario, atención por WhatsApp, fidelización y analítica en un solo núcleo propietario, veloz y sin intermediarios que muerdan sus márgenes.
           </p>
 
-          {/* FIGURA 3: TOPOLOGÍA DEL SISTEMA OPERATIVO DIGITAL */}
+          {/* FIGURA 5.0: TOPOLOGÍA DEL SISTEMA OPERATIVO DIGITAL */}
           <figure className="my-10">
             <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
               <DigitalOSGraphic />
             </div>
             <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
-              <strong>Fig. 3.0:</strong> La topología de un Sistema Operativo Digital: núcleo Next.js Edge conectado directamente a rieles bancarios, WhatsApp y contabilidad fiscal, sin intermediarios ni alquiler forzado.
+              <strong>Fig. 5.0:</strong> La topología de un Sistema Operativo Digital: núcleo Next.js Edge conectado directamente a rieles bancarios, WhatsApp y contabilidad fiscal, sin intermediarios ni alquiler forzado.
               <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-1 uppercase tracking-wider">
                 Diagrama de Arquitectura: Purrpurr Core Systems
               </span>
@@ -351,6 +522,30 @@ export const ArticleNivelIA: React.FC<ArticleNivelIAProps> = ({
           <p>
             La inteligencia artificial es el motor más potente que ha conocido la historia del software. Pero un motor de Fórmula 1 sin un chasis de ingeniería, sin frenos y sin piloto, solo sirve para estrellarse más rápido.
           </p>
+
+          {/* FIGURA 5.1: LA METÁFORA DEL CHASIS Y EL MOTOR */}
+          <figure className="my-10">
+            <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm bg-white hover:shadow-md transition-shadow">
+              <picture>
+                <source srcSet="/images/editorial/f1_engine_chassis.webp?v=2" type="image/webp" />
+                <img 
+                  src="/images/editorial/f1_engine_chassis.jpg?v=2" 
+                  alt="La metáfora del chasis y el motor: potencia generativa de la IA en un chasis de ingeniería de misión crítica"
+                  className="w-full h-auto object-cover block"
+                  width={1376}
+                  height={768}
+                  style={{ aspectRatio: "16 / 9" }}
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+            <figcaption className="mt-3 text-center text-xs font-serif italic text-zinc-600">
+              <strong>Fig. 5.1:</strong> La anatomía de un sistema de alto impacto: la potencia generativa de la IA (el motor) alojada dentro de un chasis de ingeniería con frenos criptográficos, suspensión transaccional y piloto humano.
+              <span className="not-italic font-mono text-[10px] text-zinc-400 block mt-1 uppercase tracking-wider">
+                Filosofía de Arquitectura de Software / The Purrpurr Dispatch
+              </span>
+            </figcaption>
+          </figure>
 
           <p className="font-sans font-bold text-zinc-950 pt-4">
             Esa es la diferencia entre un prototipo de treinta segundos y una empresa construida para perdurar.

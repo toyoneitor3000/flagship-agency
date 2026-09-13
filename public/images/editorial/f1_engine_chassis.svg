@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1376 768" width="1376" height="768" style="background:#FAF9F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+      <defs>
+        <filter id="shF" x="-10%" y="-10%" width="125%" height="125%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.06"/>
+        </filter>
+      </defs>
+
+      <rect width="1376" height="768" fill="#FAF9F5"/>
+
+      <!-- Header -->
+      <g transform="translate(60, 45)">
+        <text x="0" y="0" fill="#64748B" font-size="12" font-family="monospace" letter-spacing="2">THE PURRPURR DISPATCH • FILOSOFÍA DE ARQUITECTURA DE SOFTWARE</text>
+        <text x="1256" y="0" fill="#BE123C" font-size="12" font-family="monospace" letter-spacing="2" text-anchor="end" font-weight="700">FIG. 5.1 — LA METÁFORA DEL CHASIS Y EL MOTOR</text>
+        <line x1="0" y1="12" x2="1256" y2="12" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="4,4"/>
+      </g>
+
+      <!-- Title -->
+      <g transform="translate(60, 95)">
+        <text x="0" y="0" fill="#0F172A" font-size="24" font-weight="900" letter-spacing="-0.5">Un Motor de Fórmula 1 sin Chasis ni Frenos Solo Sirve para Estrellarse Más Rápido</text>
+        <text x="0" y="24" fill="#64748B" font-size="13">La descomposición anatómica entre la aceleración generativa y el blindaje estructural que exige una empresa real.</text>
+      </g>
+
+      <!-- Left Card: The Engine (AI) -->
+      <g transform="translate(60, 160)">
+        <rect width="610" height="480" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2" filter="url(#shF)"/>
+        <rect width="610" height="45" rx="14" fill="#F8FAFC"/>
+        <rect y="40" width="610" height="5" fill="#F8FAFC"/>
+        <text x="24" y="28" fill="#0F172A" font-size="13" font-weight="900">EL MOTOR: INTELIGENCIA ARTIFICIAL (POTENCIA PURA)</text>
+
+        <g transform="translate(24, 70)">
+          <text x="0" y="10" fill="#475569" font-size="12" font-family="Georgia, serif">Lo que la IA resuelve con velocidad astronómica:</text>
+
+          <g>
+            <g transform="translate(0, 30)">
+              <rect width="562" height="60" rx="6" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1"/>
+              <text x="16" y="24" fill="#3730A3" font-size="11.5" font-weight="bold">1. Aceleración de Código Repetitivo</text>
+              <text x="16" y="44" fill="#475569" font-size="10.5">Generación instantánea de componentes UI, tipado TypeScript y tests unitarios.</text>
+            </g>
+
+            <g transform="translate(0, 105)">
+              <rect width="562" height="60" rx="6" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1"/>
+              <text x="16" y="24" fill="#3730A3" font-size="11.5" font-weight="bold">2. Análisis y Síntesis de Datos</text>
+              <text x="16" y="44" fill="#475569" font-size="10.5">Categorización de catálogos masivos, optimización SEO y textos en segundos.</text>
+            </g>
+
+            <g transform="translate(0, 180)">
+              <rect width="562" height="60" rx="6" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1"/>
+              <text x="16" y="24" fill="#3730A3" font-size="11.5" font-weight="bold">3. Personalización Dinámica</text>
+              <text x="16" y="44" fill="#475569" font-size="10.5">Recomendaciones de productos contextuales basadas en la navegación del usuario.</text>
+            </g>
+
+            <g transform="translate(0, 255)">
+              <rect width="562" height="90" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+              <text x="16" y="24" fill="#64748B" font-size="10" font-family="monospace" font-weight="bold">EL LÍMITE DE LA IA PURA:</text>
+              <text x="16" y="45" fill="#7F1D1D" font-size="11" font-family="Georgia, serif">
+                La IA no tiene cuenta en Bancolombia. No sabe qué es el Estatuto Tributario 657. No paga abogados si un cliente demanda por fraude de datos personales. No asume responsabilidad civil.
+              </text>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- Right Card: The Chassis (Purrpurr Engineering) -->
+      <g transform="translate(706, 160)">
+        <rect width="610" height="480" rx="14" fill="#0F172A" stroke="#00FF9C" stroke-width="2" filter="url(#shF)"/>
+        <rect width="610" height="45" rx="14" fill="#1E293B"/>
+        <rect y="40" width="610" height="5" fill="#1E293B"/>
+        <text x="24" y="28" fill="#00FF9C" font-size="13" font-family="monospace" font-weight="900">EL CHASIS: INGENIERÍA PURRPURR (RIGOR Y CONTROL)</text>
+
+        <g transform="translate(24, 70)">
+          <text x="0" y="10" fill="#94A3B8" font-size="12" font-family="Georgia, serif">La estructura de misión crítica que permite acelerar a fondo:</text>
+
+          <g>
+            <g transform="translate(0, 30)">
+              <rect width="562" height="60" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+              <text x="16" y="24" fill="#00FF9C" font-size="11.5" font-weight="bold">1. Chasis Tubular de Titanio (Next.js App Router Edge)</text>
+              <text x="16" y="44" fill="#94A3B8" font-size="10.5">Arquitectura monolítica moderna desplegada globalmente con latencia &lt; 50ms.</text>
+            </g>
+
+            <g transform="translate(0, 105)">
+              <rect width="562" height="60" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+              <text x="16" y="24" fill="#00FF9C" font-size="11.5" font-weight="bold">2. Frenos Cerámicos Criptográficos (HMAC SHA-256)</text>
+              <text x="16" y="44" fill="#94A3B8" font-size="10.5">Imposibilita transacciones falsas; valida cada peso con Bancolombia.</text>
+            </g>
+
+            <g transform="translate(0, 180)">
+              <rect width="562" height="60" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+              <text x="16" y="24" fill="#00FF9C" font-size="11.5" font-weight="bold">3. Suspensión Activa ACID (PostgreSQL Relacional)</text>
+              <text x="16" y="44" fill="#94A3B8" font-size="10.5">Bloqueo estricto de concurrencia para evitar sobreventa en picos de tráfico.</text>
+            </g>
+
+            <g transform="translate(0, 255)">
+              <rect width="562" height="90" rx="8" fill="#064E3B" stroke="#059669" stroke-width="1"/>
+              <text x="16" y="24" fill="#00FF9C" font-size="10" font-family="monospace" font-weight="bold">EL PILOTO HUMANO:</text>
+              <text x="16" y="45" fill="#ECFDF5" font-size="11" font-family="Georgia, serif">
+                Ingenieros con nombre, apellido y teléfono que supervisan cada despliegue, responden por la integridad de tu plataforma y construyen relaciones a largo plazo.
+              </text>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- Bottom Tagline -->
+      <g transform="translate(60, 665)">
+        <rect width="1256" height="55" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+        <text x="628" y="32" fill="#0F172A" font-size="12" font-family="Georgia, serif" font-weight="bold" text-anchor="middle">
+          La tecnología sin ingeniería no es progreso; es fragilidad disfrazada de innovación.
+        </text>
+      </g>
+    </svg>

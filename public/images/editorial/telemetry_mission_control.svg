@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1376 768" width="1376" height="768" style="background:#090D16;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+      <defs>
+        <filter id="glowT" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+      </defs>
+
+      <rect width="1376" height="768" fill="#090D16"/>
+
+      <!-- Grid Matrix -->
+      <g stroke="#1E293B" stroke-width="0.7" opacity="0.6">
+        <line x1="0" y1="96" x2="1376" y2="96"/>
+        <line x1="0" y1="192" x2="1376" y2="192"/>
+        <line x1="0" y1="288" x2="1376" y2="288"/>
+        <line x1="0" y1="384" x2="1376" y2="384"/>
+        <line x1="0" y1="480" x2="1376" y2="480"/>
+        <line x1="0" y1="576" x2="1376" y2="576"/>
+        <line x1="0" y1="672" x2="1376" y2="672"/>
+      </g>
+
+      <!-- Header Top -->
+      <g transform="translate(60, 45)">
+        <circle cx="8" cy="8" r="4.5" fill="#00FF9C" filter="url(#glowT)"/>
+        <text x="24" y="12" fill="#00FF9C" font-size="11" font-family="monospace" font-weight="bold" letter-spacing="2">PURRPURR MISSION CONTROL • CENTRO DE TELEMETRÍA EN VIVO</text>
+        <text x="1256" y="12" fill="#94A3B8" font-size="11" font-family="monospace" letter-spacing="1" text-anchor="end">STATUS: OPERACIONAL (99.99%) • REGION: BOGOTÁ (CO-DC1)</text>
+        <line x1="0" y1="24" x2="1256" y2="24" stroke="#334155" stroke-width="1"/>
+      </g>
+
+      <!-- KPI Row (4 Cards) -->
+      <g transform="translate(60, 95)">
+        <!-- KPI 1 -->
+        <rect width="296" height="110" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1.2"/>
+        <g transform="translate(20, 30)">
+          <text x="0" y="0" fill="#94A3B8" font-size="10" font-family="monospace" font-weight="bold">LATENCIA EDGE P95</text>
+          <text x="0" y="38" fill="#38BDF8" font-size="32" font-weight="900" font-family="monospace">34.2 ms</text>
+          <text x="0" y="60" fill="#0284C7" font-size="10" font-family="monospace">SSR Bogotá / Medellín / Cali</text>
+        </g>
+
+        <!-- KPI 2 -->
+        <g transform="translate(320, 0)">
+          <rect width="296" height="110" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1.2"/>
+          <g transform="translate(20, 30)">
+            <text x="0" y="0" fill="#94A3B8" font-size="10" font-family="monospace" font-weight="bold">TASA DE APROBACIÓN WOMPI</text>
+            <text x="0" y="38" fill="#00FF9C" font-size="32" font-weight="900" font-family="monospace">99.82%</text>
+            <text x="0" y="60" fill="#059669" font-size="10" font-family="monospace">1,480 transacciones verificadas</text>
+          </g>
+        </g>
+
+        <!-- KPI 3 -->
+        <g transform="translate(640, 0)">
+          <rect width="296" height="110" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1.2"/>
+          <g transform="translate(20, 30)">
+            <text x="0" y="0" fill="#94A3B8" font-size="10" font-family="monospace" font-weight="bold">SINCRONIZACIÓN DIAN CUFE</text>
+            <text x="0" y="38" fill="#A855F7" font-size="32" font-weight="900" font-family="monospace">100% OK</text>
+            <text x="0" y="60" fill="#9333EA" font-size="10" font-family="monospace">0 facturas en cola / Res. 165</text>
+          </g>
+        </g>
+
+        <!-- KPI 4 -->
+        <g transform="translate(960, 0)">
+          <rect width="296" height="110" rx="12" fill="#0F172A" stroke="#334155" stroke-width="1.2"/>
+          <g transform="translate(20, 30)">
+            <text x="0" y="0" fill="#94A3B8" font-size="10" font-family="monospace" font-weight="bold">SOBREVENTAS PREVENIDAS</text>
+            <text x="0" y="38" fill="#F59E0B" font-size="32" font-weight="900" font-family="monospace">47 BLOCKED</text>
+            <text x="0" y="60" fill="#D97706" font-size="10" font-family="monospace">Bloqueo de fila ACID en pico</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Live Stream Terminal & Map -->
+      <g transform="translate(60, 230)">
+        <!-- Terminal (Left) -->
+        <rect width="780" height="420" rx="14" fill="#0B132B" stroke="#1E293B" stroke-width="1.5"/>
+        <rect width="780" height="38" rx="14" fill="#1C2541"/>
+        <rect y="34" width="780" height="4" fill="#1C2541"/>
+        <circle cx="20" cy="19" r="4.5" fill="#EF4444"/>
+        <circle cx="34" cy="19" r="4.5" fill="#F59E0B"/>
+        <circle cx="48" cy="19" r="4.5" fill="#10B981"/>
+        <text x="70" y="24" fill="#94A3B8" font-size="11" font-family="monospace">LIVE TRANSACTION STREAM • NEXT.JS EDGE TELEMETRY</text>
+
+        <g transform="translate(20, 60)" font-family="monospace" font-size="11" fill="#E2E8F0">
+          <text x="0" y="15"><tspan fill="#64748B">[18:14:02.112]</tspan> <tspan fill="#38BDF8">INCOMING_POST</tspan> /api/webhooks/wompi <tspan fill="#10B981">200 OK (38ms)</tspan></text>
+          <text x="20" y="35" fill="#94A3B8">↳ tran_id: "tr_live_891823" • amount: $450.000 COP • hash: VALIDATED OK</text>
+          <text x="20" y="55" fill="#00FF9C">↳ ACID LOCK: sku_leather_jacket_m (Stock 2 → 1) • DIAN XML UBL 2.1 SIGNED</text>
+
+          <line x1="0" y1="75" x2="740" y2="75" stroke="#1E293B" stroke-width="1"/>
+
+          <text x="0" y="100"><tspan fill="#64748B">[18:14:02.120]</tspan> <tspan fill="#F59E0B">COLLISION_AVOIDED</tspan> /api/checkout/reserve <tspan fill="#F59E0B">409 CONFLICT</tspan></text>
+          <text x="20" y="120" fill="#94A3B8">↳ Client from Medellín attempted last unit concurrently. ACID Row-Lock prevented duplicate payment.</text>
+          <text x="20" y="140" fill="#A855F7">↳ WhatsApp Bot triggered alternative variant suggestion to customer.</text>
+
+          <line x1="0" y1="160" x2="740" y2="160" stroke="#1E293B" stroke-width="1"/>
+
+          <text x="0" y="185"><tspan fill="#64748B">[18:14:08.450]</tspan> <tspan fill="#38BDF8">INCOMING_POST</tspan> /api/webhooks/wompi <tspan fill="#10B981">200 OK (29ms)</tspan></text>
+          <text x="20" y="205" fill="#94A3B8">↳ tran_id: "tr_live_891824" • amount: $120.000 COP • PSE Bancolombia Clearing</text>
+          <text x="20" y="225" fill="#00FF9C">↳ Settlement queued for direct bank deposit in 24h. Zero third-party fees.</text>
+
+          <line x1="0" y1="245" x2="740" y2="245" stroke="#1E293B" stroke-width="1"/>
+
+          <text x="0" y="270"><tspan fill="#64748B">[18:14:15.890]</tspan> <tspan fill="#10B981">DIAN_VPFE_ACK</tspan> SOAP Response from Bogotá Tax Authority</text>
+          <text x="20" y="290" fill="#94A3B8">↳ CUFE: 99a8f238b1e09c81726a84... • Factura legal registrada sin observaciones.</text>
+
+          <rect y="315" width="740" height="30" rx="4" fill="#1C2541"/>
+          <text x="370" y="335" fill="#00FF9C" font-size="10" font-family="monospace" text-anchor="middle">SISTEMA CORRIENDO EN ALTA VELOCIDAD • 0 ADVERTENCIAS EN BITÁCORA</text>
+        </g>
+      </g>
+
+      <!-- Right Human Command Shield -->
+      <g transform="translate(860, 230)">
+        <rect width="456" height="420" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5"/>
+        <rect width="456" height="38" rx="14" fill="#1E293B"/>
+        <rect y="34" width="456" height="4" fill="#1E293B"/>
+        <text x="20" y="24" fill="#FFFFFF" font-size="11" font-family="monospace" font-weight="bold">EL RESPALDO HUMANO EN HORAS PICO</text>
+
+        <g transform="translate(24, 60)">
+          <text x="0" y="15" fill="#F8FAFC" font-size="14" font-weight="900">Black Friday, CyberLunes y Días Sin IVA</text>
+          <text x="0" y="40" fill="#94A3B8" font-size="12" font-family="Georgia, serif">
+            Cuando tu tienda procesa cincuenta compras por minuto, no puedes esperar a que un chatbot de soporte en inglés te responda en 48 horas.
+          </text>
+
+          <rect y="65" width="408" height="100" rx="8" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+          <g transform="translate(16, 85)" font-family="monospace" font-size="11">
+            <text x="0" y="5" fill="#38BDF8">HOTLINE INGENIERO PURRPURR ASIGNADO:</text>
+            <text x="0" y="25" fill="#FFFFFF">Línea de WhatsApp y celular directa.</text>
+            <text x="0" y="45" fill="#00FF9C">Tiempo de respuesta ante incidentes: &lt; 5 min.</text>
+            <text x="0" y="65" fill="#94A3B8">Monitoreo activo de logs y balance transaccional.</text>
+          </g>
+
+          <rect y="180" width="408" height="155" rx="8" fill="#064E3B" stroke="#059669" stroke-width="1.2"/>
+          <g transform="translate(16, 205)">
+            <text x="0" y="5" fill="#00FF9C" font-size="12" font-family="monospace" font-weight="bold">GARANTÍA PURRPURR:</text>
+            <text x="0" y="30" fill="#FFFFFF" font-size="11.5" font-family="Georgia, serif">
+              "El cliente no paga únicamente por el código de software; paga por la certeza de que su dinero y sus transacciones están custodiadas por un equipo de ingeniería que responde su llamada cuando el dinero está en juego."
+            </text>
+            <text x="0" y="90" fill="#A7F3D0" font-size="11" font-family="monospace" font-weight="bold">— Camilo Toloza, Fundador</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Bottom Bar -->
+      <g transform="translate(60, 675)">
+        <rect width="1256" height="50" rx="8" fill="#0F172A" stroke="#1E293B" stroke-width="1"/>
+        <text x="628" y="31" fill="#94A3B8" font-size="11" font-family="monospace" text-anchor="middle">
+          CENTRO DE OPERACIONES PURRPURR • VIGILANCIA CRIPTOGRÁFICA 24/7/365
+        </text>
+      </g>
+    </svg>
