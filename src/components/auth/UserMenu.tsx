@@ -3,7 +3,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from 'next/link';
-import { LogOut, User, Settings, LayoutDashboard, ChevronDown, ArrowRightLeft, Sparkles } from "lucide-react";
+import { LogOut, User, Settings, LayoutDashboard, ChevronDown, ArrowRightLeft, Sparkles, CheckSquare } from "lucide-react";
 import { useState, useRef, useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import { useRouter } from 'next/navigation';
@@ -108,14 +108,24 @@ export const UserMenu = ({ iconOnly = false }: { iconOnly?: boolean }) => {
                         {/* Navigation Links */}
                         <div className="p-2 space-y-1">
                             {session.user.role === 'admin' && (
-                                <Link
-                                    href="/cockpit/proposals"
-                                    className="flex items-center gap-3 px-3 py-2 text-sm text-indigo-300 hover:text-white hover:bg-indigo-950/30 rounded-lg transition-colors font-medium"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    <Sparkles className="w-4 h-4 text-indigo-400" />
-                                    <span>Generador Propuestas</span>
-                                </Link>
+                                <>
+                                    <Link
+                                        href="/cockpit/roadmap"
+                                        className="flex items-center gap-3 px-3 py-2 text-sm text-emerald-300 hover:text-white hover:bg-emerald-950/30 rounded-lg transition-colors font-medium"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        <CheckSquare className="w-4 h-4 text-emerald-400" />
+                                        <span>Checklist Laboratorio</span>
+                                    </Link>
+                                    <Link
+                                        href="/cockpit/proposals"
+                                        className="flex items-center gap-3 px-3 py-2 text-sm text-indigo-300 hover:text-white hover:bg-indigo-950/30 rounded-lg transition-colors font-medium"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        <Sparkles className="w-4 h-4 text-indigo-400" />
+                                        <span>Generador Propuestas</span>
+                                    </Link>
+                                </>
                             )}
 
                             <Link
