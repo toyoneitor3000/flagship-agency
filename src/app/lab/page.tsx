@@ -268,25 +268,6 @@ export default function PurrpurrTestPage() {
                                     </div>
                                 </div>
                             </Link>
-
-                            <Link href="/cockpit/roadmap" className="md:col-span-6 lg:col-span-4 group relative bg-zinc-900/40 backdrop-blur-sm border border-emerald-500/20 rounded-3xl overflow-hidden hover:border-emerald-500/60 transition-all duration-500 hover:bg-zinc-900/60 hover:shadow-[0_0_50px_rgba(16,185,129,0.15)]">
-                                <div className="absolute top-0 right-0 p-6 opacity-40 group-hover:opacity-100 transition-opacity"><CheckCircle className="w-6 h-6 text-emerald-400" /></div>
-                                <div className="p-8 h-full flex flex-col justify-between min-h-[280px]">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                            <h3 className="font-mono text-[10px] text-emerald-400 uppercase tracking-widest">Master Plan / 8 Semanas</h3>
-                                        </div>
-                                        <h2 className="text-3xl font-bold text-white mb-4 group-hover:translate-x-1 transition-transform">Checklist Lab</h2>
-                                        <p className="text-sm text-zinc-400 leading-relaxed font-mono">
-                                            {'>'} Matriz de ejecución interactiva: 4 fases, 16 hitos críticos y tracking en tiempo real.
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-400 group-hover:text-emerald-300 transition-colors uppercase tracking-wider">
-                                        <span>Abrir_Checklist</span> <Play className="w-3 h-3" />
-                                    </div>
-                                </div>
-                            </Link>
                         </>
                     )}
                 </div>
