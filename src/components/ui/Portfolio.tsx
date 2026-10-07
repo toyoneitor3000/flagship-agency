@@ -16,6 +16,24 @@ const projects = [
         color: 'from-orange-500 to-red-600'
     },
     {
+        title: 'Ofiro',
+        category: 'Luxury Jewelry',
+        description: 'Joyería contemporánea europea.',
+        role: 'Arquitectura digital y experiencia e-commerce de ultra lujo para joyería contemporánea europea, con curaduría visual, pasarela de pagos y narrativa de marca refinada.',
+        image: '/portfolio/ofiroicon.png',
+        link: 'https://ofiro.co',
+        color: 'from-amber-400 to-yellow-600'
+    },
+    {
+        title: 'Híbrido Lab',
+        category: 'Circular Tech',
+        description: 'Laboratorio creativo y suprareciclaje.',
+        role: 'Plataforma multipágina interactiva con visor 3D, marketplace circular de suprareciclaje y experiencia de usuario inmersiva para marcas sostenibles.',
+        image: '/portfolio/hibridoicon.png',
+        link: 'https://laboratoriohibrido.com',
+        color: 'from-cyan-400 to-rose-500'
+    },
+    {
         title: 'Pigmentos TKRS',
         category: 'E-commerce',
         description: 'Tienda de stickers y arte urbano.',

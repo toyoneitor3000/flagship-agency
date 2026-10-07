@@ -16,7 +16,7 @@ export const Hero = () => {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={ref} className="relative w-full h-screen min-h-[800px] flex items-center overflow-hidden bg-[#050011]">
+    <section ref={ref} data-section-theme="dark" className="relative w-full h-screen min-h-[800px] flex items-center overflow-hidden bg-[#050011]">
 
       {/* Background Elements - Windows Fluent OS Bloom Wallpaper */}
       <div className="absolute inset-0 z-0 overflow-hidden">

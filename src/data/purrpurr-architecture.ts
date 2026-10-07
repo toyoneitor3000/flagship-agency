@@ -75,6 +75,24 @@ export const MULTIVERSE_PROJECTS: MultiverseProject[] = [
         orbitRadius: 42,
         orbitSpeed: 0.04,
         color: '#ec4899' // Pink
+    },
+    {
+        id: 'p-7',
+        name: 'Ofiro',
+        description: 'Joyería contemporánea europea de ultra lujo.',
+        type: 'startup',
+        orbitRadius: 46,
+        orbitSpeed: 0.07,
+        color: '#f59e0b' // Amber/Gold
+    },
+    {
+        id: 'p-8',
+        name: 'Híbrido Lab',
+        description: 'Laboratorio creativo y suprareciclaje circular.',
+        type: 'startup',
+        orbitRadius: 50,
+        orbitSpeed: 0.09,
+        color: '#06b6d4' // Cyan
     }
 ];
 

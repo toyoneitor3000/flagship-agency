@@ -17,7 +17,7 @@ export const Navbar = () => {
   // Scroll detection removed as requested for consistent sizing
   const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [navTheme, setNavTheme] = useState<'light' | 'dark'>('light'); // 'light' = Light Background (needs dark text)
+  const [navTheme, setNavTheme] = useState<'light' | 'dark'>('dark'); // 'dark' = Dark Background (light text by default)
   const pathname = usePathname();
   const router = useRouter();
 
@@ -88,9 +88,11 @@ export const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   // Derived styles based on theme
-  const textColorClass = navTheme === 'light' ? 'text-[#022C22]' : 'text-zinc-100'; // Dark text on light bg, Light text on dark bg
-  const hoverColorClass = navTheme === 'light' ? 'hover:text-[#6D28D9]' : 'hover:text-[#00FF9C]';
-  const buttonBorderClass = navTheme === 'light' ? 'border-[#6D28D9] text-[#6D28D9] hover:bg-[#6D28D9] hover:text-white' : 'border-zinc-100 text-zinc-100 hover:border-[#00FF9C] hover:text-[#00FF9C] hover:bg-zinc-950';
+  const textColorClass = navTheme === 'light' ? 'text-zinc-900 font-semibold' : 'text-zinc-100 font-medium'; // Dark text on light bg, Light text on dark bg
+  const hoverColorClass = navTheme === 'light' ? 'hover:text-purple-700' : 'hover:text-purple-300';
+  const buttonBorderClass = navTheme === 'light'
+    ? 'border-purple-700 bg-purple-700/10 text-purple-900 hover:bg-purple-700 hover:text-white'
+    : 'border-purple-400/80 bg-purple-500/20 text-purple-200 hover:bg-purple-600 hover:text-white hover:border-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.35)]';
 
 
 
@@ -104,7 +106,7 @@ export const Navbar = () => {
           'fixed top-0 w-full z-[100] transition-all duration-300 border-b flex items-center',
           'h-[calc(3.5rem+env(safe-area-inset-top))] pt-[env(safe-area-inset-top)]', // Dynamic adaptation for all iPhone models (11, 12, 13, 14, 15, 17...)
           // Premium Glass properties
-          'bg-zinc-950/30 dark:bg-zinc-950/50', // Darker glass effect for better contrast and match with notifications
+          'bg-zinc-950/60 dark:bg-zinc-950/80', // Darker glass effect for high contrast and legibility
           'backdrop-blur-xl', // More intense blur for premium feel
           'border-white/10 shadow-2xl'
         )
@@ -115,9 +117,10 @@ export const Navbar = () => {
             <button
               className={cn(
                 'lg:hidden p-2 -ml-2 rounded-md transition-colors',
-                navTheme === 'light' ? 'text-[#6D28D9] hover:bg-purple-50' : 'text-zinc-100 hover:bg-white/10'
+                navTheme === 'light' ? 'text-zinc-900 hover:bg-black/5' : 'text-zinc-100 hover:bg-white/10'
               )}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Abrir menú"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -138,36 +141,39 @@ export const Navbar = () => {
 
           <div className="col-span-1 lg:col-span-9 flex justify-end items-center gap-4">
             <nav className='hidden lg:flex items-center gap-6'>
-              <Link href='#features' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='#features' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 Servicios
               </Link>
-              <Link href='/demo' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='/demo' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 Demo
               </Link>
-              <Link href='/academy' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='/academy' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 Academy
               </Link>
-              <Link href='/lab' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='/lab' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 Lab
               </Link>
-              <Link href='/purrpurr' className={cn('text-sm font-medium transition-colors hover:text-purple-400 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400')}>
+              <Link href='/purrpurr' className={cn('text-sm font-semibold transition-colors hover:opacity-80 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-400 to-indigo-300')}>
                 Purrpurr
               </Link>
-              <Link href='/wiki' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='/wiki' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 Wiki
               </Link>
-              <Link href='/news' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='/news' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 News
               </Link>
-              <Link href='#invitation' className={cn('text-sm font-medium transition-colors hover:text-purple-400', textColorClass)}>
+              <Link href='#invitation' className={cn('text-sm transition-colors', textColorClass, hoverColorClass)}>
                 Contacto
               </Link>
-              <button className={cn(
-                'px-4 py-2 rounded-full text-xs font-bold border transition-all shadow-[0_0_15px_rgba(109,40,217,0.3)] hover:shadow-[0_0_25px_rgba(109,40,217,0.5)] active:scale-95',
-                buttonBorderClass
-              )}>
+              <Link
+                href="/cockpit/proposals"
+                className={cn(
+                  'px-4 py-2 rounded-full text-xs font-bold border transition-all active:scale-95 inline-flex items-center justify-center',
+                  buttonBorderClass
+                )}
+              >
                 COTIZAR
-              </button>
+              </Link>
 
               {session && <NotificationList iconColorClass={cn(textColorClass, hoverColorClass)} />}
               <UserMenu />

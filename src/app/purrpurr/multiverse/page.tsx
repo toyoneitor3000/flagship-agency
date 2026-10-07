@@ -69,6 +69,22 @@ const MULTIVERSE_WORLDS: MultiverseWorld[] = [
         status: 'offline',
         buildingLevels: 3,
     },
+    {
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-7') || MULTIVERSE_PROJECTS[0]),
+        productionUrl: 'https://ofiro.co',
+        localUrl: 'http://localhost:3006',
+        framework: 'Next.js 15',
+        status: 'production',
+        buildingLevels: 12,
+    },
+    {
+        ...(MULTIVERSE_PROJECTS.find(p => p.id === 'p-8') || MULTIVERSE_PROJECTS[0]),
+        productionUrl: 'https://laboratoriohibrido.com',
+        localUrl: 'http://localhost:3007',
+        framework: 'Next.js 15',
+        status: 'production',
+        buildingLevels: 16,
+    },
 ];
 
 // =============================================================================
