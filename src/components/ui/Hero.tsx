@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { MagicText } from '@/components/magic/MagicText';
 
@@ -17,10 +18,18 @@ export const Hero = () => {
   return (
     <section ref={ref} className="relative w-full h-screen min-h-[800px] flex items-center overflow-hidden bg-[#050011]">
 
-      {/* Background Elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[#0f0033]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0f0033]/85 to-[#0f0033]/30" />
+      {/* Background Elements - Windows Fluent OS Bloom Wallpaper */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <Image
+          src="/images/purrpurr-os-wallpaper.jpg"
+          alt="Purrpurr OS Wallpaper"
+          fill
+          priority
+          className="object-cover object-center lg:object-[68%_center] opacity-95 scale-105"
+        />
+        {/* Directional gradient overlays for text readability & smooth section blending */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050011]/95 via-[#050011]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050011] via-transparent to-[#050011]/50" />
       </div>
 
       {/* Content - Left Aligned, Vertically Centered */}
