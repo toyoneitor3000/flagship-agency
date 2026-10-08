@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useRef } from 'react';
-import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { MagicText } from '@/components/magic/MagicText';
+import { LivingAIEntity } from '@/components/ui/LivingAIEntity';
 
 export const Hero = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -12,59 +12,52 @@ export const Hero = () => {
     offset: ["start start", "end start"]
   });
 
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 0.7], [0, -320]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
+  const contentScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.94]);
 
   return (
     <section ref={ref} data-section-theme="dark" className="relative w-full h-screen min-h-[800px] flex items-center overflow-hidden bg-[#050011]">
 
-      {/* Background Elements - Windows Fluent OS Bloom Wallpaper */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <Image
-          src="/images/purrpurr-os-wallpaper.jpg"
-          alt="Purrpurr OS Wallpaper"
-          fill
-          priority
-          className="object-cover object-center lg:object-[68%_center] opacity-95 scale-105"
-        />
-        {/* Directional gradient overlays for text readability & smooth section blending */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050011]/95 via-[#050011]/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050011] via-transparent to-[#050011]/50" />
-      </div>
+      {/* Living AI Entity - Procedural Real-Time WebGL Shader (Wind-Molded, Siri-like living bot) */}
+      <LivingAIEntity interactive={true} intensity={1.0} showStatusIndicator={false} />
 
       {/* Content - Left Aligned, Vertically Centered */}
       <div className="container mx-auto px-8 md:px-16 relative z-10">
         <motion.div
           className='max-w-4xl'
-          style={{ y: contentY, opacity: contentOpacity }}
+          style={{ y: contentY, opacity: contentOpacity, scale: contentScale }}
         >
           {/* Eyebrow */}
           <motion.div
-            className="mb-6"
+            className="mb-6 flex flex-wrap items-center gap-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            <span className="font-mono text-sm md:text-base tracking-widest text-[#8f69ff] uppercase font-bold">
+            <span className="font-mono text-sm md:text-base tracking-widest text-[#a882ff] uppercase font-bold drop-shadow-[0_0_12px_rgba(168,130,255,0.4)]">
               purrpurr.dev — Software Empresarial
             </span>
           </motion.div>
 
           {/* Title - Left Aligned */}
           <motion.h1
-            className='font-unbounded font-medium tracking-tight text-white mb-8'
+            className='font-unbounded font-semibold tracking-tight text-white mb-8'
             style={{
               fontSize: 'clamp(2.5rem, 5vw, 5rem)',
               letterSpacing: '-0.02em',
               lineHeight: '1.05',
-              textShadow: '0 0 20px rgba(143, 105, 255, 0.2)',
+              textShadow: '0 0 35px rgba(168, 130, 255, 0.35), 0 4px 16px rgba(0,0,0,0.9)',
             }}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <MagicText id="hero.title_1_v16" defaultText="Control Total" /><br />
-            <span className="text-[#8f69ff]">
+            <span className="text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+              <MagicText id="hero.title_1_v16" defaultText="Control Total" />
+            </span>
+            <br />
+            <span className="text-[#a882ff] drop-shadow-[0_0_25px_rgba(168,130,255,0.5)]">
               <MagicText id="hero.title_2_v16" defaultText="De Tu Operación" />
             </span>
           </motion.h1>
@@ -77,7 +70,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
           >
             <p
-              className='font-medium text-zinc-100 leading-relaxed'
+              className='font-medium text-white/90 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]'
               style={{
                 fontSize: 'clamp(1.125rem, 1.5vw, 1.35rem)',
                 letterSpacing: '0.01em',
