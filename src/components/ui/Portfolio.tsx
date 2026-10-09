@@ -30,7 +30,7 @@ const projects = [
         description: 'Laboratorio creativo y suprareciclaje.',
         role: 'Plataforma multipágina interactiva con visor 3D, marketplace circular de suprareciclaje y experiencia de usuario inmersiva para marcas sostenibles.',
         image: '/portfolio/hibridoicon.png',
-        link: 'https://laboratoriohibrido.com',
+        link: 'https://www.laboratoriohibrido.com/',
         color: 'from-cyan-400 to-rose-500'
     },
     {
