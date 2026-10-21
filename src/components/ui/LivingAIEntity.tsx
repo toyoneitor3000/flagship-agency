@@ -454,9 +454,9 @@ export const LivingAIEntity: React.FC<LivingAIEntityProps> = ({
         style={{ width: '100%', height: '100%' }}
       />
 
-      {/* Directional Soft Lighting & Contrast Enforcers (protects typography on the left) */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#050011]/90 via-[#050011]/35 to-transparent pointer-events-none" />
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#050011]/85 via-transparent to-[#050011]/50 pointer-events-none" />
+      {/* Directional Soft Lighting & Contrast Enforcers - strictly behind text (z-[1]) */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#050011]/90 via-[#050011]/35 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#050011]/85 via-transparent to-[#050011]/50 pointer-events-none" />
 
       {/* High-Tech Operational Telemetry Badge ("inteligencia artificial para la gestión operativa en vivo") */}
       {showStatusIndicator && (

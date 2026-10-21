@@ -29,9 +29,7 @@ export const LoadingScreen = () => {
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="fixed inset-0 z-[9999] bg-zinc-950 flex items-center justify-center pointer-events-none"
                 >
-                    <div className="scale-150">
-                        <PurrpurrLoader />
-                    </div>
+                    <PurrpurrLoader />
                 </motion.div>
             )}
         </AnimatePresence>

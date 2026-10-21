@@ -20,10 +20,12 @@ export const Hero = () => {
     <section ref={ref} data-section-theme="dark" className="relative w-full h-screen min-h-[800px] flex items-center overflow-hidden bg-[#050011]">
 
       {/* Living AI Entity - Procedural Real-Time WebGL Shader (Wind-Molded, Siri-like living bot) */}
-      <LivingAIEntity interactive={true} intensity={1.0} showStatusIndicator={false} />
+      <div className="absolute inset-0 z-0">
+        <LivingAIEntity interactive={true} intensity={1.0} showStatusIndicator={false} />
+      </div>
 
       {/* Content - Left Aligned, Vertically Centered */}
-      <div className="container mx-auto px-8 md:px-16 relative z-10">
+      <div className="container mx-auto px-8 md:px-16 relative z-30">
         <motion.div
           className='max-w-4xl'
           style={{ y: contentY, opacity: contentOpacity, scale: contentScale }}
