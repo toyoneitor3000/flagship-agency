@@ -134,6 +134,38 @@ export default function SpeedlightPartnerPage() {
                     </div>
                 </motion.div>
 
+                {/* Cotización Activa en Alianza */}
+                <div className="bg-zinc-900/60 border border-[#00FF9C]/30 rounded-3xl p-6 md:p-8 mb-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div className="space-y-1.5">
+                        <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#00FF9C] block">
+                            Propuesta Sincronizada · #PROP-JL-2026-094
+                        </span>
+                        <h3 className="text-xl font-bold text-white">
+                            Cotización Oficial en Alianza: Sistema de Cotizaciones, Agenda &amp; Dispersión Wompi
+                        </h3>
+                        <p className="text-sm text-zinc-400">
+                            Julián Lotero · Bogotá Detail Center — Mismo pliego ejecutivo A4 sincronizado entre purrpurr.dev y Speedlight Culture ($800.000 Etapa 1 / $1.800.000 Sistema Integral).
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 shrink-0">
+                        <Link
+                            href="/proposals/prop-jl-2026-094"
+                            className="inline-flex items-center gap-2 bg-[#00FF9C] hover:bg-[#00dda0] text-zinc-950 font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all"
+                        >
+                            Ver Cotización #PROP-JL-2026-094
+                        </Link>
+                        <a
+                            href="https://speedlightculture.com/cotizaciones?id=PROP-JL-2026-094"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs uppercase tracking-wider px-4 py-3 rounded-xl border border-zinc-700 transition-all"
+                        >
+                            Abrir en Speedlight
+                            <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                    </div>
+                </div>
+
                 {/* Steps */}
                 <div className="max-w-3xl mx-auto">
                     <h3 className="text-center font-bold text-xl mb-12">¿Cómo reclamar tu beneficio?</h3>

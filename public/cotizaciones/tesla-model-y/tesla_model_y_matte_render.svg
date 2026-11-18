@@ -1,0 +1,124 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111113"/>
+      <stop offset="50%" stop-color="#18191C"/>
+      <stop offset="100%" stop-color="#0C0908"/>
+    </linearGradient>
+    <linearGradient id="carMatte" x1="0" y1="0" x2="1" y2="0.8">
+      <stop offset="0%" stop-color="#2C2D30"/>
+      <stop offset="40%" stop-color="#1A1B1D"/>
+      <stop offset="80%" stop-color="#121315"/>
+      <stop offset="100%" stop-color="#080809"/>
+    </linearGradient>
+    <linearGradient id="glassTint" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A0B0D" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#1E2229" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="rimGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3A3B3E"/>
+      <stop offset="50%" stop-color="#1B1C1E"/>
+      <stop offset="100%" stop-color="#0C0D0E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Studio -->
+  <rect width="1200" height="600" fill="url(#bgGrad)"/>
+  <ellipse cx="600" cy="490" rx="540" ry="35" fill="#000000" opacity="0.75" filter="blur(15px)"/>
+
+  <!-- Technical Grid lines subtle -->
+  <path d="M50 100 H1150 M50 200 H1150 M50 300 H1150 M50 400 H1150 M50 500 H1150" stroke="#FF9800" stroke-opacity="0.05" stroke-dasharray="4,8"/>
+  <path d="M200 50 V550 M400 50 V550 M600 50 V550 M800 50 V550 M1000 50 V550" stroke="#FF9800" stroke-opacity="0.05" stroke-dasharray="4,8"/>
+
+  <!-- Header Info Vector -->
+  <text x="60" y="65" fill="#FFF8F0" font-family="system-ui, sans-serif" font-size="24" font-weight="900" letter-spacing="1">TESLA MODEL Y</text>
+  <text x="245" y="65" fill="#FF9800" font-family="monospace" font-size="14" font-weight="bold" letter-spacing="2">· SPEC SHEET &amp; COLOR CHANGE</text>
+  <text x="60" y="90" fill="#8E8885" font-family="system-ui, sans-serif" font-size="12">Configuración Técnica: Forrado Integral Satin / Deep Matte Finish (Avery, Hexis &amp; TeckWrap PPF)</text>
+
+  <!-- Side Silhouette Tesla Model Y -->
+  <g transform="translate(80, 110)">
+    <!-- Main Body Mesh -->
+    <path d="M 120 340 
+             C 140 335, 180 280, 260 270 
+             C 320 230, 420 160, 560 145 
+             C 700 130, 810 165, 890 230 
+             C 940 270, 970 310, 990 340 
+             L 980 370 
+             C 960 380, 930 380, 910 380 
+             C 890 320, 770 320, 750 380 
+             L 390 380 
+             C 370 320, 250 320, 230 380 
+             L 100 380 
+             C 90 365, 100 345, 120 340 Z" 
+          fill="url(#carMatte)" stroke="#404348" stroke-width="2.5"/>
+
+    <!-- Greenhouse / Glass Canopy -->
+    <path d="M 360 265 
+             C 430 195, 520 160, 620 155 
+             C 720 150, 790 180, 850 235 
+             L 800 240 
+             C 740 195, 680 175, 600 175 
+             C 520 175, 450 205, 390 265 Z" 
+          fill="url(#glassTint)" stroke="#26282B" stroke-width="1.5"/>
+
+    <!-- Side Windows B-pillar & C-pillar Cutouts -->
+    <path d="M 400 260 C 450 210, 500 185, 560 180 L 560 260 Z" fill="url(#glassTint)" opacity="0.85"/>
+    <path d="M 575 180 C 640 180, 710 200, 765 240 L 730 260 L 575 260 Z" fill="url(#glassTint)" opacity="0.85"/>
+    <path d="M 775 242 C 810 250, 835 255, 845 260 L 755 260 Z" fill="url(#glassTint)" opacity="0.85"/>
+
+    <!-- Body Lines & Door Seams -->
+    <path d="M 270 275 C 380 270, 520 280, 680 265 C 780 255, 880 280, 940 310" fill="none" stroke="#333538" stroke-width="1.5"/>
+    <path d="M 565 180 L 565 375" fill="none" stroke="#2A2C2F" stroke-width="2"/>
+    <path d="M 740 240 L 740 375" fill="none" stroke="#2A2C2F" stroke-width="2"/>
+    <path d="M 385 270 L 385 375" fill="none" stroke="#2A2C2F" stroke-width="2"/>
+
+    <!-- Flush Door Handles (Tesla Signature) -->
+    <rect x="510" y="278" width="32" height="6" rx="3" fill="#111214" stroke="#383A3E" stroke-width="1"/>
+    <rect x="685" y="278" width="32" height="6" rx="3" fill="#111214" stroke="#383A3E" stroke-width="1"/>
+
+    <!-- Headlight & Taillight -->
+    <path d="M 130 335 C 160 325, 200 320, 215 320 L 205 330 Z" fill="#A4C8E1" opacity="0.75" filter="drop-shadow(0 0 4px #64B5F6)"/>
+    <path d="M 960 320 C 975 325, 985 335, 985 340 L 965 345 Z" fill="#EF5350" opacity="0.85" filter="drop-shadow(0 0 4px #D32F2F)"/>
+
+    <!-- Front Wheel Assembly -->
+    <g transform="translate(240, 380)">
+      <circle cx="0" cy="0" r="65" fill="#080809" stroke="#222325" stroke-width="4"/>
+      <circle cx="0" cy="0" r="48" fill="url(#rimGrad)" stroke="#404348" stroke-width="2"/>
+      <!-- Uberturbine Spokes Style -->
+      <line x1="0" y1="-44" x2="0" y2="44" stroke="#55585D" stroke-width="4"/>
+      <line x1="-44" y1="0" x2="44" y2="0" stroke="#55585D" stroke-width="4"/>
+      <line x1="-31" y1="-31" x2="31" y2="31" stroke="#55585D" stroke-width="4"/>
+      <line x1="-31" y1="31" x2="31" y2="-31" stroke="#55585D" stroke-width="4"/>
+      <circle cx="0" cy="0" r="14" fill="#18191C" stroke="#6E727A" stroke-width="1.5"/>
+      <!-- Red Performance Caliper -->
+      <path d="M -24 -24 C -30 -15, -30 0, -26 15" fill="none" stroke="#E53935" stroke-width="7" stroke-linecap="round"/>
+    </g>
+
+    <!-- Rear Wheel Assembly -->
+    <g transform="translate(820, 380)">
+      <circle cx="0" cy="0" r="65" fill="#080809" stroke="#222325" stroke-width="4"/>
+      <circle cx="0" cy="0" r="48" fill="url(#rimGrad)" stroke="#404348" stroke-width="2"/>
+      <!-- Uberturbine Spokes Style -->
+      <line x1="0" y1="-44" x2="0" y2="44" stroke="#55585D" stroke-width="4"/>
+      <line x1="-44" y1="0" x2="44" y2="0" stroke="#55585D" stroke-width="4"/>
+      <line x1="-31" y1="-31" x2="31" y2="31" stroke="#55585D" stroke-width="4"/>
+      <line x1="-31" y1="31" x2="31" y2="-31" stroke="#55585D" stroke-width="4"/>
+      <circle cx="0" cy="0" r="14" fill="#18191C" stroke="#6E727A" stroke-width="1.5"/>
+      <!-- Red Performance Caliper -->
+      <path d="M -24 -24 C -30 -15, -30 0, -26 15" fill="none" stroke="#E53935" stroke-width="7" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Technical Footer Badge & Spec Callouts -->
+  <rect x="60" y="515" width="280" height="45" rx="8" fill="#161719" stroke="#2E3034" stroke-width="1"/>
+  <text x="80" y="535" fill="#FF9800" font-family="monospace" font-size="10" font-weight="bold">DISPERSIÓN TÉCNICA OFICIAL</text>
+  <text x="80" y="550" fill="#B0A8A4" font-family="system-ui, sans-serif" font-size="11">15% SL Media + 10% SL Works</text>
+
+  <rect x="360" y="515" width="320" height="45" rx="8" fill="#161719" stroke="#2E3034" stroke-width="1"/>
+  <text x="380" y="535" fill="#4ADE80" font-family="monospace" font-size="10" font-weight="bold">COBERTURA &amp; METRAJE</text>
+  <text x="380" y="550" fill="#B0A8A4" font-family="system-ui, sans-serif" font-size="11">Avery (22m) · Hexis (24m) · TeckWrap (15-18m)</text>
+
+  <rect x="700" y="515" width="440" height="45" rx="8" fill="#161719" stroke="#2E3034" stroke-width="1"/>
+  <text x="720" y="535" fill="#60A5FA" font-family="monospace" font-size="10" font-weight="bold">RESPALDO &amp; GARANTÍA HOMOLOGADA</text>
+  <text x="720" y="550" fill="#B0A8A4" font-family="system-ui, sans-serif" font-size="11">Taller Oficial Speedlight Works · Bogotá D.C.</text>
+</svg>
