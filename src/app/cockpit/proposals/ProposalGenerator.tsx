@@ -20,7 +20,7 @@ import { ACTIVE_PROPOSAL } from '@/config/active-proposal';
 const A4_WIDTH = 820;
 const A4_HEIGHT = 1160;
 const OFFICIAL_VECTOR_PDF_URL =
-  '/cotizaciones/PROPUESTA_JULIAN_LOTERO_PROP-JL-2026-094_2026-10-29.pdf';
+  '/cotizaciones/PROPUESTA_JULIAN_LOTERO_PROP-JL-2026-094_2026-10-29.pdf?v=20261117-v5';
 
 function VectorArrow({
   direction = 'ne',
