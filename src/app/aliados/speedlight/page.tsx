@@ -144,7 +144,7 @@ export default function SpeedlightPartnerPage() {
                             Cotización Oficial en Alianza: Sistema de Cotizaciones, Agenda &amp; Dispersión Wompi
                         </h3>
                         <p className="text-sm text-zinc-400">
-                            Julián Lotero · Bogotá Detail Center — Mismo pliego ejecutivo A4 sincronizado entre purrpurr.dev y Speedlight Culture ($800.000 Etapa 1 / $1.800.000 Sistema Integral).
+                            Julián Lotero · Marca Independiente — Mismo pliego ejecutivo A4 sincronizado entre purrpurr.dev y Speedlight Culture ($800.000 Etapa 1 / $1.800.000 Sistema Integral).
                         </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3 shrink-0">

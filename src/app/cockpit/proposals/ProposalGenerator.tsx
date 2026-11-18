@@ -20,7 +20,7 @@ import { ACTIVE_PROPOSAL } from '@/config/active-proposal';
 const A4_WIDTH = 820;
 const A4_HEIGHT = 1160;
 const OFFICIAL_VECTOR_PDF_URL =
-  '/cotizaciones/PROPUESTA_JULIAN_LOTERO_PROP-JL-2026-094_2026-10-29.pdf?v=20261117-v5';
+  '/cotizaciones/PROPUESTA_JULIAN_LOTERO_PROP-JL-2026-094_2026-10-29.pdf?v=20261117-v6';
 
 function VectorArrow({
   direction = 'ne',
@@ -670,7 +670,7 @@ export const ProposalGenerator = () => {
                       </div>
                       <div className="mt-2.5 flex items-center justify-center">
                         <span className="px-4 py-1.5 rounded-full border border-[#111111] bg-white font-mono text-[9.5px] font-bold uppercase tracking-widest text-[#111111]">
-                          INTERFAZ PROPIA · BOGOTÁ DETAIL CENTER
+                          INTERFAZ PROPIA · JULIÁN LOTERO
                         </span>
                       </div>
                     </div>
@@ -1211,7 +1211,7 @@ export const ProposalGenerator = () => {
                       },
                       {
                         title: '4. Propiedad Intelectual y de Datos',
-                        body: 'Julián Lotero / Bogotá Detail Center es 100% dueño de su base de datos, catálogo de servicios, registros de clientes y operarios, bajo dominio propio sin ataduras.',
+                        body: 'Julián Lotero es 100% dueño de su base de datos, catálogo de servicios, registros de clientes y operarios, bajo dominio propio sin ataduras.',
                       },
                       {
                         title: '5. Garantía Técnica & Soporte',

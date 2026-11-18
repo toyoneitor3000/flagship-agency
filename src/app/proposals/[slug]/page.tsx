@@ -8,7 +8,6 @@ const VALID_TARGETS = ['opyt'];
 const PROPOSAL_SLUGS = [
   'prop-jl-2026-094',
   'julian-lotero',
-  'bogota-detail-center',
   'speedlight',
 ];
 

@@ -6,7 +6,7 @@ import type { ProjectSector, Proposal, ProposalVersion } from './types';
 // =============================================================================
 // 07 · EXPORT & VERSIONING + CANONICAL SEED PROPOSALS
 // Demuestra una misma identidad institucional adaptándose a dos sectores:
-// 1. Software (#PROP-JL-2026-094 · Julián Lotero · Bogotá Detail Center)
+// 1. Software (#PROP-JL-2026-094 · Julián Lotero · Marca Independiente)
 // 2. Automotriz (#SLW-TMYG-2026-116 · Tesla Model Y Juniper PPF · 3 Bloques)
 // =============================================================================
 
@@ -162,7 +162,7 @@ function buildJulianLoteroProposal(): Proposal {
             },
             {
                 title: 'Propiedad 100% del Cliente & Despliegue Propio',
-                body: 'El código operativo desplegado, base de datos, catálogo de servicios, operarios y CRM pertenecen 100% a Bogotá Detail Center bajo su propio dominio.',
+                body: 'El código operativo desplegado, base de datos, catálogo de servicios, operarios y CRM pertenecen 100% a Julián Lotero bajo su propio dominio.',
             },
             {
                 title: 'Garantía Conjunta purrpurr.dev × Speedlight (60 Días)',
@@ -170,7 +170,7 @@ function buildJulianLoteroProposal(): Proposal {
             },
         ],
         warrantySummary:
-            'Propuesta emitida en alianza oficial por purrpurr.dev (Ingeniería de Software) y Speedlight Culture (Ecosistema Automotriz), garantizando propiedad 100% de los datos para Bogotá Detail Center y 60 días de soporte técnico post-despliegue.',
+            'Propuesta emitida en alianza oficial por purrpurr.dev (Ingeniería de Software) y Speedlight Culture (Ecosistema Automotriz), garantizando propiedad 100% de los datos para Julián Lotero y 60 días de soporte técnico post-despliegue.',
     });
 
     const baseProposal: Proposal = {
@@ -185,7 +185,7 @@ function buildJulianLoteroProposal(): Proposal {
         client: {
             name: 'Julián Lotero',
             roleOrArea: 'Dirección de Operaciones & Taller',
-            company: 'Bogotá Detail Center / Marca Independiente',
+            company: 'Marca Independiente',
             phone: '+57 313 883 0156',
             city: 'Bogotá D.C., Colombia',
             projectReference: 'Plataforma Propia de Cotizaciones, Agenda & Dispersión Wompi',
@@ -198,7 +198,7 @@ function buildJulianLoteroProposal(): Proposal {
             sector: 'software',
             complexity: 'standard',
             executiveSummary:
-                'Bogotá Detail Center requiere profesionalizar el ciclo comercial y financiero de taller eliminando cotizaciones manuales en chats dispersos, evitando errores en márgenes y automatizando la liquidación de operarios. A través de la alianza purrpurr.dev × Speedlight Culture, implementamos un sistema propio de 3 etapas acumulativas con retorno inmediato desde la Semana 1.',
+                'El taller de Julián Lotero requiere profesionalizar su ciclo comercial y financiero eliminando cotizaciones manuales en chats dispersos, evitando errores en márgenes y automatizando la liquidación de operarios. A través de la alianza purrpurr.dev × Speedlight Culture, implementamos un sistema propio de 3 etapas acumulativas con retorno inmediato desde la Semana 1.',
             problemContext:
                 'Las cotizaciones enviadas sin estandarización visual reducen el ticket promedio y retrasan la aprobación de servicios complejos (PPF, detailing cerámico y pintura). Sumado a esto, la conciliación manual de pagos y porcentajes de operarios consume horas directivas clave cada semana.',
             solutionConcept:

@@ -79,7 +79,7 @@ export const ACTIVE_PROPOSAL: ActiveProposalConfig = {
   validDays: 15,
   clientName: 'Julián Lotero',
   clientDoc: 'Dirección de Operaciones & Taller',
-  clientCompany: 'Bogotá Detail Center / Marca Independiente',
+  clientCompany: 'Marca Independiente · Dirección de Operaciones',
   clientPhone: '+57 313 883 0156',
   projectName: 'Sistema Web de Cotizaciones A4, Agenda & Dispersión Wompi',
   issuerName: 'purrpurr.dev × Speedlight Works',
@@ -214,7 +214,7 @@ export const ACTIVE_PROPOSAL: ActiveProposalConfig = {
   checkoutBaseUrl:
     'https://speedlightculture.com/checkout?doc=prop-julian-lotero-software-001',
   whatsappSummary: `📄 *PROPUESTA EN ALIANZA · PURRPURR.DEV × SPEEDLIGHT CULTURE*
-👤 *Cliente:* Julián Lotero · Bogotá Detail Center
+👤 *Cliente:* Julián Lotero · Marca Independiente
 📋 *Código:* PROP-JL-2026-094 • Bogotá D.C.
 💻 *Proyecto:* Sistema Web de Cotizaciones A4, Agenda & Dispersión Wompi
 
